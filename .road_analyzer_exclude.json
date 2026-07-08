@@ -3,9 +3,15 @@
     "docs",
     "fix.txt",
     "fix2.txt",
-    "roadmap.txt"
+    "roadmap.txt",
+    "dist-electron",
+    "content.txt",
+    "public",
+    "src\\domains\\h"
   ],
-  "globalPatterns": [],
-  "lastModified": "2026-07-08T16:27:27.320Z",
+  "globalPatterns": [
+    "__tests__"
+  ],
+  "lastModified": "2026-07-08T18:39:49.058Z",
   "version": 1
 }

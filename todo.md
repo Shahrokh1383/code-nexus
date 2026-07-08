@@ -473,11 +473,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/presentation/hooks/useBackgroundWatcher.ts` — (Enhanced). Listen to real-time file events from Main process. Update UI state without manual refresh.
 - `src/presentation/hooks/useNavigation.ts` — React Router navigation helper. Programmatic navigation with history.
 
-#### Styles
-- `src/presentation/styles/custom-bootstrap.scss` — Complete Bootstrap 5.3.8 theme override. Custom colors matching CodeNexus branding. Card styles. Button styles. Form styles.
-- `src/presentation/styles/animations.scss` — CSS animations for page transitions, loading states, warning pulses.
-- `src/presentation/styles/variables.scss` — SCSS variables. Primary color, secondary color, warning colors, spacing scale, font stack.
-
 #### Stores (Zustand)
 - `src/presentation/stores/workspace.store.ts` — (Enhanced). Add workspace history, recent files.
 - `src/presentation/stores/filesystem.store.ts` — (Enhanced). Add search/filter for file tree.

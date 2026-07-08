@@ -1,8 +1,8 @@
 import { useState, type JSX } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { WelcomePage } from './renderer/pages/welcome-page/WelcomePage';
-import { SettingsModal } from './renderer/components/settings-modal/SettingsModal';
-import { useTheme } from './renderer/hooks/useTheme';
+import { WelcomePage } from './presentation/pages/welcome-page/WelcomePage';
+import { SettingsModal } from './presentation/components/settings-modal/SettingsModal';
+import { useTheme } from './presentation/hooks/useTheme';
 
 export default function App(): JSX.Element {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
