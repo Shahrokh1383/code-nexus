@@ -27,12 +27,43 @@ export class PathUtils {
     return result.length === 0 ? '.' : result.join('/');
   }
 
+  /**
+   * Resolves '.' and '..' segments in a normalized path.
+   * Example: 'a/b/../../c' → 'a/c'
+   */
+  private static resolveSegments(path: string): string {
+    const segments = path.split('/');
+    const resolved: string[] = [];
+
+    for (const segment of segments) {
+      if (segment === '..') {
+        // Remove the last segment if possible, otherwise keep '..' (root-relative)
+        if (resolved.length > 0 && resolved[resolved.length - 1] !== '..') {
+          resolved.pop();
+        } else {
+          resolved.push('..');
+        }
+      } else if (segment !== '.' && segment !== '') {
+        resolved.push(segment);
+      }
+    }
+
+    return resolved.join('/');
+  }
+
   static isWithin(parent: string, child: string): boolean {
     const normParent = this.normalize(parent);
     const normChild = this.normalize(child);
-    if (normChild === normParent) {
+
+    // Resolve traversal to get the real child path
+    const resolvedChild = this.resolveSegments(normChild);
+
+    // Exact match
+    if (resolvedChild === normParent) {
       return true;
     }
-    return normChild.startsWith(normParent + '/');
+
+    // Must be a strict child (starts with parent + '/')
+    return resolvedChild.startsWith(normParent + '/');
   }
 }
