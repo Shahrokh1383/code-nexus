@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { Identifier } from '../types/identifier';
 import { DateTime } from '../types/date-time';
 
@@ -8,7 +8,7 @@ export abstract class DomainEvent {
   readonly eventType: string;
 
   protected constructor(eventType: string) {
-    this.eventId = new Identifier(randomUUID());
+    this.eventId = new Identifier(uuidv4());
     this.occurredOn = DateTime.now();
     this.eventType = eventType;
   }
