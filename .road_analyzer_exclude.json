@@ -1,0 +1,11 @@
+{
+  "excludedPaths": [
+    "docs",
+    "fix.txt",
+    "fix2.txt",
+    "roadmap.txt"
+  ],
+  "globalPatterns": [],
+  "lastModified": "2026-07-08T16:27:27.320Z",
+  "version": 1
+}
