@@ -1,0 +1,11 @@
+/* ============================================================
+   CodeNexus – Core Stylesheet Aggregator
+   Imports all design tokens, themes, globals, utilities,
+   and layout rules. Do NOT write raw CSS here.
+   ============================================================ */
+
+@import './core/tokens.css';
+@import './core/theme.css';
+@import './core/global.css';
+@import './core/utilities.css';
+@import './core/layout.css';

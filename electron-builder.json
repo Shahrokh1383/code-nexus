@@ -1,0 +1,20 @@
+{
+  "appId": "com.codenexus.app",
+  "productName": "CodeNexus",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*"
+  ],
+  "mac": {
+    "target": "dmg"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}

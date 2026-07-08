@@ -1,16 +1,45 @@
-# React + Vite
+# CodeNexus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A desktop application for linking documentation to code files, built with strict Domain-Driven Design and Onion Architecture principles.
 
-Currently, two official plugins are available:
+## Technology Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Electron** (Main + Renderer processes)
+- **React 19** (Functional components + Hooks)
+- **TypeScript 5.7+** (Strict mode)
+- **Vite** (Primary build tool)
+- **Bootstrap 5.3.8** (Local assets)
+- **FontAwesome 7 Pro** (Local assets)
+- **Zustand** (Per-context state management)
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Build
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run build
+npm run dist
+```
+
+## Architecture
+
+The codebase follows the **CodeNexus Immutable Constitution**:
+- Onion Architecture with Domain-Driven Design
+- Six Bounded Contexts: Project, FileSystem, Documentation, Linking, Tracking, Notification
+- Strict File-Isolation Mandate (no bloated files)
+- IPC-only communication between Main and Renderer
+- JSON persistence in `.doclink/` (portable, Git-friendly)
+
+## Asset Placement
+
+Place the following assets into `public/assets/` before running:
+- `public/assets/bootstrap-pack/css/bootstrap.min.css`
+- `public/assets/bootstrap-pack/js/bootstrap.min.js`
+- `public/assets/FontAwesome/css/all.css`
+- `public/assets/FontAwesome/webfonts/` (all font files)
+- `public/assets/logo.png` (application logo)

@@ -1,0 +1,32 @@
+/* ============================================================
+   CodeNexus – Light Theme Override
+   Toggle .light-theme on <html> or <body> to activate.
+   ============================================================ */
+
+.light-theme {
+  --cn-bg-primary: #ffffff;
+  --cn-bg-secondary: #f8fafc;
+  --cn-bg-elevated: #ffffff;
+  --cn-bg-hover: #f1f5f9;
+  --cn-bg-active: #e2e8f0;
+  --cn-text-primary: #0f172a;
+  --cn-text-secondary: #475569;
+  --cn-text-disabled: #94a3b8;
+  --cn-text-inverse: #ffffff;
+  --cn-primary-muted: rgba(6, 182, 212, 0.1);
+  --cn-primary-soft: #e0f7fa;
+  --cn-warning-muted: rgba(245, 158, 11, 0.1);
+  --cn-warning-soft: #fffbeb;
+  --cn-success-muted: rgba(16, 185, 129, 0.1);
+  --cn-success-soft: #ecfdf5;
+  --cn-error-muted: rgba(239, 68, 68, 0.1);
+  --cn-error-soft: #fef2f2;
+  --cn-border-light: rgba(15, 23, 42, 0.08);
+  --cn-border-default: rgba(15, 23, 42, 0.15);
+  --cn-border-strong: rgba(15, 23, 42, 0.25);
+  --cn-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --cn-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --cn-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --cn-scrollbar-thumb: #cbd5e1;
+  --cn-scrollbar-track: #f1f5f9;
+}

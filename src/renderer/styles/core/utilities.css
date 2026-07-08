@@ -1,0 +1,31 @@
+/* ============================================================
+   CodeNexus – Utility Classes & Status Indicators
+   ============================================================ */
+
+/* Text & Background Utilities */
+.text-primary { color: var(--cn-text-primary); }
+.text-secondary { color: var(--cn-text-secondary); }
+.text-disabled { color: var(--cn-text-disabled); }
+.text-inverse { color: var(--cn-text-inverse); }
+.bg-primary { background-color: var(--cn-bg-primary); }
+.bg-secondary { background-color: var(--cn-bg-secondary); }
+.bg-elevated { background-color: var(--cn-bg-elevated); }
+.radius-sm { border-radius: var(--cn-radius-sm); }
+.radius-md { border-radius: var(--cn-radius-md); }
+.radius-lg { border-radius: var(--cn-radius-lg); }
+.radius-full { border-radius: var(--cn-radius-full); }
+.shadow-sm { box-shadow: var(--cn-shadow-sm); }
+.shadow-md { box-shadow: var(--cn-shadow-md); }
+.shadow-lg { box-shadow: var(--cn-shadow-lg); }
+
+/* Status Indicators */
+.status-unlinked { color: var(--cn-status-unlinked); }
+.status-changed { color: var(--cn-status-changed); }
+.status-reviewed { color: var(--cn-status-reviewed); }
+.status-ignored { color: var(--cn-status-ignored); }
+.status-doc-orphan { color: var(--cn-status-doc-orphan); }
+
+/* Muted Pills */
+.pill-warning { background-color: var(--cn-warning-muted); color: var(--cn-warning); padding: 2px 8px; border-radius: var(--cn-radius-full); font-size: var(--cn-font-size-xs); font-weight: var(--cn-font-weight-medium); }
+.pill-success { background-color: var(--cn-success-muted); color: var(--cn-success); padding: 2px 8px; border-radius: var(--cn-radius-full); font-size: var(--cn-font-size-xs); font-weight: var(--cn-font-weight-medium); }
+.pill-error { background-color: var(--cn-error-muted); color: var(--cn-error); padding: 2px 8px; border-radius: var(--cn-radius-full); font-size: var(--cn-font-size-xs); font-weight: var(--cn-font-weight-medium); }
