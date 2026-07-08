@@ -195,4 +195,62 @@ Before every commit, every developer must verify:
 
 ---
 
+## X. Testing Standards & Conventions
+
+All CodeNexus tests must follow strict co‑location and structural rules to keep the test suite navigable, maintainable, and aligned with the Onion Architecture.
+
+### 1. Co‑located Tests (Jest `__tests__` Convention)
+* Tests live in **`__tests__` folders** that **mirror the source tree** exactly. This is known as the **colocated tests** pattern.
+* Example mapping:
+
+```
+src/domains/project/application/handlers/initialize-workspace.handler.ts
+src/domains/project/__tests__/application/handlers/initialize-workspace.handler.test.ts
+```
+
+* **NEVER** place tests in a separate top‑level `tests/` directory. Tests must always sit adjacent to the code they verify.
+
+### 2. File Naming
+* Test files use the suffix **`.test.ts`** (or `.test.tsx` for React components).
+* The file name must match the source file exactly (e.g., `workspace.ts` → `workspace.test.ts`).
+* This makes it trivial to locate the corresponding tests for any source file.
+
+### 3. Mirror the Layer Structure
+* The `__tests__` hierarchy must replicate the full DDD layer structure:
+  * `src/domains/project/__tests__/domain/entities/`
+  * `src/domains/project/__tests__/application/handlers/`
+  * `src/domains/project/__tests__/infrastructure/repository/`
+* Presentation‑layer tests follow the same rule:
+  * `src/presentation/hooks/__tests__/useWorkspace.test.ts`
+  * `src/presentation/pages/__tests__/WelcomePage.test.tsx` (when created)
+
+### 4. Test Isolation & Purity
+* **Domain tests MUST be pure unit tests.** They test entities, value objects, and domain events without any mocks, filesystem, or network calls.
+* **Application handler tests** may mock repository interfaces; never import concrete infrastructure classes directly in tests (use the same interface abstractions).
+* **Infrastructure tests** (repositories, adapters) may mock the `fs` module or use real JSON files in a temporary directory, but must never depend on the real `.doclink` of a workspace.
+* **Presentation tests** test hooks and components in isolation. Mock `window.electronAPI` for IPC calls. Use React Testing Library’s `renderHook` / `render` with appropriate `act()` wrappers.
+
+### 5. Coverage Mandate
+* **Domain logic coverage must remain ≥ 95%** at all times (Commandment 14). This includes entities, value objects, domain events, and domain services.
+* Application handlers and infrastructure repositories must have ≥ 80% coverage.
+* Presentation hooks and stores should have ≥ 80% coverage.
+* Run `npx jest --coverage` regularly; failing coverage targets is a build‑stopper in CI.
+
+### 6. Build Exclusions
+* The root `tsconfig.json` and `tsconfig.electron.json` already exclude `**/__tests__/**` from production builds. Never remove that exclusion.
+* Jest configuration (in `package.json` or `jest.config.ts`) must point to `src` as the root and use `testMatch: ["**/__tests__/**/*.test.ts"]`.
+
+### 7. Mocking Rules
+* Use `jest.mock` only for external dependencies (Node.js modules, Electron IPC, `fs`).
+* Never mock domain entities or value objects.
+* When mocking `fs`, always use `jest.mock('fs', () => ({ promises: { ... } }))` to keep tests fast and deterministic.
+
+### 8. State Cleanup
+* If a test modifies global state (e.g., Zustand stores, EventBus), reset it in `beforeEach` using the store’s own `clear`/`reset` method or by manually setting initial state.
+* After tests that set `window.electronAPI`, delete the property in `afterEach` to prevent leakage.
+
+---
+
+This testing convention ensures every line of production code has a predictable, easy‑to‑find test, and keeps the codebase ready for scaling and refactoring without regressions.
+
 *This Constitution is immutable. It is the single source of truth for the CodeNexus project. Any deviation must be corrected immediately.*
