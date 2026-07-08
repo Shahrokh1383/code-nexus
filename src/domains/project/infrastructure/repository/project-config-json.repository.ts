@@ -17,7 +17,7 @@ export class ProjectConfigJsonRepository implements IProjectConfigRepository {
   async findByWorkspaceId(workspaceId: WorkspaceId): Promise<ProjectConfig | null> {
     try {
       const raw = await this.db.read<Record<string, unknown>>(this.filename);
-      const migrated = this.migrator.migrate(raw) as ProjectConfigSchema;
+      const migrated = this.migrator.migrate(raw) as unknown as ProjectConfigSchema;
 
       if (migrated.workspaceId !== workspaceId.value) {
         return null;

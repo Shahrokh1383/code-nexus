@@ -1,5 +1,5 @@
 /* ============================================================
-   CodeNexus – Welcome Page Styles
+   CodeNexus – Welcome Page
    ============================================================ */
 
 .welcome-page {
@@ -34,10 +34,6 @@
 .welcome-title {
   font-size: var(--cn-font-size-2xl);
   font-weight: var(--cn-font-weight-bold);
-  background: linear-gradient(135deg, var(--cn-primary), var(--cn-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .welcome-subtitle {

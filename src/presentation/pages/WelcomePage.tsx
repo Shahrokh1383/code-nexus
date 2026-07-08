@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import '../styles/pages/welcome-page.css';
+import '../styles/welcome-page.css';
 
 export function WelcomePage(): JSX.Element {
   return (
@@ -10,7 +10,7 @@ export function WelcomePage(): JSX.Element {
           alt="CodeNexus"
           className="welcome-logo"
         />
-        <h2 className="welcome-title">CodeNexus</h2>
+        <h2 className="welcome-title gradient-text">CodeNexus</h2>
         <p className="welcome-subtitle">
           Link your documentation to your code. Stay in sync.
         </p>

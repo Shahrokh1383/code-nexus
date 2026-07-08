@@ -1,8 +1,9 @@
-import { useState, type JSX } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkspace } from '../hooks/useWorkspace';
 import { useIpc } from '../hooks/useIpc';
 import { IpcChannels } from '../../../electron/ipc/channels';
+import '../styles/workspace-setup.css';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -16,14 +17,19 @@ export function WorkspaceSetupPage(): JSX.Element {
   const navigate = useNavigate();
   const [dialogError, setDialogError] = useState<string | null>(null);
 
+  // Navigate away only when workspace becomes available (side‑effect)
+  useEffect(() => {
+    if (workspace) {
+      navigate('/');
+    }
+  }, [workspace, navigate]);
+
   const handleSelectFolder = async (): Promise<void> => {
     setDialogError(null);
-
     try {
       const response = (await ipc.invoke(
         IpcChannels.DIALOG_OPEN_FOLDER
       )) as IpcResponse<string[]>;
-
       if (response.success && response.data && response.data.length > 0) {
         await initialize(response.data[0]);
       }
@@ -31,11 +37,6 @@ export function WorkspaceSetupPage(): JSX.Element {
       setDialogError(err instanceof Error ? err.message : 'Failed to open folder dialog');
     }
   };
-
-  if (workspace) {
-    navigate('/');
-    return <></>;
-  }
 
   return (
     <div className="workspace-setup-page">

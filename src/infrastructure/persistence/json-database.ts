@@ -1,4 +1,4 @@
-import { PathUtils } from '@/domains/shared-kernel/utils/path-utils';
+import { PathUtils } from '../../domains/shared-kernel/utils/path-utils';
 import { promises as fs } from 'fs';
 
 export class JsonDatabase {
