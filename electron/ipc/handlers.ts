@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 import { IpcChannels } from './channels';
 import { registerProjectHandlers } from './handlers/project-handlers';
 
@@ -6,9 +6,19 @@ import { registerProjectHandlers } from './handlers/project-handlers';
  * Registers all IPC handlers for the main process.
  */
 export function registerIpcHandlers(): void {
-  registerProjectHandlers();
+  // Infrastructure‑level handlers (no domain imports)
+  ipcMain.handle(IpcChannels.DIALOG_OPEN_FOLDER, async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory'],
+    });
 
-  // Placeholder: additional context handlers will be registered in subsequent phases.
-  void ipcMain;
-  void IpcChannels;
+    if (result.canceled) {
+      return { success: true, data: [] };
+    }
+
+    return { success: true, data: result.filePaths };
+  });
+
+  // Domain‑specific handlers
+  registerProjectHandlers();
 }

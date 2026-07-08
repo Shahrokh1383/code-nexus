@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron';
+import { ipcMain } from 'electron';
 import { promises as fs } from 'fs';
 import { IpcChannels } from '../channels';
 import { InitializeWorkspaceCommand } from '../../../src/domains/project/application/commands/initialize-workspace.command';
@@ -105,21 +105,6 @@ export function registerProjectHandlers(): void {
         const message = error instanceof Error ? error.message : 'Unknown error';
         return { success: false, error: message };
       }
-    }
-  );
-
-  ipcMain.handle(
-    IpcChannels.DIALOG_OPEN_FOLDER,
-    async (): Promise<IpcResponse<string[]>> => {
-      const result = await dialog.showOpenDialog({
-        properties: ['openDirectory'],
-      });
-
-      if (result.canceled) {
-        return { success: true, data: [] };
-      }
-
-      return { success: true, data: result.filePaths };
     }
   );
 }

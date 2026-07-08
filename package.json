@@ -2,7 +2,7 @@
   "name": "codenexus",
   "version": "1.0.0",
   "description": "CodeNexus - Documentation Linking Desktop Application",
-  "main": "dist-electron/main.js",
+  "main": "dist-electron/electron/main.js",
   "author": "CodeNexus Team",
   "license": "MIT",
   "scripts": {
@@ -48,14 +48,14 @@
     "playwright": "^1.49.0"
   },
   "jest": {
-  "transform": {
-    "^.+\\.tsx?$": ["ts-jest", { "tsconfig": "tsconfig.test.json" }]
-  },
-  "testEnvironment": "jsdom",
-  "roots": ["<rootDir>/src"],
-  "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1"
-  },
-  "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"]
+    "transform": {
+      "^.+\\.tsx?$": ["ts-jest", { "tsconfig": "tsconfig.test.json" }]
+    },
+    "testEnvironment": "jsdom",
+    "roots": ["<rootDir>/src"],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"]
   }
 }
