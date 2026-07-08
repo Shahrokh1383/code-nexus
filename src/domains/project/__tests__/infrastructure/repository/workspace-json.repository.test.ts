@@ -9,7 +9,7 @@ jest.mock('fs', () => ({
 
 import { promises as fs } from 'fs';
 import { WorkspaceJsonRepository } from '../../../infrastructure/repository/workspace-json.repository';
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
+import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
 import { Workspace } from '../../../domain/entities/workspace';
 import { WorkspaceId } from '../../../domain/value-objects/workspace-id';
 import { WorkspacePath } from '../../../domain/value-objects/workspace-path';

@@ -1,15 +1,22 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { useWorkspace } from '../useWorkspace';
+import { useWorkspaceStore } from '../../stores/workspace.store';
 
 const mockInvoke = jest.fn();
 
 beforeEach(() => {
   jest.clearAllMocks();
+  // Reset the global Zustand store to its initial state
+  useWorkspaceStore.getState().clearWorkspace();
   Object.defineProperty(window, 'electronAPI', {
     value: { invoke: mockInvoke },
     writable: true,
     configurable: true,
   });
+});
+
+afterEach(() => {
+  delete (window as any).electronAPI;
 });
 
 describe('useWorkspace', () => {
@@ -27,7 +34,9 @@ describe('useWorkspace', () => {
 
     const { result } = renderHook(() => useWorkspace());
 
-    await result.current.initialize('/test/project');
+    await act(async () => {
+      await result.current.initialize('/test/project');
+    });
 
     await waitFor(() => {
       expect(result.current.workspace).not.toBeNull();
@@ -45,7 +54,9 @@ describe('useWorkspace', () => {
 
     const { result } = renderHook(() => useWorkspace());
 
-    await result.current.initialize('/bad/path');
+    await act(async () => {
+      await result.current.initialize('/bad/path');
+    });
 
     await waitFor(() => {
       expect(result.current.workspace).toBeNull();
@@ -55,12 +66,20 @@ describe('useWorkspace', () => {
   });
 
   it('should set loading state during initialization', async () => {
-    mockInvoke.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockInvoke.mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve({ success: true, data: null }), 100))
+    );
 
     const { result } = renderHook(() => useWorkspace());
 
-    result.current.initialize('/test/project');
+    act(() => {
+      result.current.initialize('/test/project');
+    });
 
     expect(result.current.isLoading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
   });
 });

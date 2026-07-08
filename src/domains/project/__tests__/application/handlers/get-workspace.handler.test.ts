@@ -11,7 +11,7 @@ import { promises as fs } from 'fs';
 import { GetWorkspaceHandler } from '../../../application/handlers/get-workspace.handler';
 import { GetWorkspaceQuery } from '../../../application/queries/get-workspace.query';
 import { WorkspaceJsonRepository } from '../../../infrastructure/repository/workspace-json.repository';
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
+import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
 
 describe('GetWorkspaceHandler', () => {
   let handler: GetWorkspaceHandler;

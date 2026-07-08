@@ -9,9 +9,9 @@ jest.mock('fs', () => ({
 
 import { promises as fs } from 'fs';
 import { ProjectConfigJsonRepository } from '../../../infrastructure/repository/project-config-json.repository';
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
-import { SchemaMigrator } from '../../../../infrastructure/persistence/migration/schema-migrator';
-import { DATABASE_SCHEMA_VERSION } from '../../../../infrastructure/persistence/database-schema';
+import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
+import { SchemaMigrator } from '../../../../../infrastructure/persistence/migration/schema-migrator';
+import { DATABASE_SCHEMA_VERSION } from '../../../../../infrastructure/persistence/database-schema';
 import { ProjectConfig } from '../../../domain/entities/project-config';
 import { WorkspaceId } from '../../../domain/value-objects/workspace-id';
 import { Maybe } from '../../../../shared-kernel/types/maybe';
