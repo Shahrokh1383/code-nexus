@@ -9,9 +9,7 @@
     "public",
     "src\\domains\\h"
   ],
-  "globalPatterns": [
-    "__tests__"
-  ],
-  "lastModified": "2026-07-08T18:51:11.355Z",
+  "globalPatterns": [],
+  "lastModified": "2026-07-08T19:00:25.009Z",
   "version": 1
 }

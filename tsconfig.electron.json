@@ -23,6 +23,7 @@
     "node_modules",
     "dist",
     "dist-electron",
-    "release"
+    "release",
+    "**/__tests__/**"
   ]
 }
