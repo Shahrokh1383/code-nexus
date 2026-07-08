@@ -1,6 +1,13 @@
+import { useState, type JSX } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { WelcomePage } from './renderer/pages/welcome-page/WelcomePage';
+import { SettingsModal } from './renderer/components/settings-modal/SettingsModal';
+import { useTheme } from './renderer/hooks/useTheme';
 
 export default function App(): JSX.Element {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { isLight, toggleTheme } = useTheme();
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -12,15 +19,26 @@ export default function App(): JSX.Element {
           />
           <h1>CodeNexus</h1>
         </div>
+        <button
+          className="btn-ghost settings-btn"
+          onClick={() => setIsSettingsOpen(true)}
+          aria-label="Open settings"
+        >
+          <i className="fa-solid fa-gear" />
+        </button>
       </header>
       <main className="app-main">
         <Routes>
-          <Route
-            path="/"
-            element={<div className="welcome-page">Welcome to CodeNexus</div>}
-          />
+          <Route path="/" element={<WelcomePage />} />
         </Routes>
       </main>
+      {isSettingsOpen && (
+        <SettingsModal
+          isLight={isLight}
+          onToggleTheme={toggleTheme}
+          onClose={() => setIsSettingsOpen(false)}
+        />
+      )}
     </div>
   );
 }

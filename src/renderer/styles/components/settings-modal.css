@@ -1,0 +1,74 @@
+/* ============================================================
+   CodeNexus – Settings Modal Styles
+   ============================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: fade-in 0.2s ease-out;
+}
+
+.modal-card {
+  width: 360px;
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-default);
+  border-radius: var(--cn-radius-lg);
+  box-shadow: var(--cn-shadow-lg);
+  animation: slide-up 0.25s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--cn-space-4) var(--cn-space-5);
+  border-bottom: 1px solid var(--cn-border-light);
+}
+
+.modal-header h3 {
+  font-size: var(--cn-font-size-lg);
+  font-weight: var(--cn-font-weight-semibold);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: var(--cn-radius-md);
+  color: var(--cn-text-secondary);
+}
+
+.modal-close:hover {
+  color: var(--cn-text-primary);
+  background-color: var(--cn-bg-hover);
+}
+
+.modal-body { padding: var(--cn-space-4) var(--cn-space-5); }
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cn-space-4);
+}
+
+.theme-toggle { display: flex; align-items: center; gap: var(--cn-space-2); }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
