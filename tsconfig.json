@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
+    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]
     }
@@ -26,9 +27,6 @@
     "node_modules",
     "dist",
     "dist-electron",
-    "release",
-    "src/domains",
-    "src/application",
-    "src/infrastructure"
+    "release"
   ]
 }

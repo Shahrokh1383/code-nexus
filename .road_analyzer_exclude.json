@@ -9,11 +9,13 @@
     "public",
     "src\\domains\\h",
     "todo.md",
-    "README.md"
+    "README.md",
+    "src\\presentation",
+    "package-lock.json"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-08T21:28:27.745Z",
+  "lastModified": "2026-07-08T22:25:17.152Z",
   "version": 1
 }

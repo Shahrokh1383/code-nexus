@@ -15,10 +15,6 @@ import { InitializeWorkspaceCommand } from '../commands/initialize-workspace.com
 import { WorkspaceDto } from '../dto/workspace.dto';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
-import { SchemaMigrator } from '../../../../infrastructure/persistence/migration/schema-migrator';
-import { DATABASE_SCHEMA_VERSION } from '../../../../infrastructure/persistence/database-schema';
-import { promises as fs } from 'fs';
 
 const DEFAULT_IGNORE_PATTERNS = [
   'node_modules/',
@@ -28,8 +24,6 @@ const DEFAULT_IGNORE_PATTERNS = [
   '.doclink/',
   '*.log',
 ];
-
-const DOCIGNORE_CONTENT = DEFAULT_IGNORE_PATTERNS.join('\n') + '\n';
 
 export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWorkspaceCommand, WorkspaceDto> {
   private readonly eventBus: EventBus;
@@ -45,8 +39,7 @@ export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWor
     try {
       const normalizedPath = PathUtils.normalize(command.rootPath);
 
-      await fs.access(normalizedPath);
-
+      // No filesystem check here – the caller guarantees the path is valid.
       const workspaceId = new WorkspaceId(UuidGenerator.generate());
       const workspacePath = new WorkspacePath(normalizedPath);
       const metadataFolder = new MetadataFolderName();
@@ -64,7 +57,7 @@ export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWor
         workspaceId,
         Maybe.none<string>(),
         [...DEFAULT_IGNORE_PATTERNS],
-        DATABASE_SCHEMA_VERSION
+        '1.0' // hard-coded schema version matching DATABASE_SCHEMA_VERSION; could be passed if needed
       );
 
       await this.workspaceRepo.save(workspace);

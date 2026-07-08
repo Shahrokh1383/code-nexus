@@ -5,7 +5,7 @@ import { IWorkspaceRepository } from '../../domain/repository/workspace-reposito
 import { GetWorkspaceQuery } from '../queries/get-workspace.query';
 import { WorkspaceDto } from '../dto/workspace.dto';
 
-export class GetWorkspaceHandler implements IQueryHandler<GetWorkspaceQuery, Result<WorkspaceDto, string>> {
+export class GetWorkspaceHandler implements IQueryHandler<GetWorkspaceQuery, WorkspaceDto> {
   constructor(private readonly workspaceRepo: IWorkspaceRepository) {}
 
   async execute(query: GetWorkspaceQuery): Promise<Result<WorkspaceDto, string>> {

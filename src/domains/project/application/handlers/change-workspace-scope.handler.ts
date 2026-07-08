@@ -6,7 +6,6 @@ import { WorkspacePath } from '../../domain/value-objects/workspace-path';
 import { IWorkspaceRepository } from '../../domain/repository/workspace-repository.interface';
 import { WorkspaceScopeChangedEvent } from '../../domain/events/workspace-scope-changed';
 import { ChangeWorkspaceScopeCommand } from '../commands/change-workspace-scope.command';
-import { promises as fs } from 'fs';
 
 export class ChangeWorkspaceScopeHandler implements ICommandHandler<ChangeWorkspaceScopeCommand, void> {
   private readonly eventBus: EventBus;
@@ -17,8 +16,6 @@ export class ChangeWorkspaceScopeHandler implements ICommandHandler<ChangeWorksp
 
   async execute(command: ChangeWorkspaceScopeCommand): Promise<Result<void, string>> {
     try {
-      await fs.access(command.newRootPath);
-
       const workspaceId = new WorkspaceId(command.workspaceId);
       const workspace = await this.workspaceRepo.findById(workspaceId);
 

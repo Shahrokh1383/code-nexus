@@ -1,4 +1,5 @@
 import { ipcMain, dialog } from 'electron';
+import { promises as fs } from 'fs';
 import { IpcChannels } from '../channels';
 import { InitializeWorkspaceCommand } from '../../../src/domains/project/application/commands/initialize-workspace.command';
 import { InitializeWorkspaceHandler } from '../../../src/domains/project/application/handlers/initialize-workspace.handler';
@@ -25,6 +26,8 @@ export function registerProjectHandlers(): void {
     IpcChannels.PROJECT_INITIALIZE,
     async (_event, rootPath: string): Promise<IpcResponse<unknown>> => {
       try {
+        await fs.access(rootPath);
+
         const db = new JsonDatabase(rootPath);
         await db.ensureDoclinkExists();
         await db.writeTextFile('.docignore', 'node_modules/\n.git/\ndist/\nbuild/\n.doclink/\n*.log\n');
