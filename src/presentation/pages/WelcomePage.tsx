@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import '../../styles/pages/welcome-page.css';
+import '../styles/pages/welcome-page.css';
 
 export function WelcomePage(): JSX.Element {
   return (

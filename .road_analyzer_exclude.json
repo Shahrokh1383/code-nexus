@@ -7,11 +7,13 @@
     "dist-electron",
     "content.txt",
     "public",
-    "src\\domains\\h"
+    "src\\domains\\h",
+    "todo.md",
+    "README.md"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-08T19:05:02.137Z",
+  "lastModified": "2026-07-08T21:28:27.745Z",
   "version": 1
 }

@@ -1,6 +1,7 @@
 import { useState, type JSX } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { WelcomePage } from './presentation/pages/welcome-page/WelcomePage';
+import { WelcomePage } from './presentation/pages/WelcomePage';
+import { WorkspaceSetupPage } from './presentation/pages/WorkspaceSetupPage';
 import { SettingsModal } from './presentation/components/settings-modal/SettingsModal';
 import { useTheme } from './presentation/hooks/useTheme';
 
@@ -30,6 +31,7 @@ export default function App(): JSX.Element {
       <main className="app-main">
         <Routes>
           <Route path="/" element={<WelcomePage />} />
+          <Route path="/setup" element={<WorkspaceSetupPage />} />
         </Routes>
       </main>
       {isSettingsOpen && (

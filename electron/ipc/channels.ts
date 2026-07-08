@@ -1,6 +1,10 @@
 export enum IpcChannels {
   PROJECT_OPEN = 'project:open',
   PROJECT_CLOSE = 'project:close',
+  PROJECT_INITIALIZE = 'project:initialize',
+  PROJECT_GET_WORKSPACE = 'project:get-workspace',
+  PROJECT_CHANGE_SCOPE = 'project:change-scope',
+  DIALOG_OPEN_FOLDER = 'dialog:open-folder',
   FILESYSTEM_SCAN = 'filesystem:scan',
   FILESYSTEM_WATCH = 'filesystem:watch',
   DOCUMENTATION_GET_LIST = 'documentation:get-list',
