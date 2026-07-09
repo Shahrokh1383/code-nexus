@@ -6,7 +6,8 @@ describe('WorkspaceClosedEvent', () => {
     const workspaceId = new WorkspaceId('test-id-123');
     const event = new WorkspaceClosedEvent(workspaceId);
 
-    expect(event.eventName).toBe('WorkspaceClosed');
+    // Fixed: base class property is `eventType`, not `eventName`
+    expect(event.eventType).toBe('WorkspaceClosed');
     expect(event.workspaceId).toBe(workspaceId);
     expect(event.workspaceId.value).toBe('test-id-123');
   });

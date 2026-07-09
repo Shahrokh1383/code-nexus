@@ -13,11 +13,14 @@
     "package-lock.json",
     "src\\domains\\shared-kernel\\__tests__",
     "src\\infrastructure",
-    "src\\domains\\shared-kernel",
     "src\\application",
-    "src\\domains\\filesystem"
+    "src\\domains\\filesystem",
+    "src\\presentation",
+    "src\\types"
   ],
-  "globalPatterns": [],
-  "lastModified": "2026-07-09T15:41:55.646Z",
+  "globalPatterns": [
+    "__tests__"
+  ],
+  "lastModified": "2026-07-09T16:10:00.774Z",
   "version": 1
 }
