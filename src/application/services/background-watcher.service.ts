@@ -1,3 +1,4 @@
+// src/application/services/background-watcher.service.ts
 import { EventBus } from '../../domains/shared-kernel/events/event-bus';
 import { IDomainEventHandler } from '../../domains/shared-kernel/events/domain-event-handler.interface';
 import { DomainEvent } from '../../domains/shared-kernel/events/domain-event';
@@ -28,7 +29,7 @@ export class BackgroundWatcherService implements IDomainEventHandler<DomainEvent
     if (event instanceof WorkspaceInitializedEvent) {
       await this.startWatching(event.workspaceId, event.rootPath.value);
     } else if (event instanceof WorkspaceScopeChangedEvent) {
-      await this.startWatching(event.workspaceId, event.newPath.value);
+      await this.startWatching(event.workspaceId, event.newRootPath.value);
     }
   }
 

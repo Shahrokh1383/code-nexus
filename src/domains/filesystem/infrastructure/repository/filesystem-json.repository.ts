@@ -38,13 +38,21 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
 
   async save(entity: FileNode | FolderNode): Promise<void> {
     const index = await this.readIndex();
+
+    const hash = entity instanceof FileNode ? entity.hash.getOrNull()?.value ?? null : null;
+    const size = entity instanceof FileNode ? entity.size.bytes : 0;
+    const lastModified = entity instanceof FileNode
+      ? entity.lastModified.toISO()
+      : DateTime.now().toISO();
+
     index.files[entity.path.value] = {
       id: entity.id.value,
-      hash: entity instanceof FileNode ? entity.hash.getOrNull()?.value ?? null : null,
-      lastModified: entity.lastModified.toISO(),
-      size: entity instanceof FileNode ? entity.size.bytes : 0,
+      hash,
+      lastModified,
+      size,
       isDirectory: entity instanceof FolderNode,
     };
+
     await this.writeIndex(index);
   }
 
