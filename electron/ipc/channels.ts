@@ -1,6 +1,8 @@
 export enum IpcChannels {
   PROJECT_OPEN = 'project:open',
   PROJECT_CLOSE = 'project:close',
+  PROJECT_GET_RECENT_WORKSPACES = 'project:get-recent-workspaces',
+  PROJECT_REMOVE_RECENT_WORKSPACE = 'project:remove-recent-workspace',
   PROJECT_INITIALIZE = 'project:initialize',
   PROJECT_GET_WORKSPACE = 'project:get-workspace',
   PROJECT_CHANGE_SCOPE = 'project:change-scope',
@@ -18,5 +20,5 @@ export enum IpcChannels {
   TRACKING_GET_STATUS = 'tracking:get-status',
   TRACKING_COMMIT = 'tracking:commit',
   NOTIFICATION_GET_WARNINGS = 'notification:get-warnings',
-  NOTIFICATION_DISMISS = 'notification:dismiss',
+  NOTIFICATION_DISMISS = 'notification:dismiss', 
 }

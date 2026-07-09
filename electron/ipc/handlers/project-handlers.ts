@@ -12,6 +12,10 @@ import { SchemaMigrator } from '../../../src/infrastructure/persistence/migratio
 import { DATABASE_SCHEMA_VERSION } from '../../../src/infrastructure/persistence/database-schema';
 import { WorkspaceJsonRepository } from '../../../src/domains/project/infrastructure/repository/workspace-json.repository';
 import { ProjectConfigJsonRepository } from '../../../src/domains/project/infrastructure/repository/project-config-json.repository';
+import { RecentWorkspacesAdapter, RecentWorkspaceDto } from '../infrastructure/recent-workspaces.adapter';
+import { EventBus } from '../../../src/shared-kernel/events/event-bus';
+import { WorkspaceClosedEvent } from '../../../src/domains/project/domain/events/workspace-closed';
+import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -20,6 +24,8 @@ interface IpcResponse<T> {
 }
 
 export const workspaceRegistry = new Map<string, string>();
+const recentAdapter = new RecentWorkspacesAdapter();
+const eventBus = EventBus.getInstance();
 
 export function registerProjectHandlers(): void {
   ipcMain.handle(
@@ -29,7 +35,7 @@ export function registerProjectHandlers(): void {
         await fs.access(rootPath);
 
         const db = new JsonDatabase(rootPath);
-        await db.ensureDoclinkExists();
+        await db.ensureDoclinkExist();
         await db.writeTextFile('.docignore', 'node_modules/\n.git/\ndist/\nbuild/\n.doclink/\n*.log\n');
 
         const workspaceRepo = new WorkspaceJsonRepository(db);
@@ -42,6 +48,13 @@ export function registerProjectHandlers(): void {
           const dto = result.getValue();
           if (dto) {
             workspaceRegistry.set(dto.id, rootPath);
+            
+            // Track in recent workspaces
+            await recentAdapter.addOrUpdate({
+              id: dto.id,
+              rootPath: dto.rootPath,
+              lastOpened: new Date().toISOString(),
+            });
           }
         }
 
@@ -103,6 +116,52 @@ export function registerProjectHandlers(): void {
         );
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
+        return { success: false, error: message };
+      }
+    }
+  );
+
+  ipcMain.handle(
+    IpcChannels.PROJECT_CLOSE,
+    async (_event, workspaceId: string): Promise<IpcResponse<void>> => {
+      try {
+        const exists = workspaceRegistry.has(workspaceId);
+        workspaceRegistry.delete(workspaceId);
+        
+        if (exists) {
+          // Emit event to notify FileSystem context to stop Chokidar watcher
+          eventBus.emit(new WorkspaceClosedEvent(new WorkspaceId(workspaceId)));
+        }
+        
+        return { success: true };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to close workspace';
+        return { success: false, error: message };
+      }
+    }
+  );
+
+  ipcMain.handle(
+    IpcChannels.PROJECT_GET_RECENT_WORKSPACES,
+    async (): Promise<IpcResponse<RecentWorkspaceDto[]>> => {
+      try {
+        const recents = await recentAdapter.getRecent();
+        return { success: true, data: recents };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to fetch recent workspaces';
+        return { success: false, error: message };
+      }
+    }
+  );
+
+  ipcMain.handle(
+    IpcChannels.PROJECT_REMOVE_RECENT_WORKSPACE,
+    async (_event, workspaceId: string): Promise<IpcResponse<void>> => {
+      try {
+        await recentAdapter.remove(workspaceId);
+        return { success: true };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to remove recent workspace';
         return { success: false, error: message };
       }
     }

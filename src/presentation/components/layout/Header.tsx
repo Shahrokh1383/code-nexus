@@ -1,51 +1,63 @@
-import { type JSX } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { type JSX, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
-import { useWorkspaceStore } from '../../stores/workspace.store';
+import { useWorkspace } from '../../hooks/useWorkspace';
 
 interface NavItem {
   icon: string;
   label: string;
-  path: string;
+  action: () => void;
   shouldShow: () => boolean;
   ariaLabel: string;
+  variant?: 'danger';
 }
 
 export function Header(): JSX.Element {
   const navigate = useNavigate();
-  const location = useLocation();
   const { isLight, toggleTheme } = useTheme();
-  const workspace = useWorkspaceStore((s) => s.workspace);
+  const { workspace, closeWorkspace } = useWorkspace();
+
+  const handleClose = useCallback(async () => {
+    await closeWorkspace();
+    navigate('/', { replace: true });
+  }, [closeWorkspace, navigate]);
 
   const navItems: NavItem[] = [
     {
       icon: 'fa-folder-tree',
       label: 'Files',
-      path: '/files',
+      action: () => navigate('/files'),
       shouldShow: () => !!workspace,
       ariaLabel: 'File Browser',
     },
     {
-      icon: 'fa-folder-open',
-      label: 'Setup',
-      path: '/setup',
-      shouldShow: () => location.pathname !== '/setup',
-      ariaLabel: 'Workspace setup',
+      icon: 'fa-right-from-bracket',
+      label: 'Close Folder',
+      action: handleClose,
+      shouldShow: () => !!workspace,
+      ariaLabel: 'Close current workspace',
+      variant: 'danger',
     },
   ];
 
   return (
     <header className="app-header">
-      <div className="logo-container">
+      <div
+        className="logo-container"
+        onClick={() => navigate('/')}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
+      >
         <h1 className="gradient-text">CodeNexus</h1>
       </div>
       <div className="header-actions">
         {navItems.map((item) =>
           item.shouldShow() ? (
             <button
-              key={item.path}
-              className="btn-ghost nav-setup-btn"
-              onClick={() => navigate(item.path)}
+              key={item.label}
+              className={`btn-ghost nav-setup-btn ${item.variant === 'danger' ? 'nav-danger-btn' : ''}`}
+              onClick={item.action}
               aria-label={item.ariaLabel}
             >
               <i className={`fa-solid ${item.icon}`} />

@@ -11,14 +11,13 @@
     "todo.md",
     "README.md",
     "package-lock.json",
-    "src\\domains\\project",
     "src\\domains\\shared-kernel\\__tests__",
     "src\\infrastructure",
     "src\\domains\\shared-kernel",
     "src\\application",
-    "src\\domains"
+    "src\\domains\\filesystem"
   ],
   "globalPatterns": [],
-  "lastModified": "2026-07-09T14:28:19.774Z",
+  "lastModified": "2026-07-09T15:41:55.646Z",
   "version": 1
 }

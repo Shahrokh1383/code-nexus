@@ -13,7 +13,7 @@ interface IpcResponse<T> {
 export function useWorkspace() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { workspace, setWorkspace } = useWorkspaceStore();
+  const { workspace, setWorkspace, clearWorkspace } = useWorkspaceStore();
   const ipc = useIpc();
 
   const initialize = useCallback(
@@ -41,8 +41,19 @@ export function useWorkspace() {
     [ipc, setWorkspace]
   );
 
+  const closeWorkspace = useCallback(async () => {
+    if (!workspace) return;
+
+    try {
+      await ipc.invoke(IpcChannels.PROJECT_CLOSE, workspace.id);
+    } finally {
+      clearWorkspace();
+    }
+  }, [workspace, ipc, clearWorkspace]);
+
   return {
     initialize,
+    closeWorkspace,
     workspace,
     isLoading,
     error,

@@ -206,6 +206,16 @@ a:hover {
   white-space: nowrap;
 }
 
+/* Close Folder danger variant */
+.nav-danger-btn {
+  color: var(--cn-error);
+}
+.nav-danger-btn:hover {
+  color: var(--cn-error-hover);
+  background-color: var(--cn-error-muted);
+  border-color: var(--cn-error-muted);
+}
+
 /* Buttons */
 button {
   font-family: inherit;

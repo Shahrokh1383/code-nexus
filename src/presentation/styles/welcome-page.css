@@ -9,6 +9,7 @@
   justify-content: center;
   height: 100%;
   min-height: 100%;
+  gap: var(--cn-space-10);
 }
 
 .welcome-hero {
@@ -40,6 +41,23 @@
   font-size: var(--cn-font-size-lg);
   color: var(--cn-text-secondary);
   max-width: 400px;
+}
+
+.welcome-open-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--cn-space-2);
+  padding: var(--cn-space-3) var(--cn-space-8);
+  font-size: var(--cn-font-size-base);
+  font-weight: var(--cn-font-weight-semibold);
+  border-radius: var(--cn-radius-lg);
+  margin-top: var(--cn-space-3);
+}
+
+.welcome-error {
+  color: var(--cn-error);
+  font-size: var(--cn-font-size-sm);
+  margin-top: var(--cn-space-2);
 }
 
 @keyframes hero-fade-in {
