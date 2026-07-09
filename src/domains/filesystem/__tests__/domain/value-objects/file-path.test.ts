@@ -17,6 +17,13 @@ describe('FilePath', () => {
     expect(path.value).toBe('src/components/Button.tsx');
   });
 
+  it('should allow "." as root path', () => {
+    const path = new FilePath('.');
+    expect(path.value).toBe('.');
+    expect(path.getName()).toBe('.');
+    expect(path.getParentPath().value).toBe('.');
+  });
+
   it('should extract the file name', () => {
     const path = new FilePath('src/components/Button.tsx');
     expect(path.getName()).toBe('Button.tsx');
@@ -50,11 +57,6 @@ describe('FilePath', () => {
 
   it('should throw for path containing traversal in middle', () => {
     expect(() => new FilePath('src/../../secret.ts')).toThrow(DomainException);
-  });
-
-  it('should accept "." as current directory', () => {
-    const path = new FilePath('.');
-    expect(path.value).toBe('.');
   });
 
   it('should equal another FilePath with the same value', () => {

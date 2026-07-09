@@ -27,11 +27,17 @@ export class FilePath {
   }
 
   getName(): string {
+    if (this._value === '.') {
+      return '.';
+    }
     const segments = this._value.split('/');
     return segments[segments.length - 1] || '';
   }
 
   getParentPath(): FilePath {
+    if (this._value === '.') {
+      return new FilePath('.');
+    }
     const segments = this._value.split('/');
     segments.pop();
     const parentValue = segments.join('/') || '.';

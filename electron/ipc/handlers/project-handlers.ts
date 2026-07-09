@@ -19,7 +19,7 @@ interface IpcResponse<T> {
   error?: string;
 }
 
-const workspaceRegistry = new Map<string, string>();
+export const workspaceRegistry = new Map<string, string>();
 
 export function registerProjectHandlers(): void {
   ipcMain.handle(

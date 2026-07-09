@@ -14,9 +14,10 @@
     "src\\domains\\project",
     "src\\domains\\shared-kernel\\__tests__",
     "src\\infrastructure",
-    "src\\presentation"
+    "src\\presentation",
+    "src\\domains\\shared-kernel"
   ],
   "globalPatterns": [],
-  "lastModified": "2026-07-09T12:09:43.134Z",
+  "lastModified": "2026-07-09T13:47:13.581Z",
   "version": 1
 }

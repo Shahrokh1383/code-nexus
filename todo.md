@@ -18,17 +18,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 ### Files to Create
 
 
-#### Infrastructure Layer
-- `src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts` — Implements `IFileSystemRepository`. Stores file tree in `.doclink/file-index.json`. Structure: `{ version, lastScan, files: { [relativePath]: { hash, lastModified, size } } }`. Lightweight. No file content.
-- `src/domains/filesystem/infrastructure/adapters/node-fs.adapter.ts` — `NodeFsAdapter`. Methods: `readDir(path): Promise<FileMetadata[]>`, `stat(path): Promise<FileMetadata>`, `exists(path): boolean`. Wraps Node.js `fs` and `path` modules. ONLY this file imports `fs` in the FileSystem context.
-- `src/domains/filesystem/infrastructure/adapters/chokidar.adapter.ts` — `ChokidarAdapter`. Methods: `startWatching(rootPath, ignorePatterns): FSWatcher`, `stopWatching(): void`. Wraps `chokidar`. Debounces events (300ms). Emits `FileModifiedEvent`, `FileDeletedEvent`, `FileDiscoveredEvent` via EventBus. Runs in Main process ONLY.
-- `src/domains/filesystem/infrastructure/adapters/ignore-parser.adapter.ts` — `IgnoreParserAdapter`. Methods: `parse(patterns): IgnoreMatcher`, `isIgnored(path, matcher): boolean`. Handles glob patterns, negations (`!`), and directory-specific patterns. Uses `minimatch` or custom implementation.
 
-#### Application Orchestration (Cross-Domain)
-- `src/application/services/background-watcher.service.ts` — `BackgroundWatcherService`. Orchestrates the ChokidarAdapter. Starts/stops watching based on workspace changes. Listens to `WorkspaceInitializedEvent` and `WorkspaceScopeChangedEvent` via EventBus. This is an Application-layer service, NOT a Domain service.
-
-#### Electron IPC
-- `.electron/ipc/handlers/filesystem-handlers.ts` — Registers: `fs:scanProject`, `fs:getFileTree`, `fs:addIgnorePattern`, `fs:removeIgnorePattern`, `fs:getIgnoredFiles`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useFileTree.ts` — Hook. Exposes: `fileTree`, `scan()`, `isScanning`, `error`. Calls IPC.
@@ -92,7 +82,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts` — `DocsFolderDetectorAdapter`. Implements the signature calculation. Uses `NodeFsAdapter` to read candidate folders. Calculates `DocFolderSignature`. Scores candidates. Returns best match.
 
 #### Electron IPC
-- `.electron/ipc/handlers/documentation-handlers.ts` — Registers: `docs:registerFolder`, `docs:detectRelocation`, `docs:getAll`, `docs:getOrphaned`, `docs:deleteDocument`.
+- `electron/ipc/handlers/documentation-handlers.ts` — Registers: `docs:registerFolder`, `docs:detectRelocation`, `docs:getAll`, `docs:getOrphaned`, `docs:deleteDocument`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useDocuments.ts` — Hook. Exposes: `documents`, `docsFolder`, `registerFolder(path)`, `detectRelocation()`, `deleteDocument(id)`, `isLoading`.
@@ -161,7 +151,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/application/sagas/file-change-reaction.saga.ts` — `FileChangeReactionSaga`. Listens to `FileModifiedEvent` from FileSystem context. Calls `DetectChangesCommand` in Tracking context. Listens to `ChangesDetectedEvent`. Calls Linking context to find linked documents. Emits `ReviewRequiredEvent` for each linked document. This saga bridges FileSystem → Tracking → Notification.
 
 #### Electron IPC
-- `.electron/ipc/handlers/tracking-handlers.ts` — Registers: `tracking:recordHash`, `tracking:detectChanges`, `tracking:approveCommit`, `tracking:getPendingChanges`, `tracking:getCommitHistory`.
+- `electron/ipc/handlers/tracking-handlers.ts` — Registers: `tracking:recordHash`, `tracking:detectChanges`, `tracking:approveCommit`, `tracking:getPendingChanges`, `tracking:getCommitHistory`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useTracking.ts` — Hook. Exposes: `pendingChanges`, `commitHistory`, `approveCommit(docId)`, `isLoading`.
@@ -226,7 +216,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/application/sagas/document-split.saga.ts` — `DocumentSplitSaga`. Listens to `DocumentDeletedEvent` from Documentation context. Checks if deleted document had child documents (links to other documents). If yes, calls `MigrateLinksCommand`. After migration, emits `LinksMigratedEvent`. Then checks each child document for orphaned status. This is the CRITICAL saga for the document split feature.
 
 #### Electron IPC
-- `.electron/ipc/handlers/linking-handlers.ts` — Registers: `linking:createLink`, `linking:removeLink`, `linking:migrateLinks`, `linking:getLinksForDocument`, `linking:getLinksForCodeFile`, `linking:getUnlinkedCodeFiles`.
+- `electron/ipc/handlers/linking-handlers.ts` — Registers: `linking:createLink`, `linking:removeLink`, `linking:migrateLinks`, `linking:getLinksForDocument`, `linking:getLinksForCodeFile`, `linking:getUnlinkedCodeFiles`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useLinks.ts` — Hook. Exposes: `links`, `createLink(fileId, docId)`, `removeLink(linkId)`, `getLinksForDocument(docId)`, `getLinksForCodeFile(fileId)`, `isLoading`.
@@ -294,7 +284,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/domains/notification/application/handlers/commit-approved-subscriber.ts` — Listens to `CommitApprovedEvent` from Tracking context. Clears `OUTDATED` warnings for the approved document ONLY.
 
 #### Electron IPC
-- `.electron/ipc/handlers/notification-handlers.ts` — Registers: `notification:getReviewQueue`, `notification:getWarningsForDocument`, `notification:clearWarning`.
+- `electron/ipc/handlers/notification-handlers.ts` — Registers: `notification:getReviewQueue`, `notification:getWarningsForDocument`, `notification:clearWarning`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useWarnings.ts` — Hook. Exposes: `reviewQueue`, `warnings`, `clearWarning(id)`, `isLoading`.

@@ -14,3 +14,17 @@ export interface ProjectConfigSchema {
   ignorePatterns: string[];
   schemaVersion: string;
 }
+
+export interface FileIndexEntrySchema {
+  id: string;
+  hash: string | null;
+  lastModified: string;
+  size: number;
+  isDirectory: boolean;
+}
+
+export interface FileIndexSchema {
+  version: string;
+  lastScan: string | null;
+  files: Record<string, FileIndexEntrySchema>;
+}

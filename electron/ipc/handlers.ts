@@ -1,6 +1,7 @@
 import { ipcMain, dialog } from 'electron';
 import { IpcChannels } from './channels';
 import { registerProjectHandlers } from './handlers/project-handlers';
+import { registerFilesystemHandlers } from './handlers/filesystem-handlers';
 
 /**
  * Registers all IPC handlers for the main process.
@@ -21,4 +22,5 @@ export function registerIpcHandlers(): void {
 
   // Domain‑specific handlers
   registerProjectHandlers();
+  registerFilesystemHandlers();
 }

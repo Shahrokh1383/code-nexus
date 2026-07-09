@@ -65,7 +65,7 @@ When tasked with adding a new feature, follow this exact sequence to maintain ar
 5. **Create or Extend Infrastructure:**
    * If persistence is needed: Create a Repository implementation in `src/domains/{context}/infrastructure/repository/` or extend the existing JSON database schema.
    * If external APIs are needed: Create an Adapter in `src/domains/{context}/infrastructure/adapters/`.
-6. **Create the IPC Handler (Main Process):** In `.electron/ipc/handlers/`, create or extend a handler group to wire the IPC channel to the Application Handler.
+6. **Create the IPC Handler (Main Process):** In `electron/ipc/handlers/`, create or extend a handler group to wire the IPC channel to the Application Handler.
 7. **Create the React Hook (Renderer Process):** In `src/presentation/hooks/`, create a custom hook that calls the IPC Client and manages React state.
 8. **Create the UI Component:** In `src/presentation/components/` or `pages/`, create the React component. It must use the custom Hook and contain ZERO business logic.
 9. **Register the Route:** If this is a new page, add it to the React Router configuration in `App.tsx`.
@@ -78,7 +78,7 @@ When tasked with adding a new feature, follow this exact sequence to maintain ar
 When tracking down a bug or planning a refactor, use this top-down trace methodology:
 
 1. **Trace the UI Entry Point:** Identify the React component and Hook that initiated the action. Verify the correct IPC channel is called with the correct payload.
-2. **Trace the IPC Handler:** In `.electron/ipc/handlers/`, verify the IPC handler is registered and correctly routes to the Application Handler.
+2. **Trace the IPC Handler:** In `electron/ipc/handlers/`, verify the IPC handler is registered and correctly routes to the Application Handler.
 3. **Check the Application Handler:** Verify the handler receives the correct DTO, performs any necessary validation, and delegates to the correct Domain Service or Repository.
 4. **Check the Domain Layer:** This is where 90% of business logic bugs live. Verify Entity invariants, Value Object validation, and Domain Event emission. Check for missing edge cases (e.g., empty arrays, null values, path traversal).
 5. **Check the Infrastructure Layer:** If data is incorrect or missing, verify the Repository implementation reads/writes the correct JSON files in `.doclink/`. Verify file system adapters handle paths correctly (cross-platform separators, relative vs absolute).
