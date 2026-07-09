@@ -12,8 +12,8 @@ import { SchemaMigrator } from '../../../src/infrastructure/persistence/migratio
 import { DATABASE_SCHEMA_VERSION } from '../../../src/infrastructure/persistence/database-schema';
 import { WorkspaceJsonRepository } from '../../../src/domains/project/infrastructure/repository/workspace-json.repository';
 import { ProjectConfigJsonRepository } from '../../../src/domains/project/infrastructure/repository/project-config-json.repository';
-import { RecentWorkspacesAdapter, RecentWorkspaceDto } from '../infrastructure/recent-workspaces.adapter';
-import { EventBus } from '../../../src/shared-kernel/events/event-bus';
+import { RecentWorkspacesAdapter, RecentWorkspaceDto } from '../../infrastructure/recent-workspaces.adapter';
+import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
 import { WorkspaceClosedEvent } from '../../../src/domains/project/domain/events/workspace-closed';
 import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
 
@@ -35,7 +35,7 @@ export function registerProjectHandlers(): void {
         await fs.access(rootPath);
 
         const db = new JsonDatabase(rootPath);
-        await db.ensureDoclinkExist();
+        await db.ensureDoclinkExists();
         await db.writeTextFile('.docignore', 'node_modules/\n.git/\ndist/\nbuild/\n.doclink/\n*.log\n');
 
         const workspaceRepo = new WorkspaceJsonRepository(db);
