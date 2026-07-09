@@ -35,34 +35,37 @@ describe('JsonDatabase', () => {
     expect(fs.readFile).toHaveBeenCalledWith('/test/project/.doclink/test.json', 'utf-8');
   });
 
-  it('should write JSON atomically', async () => {
+  it('should write JSON directly', async () => {
+    (fs.mkdir as jest.Mock).mockResolvedValue(undefined);
     (fs.writeFile as jest.Mock).mockResolvedValue(undefined);
-    (fs.rename as jest.Mock).mockResolvedValue(undefined);
 
     await db.write('test.json', { key: 'value' });
 
+    // ensure directory is created before writing
+    expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.doclink', { recursive: true });
+    // write directly to the final file (no .tmp)
     expect(fs.writeFile).toHaveBeenCalledWith(
-      '/test/project/.doclink/test.json.tmp',
+      '/test/project/.doclink/test.json',
       JSON.stringify({ key: 'value' }, null, 2),
       'utf-8'
     );
-    expect(fs.rename).toHaveBeenCalledWith(
-      '/test/project/.doclink/test.json.tmp',
-      '/test/project/.doclink/test.json'
-    );
+    // no rename should be called
+    expect(fs.rename).not.toHaveBeenCalled();
   });
 
-  it('should write text file atomically', async () => {
+  it('should write text file directly', async () => {
+    (fs.mkdir as jest.Mock).mockResolvedValue(undefined);
     (fs.writeFile as jest.Mock).mockResolvedValue(undefined);
-    (fs.rename as jest.Mock).mockResolvedValue(undefined);
 
     await db.writeTextFile('.docignore', 'content');
 
+    expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.doclink', { recursive: true });
     expect(fs.writeFile).toHaveBeenCalledWith(
-      '/test/project/.doclink/.docignore.tmp',
+      '/test/project/.doclink/.docignore',
       'content',
       'utf-8'
     );
+    expect(fs.rename).not.toHaveBeenCalled();
   });
 
   it('should read text file', async () => {
