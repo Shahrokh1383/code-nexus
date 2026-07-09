@@ -1,9 +1,9 @@
-import { ScanProjectService, FileMetadata } from '../../../../domain/services/scan-project.service';
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { IgnorePattern } from '../../../../domain/value-objects/ignore-pattern';
-import { FileDiscoveredEvent } from '../../../../domain/events/file-discovered';
-import { ScanCompletedEvent } from '../../../../domain/events/scan-completed';
-import { FolderNode } from '../../../../domain/entities/folder-node';
+import { ScanProjectService, FileMetadata } from '../../../domain/services/scan-project.service';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { IgnorePattern } from '../../../domain/value-objects/ignore-pattern';
+import { FileDiscoveredEvent } from '../../../domain/events/file-discovered';
+import { ScanCompletedEvent } from '../../../domain/events/scan-completed';
+import { FolderNode } from '../../../domain/entities/folder-node';
 
 describe('ScanProjectService', () => {
   const service = new ScanProjectService();
@@ -72,6 +72,7 @@ describe('ScanProjectService', () => {
   it('should filter out ignored files and directories', () => {
     const rootPath = new FilePath('.');
     const files = [
+      createMetadata({ path: 'src', name: 'src', isDirectory: true, size: 0 }),
       createMetadata({ path: 'src/index.ts', name: 'index.ts' }),
       createMetadata({ path: 'node_modules', name: 'node_modules', isDirectory: true, size: 0 }),
       createMetadata({ path: 'node_modules/lodash/index.js', name: 'index.js' }),
