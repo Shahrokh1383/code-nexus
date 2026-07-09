@@ -27,8 +27,9 @@ export class IgnoreMatcher {
     }
 
     const regexSource = pattern
-      .replace(/\./g, '\\.')
+      .replace(/\*\*\//g, '({{GLOBSTAR}}/|)')
       .replace(/\*\*/g, '{{GLOBSTAR}}')
+      .replace(/\./g, '\\.')
       .replace(/\*/g, '[^/]*')
       .replace(/\?/g, '[^/]')
       .replace(/{{GLOBSTAR}}/g, '.*');

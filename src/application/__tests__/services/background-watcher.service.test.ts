@@ -79,8 +79,10 @@ describe('BackgroundWatcherService', () => {
   it('should start watching on WorkspaceScopeChangedEvent', async () => {
     configRepo.seed('ws-1', ['dist/']);
 
+    // Now includes oldRootPath as second argument
     const event = new WorkspaceScopeChangedEvent(
       new WorkspaceId('ws-1'),
+      new WorkspacePath('/old/path'),
       new WorkspacePath('/new/path')
     );
 

@@ -5,6 +5,12 @@ jest.mock('chokidar', () => ({
   }),
 }));
 
+jest.mock('fs', () => ({
+  promises: {
+    readFile: jest.fn().mockResolvedValue('mock file content'),
+  },
+}));
+
 import chokidar from 'chokidar';
 import { ChokidarAdapter } from '../../../infrastructure/adapters/chokidar.adapter';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
@@ -12,13 +18,13 @@ import { FileModifiedEvent } from '../../../domain/events/file-modified';
 import { FileDeletedEvent } from '../../../domain/events/file-deleted';
 import { FileDiscoveredEvent } from '../../../domain/events/file-discovered';
 
-jest.mock('../../../../../shared-kernel/utils/hash-utils', () => ({
+jest.mock('../../../../shared-kernel/utils/hash-utils', () => ({
   HashUtils: {
     sha256: jest.fn().mockReturnValue('a'.repeat(64)),
   },
 }));
 
-jest.mock('../../../../../shared-kernel/utils/uuid-generator', () => ({
+jest.mock('../../../../shared-kernel/utils/uuid-generator', () => ({
   UuidGenerator: {
     generate: jest.fn().mockReturnValue('mock-uuid'),
   },

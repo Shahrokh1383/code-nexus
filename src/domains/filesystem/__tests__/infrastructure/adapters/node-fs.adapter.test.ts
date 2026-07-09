@@ -74,14 +74,16 @@ describe('NodeFsAdapter', () => {
 
   describe('scanDirectory', () => {
     it('should recursively scan all files', async () => {
+      // Use normalized path comparison to be OS-agnostic
       (fsPromises.readdir as jest.Mock).mockImplementation((dirPath: string) => {
-        if (dirPath === '/project') {
+        const normalized = dirPath.replace(/\\/g, '/');
+        if (normalized === '/project') {
           return Promise.resolve([
             { name: 'readme.md', isDirectory: () => false },
             { name: 'src', isDirectory: () => true },
           ]);
         }
-        if (dirPath === '/project/src') {
+        if (normalized === '/project/src') {
           return Promise.resolve([
             { name: 'index.ts', isDirectory: () => false },
           ]);
@@ -89,10 +91,13 @@ describe('NodeFsAdapter', () => {
         return Promise.resolve([]);
       });
 
-      (fsPromises.stat as jest.Mock).mockResolvedValue({
-        size: 100,
-        mtime: new Date('2024-01-01'),
-        isDirectory: () => false,
+      (fsPromises.stat as jest.Mock).mockImplementation((filePath: string) => {
+        const normalized = filePath.replace(/\\/g, '/');
+        return Promise.resolve({
+          size: 100,
+          mtime: new Date('2024-01-01'),
+          isDirectory: () => normalized.endsWith('src'),
+        });
       });
 
       const result = await adapter.scanDirectory('/project');

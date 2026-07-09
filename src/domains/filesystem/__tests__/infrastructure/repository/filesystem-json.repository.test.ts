@@ -5,6 +5,7 @@ import { FileNodeId } from '../../../domain/value-objects/file-node-id';
 import { FolderNodeId } from '../../../domain/value-objects/folder-node-id';
 import { FilePath } from '../../../domain/value-objects/file-path';
 import { FileSize } from '../../../domain/value-objects/file-size';
+import { FileHash } from '../../../domain/value-objects/file-hash';
 import { DateTime } from '../../../../shared-kernel/types/date-time';
 import { Maybe } from '../../../../shared-kernel/types/maybe';
 import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
