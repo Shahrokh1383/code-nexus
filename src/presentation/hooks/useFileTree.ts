@@ -3,7 +3,7 @@ import { useFileSystemStore } from '../stores/filesystem.store';
 import { useIpc } from './useIpc';
 import { useWorkspaceStore } from '../stores/workspace.store';
 import { IpcChannels } from '../../../electron/ipc/channels';
-import { FileTreeDto } from '../../../domains/filesystem/application/dto/file-tree.dto';
+import { FileTreeDto } from '../../domains/filesystem/application/dto/file-tree.dto';
 
 interface IpcResponse<T> { success: boolean; data?: T; error?: string; }
 

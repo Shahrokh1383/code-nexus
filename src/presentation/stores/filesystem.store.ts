@@ -1,5 +1,7 @@
 import { create } from 'zustand';
-import { FileTreeDto, FolderNodeDto, FileNodeDto } from '../../../domains/filesystem/application/dto/file-tree.dto';
+import { FileTreeDto } from '../../domains/filesystem/application/dto/file-tree.dto';
+import { FolderNodeDto } from '../../domains/filesystem/application/dto/folder-node.dto';
+import { FileNodeDto } from '../../domains/filesystem/application/dto/file-node.dto';
 
 export const isFolderNode = (node: FileNodeDto | FolderNodeDto): node is FolderNodeDto => 
   'children' in node;

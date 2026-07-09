@@ -18,25 +18,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 ### Files to Create
 
 
-
-
-#### Presentation Layer
-- `src/presentation/hooks/useFileTree.ts` — Hook. Exposes: `fileTree`, `scan()`, `isScanning`, `error`. Calls IPC.
-- `src/presentation/hooks/useBackgroundWatcher.ts` — Hook. Listens to IPC events from watcher. Updates file tree state reactively.
-- `src/presentation/components/file-tree/FileTree.tsx` — Recursive tree component. Uses virtualized list for large trees.
-- `src/presentation/components/file-tree/FileNode.tsx` — Individual file/folder row. Shows icon, name, size, last modified.
-- `src/presentation/components/file-tree/FileIcon.tsx` — File type icon using FontAwesome.
-- `src/presentation/pages/FileBrowserPage.tsx` — Full page. Shows file tree, scan button, ignore pattern editor.
-- `src/presentation/stores/filesystem.store.ts` — Zustand store. Holds file tree, scan status, ignore patterns.
-
-### Deliverables
-- [ ] Deep scan of 1000 files completes in under 3 seconds
-- [ ] `file-index.json` is under 50KB for 1000 files
-- [ ] File watcher detects changes within 300ms of file save
-- [ ] Ignore patterns correctly exclude `node_modules/`, `.git/`, build folders
-- [ ] Changing a file emits `FileModifiedEvent` via EventBus
-- [ ] All paths in `file-index.json` are relative with forward slashes
-
 ---
 
 ## Phase 4: Documentation Context (Docs Folder & Orphan Detection)

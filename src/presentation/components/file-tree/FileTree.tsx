@@ -1,5 +1,6 @@
 import { type JSX } from 'react';
-import { FileNodeDto, FolderNodeDto } from '../../../../domains/filesystem/application/dto/file-tree.dto';
+import { FileNodeDto } from '../../../domains/filesystem/application/dto/file-node.dto';
+import { FolderNodeDto } from '../../../domains/filesystem/application/dto/folder-node.dto';
 import { useFileSystemStore, isFolderNode } from '../../stores/filesystem.store';
 import { FileNode } from './FileNode';
 
