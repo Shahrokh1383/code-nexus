@@ -13,28 +13,9 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ## Phase 3: FileSystem Context (Scanning & Watching)
 **Objective:** Deep project scanning, real-time file watching, ignore pattern enforcement, and file tree building.
-**Duration Estimate:** 3-4 days
-**Dependencies:** Phase 2 (Project Context)
 **Constitution References:** Section VI.2 (File System & Watching), Section VII (Commandments 1, 2, 15)
 
 ### Files to Create
-
-#### Domain Layer
-- `src/domains/filesystem/domain/entities/file-node.ts` — `FileNode` entity. Properties: `id` (FileNodeId), `path` (FilePath), `name` (string), `parentPath` (FilePath), `size` (number), `lastModified` (DateTime), `hash` (Maybe<FileHash>), `isDirectory` (boolean). Invariant: `path` must be within workspace root.
-- `src/domains/filesystem/domain/entities/folder-node.ts` — `FolderNode` entity. Properties: `id` (FolderNodeId), `path` (FilePath), `name` (string), `children` (FileNode[] | FolderNode[]). Methods: `addChild(node)`, `removeChild(id)`, `getAllDescendants(): FileNode[]`.
-- `src/domains/filesystem/domain/value-objects/file-node-id.ts` — Extends Identifier.
-- `src/domains/filesystem/domain/value-objects/folder-node-id.ts` — Extends Identifier.
-- `src/domains/filesystem/domain/value-objects/file-path.ts` — Extends Value Object. Validates path is relative to workspace root. Normalizes slashes. Prevents path traversal (`../`).
-- `src/domains/filesystem/domain/value-objects/file-hash.ts` — Extends Value Object. Wraps SHA-256 hex string. Validates length (64 chars).
-- `src/domains/filesystem/domain/value-objects/ignore-pattern.ts` — Extends Value Object. Wraps glob pattern string. Validates syntax (no invalid glob characters). Methods: `matches(path: string): boolean`.
-- `src/domains/filesystem/domain/value-objects/file-size.ts` — Extends Value Object. Wraps number (bytes). Validates non-negative.
-- `src/domains/filesystem/domain/events/file-discovered.ts` — `FileDiscoveredEvent`. Payload: `fileNodeId`, `path`, `isDirectory`.
-- `src/domains/filesystem/domain/events/file-modified.ts` — `FileModifiedEvent`. Payload: `fileNodeId`, `path`, `newHash`.
-- `src/domains/filesystem/domain/events/file-deleted.ts` — `FileDeletedEvent`. Payload: `fileNodeId`, `path`.
-- `src/domains/filesystem/domain/events/file-moved.ts` — `FileMovedEvent`. Payload: `fileNodeId`, `oldPath`, `newPath`.
-- `src/domains/filesystem/domain/events/scan-completed.ts` — `ScanCompletedEvent`. Payload: `workspaceId`, `fileCount`, `folderCount`, `durationMs`.
-- `src/domains/filesystem/domain/repository/filesystem-repository.interface.ts` — `IFileSystemRepository`. Methods: `findById`, `findByPath`, `save`, `delete`, `findAll`, `findChildrenOf`, `findByPattern`.
-- `src/domains/filesystem/domain/services/scan-project.service.ts` — `ScanProjectService`. Domain service. Orchestrates scanning logic. Takes a root path and ignore patterns. Returns a tree of FileNodes and FolderNodes. Emits `FileDiscoveredEvent` for each file found. Emits `ScanCompletedEvent` at the end. This is PURE logic — it does not touch the actual file system. It receives file metadata from an adapter.
 
 #### Application Layer
 - `src/domains/filesystem/application/commands/scan-project.command.ts` — `ScanProjectCommand`. Payload: `workspaceId: string`.

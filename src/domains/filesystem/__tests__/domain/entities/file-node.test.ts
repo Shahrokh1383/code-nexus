@@ -1,11 +1,11 @@
-import { FileNode } from '../../../../domain/entities/file-node';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { FileSize } from '../../../../domain/value-objects/file-size';
-import { FileHash } from '../../../../domain/value-objects/file-hash';
-import { DateTime } from '../../../../../shared-kernel/types/date-time';
-import { Maybe } from '../../../../../shared-kernel/types/maybe';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { FileNode } from '../../../domain/entities/file-node';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { FileSize } from '../../../domain/value-objects/file-size';
+import { FileHash } from '../../../domain/value-objects/file-hash';
+import { DateTime } from '../../../../shared-kernel/types/date-time';
+import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('FileNode', () => {
   const validHash = 'a'.repeat(64);

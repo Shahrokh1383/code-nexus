@@ -1,12 +1,12 @@
-import { FolderNode } from '../../../../domain/entities/folder-node';
-import { FolderNodeId } from '../../../../domain/value-objects/folder-node-id';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { FileNode } from '../../../../domain/entities/file-node';
-import { FileSize } from '../../../../domain/value-objects/file-size';
-import { DateTime } from '../../../../../shared-kernel/types/date-time';
-import { Maybe } from '../../../../../shared-kernel/types/maybe';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { FolderNode } from '../../../domain/entities/folder-node';
+import { FolderNodeId } from '../../../domain/value-objects/folder-node-id';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { FileNode } from '../../../domain/entities/file-node';
+import { FileSize } from '../../../domain/value-objects/file-size';
+import { DateTime } from '../../../../shared-kernel/types/date-time';
+import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('FolderNode', () => {
   const createFolderNode = (
