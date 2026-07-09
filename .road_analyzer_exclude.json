@@ -14,13 +14,13 @@
     "src\\domains\\shared-kernel\\__tests__",
     "src\\infrastructure",
     "src\\application",
-    "src\\domains\\filesystem",
     "src\\presentation",
-    "src\\types"
+    "src\\types",
+    "src\\domains\\project"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-09T16:10:00.774Z",
+  "lastModified": "2026-07-09T16:43:00.200Z",
   "version": 1
 }

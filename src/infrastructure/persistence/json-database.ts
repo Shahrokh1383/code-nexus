@@ -19,19 +19,15 @@ export class JsonDatabase {
   }
 
   async write<T>(filename: string, data: T): Promise<void> {
+    await this.ensureDoclinkExists();
     const filePath = PathUtils.join(this.doclinkPath, filename);
-    const tempPath = `${filePath}.tmp`;
-
-    await fs.writeFile(tempPath, JSON.stringify(data, null, 2), 'utf-8');
-    await fs.rename(tempPath, filePath);
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
   }
 
   async writeTextFile(filename: string, content: string): Promise<void> {
+    await this.ensureDoclinkExists();
     const filePath = PathUtils.join(this.doclinkPath, filename);
-    const tempPath = `${filePath}.tmp`;
-
-    await fs.writeFile(tempPath, content, 'utf-8');
-    await fs.rename(tempPath, filePath);
+    await fs.writeFile(filePath, content, 'utf-8');
   }
 
   async readTextFile(filename: string): Promise<string> {

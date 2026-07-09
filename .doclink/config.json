@@ -1,0 +1,13 @@
+{
+  "workspaceId": "06383bf4-3198-4b27-bd42-72c9c30f37d9",
+  "docsFolderPath": null,
+  "ignorePatterns": [
+    "node_modules/",
+    ".git/",
+    "dist/",
+    "build/",
+    ".doclink/",
+    "*.log"
+  ],
+  "schemaVersion": "1.0"
+}
