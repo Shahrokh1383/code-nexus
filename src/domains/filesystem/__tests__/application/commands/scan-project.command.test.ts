@@ -1,4 +1,4 @@
-import { ScanProjectCommand } from '../../../../application/commands/scan-project.command';
+import { ScanProjectCommand } from '../../../application/commands/scan-project.command';
 
 describe('ScanProjectCommand', () => {
   it('should hold workspaceId', () => {

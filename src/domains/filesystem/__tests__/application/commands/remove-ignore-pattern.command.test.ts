@@ -1,4 +1,4 @@
-import { RemoveIgnorePatternCommand } from '../../../../application/commands/remove-ignore-pattern.command';
+import { RemoveIgnorePatternCommand } from '../../../application/commands/remove-ignore-pattern.command';
 
 describe('RemoveIgnorePatternCommand', () => {
   it('should hold workspaceId and pattern', () => {

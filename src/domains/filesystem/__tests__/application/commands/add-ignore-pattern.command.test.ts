@@ -1,4 +1,4 @@
-import { AddIgnorePatternCommand } from '../../../../application/commands/add-ignore-pattern.command';
+import { AddIgnorePatternCommand } from '../../../application/commands/add-ignore-pattern.command';
 
 describe('AddIgnorePatternCommand', () => {
   it('should hold workspaceId and pattern', () => {

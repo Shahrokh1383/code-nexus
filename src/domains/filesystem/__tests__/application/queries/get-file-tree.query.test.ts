@@ -1,4 +1,4 @@
-import { GetFileTreeQuery } from '../../../../application/queries/get-file-tree.query';
+import { GetFileTreeQuery } from '../../../application/queries/get-file-tree.query';
 
 describe('GetFileTreeQuery', () => {
   it('should hold workspaceId without parentPath', () => {

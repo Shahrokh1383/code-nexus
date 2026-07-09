@@ -1,15 +1,15 @@
-import { GetFileTreeHandler } from '../../../../application/handlers/get-file-tree.handler';
-import { GetFileTreeQuery } from '../../../../application/queries/get-file-tree.query';
-import { IFileSystemRepository } from '../../../../domain/repository/filesystem-repository.interface';
-import { FileNode } from '../../../../domain/entities/file-node';
-import { FolderNode } from '../../../../domain/entities/folder-node';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FolderNodeId } from '../../../../domain/value-objects/folder-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { FileSize } from '../../../../domain/value-objects/file-size';
-import { DateTime } from '../../../../../shared-kernel/types/date-time';
-import { Maybe } from '../../../../../shared-kernel/types/maybe';
-import { Identifier } from '../../../../../shared-kernel/types/identifier';
+import { GetFileTreeHandler } from '../../../application/handlers/get-file-tree.handler';
+import { GetFileTreeQuery } from '../../../application/queries/get-file-tree.query';
+import { IFileSystemRepository } from '../../../domain/repository/filesystem-repository.interface';
+import { FileNode } from '../../../domain/entities/file-node';
+import { FolderNode } from '../../../domain/entities/folder-node';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FolderNodeId } from '../../../domain/value-objects/folder-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { FileSize } from '../../../domain/value-objects/file-size';
+import { DateTime } from '../../../../shared-kernel/types/date-time';
+import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { Identifier } from '../../../../shared-kernel/types/identifier';
 
 class MockFileSystemRepository implements IFileSystemRepository {
   private nodes = new Map<string, FileNode | FolderNode>();
@@ -47,7 +47,10 @@ class MockFileSystemRepository implements IFileSystemRepository {
       if (node instanceof FileNode) {
         if (node.parentPath.equals(parentPath)) children.push(node);
       } else {
-        if (node.path.getParentPath().equals(parentPath)) children.push(node);
+        // Prevent a folder from being considered its own child
+        if (!node.path.equals(parentPath) && node.path.getParentPath().equals(parentPath)) {
+          children.push(node);
+        }
       }
     }
     return children;

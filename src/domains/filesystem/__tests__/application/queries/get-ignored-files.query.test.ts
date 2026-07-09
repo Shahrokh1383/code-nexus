@@ -1,4 +1,4 @@
-import { GetIgnoredFilesQuery } from '../../../../application/queries/get-ignored-files.query';
+import { GetIgnoredFilesQuery } from '../../../application/queries/get-ignored-files.query';
 
 describe('GetIgnoredFilesQuery', () => {
   it('should hold workspaceId', () => {

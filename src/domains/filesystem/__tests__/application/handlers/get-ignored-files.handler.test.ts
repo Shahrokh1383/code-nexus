@@ -1,9 +1,9 @@
-import { GetIgnoredFilesHandler } from '../../../../application/handlers/get-ignored-files.handler';
-import { GetIgnoredFilesQuery } from '../../../../application/queries/get-ignored-files.query';
-import { IProjectConfigRepository } from '../../../../../project/domain/repository/project-config-repository.interface';
-import { ProjectConfig } from '../../../../../project/domain/entities/project-config';
-import { WorkspaceId } from '../../../../../project/domain/value-objects/workspace-id';
-import { Maybe } from '../../../../../shared-kernel/types/maybe';
+import { GetIgnoredFilesHandler } from '../../../application/handlers/get-ignored-files.handler';
+import { GetIgnoredFilesQuery } from '../../../application/queries/get-ignored-files.query';
+import { IProjectConfigRepository } from '../../../../project/domain/repository/project-config-repository.interface';
+import { ProjectConfig } from '../../../../project/domain/entities/project-config';
+import { WorkspaceId } from '../../../../project/domain/value-objects/workspace-id';
+import { Maybe } from '../../../../shared-kernel/types/maybe';
 
 class MockProjectConfigRepository implements IProjectConfigRepository {
   private configs: ProjectConfig[] = [];

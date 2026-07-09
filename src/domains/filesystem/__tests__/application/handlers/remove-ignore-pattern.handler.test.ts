@@ -1,9 +1,9 @@
-import { RemoveIgnorePatternHandler } from '../../../../application/handlers/remove-ignore-pattern.handler';
-import { RemoveIgnorePatternCommand } from '../../../../application/commands/remove-ignore-pattern.command';
-import { IProjectConfigRepository } from '../../../../../project/domain/repository/project-config-repository.interface';
-import { ProjectConfig } from '../../../../../project/domain/entities/project-config';
-import { WorkspaceId } from '../../../../../project/domain/value-objects/workspace-id';
-import { Maybe } from '../../../../../shared-kernel/types/maybe';
+import { RemoveIgnorePatternHandler } from '../../../application/handlers/remove-ignore-pattern.handler';
+import { RemoveIgnorePatternCommand } from '../../../application/commands/remove-ignore-pattern.command';
+import { IProjectConfigRepository } from '../../../../project/domain/repository/project-config-repository.interface';
+import { ProjectConfig } from '../../../../project/domain/entities/project-config';
+import { WorkspaceId } from '../../../../project/domain/value-objects/workspace-id';
+import { Maybe } from '../../../../shared-kernel/types/maybe';
 
 class MockProjectConfigRepository implements IProjectConfigRepository {
   private configs: ProjectConfig[] = [];

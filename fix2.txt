@@ -1,9 +1,0 @@
-# Scan handler (the most complex)
-
-# Pattern management handlers
-npx jest src/domains/filesystem/__tests__/application/handlers/add-ignore-pattern.handler.test.ts --verbose
-npx jest src/domains/filesystem/__tests__/application/handlers/remove-ignore-pattern.handler.test.ts --verbose
-
-# Query handlers
-npx jest src/domains/filesystem/__tests__/application/handlers/get-file-tree.handler.test.ts --verbose
-npx jest src/domains/filesystem/__tests__/application/handlers/get-ignored-files.handler.test.ts --verbose
