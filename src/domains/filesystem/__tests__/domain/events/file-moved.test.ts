@@ -1,6 +1,6 @@
-import { FileMovedEvent } from '../../../../domain/events/file-moved';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
+import { FileMovedEvent } from '../../../domain/events/file-moved';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
 
 describe('FileMovedEvent', () => {
   it('should create a file moved event', () => {

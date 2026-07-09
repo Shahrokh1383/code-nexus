@@ -1,7 +1,5 @@
 
 
-# Events only
-npx jest src/domains/filesystem/__tests__/domain/events --verbose
 
 # Service only
 npx jest src/domains/filesystem/__tests__/domain/services --verbose

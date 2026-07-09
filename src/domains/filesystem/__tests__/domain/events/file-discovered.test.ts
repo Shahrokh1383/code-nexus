@@ -1,7 +1,7 @@
-import { FileDiscoveredEvent } from '../../../../domain/events/file-discovered';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FolderNodeId } from '../../../../domain/value-objects/folder-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
+import { FileDiscoveredEvent } from '../../../domain/events/file-discovered';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FolderNodeId } from '../../../domain/value-objects/folder-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
 
 describe('FileDiscoveredEvent', () => {
   it('should create a file discovered event for a file', () => {

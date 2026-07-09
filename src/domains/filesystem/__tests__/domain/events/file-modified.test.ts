@@ -1,7 +1,7 @@
-import { FileModifiedEvent } from '../../../../domain/events/file-modified';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { FileHash } from '../../../../domain/value-objects/file-hash';
+import { FileModifiedEvent } from '../../../domain/events/file-modified';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { FileHash } from '../../../domain/value-objects/file-hash';
 
 describe('FileModifiedEvent', () => {
   it('should create a file modified event', () => {

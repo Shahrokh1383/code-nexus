@@ -1,6 +1,6 @@
-import { FileDeletedEvent } from '../../../../domain/events/file-deleted';
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
-import { FilePath } from '../../../../domain/value-objects/file-path';
+import { FileDeletedEvent } from '../../../domain/events/file-deleted';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
+import { FilePath } from '../../../domain/value-objects/file-path';
 
 describe('FileDeletedEvent', () => {
   it('should create a file deleted event', () => {

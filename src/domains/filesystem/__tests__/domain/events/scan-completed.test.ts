@@ -1,4 +1,4 @@
-import { ScanCompletedEvent } from '../../../../domain/events/scan-completed';
+import { ScanCompletedEvent } from '../../../domain/events/scan-completed';
 
 describe('ScanCompletedEvent', () => {
   it('should create a scan completed event', () => {
