@@ -6,12 +6,15 @@ import { IWorkspaceRepository } from '../../../project/domain/repository/workspa
 import { IProjectConfigRepository } from '../../../project/domain/repository/project-config-repository.interface';
 import { ScanProjectCommand } from '../commands/scan-project.command';
 import { FileTreeDto } from '../dto/file-tree.dto';
+import { FileNodeDto } from '../dto/file-node.dto';
+import { FolderNodeDto } from '../dto/folder-node.dto';
 import { IFileSystemRepository } from '../../domain/repository/filesystem-repository.interface';
 import { ScanProjectService } from '../../domain/services/scan-project.service';
 import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { FilePath } from '../../domain/value-objects/file-path';
 import { FileNode } from '../../domain/entities/file-node';
 import { FolderNode } from '../../domain/entities/folder-node';
+
 import { IFileSystemAdapter } from '../ports/file-system-adapter.interface';
 
 export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, FileTreeDto> {
