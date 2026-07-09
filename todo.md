@@ -17,19 +17,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ### Files to Create
 
-#### Application Layer
-- `src/domains/filesystem/application/commands/scan-project.command.ts` — `ScanProjectCommand`. Payload: `workspaceId: string`.
-- `src/domains/filesystem/application/handlers/scan-project.handler.ts` — `ScanProjectHandler`. Fetches workspace config. Reads ignore patterns. Calls `ScanProjectService` with file metadata from `NodeFsAdapter`. Saves results to `IFileSystemRepository`. Emits `ScanCompletedEvent`.
-- `src/domains/filesystem/application/commands/add-ignore-pattern.command.ts` — `AddIgnorePatternCommand`. Payload: `workspaceId: string`, `pattern: string`.
-- `src/domains/filesystem/application/handlers/add-ignore-pattern.handler.ts` — Validates pattern. Updates `ProjectConfig`. Re-saves config. Does NOT re-scan immediately.
-- `src/domains/filesystem/application/commands/remove-ignore-pattern.command.ts` — `RemoveIgnorePatternCommand`. Payload: `workspaceId: string`, `pattern: string`.
-- `src/domains/filesystem/application/handlers/remove-ignore-pattern.handler.ts` — Removes pattern from config.
-- `src/domains/filesystem/application/queries/get-file-tree.query.ts` — `GetFileTreeQuery`. Payload: `workspaceId: string`, `parentPath?: string`.
-- `src/domains/filesystem/application/handlers/get-file-tree.handler.ts` — Returns tree DTO. Lazy-loads children if `parentPath` provided.
-- `src/domains/filesystem/application/queries/get-ignored-files.query.ts` — `GetIgnoredFilesQuery`. Returns list of currently ignored patterns.
-- `src/domains/filesystem/application/dto/file-node.dto.ts` — Plain object. Properties: `id`, `path`, `name`, `size`, `lastModified`, `isDirectory`.
-- `src/domains/filesystem/application/dto/folder-node.dto.ts` — Plain object. Properties: `id`, `path`, `name`, `children`.
-- `src/domains/filesystem/application/dto/file-tree.dto.ts` — Plain object. Properties: `root`, `totalFiles`, `totalFolders`.
 
 #### Infrastructure Layer
 - `src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts` — Implements `IFileSystemRepository`. Stores file tree in `.doclink/file-index.json`. Structure: `{ version, lastScan, files: { [relativePath]: { hash, lastModified, size } } }`. Lightweight. No file content.
