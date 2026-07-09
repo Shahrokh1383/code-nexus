@@ -24,10 +24,11 @@ export class ChangeWorkspaceScopeHandler implements ICommandHandler<ChangeWorksp
       }
 
       const newPath = new WorkspacePath(command.newRootPath);
-      const oldPath = workspace.rootPath.value;
+      
+      const oldPath = workspace.rootPath; 
 
       this.eventBus.emit(
-        new WorkspaceScopeChangedEvent(workspaceId, oldPath, newPath.value)
+        new WorkspaceScopeChangedEvent(workspaceId, oldPath, newPath)
       );
 
       return Result.ok(undefined);
