@@ -14,7 +14,6 @@ import { IProjectConfigRepository } from '../../domain/repository/project-config
 import { InitializeWorkspaceCommand } from '../commands/initialize-workspace.command';
 import { WorkspaceDto } from '../dto/workspace.dto';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
-import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
 
 const DEFAULT_IGNORE_PATTERNS = [
   'node_modules/',
@@ -39,11 +38,28 @@ export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWor
     try {
       const normalizedPath = PathUtils.normalize(command.rootPath);
 
-      // No filesystem check here – the caller guarantees the path is valid.
-      const workspaceId = new WorkspaceId(UuidGenerator.generate());
+      // Stable workspace ID = normalized root path
+      const workspaceId = new WorkspaceId(normalizedPath);
       const workspacePath = new WorkspacePath(normalizedPath);
       const metadataFolder = new MetadataFolderName();
       const createdAt = DateTime.now();
+
+      // Check if a config already exists for this workspace
+      const existingConfig = await this.configRepo.findByWorkspaceId(workspaceId);
+
+      let projectConfig: ProjectConfig;
+      if (existingConfig) {
+        // Preserve existing ignore patterns and docs folder path
+        projectConfig = existingConfig;
+      } else {
+        // First-time initialization: create a new config with defaults
+        projectConfig = new ProjectConfig(
+          workspaceId,
+          Maybe.none<string>(),
+          [...DEFAULT_IGNORE_PATTERNS],
+          '1.0'
+        );
+      }
 
       const workspace = new Workspace(
         workspaceId,
@@ -51,13 +67,6 @@ export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWor
         metadataFolder,
         createdAt,
         Maybe.none<DateTime>()
-      );
-
-      const projectConfig = new ProjectConfig(
-        workspaceId,
-        Maybe.none<string>(),
-        [...DEFAULT_IGNORE_PATTERNS],
-        '1.0' // hard-coded schema version matching DATABASE_SCHEMA_VERSION; could be passed if needed
       );
 
       await this.workspaceRepo.save(workspace);
@@ -74,7 +83,6 @@ export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWor
 
   private mapToDto(workspace: Workspace): WorkspaceDto {
     const lastScan = workspace.lastScanAt.getOrNull();
-
     return {
       id: workspace.id.value,
       rootPath: workspace.rootPath.value,

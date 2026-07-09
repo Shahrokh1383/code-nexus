@@ -1,5 +1,5 @@
 {
-  "workspaceId": "e48b08e2-bb6b-4b5f-8f51-2cd0083b4682",
+  "workspaceId": "C:/Users/--------------------/Desktop/CodeNexus",
   "docsFolderPath": null,
   "ignorePatterns": [
     "node_modules/",
@@ -7,7 +7,10 @@
     "dist/",
     "build/",
     ".doclink/",
-    "*.log"
+    "*.log",
+    "dist-electron",
+    "public",
+    "docs"
   ],
   "schemaVersion": "1.0"
 }
