@@ -1,0 +1,11 @@
+# Value Objects only
+npx jest src/domains/filesystem/__tests__/domain/value-objects --verbose
+
+# Entities only
+npx jest src/domains/filesystem/__tests__/domain/entities --verbose
+
+# Events only
+npx jest src/domains/filesystem/__tests__/domain/events --verbose
+
+# Service only
+npx jest src/domains/filesystem/__tests__/domain/services --verbose

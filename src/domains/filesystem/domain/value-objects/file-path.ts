@@ -7,7 +7,7 @@ export class FilePath {
   constructor(value: string) {
     const normalized = PathUtils.normalize(value);
 
-    if (!normalized || normalized.length === 0 || normalized === '.') {
+    if (!normalized || normalized.length === 0) {
       throw new DomainException('FILE_PATH_EMPTY', 'File path cannot be empty');
     }
 

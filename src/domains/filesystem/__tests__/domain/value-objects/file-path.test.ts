@@ -1,5 +1,5 @@
-import { FilePath } from '../../../../domain/value-objects/file-path';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { FilePath } from '../../../domain/value-objects/file-path';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('FilePath', () => {
   it('should create a valid relative file path', () => {
@@ -52,8 +52,9 @@ describe('FilePath', () => {
     expect(() => new FilePath('src/../../secret.ts')).toThrow(DomainException);
   });
 
-  it('should throw for "." only path', () => {
-    expect(() => new FilePath('.')).toThrow(DomainException);
+  it('should accept "." as current directory', () => {
+    const path = new FilePath('.');
+    expect(path.value).toBe('.');
   });
 
   it('should equal another FilePath with the same value', () => {

@@ -1,4 +1,4 @@
-import { FileNodeId } from '../../../../domain/value-objects/file-node-id';
+import { FileNodeId } from '../../../domain/value-objects/file-node-id';
 
 describe('FileNodeId', () => {
   it('should create a valid FileNodeId', () => {

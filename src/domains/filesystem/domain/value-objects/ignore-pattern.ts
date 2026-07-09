@@ -30,14 +30,44 @@ export class IgnorePattern {
       return true;
     }
 
-    const regexPattern = this._pattern
-      .replace(/\./g, '\\.')
-      .replace(/\*\*/g, '{{GLOBSTAR}}')
-      .replace(/\*/g, '[^/]*')
-      .replace(/\?/g, '[^/]')
-      .replace(/{{GLOBSTAR}}/g, '.*');
-
+    const regexPattern = this.globToRegex(this._pattern);
     return new RegExp(`^${regexPattern}$`).test(normalized);
+  }
+
+  private globToRegex(pattern: string): string {
+    let regex = '';
+    let i = 0;
+
+    while (i < pattern.length) {
+      const ch = pattern[i];
+
+      if (ch === '*') {
+        if (i + 1 < pattern.length && pattern[i + 1] === '*') {
+          i += 2;
+          if (i < pattern.length && pattern[i] === '/') {
+            i++;
+            regex += '(.*/)?';
+          } else {
+            regex += '.*';
+          }
+        } else {
+          i++;
+          regex += '[^/]*';
+        }
+      } else if (ch === '?') {
+        i++;
+        regex += '[^/]';
+      } else {
+        if ('.[]{}()+-^$|'.includes(ch)) {
+          regex += '\\' + ch;
+        } else {
+          regex += ch;
+        }
+        i++;
+      }
+    }
+
+    return regex;
   }
 
   equals(other: IgnorePattern): boolean {

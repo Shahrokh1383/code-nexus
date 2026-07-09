@@ -1,5 +1,5 @@
-import { FileSize } from '../../../../domain/value-objects/file-size';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { FileSize } from '../../../domain/value-objects/file-size';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('FileSize', () => {
   it('should create a valid file size', () => {

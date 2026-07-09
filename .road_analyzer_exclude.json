@@ -11,11 +11,12 @@
     "todo.md",
     "README.md",
     "package-lock.json",
-    "src\\presentation"
+    "src\\presentation",
+    "src\\infrastructure",
+    "src\\domains\\project",
+    "src\\domains\\shared-kernel\\__tests__"
   ],
-  "globalPatterns": [
-    "__tests__"
-  ],
-  "lastModified": "2026-07-09T00:20:04.319Z",
+  "globalPatterns": [],
+  "lastModified": "2026-07-09T01:33:01.272Z",
   "version": 1
 }

@@ -1,5 +1,5 @@
-import { IgnorePattern } from '../../../../domain/value-objects/ignore-pattern';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { IgnorePattern } from '../../../domain/value-objects/ignore-pattern';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('IgnorePattern', () => {
   it('should create a valid pattern', () => {

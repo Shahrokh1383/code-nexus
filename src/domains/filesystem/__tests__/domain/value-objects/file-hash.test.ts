@@ -1,5 +1,5 @@
-import { FileHash } from '../../../../domain/value-objects/file-hash';
-import { DomainException } from '../../../../../shared-kernel/exceptions/domain-exception';
+import { FileHash } from '../../../domain/value-objects/file-hash';
+import { DomainException } from '../../../../shared-kernel/exceptions/domain-exception';
 
 describe('FileHash', () => {
   const validHash = 'a'.repeat(64);
