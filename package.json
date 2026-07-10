@@ -48,6 +48,11 @@
     "vite": "^6.0.0"
   },
   "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/__tests__/**/*.test.ts",
+      "**/__tests__/**/*.test.tsx"
+    ],
     "transform": {
       "^.+\\.tsx?$": [
         "ts-jest",
@@ -56,7 +61,6 @@
         }
       ]
     },
-    "testEnvironment": "jsdom",
     "roots": [
       "<rootDir>/src"
     ],
