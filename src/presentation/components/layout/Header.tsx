@@ -31,6 +31,14 @@ export function Header(): JSX.Element {
       ariaLabel: 'File Browser',
     },
     {
+      // ➕ NEW: Documentation Navigation Entry
+      icon: 'fa-book-open',
+      label: 'Docs',
+      action: () => navigate('/docs'),
+      shouldShow: () => !!workspace,
+      ariaLabel: 'Documentation Manager',
+    },
+    {
       icon: 'fa-right-from-bracket',
       label: 'Close Folder',
       action: handleClose,

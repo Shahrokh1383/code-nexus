@@ -10,6 +10,8 @@ interface IpcResponse<T> {
   error?: string;
 }
 
+const STORAGE_KEY = 'codenexus_active_workspace_id';
+
 export function useWorkspace() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,6 +30,7 @@ export function useWorkspace() {
         )) as IpcResponse<WorkspaceDto>;
 
         if (response.success && response.data) {
+          localStorage.setItem(STORAGE_KEY, response.data.id);
           setWorkspace(response.data);
         } else {
           setError(response.error || 'Failed to initialize workspace');
@@ -47,13 +50,37 @@ export function useWorkspace() {
     try {
       await ipc.invoke(IpcChannels.PROJECT_CLOSE, workspace.id);
     } finally {
+      localStorage.removeItem(STORAGE_KEY);
       clearWorkspace();
     }
   }, [workspace, ipc, clearWorkspace]);
 
+  const rehydrate = useCallback(async () => {
+    const storedId = localStorage.getItem(STORAGE_KEY);
+    if (!storedId) return;
+
+    try {
+      const response = (await ipc.invoke(
+        IpcChannels.PROJECT_GET_WORKSPACE,
+        storedId
+      )) as IpcResponse<WorkspaceDto>;
+
+      if (response.success && response.data) {
+        setWorkspace(response.data);
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+        clearWorkspace();
+      }
+    } catch (err) {
+      localStorage.removeItem(STORAGE_KEY);
+      clearWorkspace();
+    }
+  }, [ipc, setWorkspace, clearWorkspace]);
+
   return {
     initialize,
     closeWorkspace,
+    rehydrate,
     workspace,
     isLoading,
     error,

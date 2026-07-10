@@ -30,14 +30,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 
 
-#### Presentation Layer
-- `src/presentation/hooks/useDocuments.ts` — Hook. Exposes: `documents`, `docsFolder`, `registerFolder(path)`, `detectRelocation()`, `deleteDocument(id)`, `isLoading`.
-- `src/presentation/components/document-list/DocumentList.tsx` — List of documents. Grouped by folder. Shows orphan badge.
-- `src/presentation/components/document-list/DocumentCard.tsx` — Individual document card. Shows title, path, link count, orphan status.
-- `src/presentation/components/document-list/OrphanBadge.tsx` — Warning badge for orphaned documents. Red color, warning icon.
-- `src/presentation/pages/DocumentManagerPage.tsx` — Full page. Shows docs folder info, document list, orphan section, folder relocation detection button.
-- `src/presentation/stores/documentation.store.ts` — Zustand store. Holds documents, docs folder, orphan count.
-
 ### Deliverables
 - [ ] System auto-detects `docs/` folder at initialization
 - [ ] Renaming `docs/` to `Docs/` is detected automatically on next app launch
@@ -49,8 +41,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ## Phase 5: Tracking Context (Hashing, Diff Detection, Baseline Commits)
 **Objective:** Calculate content hashes, detect changes, manage per-document commit state, and track line-level diffs.
-**Duration Estimate:** 3-4 days
-**Dependencies:** Phase 3 (FileSystem Context)
 **Constitution References:** Section VI.5 (Tracking & Granular Commits), Section VII (Commandments 11, 15)
 
 ### Files to Create

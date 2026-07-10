@@ -16,11 +16,13 @@
     "src\\application",
     "src\\types",
     "src\\domains\\project",
-    "src\\domains"
+    "src\\presentation",
+    "src\\domains\\filesystem",
+    "src\\domains\\documentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-10T17:13:31.732Z",
+  "lastModified": "2026-07-10T17:52:01.067Z",
   "version": 1
 }
