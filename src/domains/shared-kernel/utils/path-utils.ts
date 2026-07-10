@@ -67,4 +67,13 @@ export class PathUtils {
     // Must be a strict child (starts with parent + '/')
     return resolvedChild.startsWith(normParent + '/');
   }
+
+  /**
+ * Returns true if the given normalized path is absolute (starts with a drive letter on Windows or '/' on POSIX).
+ */
+  static isAbsolute(path: string): boolean {
+    if (path.startsWith('/')) return true;
+    if (/^[a-zA-Z]:/.test(path)) return true;
+    return false;
+  }
 }

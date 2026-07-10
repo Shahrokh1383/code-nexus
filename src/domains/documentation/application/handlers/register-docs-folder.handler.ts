@@ -37,8 +37,9 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
 
   async execute(command: RegisterDocsFolderCommand): Promise<Result<void, string>> {
     try {
-      const workspaceId = new WorkspaceId(command.workspaceId);
-      const config = await this.configRepo.findByWorkspaceId(workspaceId);
+      // The workspace ID is the normalized root path (see InitializeWorkspaceHandler)
+      const workspaceRoot = command.workspaceId; // e.g., "C:/Users/.../CodeNexus"
+      const config = await this.configRepo.findByWorkspaceId(new WorkspaceId(workspaceRoot));
 
       if (!config) {
         return Result.fail('Project configuration not found');
@@ -47,15 +48,24 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       let docFolder: DocFolder;
 
       if (command.suggestedPath) {
-        const normalizedPath = PathUtils.normalize(command.suggestedPath);
+        // The suggestedPath comes from a native folder dialog and is absolute.
+        // We must convert it to a workspace‑relative path before storing.
+        let normalizedPath = PathUtils.normalize(command.suggestedPath);
+
+        // If the path is absolute (starts with a drive letter or '/'), make it relative
+        if (PathUtils.isAbsolute(normalizedPath)) {
+          normalizedPath = PathUtils.relative(workspaceRoot, normalizedPath);
+        }
+
+        // Ensure the folder exists (relative path now)
         const exists = await this.scanner.exists(normalizedPath);
         if (!exists) {
-          return Result.fail(`Suggested path '${normalizedPath}' does not exist`);
+          return Result.fail(`Folder '${normalizedPath}' does not exist inside the workspace`);
         }
 
         const isDir = await this.scanner.isDirectory(normalizedPath);
         if (!isDir) {
-          return Result.fail(`Suggested path '${normalizedPath}' is not a directory`);
+          return Result.fail(`Path '${normalizedPath}' is not a directory`);
         }
 
         const files = await this.scanner.scanFolder(normalizedPath);
@@ -67,6 +77,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
           files.filter((f) => !f.isDirectory).length
         );
       } else {
+        // No path provided: auto‑detect
         const candidates = await this.buildCandidates();
         const detectResult = this.detectorService.detect(candidates);
 

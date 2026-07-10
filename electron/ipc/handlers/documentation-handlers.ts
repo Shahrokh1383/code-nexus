@@ -21,6 +21,11 @@ import { GetAllDocumentsHandler } from '../../../src/domains/documentation/appli
 import { GetOrphanedDocumentsQuery } from '../../../src/domains/documentation/application/queries/get-orphaned-documents.query';
 import { GetOrphanedDocumentsHandler } from '../../../src/domains/documentation/application/handlers/get-orphaned-documents.handler';
 import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
+import { DocumentId } from '../../../src/domains/documentation/domain/value-objects/document-id';
+import { DocumentPath } from '../../../src/domains/documentation/domain/value-objects/document-path';
+import { Document } from '../../../src/domains/documentation/domain/entities/document';
+import { DateTime } from '../../../src/domains/shared-kernel/types/date-time';
+import { PathUtils } from '../../../src/domains/shared-kernel/utils/path-utils';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -43,6 +48,8 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
   }
   return workspaceId.trim();
 }
+
+const DOCUMENT_EXTENSIONS = /\.(md|txt|rst|adoc|mdx)$/i;
 
 export function registerDocumentationHandlers(): void {
   // ── REGISTER FOLDER ────────────────────────────────
@@ -226,7 +233,7 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
-    // ── SYNC FILES (remove documents whose files no longer exist) ──
+  // ── SYNC FILES (add new, remove deleted) ──
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_SYNC_FILES,
     async (_event, workspaceId: unknown): Promise<IpcResponse<void>> => {
@@ -236,15 +243,53 @@ export function registerDocumentationHandlers(): void {
       }
 
       try {
-        const { documentRepo } = createDocumentationRepositories(rootPath);
-        const scanner = new NodeFsDocumentScannerAdapter(rootPath);
-        const documents = await documentRepo.findAll();
+        const { documentRepo, configRepo } = createDocumentationRepositories(rootPath);
+        const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
+        const docsFolderPath = config?.docsFolderPath.getOrNull();
 
-        for (const doc of documents) {
-          const exists = await scanner.exists(doc.path.value);
-          if (!exists) {
+        if (!docsFolderPath) {
+          return { success: true }; // nothing to sync
+        }
+
+        const scanner = new NodeFsDocumentScannerAdapter(rootPath);
+        // Scan the entire docs folder recursively to get all files
+        const allFiles = await scanner.scanFolder(docsFolderPath);
+        const documentFiles = allFiles.filter(
+          (f) => !f.isDirectory && DOCUMENT_EXTENSIONS.test(f.name)
+        );
+
+        // Build full relative paths (docsFolderPath + file.name)
+        const currentFilePaths = documentFiles.map((f) =>
+          PathUtils.join(docsFolderPath, f.name)
+        );
+
+        const existingDocs = await documentRepo.findAll();
+        const existingPaths = new Set(existingDocs.map((d) => d.path.value));
+
+        // Remove documents whose files have been deleted
+        for (const doc of existingDocs) {
+          if (!currentFilePaths.includes(doc.path.value)) {
             await documentRepo.delete(doc.id);
           }
+        }
+
+        // Add new files that are not yet tracked
+        const newPaths = currentFilePaths.filter((p) => !existingPaths.has(p));
+        for (const newPath of newPaths) {
+          const segments = newPath.split('/');
+          const fileName = segments[segments.length - 1];
+          const title =
+            fileName.replace(/\.[^/.]+$/, '').charAt(0).toUpperCase() +
+            fileName.replace(/\.[^/.]+$/, '').slice(1);
+
+          const document = new Document(
+            DocumentId.generate(),
+            new DocumentPath(newPath),
+            title,
+            DateTime.now(), // last modified approximated to now
+            0
+          );
+          await documentRepo.save(document);
         }
 
         return { success: true };

@@ -23,15 +23,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 
 
-### Deliverables
-- [ ] System auto-detects `docs/` folder at initialization
-- [ ] Renaming `docs/` to `Docs/` is detected automatically on next app launch
-- [ ] Orphaned documents (no code links) are flagged with warning badge
-- [ ] User can delete orphaned documents from UI; file and metadata both removed
-- [ ] Document list updates in real-time when docs folder changes
-
----
-
 ## Phase 5: Tracking Context (Hashing, Diff Detection, Baseline Commits)
 **Objective:** Calculate content hashes, detect changes, manage per-document commit state, and track line-level diffs.
 **Constitution References:** Section VI.5 (Tracking & Granular Commits), Section VII (Commandments 11, 15)

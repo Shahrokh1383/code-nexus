@@ -4,15 +4,29 @@ import { DocumentationHeader } from '../components/documentation/DocumentationHe
 import { OrphanSection } from '../components/documentation/OrphanSection';
 import { DocumentList } from '../components/documentation/DocumentList';
 import { FolderRegistrationPrompt } from '../components/documentation/FolderRegistrationPrompt';
+import { useIpc } from '../hooks/useIpc';
+import { IpcChannels } from '../../../electron/ipc/channels';
 import '../styles/documentation.css';
 
 export function DocumentManagerPage(): JSX.Element {
+  const ipc = useIpc();
   const { 
     documents, docFolder, orphans, isLoading, error, 
     registerFolder, detectRelocation, deleteDocument, clearError 
   } = useDocuments();
 
   const linkedDocuments = (documents || []).filter(doc => !doc.isOrphaned);
+
+  const handleRegisterFolder = async () => {
+    try {
+      const response = (await ipc.invoke(IpcChannels.DIALOG_OPEN_FOLDER)) as { success: boolean; data?: string[] };
+      if (response.success && response.data && response.data.length > 0) {
+        await registerFolder(response.data[0]);
+      }
+    } catch {
+      // Error handled inside registerFolder
+    }
+  };
 
   return (
     <div className="document-manager-page">
@@ -27,7 +41,7 @@ export function DocumentManagerPage(): JSX.Element {
 
       <div className="document-manager-content">
         {!docFolder && !isLoading ? (
-          <FolderRegistrationPrompt isLoading={isLoading} onRegister={() => registerFolder()} />
+          <FolderRegistrationPrompt isLoading={isLoading} onRegister={handleRegisterFolder} />
         ) : (
           <>
             <OrphanSection orphans={orphans} onDelete={deleteDocument} />
