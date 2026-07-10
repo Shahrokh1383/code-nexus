@@ -28,27 +28,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ### Files to Create
 
-#### Application Layer
-- `src/domains/documentation/application/commands/register-docs-folder.command.ts` — `RegisterDocsFolderCommand`. Payload: `workspaceId: string`, `suggestedPath?: string`.
-- `src/domains/documentation/application/handlers/register-docs-folder.handler.ts` — If `suggestedPath` provided, validates and uses it. If not, calls `DocsFolderDetectorService`. Saves `DocFolder`. Scans folder for documents. Creates `Document` entities. Emits `DocumentDiscoveredEvent` for each. Checks for orphans. Emits `OrphanDetectedEvent` if any.
-- `src/domains/documentation/application/commands/detect-docs-folder-relocation.command.ts` — `DetectDocsFolderRelocationCommand`. Payload: `workspaceId: string`.
-- `src/domains/documentation/application/handlers/detect-docs-folder-relocation.handler.ts` — Checks if stored docs folder path still exists. If not, calls `DocsFolderDetectorService` to find by signature. If found, updates path. Emits `DocsFolderRelocatedEvent`.
-- `src/domains/documentation/application/commands/delete-document.command.ts` — `DeleteDocumentCommand`. Payload: `documentId: string`.
-- `src/domains/documentation/application/handlers/delete-document.handler.ts` — Finds document. Deletes physical file via `NodeFsAdapter`. Removes from repository. Emits `DocumentDeletedEvent`.
-- `src/domains/documentation/application/queries/get-all-documents.query.ts` — `GetAllDocumentsQuery`. Payload: `workspaceId: string`.
-- `src/domains/documentation/application/handlers/get-all-documents.handler.ts` — Returns all documents with orphan status.
-- `src/domains/documentation/application/queries/get-orphaned-documents.query.ts` — `GetOrphanedDocumentsQuery`.
-- `src/domains/documentation/application/handlers/get-orphaned-documents.handler.ts` — Returns only orphaned documents.
-- `src/domains/documentation/application/dto/document.dto.ts` — Plain object. Properties: `id`, `path`, `title`, `lastModified`, `linkCount`, `isOrphaned`.
-- `src/domains/documentation/application/dto/doc-folder.dto.ts` — Plain object. Properties: `id`, `path`, `signature`, `documentCount`.
 
-#### Infrastructure Layer
-- `src/domains/documentation/infrastructure/repository/document-json.repository.ts` — Implements `IDocumentRepository`. Stores in `.doclink/documents.json`. Structure: `{ version, docsFolderPath, documents: [] }`.
-- `src/domains/documentation/infrastructure/repository/doc-folder-json.repository.ts` — Implements `IDocFolderRepository`. Stores in `.doclink/config.json` (same file as ProjectConfig, different section).
-- `src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts` — `DocsFolderDetectorAdapter`. Implements the signature calculation. Uses `NodeFsAdapter` to read candidate folders. Calculates `DocFolderSignature`. Scores candidates. Returns best match.
-
-#### Electron IPC
-- `electron/ipc/handlers/documentation-handlers.ts` — Registers: `docs:registerFolder`, `docs:detectRelocation`, `docs:getAll`, `docs:getOrphaned`, `docs:deleteDocument`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useDocuments.ts` — Hook. Exposes: `documents`, `docsFolder`, `registerFolder(path)`, `detectRelocation()`, `deleteDocument(id)`, `isLoading`.
