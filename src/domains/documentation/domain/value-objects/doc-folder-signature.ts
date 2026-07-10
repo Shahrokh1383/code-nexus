@@ -35,17 +35,40 @@ export class DocFolderSignature extends ValueObject {
 
   static calculateFrom(files: FileNode[]): DocFolderSignature {
     const fileCount = files.length;
+
+    // Determine the common root directory
+    let rootPath = '';
+    if (files.length > 0) {
+      const segments = files.map(f => f.path.split('/').filter(s => s.length > 0));
+      const minLen = Math.min(...segments.map(s => s.length));
+      let commonPrefixLength = 0;
+      for (let i = 0; i < minLen; i++) {
+        const segment = segments[0][i];
+        if (segments.every(s => s[i] === segment)) {
+          commonPrefixLength++;
+        } else {
+          break;
+        }
+      }
+      rootPath = segments[0].slice(0, commonPrefixLength).join('/');
+    }
+
+    // Top-level files are non-directory items whose path relative to root has exactly one segment
     const topLevelFileNames = files
-      .filter((f) => !f.isDirectory)
-      .map((f) => f.name)
+      .filter(f => {
+        if (f.isDirectory) return false;
+        const relative = rootPath ? f.path.slice(rootPath.length).replace(/^\//, '') : f.path;
+        return !relative.includes('/');
+      })
+      .map(f => f.name)
       .sort();
 
+    // Calculate max depth relative to the doc folder root
     let maxDepth = 0;
     for (const file of files) {
-      const depth = file.path.split('/').filter((s) => s.length > 0).length;
-      if (depth > maxDepth) {
-        maxDepth = depth;
-      }
+      const relativePath = rootPath ? file.path.slice(rootPath.length).replace(/^\//, '') : file.path;
+      const depth = relativePath.split('/').filter(s => s.length > 0).length;
+      if (depth > maxDepth) maxDepth = depth;
     }
 
     return new DocFolderSignature(fileCount, topLevelFileNames, maxDepth);
