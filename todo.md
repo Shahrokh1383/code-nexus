@@ -9,13 +9,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 **Rule:** You may NOT skip phases. Each phase must be fully implemented and tested before proceeding to the next.
 
----
-
-## Phase 3: FileSystem Context (Scanning & Watching)
-**Objective:** Deep project scanning, real-time file watching, ignore pattern enforcement, and file tree building.
-**Constitution References:** Section VI.2 (File System & Watching), Section VII (Commandments 1, 2, 15)
-
-### Files to Create
 
 
 ---

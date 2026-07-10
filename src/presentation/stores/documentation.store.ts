@@ -10,6 +10,11 @@ interface IpcResponse<T> {
   error?: string;
 }
 
+interface GetAllDocumentsResponse {
+  documents: DocumentDto[];
+  docFolder: DocFolderDto | null;
+}
+
 interface DocumentationState {
   documents: DocumentDto[];
   docFolder: DocFolderDto | null;
@@ -46,15 +51,15 @@ export const useDocumentationStore = create<DocumentationState>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const result = await invokeIpc<DocumentDto[] | { documents: DocumentDto[], docFolder?: DocFolderDto }>(
+      const result = await invokeIpc<GetAllDocumentsResponse>(
         IpcChannels.DOCUMENTATION_GET_ALL, workspace.id
       );
 
-      if (Array.isArray(result)) {
-        set({ documents: result, isLoading: false });
-      } else {
-        set({ documents: result.documents || [], docFolder: result.docFolder || null, isLoading: false });
-      }
+      set({
+        documents: result.documents || [],
+        docFolder: result.docFolder || null,
+        isLoading: false,
+      });
       await get().fetchOrphans();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to fetch documents';

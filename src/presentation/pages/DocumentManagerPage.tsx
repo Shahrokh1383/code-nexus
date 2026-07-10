@@ -12,7 +12,7 @@ export function DocumentManagerPage(): JSX.Element {
     registerFolder, detectRelocation, deleteDocument, clearError 
   } = useDocuments();
 
-  const linkedDocuments = documents.filter(doc => !doc.isOrphaned);
+  const linkedDocuments = (documents || []).filter(doc => !doc.isOrphaned);
 
   return (
     <div className="document-manager-page">

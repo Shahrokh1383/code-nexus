@@ -25,6 +25,21 @@ export class DocFolderJsonRepository implements IDocFolderRepository {
     }
   }
 
+  async findByPath(path: string): Promise<DocFolder | null> {
+    try {
+      const raw = await this.db.read<unknown>(this.filename);
+      const schema = raw as ProjectConfigSchema;
+
+      if (!schema.docFolder || schema.docFolder.path !== path) {
+        return null;
+      }
+
+      return this.mapToEntity(schema.docFolder);
+    } catch {
+      return null;
+    }
+  }
+
   async save(docFolder: DocFolder): Promise<void> {
     let raw: unknown;
     try {

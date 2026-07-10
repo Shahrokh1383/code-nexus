@@ -132,7 +132,7 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
-  // ── GET ALL DOCUMENTS ─────────────────────────────
+    // ── GET ALL DOCUMENTS ─────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_GET_ALL,
     async (
@@ -145,8 +145,9 @@ export function registerDocumentationHandlers(): void {
       }
 
       try {
-        const { documentRepo } = createDocumentationRepositories(rootPath);
-        const handler = new GetAllDocumentsHandler(documentRepo);
+        const { documentRepo, docFolderRepo, configRepo } =
+          createDocumentationRepositories(rootPath);
+        const handler = new GetAllDocumentsHandler(documentRepo, docFolderRepo, configRepo);
 
         const result = await handler.execute(
           new GetAllDocumentsQuery(workspaceId as string)
