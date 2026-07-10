@@ -1,4 +1,4 @@
-import { DomainEvent } from '@/domains/shared-kernel/events/domain-event';
+import { DomainEvent } from '../../../shared-kernel/events/domain-event';
 import { DocFolderSignature } from '../value-objects/doc-folder-signature';
 
 export class DocsFolderRelocatedEvent extends DomainEvent {

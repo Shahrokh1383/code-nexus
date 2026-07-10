@@ -1,6 +1,6 @@
-import { EventBus } from '@/domains/shared-kernel/events/event-bus';
-import { Result } from '@/domains/shared-kernel/types/result';
-import { PathUtils } from '@/domains/shared-kernel/utils/path-utils';
+import { EventBus } from '../../../shared-kernel/events/event-bus';
+import { Result } from '../../../shared-kernel/types/result';
+import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 import { DocFolder } from '../entities/doc-folder';
 import { DocFolderId } from '../value-objects/doc-folder-id';
 import { DocFolderSignature, FileNode } from '../value-objects/doc-folder-signature';

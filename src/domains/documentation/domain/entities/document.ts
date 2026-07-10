@@ -1,4 +1,4 @@
-import { DateTime } from '@/domains/shared-kernel/types/date-time';
+import { DateTime } from '../../../shared-kernel/types/date-time';
 import { DocumentId } from '../value-objects/document-id';
 import { DocumentPath } from '../value-objects/document-path';
 

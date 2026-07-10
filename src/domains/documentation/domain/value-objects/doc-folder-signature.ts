@@ -1,4 +1,4 @@
-import { ValueObject } from '@/domains/shared-kernel/types/value-object';
+import { ValueObject } from '../../../shared-kernel/types/value-object';
 
 export interface FileNode {
   name: string;

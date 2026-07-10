@@ -1,4 +1,4 @@
-import { PathUtils } from '@/domains/shared-kernel/utils/path-utils';
+import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 import { DocFolderId } from '../value-objects/doc-folder-id';
 import { DocFolderSignature } from '../value-objects/doc-folder-signature';
 

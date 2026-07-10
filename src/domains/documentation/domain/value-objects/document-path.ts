@@ -1,5 +1,5 @@
-import { ValueObject } from '@/domains/shared-kernel/types/value-object';
-import { PathUtils } from '@/domains/shared-kernel/utils/path-utils';
+import { ValueObject } from '../../../shared-kernel/types/value-object';
+import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 
 export class DocumentPath extends ValueObject {
   private readonly _value: string;
