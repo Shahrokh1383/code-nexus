@@ -28,21 +28,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ### Files to Create
 
-#### Domain Layer
-- `src/domains/documentation/domain/entities/document.ts` — `Document` entity. Properties: `id` (DocumentId), `path` (DocumentPath), `title` (string), `lastModified` (DateTime), `linkCount` (number), `isOrphaned` (boolean). Methods: `markAsOrphaned()`, `markAsLinked()`, `updateTitle(title)`.
-- `src/domains/documentation/domain/entities/doc-folder.ts` — `DocFolder` entity. Properties: `id` (DocFolderId), `path` (string), `signature` (DocFolderSignature), `documentCount` (number). Methods: `updateSignature(signature)`, `relocate(newPath)`.
-- `src/domains/documentation/domain/value-objects/document-id.ts` — Extends Identifier.
-- `src/domains/documentation/domain/value-objects/document-path.ts` — Extends Value Object. Validates path is within docs folder. Relative to workspace root.
-- `src/domains/documentation/domain/value-objects/doc-folder-id.ts` — Extends Identifier.
-- `src/domains/documentation/domain/value-objects/doc-folder-signature.ts` — `DocFolderSignature` value object. Properties: `fileCount` (number), `topLevelFileNames` (string[]), `directoryDepth` (number). Methods: `calculateFrom(files: FileNode[]): DocFolderSignature`, `similarity(other): number` (0-1 score for fuzzy matching). Used for resilient detection after renaming.
-- `src/domains/documentation/domain/events/docs-folder-relocated.ts` — `DocsFolderRelocatedEvent`. Payload: `oldPath`, `newPath`, `signature`.
-- `src/domains/documentation/domain/events/document-discovered.ts` — `DocumentDiscoveredEvent`. Payload: `documentId`, `path`, `title`.
-- `src/domains/documentation/domain/events/orphan-detected.ts` — `OrphanDetectedEvent`. Payload: `documentId`, `path`.
-- `src/domains/documentation/domain/events/document-deleted.ts` — `DocumentDeletedEvent`. Payload: `documentId`, `path`.
-- `src/domains/documentation/domain/repository/document-repository.interface.ts` — `IDocumentRepository`. Methods: `findById`, `findByPath`, `findAll`, `findOrphaned`, `save`, `delete`, `findByDocFolder`.
-- `src/domains/documentation/domain/repository/doc-folder-repository.interface.ts` — `IDocFolderRepository`. Methods: `findByWorkspaceId`, `save`, `delete`.
-- `src/domains/documentation/domain/services/docs-folder-detector.service.ts` — `DocsFolderDetectorService`. Domain service. Logic: Scan workspace root for candidate folders. Score candidates based on: name similarity (docs, Docs, documentation, etc.), content type (high % of .md, .txt files), depth (prefer root-level). Returns `DocFolder` with signature. If existing folder is missing, uses signature to find renamed folder. Emits `DocsFolderRelocatedEvent` if match found.
-
 #### Application Layer
 - `src/domains/documentation/application/commands/register-docs-folder.command.ts` — `RegisterDocsFolderCommand`. Payload: `workspaceId: string`, `suggestedPath?: string`.
 - `src/domains/documentation/application/handlers/register-docs-folder.handler.ts` — If `suggestedPath` provided, validates and uses it. If not, calls `DocsFolderDetectorService`. Saves `DocFolder`. Scans folder for documents. Creates `Document` entities. Emits `DocumentDiscoveredEvent` for each. Checks for orphans. Emits `OrphanDetectedEvent` if any.
