@@ -1,4 +1,5 @@
 export class PathUtils {
+
   static normalize(path: string): string {
     return path
       .replace(/\\/g, '/')

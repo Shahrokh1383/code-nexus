@@ -1,6 +1,5 @@
 import { ipcMain } from 'electron';
 import { IpcChannels } from '../channels';
-import { workspaceRegistry } from './project-handlers';
 import { JsonDatabase } from '../../../src/infrastructure/persistence/json-database';
 import { SchemaMigrator } from '../../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../../src/infrastructure/persistence/database-schema';
@@ -37,20 +36,32 @@ function createDocumentationRepositories(rootPath: string) {
   return { configRepo, docFolderRepo, documentRepo };
 }
 
+/**
+ * Validates that the workspace ID (which doubles as the root path) is a non‑empty string.
+ * Returns the validated string or null if invalid.
+ */
+function validateWorkspaceId(workspaceId: unknown): string | null {
+  if (typeof workspaceId !== 'string' || workspaceId.trim().length === 0) {
+    return null;
+  }
+  return workspaceId.trim();
+}
+
 export function registerDocumentationHandlers(): void {
+  // ── REGISTER FOLDER ────────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_REGISTER_FOLDER,
     async (
       _event,
-      workspaceId: string,
+      workspaceId: unknown,
       suggestedPath?: string
     ): Promise<IpcResponse<unknown>> => {
-      try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
 
+      try {
         const { configRepo, docFolderRepo, documentRepo } =
           createDocumentationRepositories(rootPath);
 
@@ -65,7 +76,7 @@ export function registerDocumentationHandlers(): void {
         );
 
         const result = await handler.execute(
-          new RegisterDocsFolderCommand(workspaceId, suggestedPath)
+          new RegisterDocsFolderCommand(workspaceId as string, suggestedPath)
         );
 
         return result.fold<IpcResponse<unknown>>(
@@ -80,18 +91,19 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
+  // ── DETECT RELOCATION ─────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_DETECT_RELOCATION,
     async (
       _event,
-      workspaceId: string
+      workspaceId: unknown
     ): Promise<IpcResponse<unknown>> => {
-      try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
 
+      try {
         const { configRepo, docFolderRepo } =
           createDocumentationRepositories(rootPath);
 
@@ -105,7 +117,7 @@ export function registerDocumentationHandlers(): void {
         );
 
         const result = await handler.execute(
-          new DetectDocsFolderRelocationCommand(workspaceId)
+          new DetectDocsFolderRelocationCommand(workspaceId as string)
         );
 
         return result.fold<IpcResponse<unknown>>(
@@ -120,23 +132,24 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
+  // ── GET ALL DOCUMENTS ─────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_GET_ALL,
     async (
       _event,
-      workspaceId: string
+      workspaceId: unknown
     ): Promise<IpcResponse<unknown>> => {
-      try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
 
+      try {
         const { documentRepo } = createDocumentationRepositories(rootPath);
         const handler = new GetAllDocumentsHandler(documentRepo);
 
         const result = await handler.execute(
-          new GetAllDocumentsQuery(workspaceId)
+          new GetAllDocumentsQuery(workspaceId as string)
         );
 
         return result.fold<IpcResponse<unknown>>(
@@ -151,18 +164,19 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
+  // ── GET ORPHANED DOCUMENTS ────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_GET_ORPHANED,
     async (
       _event,
-      workspaceId: string
+      workspaceId: unknown
     ): Promise<IpcResponse<unknown>> => {
-      try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
 
+      try {
         const { documentRepo } = createDocumentationRepositories(rootPath);
         const handler = new GetOrphanedDocumentsHandler(documentRepo);
 
@@ -180,19 +194,20 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
+  // ── DELETE DOCUMENT ───────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_DELETE_DOCUMENT,
     async (
       _event,
       documentId: string,
-      workspaceId: string
+      workspaceId: unknown
     ): Promise<IpcResponse<unknown>> => {
-      try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
 
+      try {
         const { documentRepo } = createDocumentationRepositories(rootPath);
         const deletionAdapter = new NodeFsDeletionAdapter(rootPath);
         const handler = new DeleteDocumentHandler(documentRepo, deletionAdapter);

@@ -1,4 +1,3 @@
-// src/presentation/hooks/useDocuments.ts
 import { useCallback, useEffect } from 'react';
 import { useDocumentationStore } from '../stores/documentation.store';
 import { useWorkspaceStore } from '../stores/workspace.store';

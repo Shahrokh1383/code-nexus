@@ -23,11 +23,13 @@ interface IpcResponse<T> {
   error?: string;
 }
 
-export const workspaceRegistry = new Map<string, string>();
 const recentAdapter = new RecentWorkspacesAdapter();
 const eventBus = EventBus.getInstance();
 
 export function registerProjectHandlers(): void {
+  // ──────────────────────────────────────────────
+  //  WORKSPACE INITIALIZE
+  // ──────────────────────────────────────────────
   ipcMain.handle(
     IpcChannels.PROJECT_INITIALIZE,
     async (_event, rootPath: string): Promise<IpcResponse<unknown>> => {
@@ -47,8 +49,6 @@ export function registerProjectHandlers(): void {
         if (result.isSuccess) {
           const dto = result.getValue();
           if (dto) {
-            workspaceRegistry.set(dto.id, rootPath);
-            
             // Track in recent workspaces
             await recentAdapter.addOrUpdate({
               id: dto.id,
@@ -69,14 +69,16 @@ export function registerProjectHandlers(): void {
     }
   );
 
+  // ──────────────────────────────────────────────
+  //  WORKSPACE GET
+  // ──────────────────────────────────────────────
   ipcMain.handle(
     IpcChannels.PROJECT_GET_WORKSPACE,
     async (_event, workspaceId: string): Promise<IpcResponse<unknown>> => {
       try {
-        const rootPath = workspaceRegistry.get(workspaceId);
-        if (!rootPath) {
-          return { success: false, error: 'Workspace not found in registry' };
-        }
+        // The workspace ID is the normalized root path (see InitializeWorkspaceHandler).
+        // No registry needed – derive rootPath directly from the ID.
+        const rootPath = workspaceId;
 
         const db = new JsonDatabase(rootPath);
         const workspaceRepo = new WorkspaceJsonRepository(db);
@@ -95,20 +97,24 @@ export function registerProjectHandlers(): void {
     }
   );
 
+  // ──────────────────────────────────────────────
+  //  WORKSPACE CHANGE SCOPE
+  // ──────────────────────────────────────────────
   ipcMain.handle(
     IpcChannels.PROJECT_CHANGE_SCOPE,
     async (_event, workspaceId: string, newRootPath: string): Promise<IpcResponse<unknown>> => {
       try {
-        const oldRootPath = workspaceRegistry.get(workspaceId);
-        const db = new JsonDatabase(oldRootPath || '');
+        // The workspace ID is the old root path
+        const oldRootPath = workspaceId;
+
+        const db = new JsonDatabase(oldRootPath);
         const workspaceRepo = new WorkspaceJsonRepository(db);
         const handler = new ChangeWorkspaceScopeHandler(workspaceRepo);
 
         const result = await handler.execute(new ChangeWorkspaceScopeCommand(workspaceId, newRootPath));
 
-        if (result.isSuccess) {
-          workspaceRegistry.set(workspaceId, newRootPath);
-        }
+        // The handler will create a new workspace with an ID derived from newRootPath,
+        // so the client must update its stored ID. No registry update needed.
 
         return result.fold<IpcResponse<unknown>>(
           () => ({ success: true }),
@@ -121,18 +127,15 @@ export function registerProjectHandlers(): void {
     }
   );
 
+  // ──────────────────────────────────────────────
+  //  WORKSPACE CLOSE
+  // ──────────────────────────────────────────────
   ipcMain.handle(
     IpcChannels.PROJECT_CLOSE,
     async (_event, workspaceId: string): Promise<IpcResponse<void>> => {
       try {
-        const exists = workspaceRegistry.has(workspaceId);
-        workspaceRegistry.delete(workspaceId);
-        
-        if (exists) {
-          // Emit event to notify FileSystem context to stop Chokidar watcher
-          eventBus.emit(new WorkspaceClosedEvent(new WorkspaceId(workspaceId)));
-        }
-        
+        // Always emit event to notify FileSystem context to stop Chokidar watcher
+        eventBus.emit(new WorkspaceClosedEvent(new WorkspaceId(workspaceId)));
         return { success: true };
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to close workspace';
@@ -141,6 +144,9 @@ export function registerProjectHandlers(): void {
     }
   );
 
+  // ──────────────────────────────────────────────
+  //  RECENT WORKSPACES
+  // ──────────────────────────────────────────────
   ipcMain.handle(
     IpcChannels.PROJECT_GET_RECENT_WORKSPACES,
     async (): Promise<IpcResponse<RecentWorkspaceDto[]>> => {

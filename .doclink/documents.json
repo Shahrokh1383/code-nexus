@@ -3,7 +3,7 @@
   "docsFolderPath": null,
   "documents": [
     {
-      "id": "1076df6c-9445-400d-bd4e-0b85974e20ef",
+      "id": "baff804a-4b2b-462b-b01b-e92e9da09a9c",
       "path": "docs/guideline/CodeNexus_Constitution.md",
       "title": "CodeNexus_Constitution",
       "lastModified": "2026-07-09T19:38:28.377Z",
@@ -11,7 +11,7 @@
       "isOrphaned": true
     },
     {
-      "id": "142ce1b1-d611-4d49-a376-93847e1df2d4",
+      "id": "6e9266c2-b591-4b3f-b20b-1f9493a5c270",
       "path": "docs/guideline/howtotest.md",
       "title": "Howtotest",
       "lastModified": "2026-07-09T00:17:36.102Z",
@@ -19,7 +19,7 @@
       "isOrphaned": true
     },
     {
-      "id": "e1f200d1-b48b-4b9d-a976-1ff31df318b9",
+      "id": "746e6a85-fcfc-425d-9aa4-500afb7b8e0e",
       "path": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
       "title": "CodeNexus_Implementation_Roadmap",
       "lastModified": "2026-07-10T15:46:35.854Z",
@@ -27,7 +27,7 @@
       "isOrphaned": true
     },
     {
-      "id": "3557eecb-1b5d-4ed2-813d-cecc5cc4d802",
+      "id": "5c99d9cb-3451-43db-9aa9-7dde3e2aea73",
       "path": "docs/strategy/idea.md",
       "title": "Idea",
       "lastModified": "2026-07-07T15:36:49.399Z",
@@ -35,7 +35,167 @@
       "isOrphaned": true
     },
     {
-      "id": "edda514f-d8da-47da-ac49-c6f4aea50939",
+      "id": "f31dc392-e09f-496f-9654-5789a306bc10",
+      "path": "docs/strategy/Summary.md",
+      "title": "Summary",
+      "lastModified": "2026-07-07T15:51:42.075Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "bfab9ed2-534b-4add-a8b5-ca55237e0c48",
+      "path": "docs/guideline/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-09T19:38:28.377Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "16fc43e1-7124-4e8a-a2fd-211ed39683f3",
+      "path": "docs/guideline/howtotest.md",
+      "title": "Howtotest",
+      "lastModified": "2026-07-09T00:17:36.102Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "26b6f8f0-967e-41e8-bc03-92712ac552f2",
+      "path": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
+      "title": "CodeNexus_Implementation_Roadmap",
+      "lastModified": "2026-07-10T15:46:35.854Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "66ee7f33-d77e-4a10-9510-cf64a423cebc",
+      "path": "docs/strategy/idea.md",
+      "title": "Idea",
+      "lastModified": "2026-07-07T15:36:49.399Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "36354408-2dba-43ed-a183-e0ff35475877",
+      "path": "docs/strategy/Summary.md",
+      "title": "Summary",
+      "lastModified": "2026-07-07T15:51:42.075Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "a893ee89-3f46-4cad-a9be-7e7cf0aecc3a",
+      "path": "docs/guideline/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-09T19:38:28.377Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "ec3939f6-5167-4455-b4ef-0f79603f0af6",
+      "path": "docs/guideline/howtotest.md",
+      "title": "Howtotest",
+      "lastModified": "2026-07-09T00:17:36.102Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "11e4b223-f7d0-4fe0-8f99-b7fb8dfabd3c",
+      "path": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
+      "title": "CodeNexus_Implementation_Roadmap",
+      "lastModified": "2026-07-10T15:46:35.854Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "397adfa1-605b-4a8d-acfc-5330fb613e29",
+      "path": "docs/strategy/idea.md",
+      "title": "Idea",
+      "lastModified": "2026-07-07T15:36:49.399Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "0a341768-f5ae-4988-9a20-d2b4fe582026",
+      "path": "docs/strategy/Summary.md",
+      "title": "Summary",
+      "lastModified": "2026-07-07T15:51:42.075Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "14424802-7eb0-485f-b03d-34c30c5bb247",
+      "path": "docs/guideline/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-09T19:38:28.377Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "b49ddd7c-6152-4219-8778-a9be524f1630",
+      "path": "docs/guideline/howtotest.md",
+      "title": "Howtotest",
+      "lastModified": "2026-07-09T00:17:36.102Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "31416c3b-5364-4f76-b6c7-7aec4cfa3559",
+      "path": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
+      "title": "CodeNexus_Implementation_Roadmap",
+      "lastModified": "2026-07-10T15:46:35.854Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "cae5d8e2-a453-4353-a1fa-d02f48fcac57",
+      "path": "docs/strategy/idea.md",
+      "title": "Idea",
+      "lastModified": "2026-07-07T15:36:49.399Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "a38d2b50-d906-4562-9c10-8e70fa43d005",
+      "path": "docs/strategy/Summary.md",
+      "title": "Summary",
+      "lastModified": "2026-07-07T15:51:42.075Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "89210a88-7a88-4e48-816f-cde203d18a6c",
+      "path": "docs/guideline/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-09T19:38:28.377Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "79cb1252-44c1-410f-a932-e5b8f5a60c40",
+      "path": "docs/guideline/howtotest.md",
+      "title": "Howtotest",
+      "lastModified": "2026-07-09T00:17:36.102Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "6876fbfd-427a-4f3e-a2a8-b0ec34fa5ba3",
+      "path": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
+      "title": "CodeNexus_Implementation_Roadmap",
+      "lastModified": "2026-07-10T15:46:35.854Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "125dd2b0-869d-4ec7-b2c3-0599a77eb8be",
+      "path": "docs/strategy/idea.md",
+      "title": "Idea",
+      "lastModified": "2026-07-07T15:36:49.399Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "c3aabd5b-8fbe-4787-af3c-390e2ecd0983",
       "path": "docs/strategy/Summary.md",
       "title": "Summary",
       "lastModified": "2026-07-07T15:51:42.075Z",

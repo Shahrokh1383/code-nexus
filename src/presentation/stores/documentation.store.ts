@@ -4,7 +4,6 @@ import { DocumentDto } from '../../domains/documentation/application/dto/documen
 import { DocFolderDto } from '../../domains/documentation/application/dto/doc-folder.dto';
 import { useWorkspaceStore } from './workspace.store';
 
-// Mirror the backend IpcResponse contract for strict type safety
 interface IpcResponse<T> {
   success: boolean;
   data?: T;
@@ -64,8 +63,14 @@ export const useDocumentationStore = create<DocumentationState>((set, get) => ({
   },
 
   fetchOrphans: async () => {
+    const workspace = useWorkspaceStore.getState().workspace;
+    if (!workspace) return;
+    
     try {
-      const orphans = await invokeIpc<DocumentDto[]>(IpcChannels.DOCUMENTATION_GET_ORPHANED);
+      const orphans = await invokeIpc<DocumentDto[]>(
+        IpcChannels.DOCUMENTATION_GET_ORPHANED,
+        workspace.id
+      );
       set({ orphans });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to fetch orphans';
