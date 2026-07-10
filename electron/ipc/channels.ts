@@ -19,6 +19,7 @@ export enum IpcChannels {
   DOCUMENTATION_GET_ALL = 'docs:getAll',
   DOCUMENTATION_GET_ORPHANED = 'docs:getOrphaned',
   DOCUMENTATION_DELETE_DOCUMENT = 'docs:deleteDocument',
+  DOCUMENTATION_SYNC_FILES = 'docs:syncFiles',
   LINKING_CREATE = 'linking:create',
   LINKING_DELETE = 'linking:delete',
   TRACKING_GET_STATUS = 'tracking:get-status',

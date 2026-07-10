@@ -20,6 +20,7 @@ import { GetAllDocumentsQuery } from '../../../src/domains/documentation/applica
 import { GetAllDocumentsHandler } from '../../../src/domains/documentation/application/handlers/get-all-documents.handler';
 import { GetOrphanedDocumentsQuery } from '../../../src/domains/documentation/application/queries/get-orphaned-documents.query';
 import { GetOrphanedDocumentsHandler } from '../../../src/domains/documentation/application/handlers/get-orphaned-documents.handler';
+import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -36,10 +37,6 @@ function createDocumentationRepositories(rootPath: string) {
   return { configRepo, docFolderRepo, documentRepo };
 }
 
-/**
- * Validates that the workspace ID (which doubles as the root path) is a non‑empty string.
- * Returns the validated string or null if invalid.
- */
 function validateWorkspaceId(workspaceId: unknown): string | null {
   if (typeof workspaceId !== 'string' || workspaceId.trim().length === 0) {
     return null;
@@ -132,7 +129,7 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
-    // ── GET ALL DOCUMENTS ─────────────────────────────
+  // ── GET ALL DOCUMENTS ─────────────────────────────
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_GET_ALL,
     async (
@@ -224,6 +221,35 @@ export function registerDocumentationHandlers(): void {
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Unknown error';
+        return { success: false, error: message };
+      }
+    }
+  );
+
+    // ── SYNC FILES (remove documents whose files no longer exist) ──
+  ipcMain.handle(
+    IpcChannels.DOCUMENTATION_SYNC_FILES,
+    async (_event, workspaceId: unknown): Promise<IpcResponse<void>> => {
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) {
+        return { success: false, error: 'Invalid workspace ID' };
+      }
+
+      try {
+        const { documentRepo } = createDocumentationRepositories(rootPath);
+        const scanner = new NodeFsDocumentScannerAdapter(rootPath);
+        const documents = await documentRepo.findAll();
+
+        for (const doc of documents) {
+          const exists = await scanner.exists(doc.path.value);
+          if (!exists) {
+            await documentRepo.delete(doc.id);
+          }
+        }
+
+        return { success: true };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Sync failed';
         return { success: false, error: message };
       }
     }
