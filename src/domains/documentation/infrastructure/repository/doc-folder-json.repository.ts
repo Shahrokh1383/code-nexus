@@ -26,7 +26,12 @@ export class DocFolderJsonRepository implements IDocFolderRepository {
   }
 
   async save(docFolder: DocFolder): Promise<void> {
-    const raw = await this.db.read<unknown>(this.filename);
+    let raw: unknown;
+    try {
+      raw = await this.db.read<unknown>(this.filename);
+    } catch (error) {
+      throw new Error('config.json does not exist');
+    }
     const schema = raw as ProjectConfigSchema;
 
     schema.docFolder = {
@@ -44,10 +49,14 @@ export class DocFolderJsonRepository implements IDocFolderRepository {
   }
 
   async delete(_id: DocFolderId): Promise<void> {
-    const raw = await this.db.read<unknown>(this.filename);
-    const schema = raw as ProjectConfigSchema;
-    schema.docFolder = null;
-    await this.db.write(this.filename, schema);
+    try {
+      const raw = await this.db.read<unknown>(this.filename);
+      const schema = raw as ProjectConfigSchema;
+      schema.docFolder = null;
+      await this.db.write(this.filename, schema);
+    } catch {
+      // config.json doesn't exist — nothing to delete, no error to surface
+    }
   }
 
   private mapToEntity(

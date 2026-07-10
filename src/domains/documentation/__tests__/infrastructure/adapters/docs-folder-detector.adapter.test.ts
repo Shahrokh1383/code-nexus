@@ -1,6 +1,5 @@
-jest.mock('../../../filesystem/infrastructure/adapters/node-fs.adapter');
-
-import { NodeFsAdapter } from '../../../filesystem/infrastructure/adapters/node-fs.adapter';
+jest.mock('../../../../filesystem/infrastructure/adapters/node-fs.adapter');
+import { NodeFsAdapter } from '../../../../filesystem/infrastructure/adapters/node-fs.adapter';
 import { DocsFolderDetectorAdapter } from '../../../infrastructure/adapters/docs-folder-detector.adapter';
 
 describe('DocsFolderDetectorAdapter', () => {

@@ -83,6 +83,7 @@ export class NodeFsDocumentScannerAdapter implements IDocumentFolderScannerPort 
   }
 
   private resolve(relativePath: string): string {
-    return path.join(this.workspaceRoot, PathUtils.normalize(relativePath));
+    const joined = path.join(this.workspaceRoot, PathUtils.normalize(relativePath));
+    return joined.replace(/\\/g, '/');
   }
 }

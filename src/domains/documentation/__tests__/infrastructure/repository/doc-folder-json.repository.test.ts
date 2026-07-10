@@ -1,4 +1,4 @@
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
+import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
 import { DocFolderId } from '../../../domain/value-objects/doc-folder-id';
 import { DocFolderSignature } from '../../../domain/value-objects/doc-folder-signature';
 import { DocFolder } from '../../../domain/entities/doc-folder';

@@ -1,4 +1,4 @@
-import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';
+import { JsonDatabase } from '../../../../../infrastructure/persistence/json-database';
 import { DocumentId } from '../../../domain/value-objects/document-id';
 import { DocumentPath } from '../../../domain/value-objects/document-path';
 import { DateTime } from '../../../../shared-kernel/types/date-time';

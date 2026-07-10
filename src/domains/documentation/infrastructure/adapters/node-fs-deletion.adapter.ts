@@ -8,6 +8,7 @@ export class NodeFsDeletionAdapter implements IFileDeletionPort {
 
   async deleteFile(relativePath: string): Promise<void> {
     const absolutePath = path.join(this.workspaceRoot, PathUtils.normalize(relativePath));
-    await fs.unlink(absolutePath);
+    const normalizedPath = absolutePath.replace(/\\/g, '/');
+    await fs.unlink(normalizedPath);
   }
 }
