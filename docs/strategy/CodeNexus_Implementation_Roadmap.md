@@ -356,68 +356,189 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ---
 
-## Phase 6: Linking Context (Many-to-Many Links & Auto Migration)
-**Objective:** Create and manage code-to-document links, handle document splits, and auto-migrate links via Saga.
-**Duration Estimate:** 3-4 days
-**Dependencies:** Phase 4 (Documentation), Phase 5 (Tracking)
-**Constitution References:** Section VI.4 (Linking & Many-to-Many), Section VI.5 (Document Split), Section VII (Commandment 4)
+---
 
-### Files to Create
+## Phase 6: Linking Context (Many-to-Many Code↔Doc & Doc↔Doc Links, Auto Migration)
 
-#### Domain Layer
-- `src/domains/linking/domain/entities/code-to-doc-link.ts` — `CodeToDocLink` aggregate root. Properties: `id` (LinkId), `codeFileId` (FileNodeId), `documentId` (DocumentId), `type` (LinkType), `createdAt` (DateTime), `migratedAt` (Maybe<DateTime>). Methods: `markAsInherited()`, `break()`.
-- `src/domains/linking/domain/entities/link-graph.ts` — `LinkGraph` entity. Properties: `id` (LinkGraphId), `links` (CodeToDocLink[]). Methods: `addLink(link)`, `removeLink(id)`, `findByDocument(docId)`, `findByCodeFile(fileId)`, `findByCodeFileAndDocument(fileId, docId)`, `migrateLinks(oldDocId, newDocIds): CodeToDocLink[]`.
-- `src/domains/linking/domain/value-objects/link-id.ts` — Extends Identifier.
-- `src/domains/linking/domain/value-objects/link-graph-id.ts` — Extends Identifier.
-- `src/domains/linking/domain/value-objects/link-type.ts` — Enum-like value object. `DIRECT` or `INHERITED`. Immutable.
-- `src/domains/linking/domain/events/link-created.ts` — `LinkCreatedEvent`. Payload: `linkId`, `codeFileId`, `documentId`, `type`.
-- `src/domains/linking/domain/events/link-broken.ts` — `LinkBrokenEvent`. Payload: `linkId`, `codeFileId`, `documentId`, `reason`.
-- `src/domains/linking/domain/events/links-migrated.ts` — `LinksMigratedEvent`. Payload: `oldDocumentId`, `newDocumentIds`, `migratedLinkCount`.
-- `src/domains/linking/domain/repository/link-repository.interface.ts` — `ILinkRepository`. Methods: `findById`, `findByDocument`, `findByCodeFile`, `findByCodeFileAndDocument`, `save`, `delete`, `findAll`.
-- `src/domains/linking/domain/services/link-migration.service.ts` — `LinkMigrationService`. Domain service. Takes `oldDocumentId` and `newDocumentIds`. Finds all DIRECT links to old document. Creates new INHERITED links to each new document. Returns migrated links. Emits `LinksMigratedEvent`. PURE logic.
+**Objective:** Create and manage code‑to‑document **and** document‑to‑document links, handle document splits, and auto‑migrate code links via Saga when a parent document is deleted.
 
-#### Application Layer
-- `src/domains/linking/application/commands/create-link.command.ts` — `CreateLinkCommand`. Payload: `codeFileId: string`, `documentId: string`.
-- `src/domains/linking/application/handlers/create-link.handler.ts` — Validates both file and document exist. Checks for duplicate. Creates `CodeToDocLink` with type `DIRECT`. Saves. Emits `LinkCreatedEvent`. If document was orphaned, triggers orphan clearance via EventBus.
-- `src/domains/linking/application/commands/remove-link.command.ts` — `RemoveLinkCommand`. Payload: `linkId: string`.
-- `src/domains/linking/application/handlers/remove-link.handler.ts` — Finds link. Removes from repository. Emits `LinkBrokenEvent`. Checks if document becomes orphaned. If so, emits `OrphanDetectedEvent`.
-- `src/domains/linking/application/commands/migrate-links.command.ts` — `MigrateLinksCommand`. Payload: `oldDocumentId: string`, `newDocumentIds: string[]`.
-- `src/domains/linking/application/handlers/migrate-links.handler.ts` — Calls `LinkMigrationService`. Saves migrated links. Emits `LinksMigratedEvent`.
-- `src/domains/linking/application/queries/get-links-for-document.query.ts` — `GetLinksForDocumentQuery`. Payload: `documentId: string`.
-- `src/domains/linking/application/handlers/get-links-for-document.handler.ts` — Returns all links for document, with type (DIRECT/INHERITED).
-- `src/domains/linking/application/queries/get-links-for-codefile.query.ts` — `GetLinksForCodeFileQuery`. Payload: `codeFileId: string`.
-- `src/domains/linking/application/handlers/get-links-for-codefile.handler.ts` — Returns all documents linked to a code file.
-- `src/domains/linking/application/queries/get-unlinked-codefiles.query.ts` — `GetUnlinkedCodeFilesQuery`. Payload: `workspaceId: string`.
-- `src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts` — Returns all code files with ZERO links. Used for "Unlinked Code Files" alert.
-- `src/domains/linking/application/dto/code-to-doc-link.dto.ts` — Plain object. Properties: `id`, `codeFileId`, `documentId`, `type`, `createdAt`, `migratedAt`.
-- `src/domains/linking/application/dto/link-graph.dto.ts` — Plain object. Properties: `documentId`, `linkedFiles` (array of file paths + link types).
+**Duration Estimate:** 3‑4 days
 
-#### Infrastructure Layer
-- `src/domains/linking/infrastructure/repository/link-json.repository.ts` — Implements `ILinkRepository`. Stores in `.doclink/links.json`. Structure: `{ version, links: [] }`. Each link: `{ id, codeFileId, documentId, type, createdAt, migratedAt }`. Lightweight.
-- `src/domains/linking/infrastructure/adapters/link-migration.engine.ts` — `LinkMigrationEngine`. Implements the migration algorithm. Used by `LinkMigrationService`. PURE logic.
+**Dependencies:** Phase 4 (Documentation), Phase 5 (Tracking)
 
-#### Application Orchestration (Cross-Domain)
-- `src/application/sagas/document-split.saga.ts` — `DocumentSplitSaga`. Listens to `DocumentDeletedEvent` from Documentation context. Checks if deleted document had child documents (links to other documents). If yes, calls `MigrateLinksCommand`. After migration, emits `LinksMigratedEvent`. Then checks each child document for orphaned status. This is the CRITICAL saga for the document split feature.
+**Constitution References:** Section VI.4 (Linking & Many-to-Many), Section VI.5 (Document Split), Section VII (Commandment 4)
 
-#### Electron IPC
-- `.electron/ipc/handlers/linking-handlers.ts` — Registers: `linking:createLink`, `linking:removeLink`, `linking:migrateLinks`, `linking:getLinksForDocument`, `linking:getLinksForCodeFile`, `linking:getUnlinkedCodeFiles`.
+---
 
-#### Presentation Layer
-- `src/presentation/hooks/useLinks.ts` — Hook. Exposes: `links`, `createLink(fileId, docId)`, `removeLink(linkId)`, `getLinksForDocument(docId)`, `getLinksForCodeFile(fileId)`, `isLoading`.
-- `src/presentation/components/linking/LinkCreator.tsx` — UI for creating links. Shows file tree + document list. Drag-and-drop or select-based linking.
-- `src/presentation/components/linking/LinkGraph.tsx` — Visual graph of links. Shows documents as nodes, code files as nodes, lines as edges. Color-coded by link type (DIRECT = solid, INHERITED = dashed).
-- `src/presentation/components/linking/LinkBadge.tsx` — Small badge showing link count on a document or file. Clickable to show linked items.
-- `src/presentation/components/linking/UnlinkedFilesAlert.tsx` — Alert panel showing code files with no links. User can click to link them.
-- `src/presentation/pages/LinkingPage.tsx` — Full page. Split view: file tree on left, document list on right, link graph in center. Link creation UI.
-- `src/presentation/stores/linking.store.ts` — Zustand store. Holds links, link graph, unlinked files.
+### Domain Layer
 
-### Deliverables
-- [ ] User can link a code file to multiple documents
-- [ ] User can link a document to multiple code files
-- [ ] Deleting a parent document auto-migrates links to child documents (INHERITED type)
-- [ ] INHERITED links are visually distinct from DIRECT links in UI
-- [ ] Unlinked code files are shown in a dedicated alert panel
-- [ ] `links.json` remains under 10KB for 500 links
+#### Code‑to‑Document Links (existing, unchanged)
+
+- `src/domains/linking/domain/entities/code-to-doc-link.ts`  
+  `CodeToDocLink` aggregate root.  
+  Properties: `id` (LinkId), `codeFileId` (FileNodeId), `documentId` (DocumentId), `type` (LinkType), `createdAt` (DateTime), `migratedAt` (Maybe<DateTime>).  
+  Methods: `markAsInherited()`, `break()`.
+
+- `src/domains/linking/domain/value-objects/link-id.ts` – Extends Identifier.
+- `src/domains/linking/domain/value-objects/link-type.ts` – Enum‑like value object. `DIRECT` or `INHERITED`. Immutable.
+
+#### Document‑to‑Document Links (new)
+
+- `src/domains/linking/domain/entities/document-to-document-link.ts`  
+  `DocumentToDocumentLink` aggregate root.  
+  Properties: `id` (DocumentLinkId), `parentDocumentId` (DocumentId), `childDocumentId` (DocumentId), `type` (LinkType), `createdAt` (DateTime).  
+  Methods: `markAsInherited()`, `break()`.  
+
+  **Why this entity?** It represents a hierarchical relationship between documents. When a parent is split, we create links from parent to children. Later, if the parent is deleted, the `DocumentSplitSaga` queries these links to find all children and migrates code‑to‑document links accordingly.
+
+- `src/domains/linking/domain/value-objects/document-link-id.ts` – Extends Identifier.
+
+#### Shared Entities
+
+- `src/domains/linking/domain/entities/link-graph.ts`  
+  `LinkGraph` entity (manages both link types).  
+  Properties: `id` (LinkGraphId), `codeLinks` (CodeToDocLink[]), `documentLinks` (DocumentToDocumentLink[]).  
+  Methods:  
+  - `addCodeLink(link)` / `addDocumentLink(link)`  
+  - `removeCodeLink(id)` / `removeDocumentLink(id)`  
+  - `findByDocument(docId): { codeLinks, childDocumentLinks, parentDocumentLinks }`  
+  - `findByCodeFile(fileId)`  
+  - `migrateCodeLinksFromParent(parentDocId, childDocIds): CodeToDocLink[]` – moves/duplicates code links from parent to children.
+
+- `src/domains/linking/domain/value-objects/link-graph-id.ts` – Extends Identifier.
+
+#### Domain Events
+
+- `src/domains/linking/domain/events/link-created.ts` – `LinkCreatedEvent` (can be for code or doc link, distinguished by payload: `linkId`, `type` (code or doc), `sourceId`, `targetId`).  
+- `src/domains/linking/domain/events/link-broken.ts` – `LinkBrokenEvent`.  
+- `src/domains/linking/domain/events/links-migrated.ts` – `LinksMigratedEvent` (for code links migrated).  
+- `src/domains/linking/domain/events/document-link-created.ts` – `DocumentLinkCreatedEvent` (optional, but keeps granularity).  
+- `src/domains/linking/domain/events/document-link-broken.ts` – `DocumentLinkBrokenEvent`.
+
+#### Repository Interfaces
+
+- `src/domains/linking/domain/repository/link-repository.interface.ts`  
+  `ILinkRepository` – for code‑to‑document links.  
+  Methods: `findById`, `findByDocument`, `findByCodeFile`, `findByCodeFileAndDocument`, `save`, `delete`, `findAll`.
+
+- `src/domains/linking/domain/repository/document-link-repository.interface.ts`  
+  `IDocumentLinkRepository` – for document‑to‑document links.  
+  Methods: `findById`, `findByParentDocument`, `findByChildDocument`, `findByParentAndChild`, `save`, `delete`, `findChildrenOf(parentDocId): DocumentId[]`.
+
+#### Domain Services
+
+- `src/domains/linking/domain/services/link-migration.service.ts`  
+  `LinkMigrationService`.  
+  Takes `oldDocumentId` and `newDocumentIds`.  
+  Finds all DIRECT code links to `oldDocumentId`.  
+  Creates new INHERITED code links to each `newDocumentId`.  
+  Returns migrated links. Emits `LinksMigratedEvent`. PURE logic.
+
+- `src/domains/linking/domain/services/document-link-validator.service.ts` (optional)  
+  Ensures no circular document links.
+
+---
+
+### Application Layer
+
+#### Code‑to‑Document Commands & Queries (unchanged)
+
+- `src/domains/linking/application/commands/create-link.command.ts` – `CreateLinkCommand`. Payload: `codeFileId`, `documentId`.
+- `src/domains/linking/application/handlers/create-link.handler.ts` – Validates, creates `CodeToDocLink` (DIRECT), saves, emits event.
+- `src/domains/linking/application/commands/remove-link.command.ts` – `RemoveLinkCommand`. Payload: `linkId`.
+- `src/domains/linking/application/handlers/remove-link.handler.ts` – Removes code link.
+- `src/domains/linking/application/queries/get-links-for-document.query.ts` – `GetLinksForDocumentQuery`. Payload: `documentId`.
+- `src/domains/linking/application/handlers/get-links-for-document.handler.ts` – Returns code links for document.
+- `src/domains/linking/application/queries/get-links-for-codefile.query.ts` – `GetLinksForCodeFileQuery`.
+- `src/domains/linking/application/handlers/get-links-for-codefile.handler.ts`.
+- `src/domains/linking/application/queries/get-unlinked-codefiles.query.ts`.
+- `src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts`.
+
+#### Document‑to‑Document Commands & Queries (new)
+
+- `src/domains/linking/application/commands/create-document-link.command.ts` – `CreateDocumentLinkCommand`. Payload: `parentDocumentId: string`, `childDocumentId: string`.
+- `src/domains/linking/application/handlers/create-document-link.handler.ts` – Validates both documents exist, ensures no duplicate, creates `DocumentToDocumentLink` (DIRECT), saves, emits `DocumentLinkCreatedEvent`. Optionally emits `OrphanClearance` if child was orphaned (context via EventBus).
+- `src/domains/linking/application/commands/remove-document-link.command.ts` – `RemoveDocumentLinkCommand`. Payload: `linkId: string`.
+- `src/domains/linking/application/handlers/remove-document-link.handler.ts` – Removes document link.
+- `src/domains/linking/application/queries/get-document-children.query.ts` – `GetDocumentChildrenQuery`. Payload: `parentDocumentId: string`.
+- `src/domains/linking/application/handlers/get-document-children.handler.ts` – Uses `IDocumentLinkRepository.findChildrenOf` to return child document IDs.
+- `src/domains/linking/application/queries/get-document-parents.query.ts` – `GetDocumentParentsQuery`. Payload: `childDocumentId: string`.
+- `src/domains/linking/application/handlers/get-document-parents.handler.ts` – Returns parent documents.
+
+#### Migration Command (enhanced)
+
+- `src/domains/linking/application/commands/migrate-links.command.ts` – Unchanged (payload: `oldDocumentId`, `newDocumentIds`).
+- `src/domains/linking/application/handlers/migrate-links.handler.ts` – Same as before, but now the Saga will obtain `newDocumentIds` by querying the document‑to‑document links.
+
+#### DTOs
+
+- `src/domains/linking/application/dto/code-to-doc-link.dto.ts` – unchanged.
+- `src/domains/linking/application/dto/document-link.dto.ts` – new: `{ id, parentDocumentId, childDocumentId, type, createdAt }`.
+- `src/domains/linking/application/dto/link-graph.dto.ts` – now includes both code links and document links for a given document.
+
+---
+
+### Infrastructure Layer
+
+- `src/domains/linking/infrastructure/repository/link-json.repository.ts` – implements `ILinkRepository`. Stores in `.doclink/links.json` (code links).
+- `src/domains/linking/infrastructure/repository/document-link-json.repository.ts` – implements `IDocumentLinkRepository`. Stores in `.doclink/document-links.json`. Structure: `{ version, links: [{ id, parentDocumentId, childDocumentId, type, createdAt }] }`.
+- `src/domains/linking/infrastructure/adapters/link-migration.engine.ts` – pure logic, unchanged.
+
+---
+
+### Application Orchestration (Cross-Domain)
+
+- `src/application/sagas/document-split.saga.ts` – **DocumentSplitSaga**.  
+  Listens to `DocumentDeletedEvent`.  
+  1. Queries the document‑to‑document link repository to find all children of the deleted document (using `GetDocumentChildrenQuery`).  
+  2. If children exist, calls `MigrateLinksCommand` with `oldDocumentId` = deleted doc, `newDocumentIds` = child IDs.  
+  3. After migration, emits `LinksMigratedEvent`.  
+  4. Checks each child for orphan status (maybe via `OrphanDetectedEvent`).  
+
+  **Note:** This saga bridges Documentation, Linking, and Notification contexts.
+
+---
+
+### Electron IPC
+
+- `electron/ipc/handlers/linking-handlers.ts` registers channels for:
+  - `linking:createLink` (code link)
+  - `linking:removeLink`
+  - `linking:createDocumentLink`
+  - `linking:removeDocumentLink`
+  - `linking:migrateLinks`
+  - `linking:getLinksForDocument`
+  - `linking:getLinksForCodeFile`
+  - `linking:getUnlinkedCodeFiles`
+  - `linking:getDocumentChildren`
+  - `linking:getDocumentParents`
+
+---
+
+### Presentation Layer
+
+- `src/presentation/hooks/useLinks.ts` – extends to expose `createDocumentLink`, `removeDocumentLink`, `getDocumentChildren`, `getDocumentParents`.
+- `src/presentation/components/linking/LinkCreator.tsx` – now supports two modes: code‑to‑document and document‑to‑document (e.g., a document tree to select parent/child).
+- `src/presentation/components/linking/DocumentHierarchy.tsx` – new component to visualize parent‑child document links.
+- `src/presentation/components/linking/LinkGraph.tsx` – updated to show document‑to‑document edges (dotted lines, different color).
+- `src/presentation/components/linking/LinkBadge.tsx` – shows count of both code links and document links.
+- `src/presentation/components/linking/UnlinkedFilesAlert.tsx` – unchanged.
+- `src/presentation/pages/LinkingPage.tsx` – full page with tabs or sections for code links and document links.
+- `src/presentation/stores/linking.store.ts` – holds both link types.
+
+---
+
+### Deliverables (updated)
+
+- [ ] User can link a code file to multiple documents (existing).
+- [ ] User can link a document to multiple code files (existing).
+- [ ] User can link a parent document to multiple child documents (new).
+- [ ] Deleting a parent document with linked children auto‑migrates code links from the parent to all children (enhanced).
+- [ ] INHERITED links (both code and doc) are visually distinct from DIRECT links in UI.
+- [ ] Unlinked code files are shown in a dedicated alert panel (existing).
+- [ ] `links.json` and `document-links.json` remain lightweight.
+
+---
 
 ---
 
