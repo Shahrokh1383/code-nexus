@@ -32,17 +32,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 
 
-#### Infrastructure Layer
-- `src/domains/tracking/infrastructure/repository/tracking-json.repository.ts` — Implements `ITrackingRepository`. Stores in `.doclink/commits.json` and `.doclink/file-index.json` (hash section). Structure: `{ version, commits: [], pendingHashes: {} }`.
-- `src/domains/tracking/infrastructure/adapters/diff-calculator.adapter.ts` — `DiffCalculatorAdapter`. Implements the diff algorithm. Takes two strings. Returns line arrays. Used by `DiffCalculatorService`.
-- `src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts` — `HashGeneratorAdapter`. Wraps `HashUtils` from shared-kernel. Used by `HashComparisonService`.
-- `src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts` — `FileContentReaderAdapter`. Reads file content as string. Normalizes line endings to LF. ONLY infrastructure file that reads file content.
-
-#### Application Orchestration (Cross-Domain)
-- `src/application/sagas/file-change-reaction.saga.ts` — `FileChangeReactionSaga`. Listens to `FileModifiedEvent` from FileSystem context. Calls `DetectChangesCommand` in Tracking context. Listens to `ChangesDetectedEvent`. Calls Linking context to find linked documents. Emits `ReviewRequiredEvent` for each linked document. This saga bridges FileSystem → Tracking → Notification.
-
-#### Electron IPC
-- `electron/ipc/handlers/tracking-handlers.ts` — Registers: `tracking:recordHash`, `tracking:detectChanges`, `tracking:approveCommit`, `tracking:getPendingChanges`, `tracking:getCommitHistory`.
 
 #### Presentation Layer
 - `src/presentation/hooks/useTracking.ts` — Hook. Exposes: `pendingChanges`, `commitHistory`, `approveCommit(docId)`, `isLoading`.
