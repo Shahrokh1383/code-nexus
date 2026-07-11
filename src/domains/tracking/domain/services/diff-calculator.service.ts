@@ -13,19 +13,19 @@ export class DiffCalculatorService {
     oldHash: HashValue,
     newHash: HashValue
   ): ContentDiff {
-    const oldLines = oldContent.split('\n');
-    const newLines = newContent.split('\n');
+    const oldLines = oldContent === '' ? [] : oldContent.split('\n');
+    const newLines = newContent === '' ? [] : newContent.split('\n');
 
     const { added, removed, modified } = this.computeDiff(oldLines, newLines);
 
     return new ContentDiff(
-      new DiffId(UuidGenerator.generate()),
-      filePath,
-      oldHash,
-      newHash,
-      added,
-      removed,
-      modified
+        new DiffId(UuidGenerator.generate()),
+        filePath,
+        oldHash,
+        newHash,
+        added,
+        removed,
+        modified
     );
   }
 
