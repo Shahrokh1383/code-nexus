@@ -1,48 +1,39 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useTrackingStore } from '../stores/tracking.store';
-import { useWorkspaceStore } from '../stores/workspace.store';
 
 export function useTracking() {
-  const workspace = useWorkspaceStore((s) => s.workspace);
   const {
+    selectedDocumentId,
     pendingChanges,
     commitHistory,
+    selectedDiff,
     isLoading,
     error,
+    setSelectedDocument,
     fetchPendingChanges,
     fetchCommitHistory,
+    fetchFileDiff,
     approveCommit,
     clearError,
   } = useTrackingStore();
 
-  useEffect(() => {
-    if (workspace) {
-      fetchPendingChanges();
-    }
-  }, [workspace, fetchPendingChanges]);
-
   const handleApproveCommit = useCallback(
-    async (documentId: string) => {
-      await approveCommit(documentId);
-    },
+    async (documentId: string) => { await approveCommit(documentId); },
     [approveCommit]
   );
 
-  const handleFetchCommitHistory = useCallback(
-    async (documentId: string) => {
-      await fetchCommitHistory(documentId);
-    },
-    [fetchCommitHistory]
-  );
-
   return {
+    selectedDocumentId,
     pendingChanges,
     commitHistory,
+    selectedDiff,
     isLoading,
     error,
+    setSelectedDocument,
     approveCommit: handleApproveCommit,
-    fetchCommitHistory: handleFetchCommitHistory,
     fetchPendingChanges,
+    fetchCommitHistory,
+    fetchFileDiff,
     clearError,
   };
 }

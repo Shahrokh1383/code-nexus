@@ -26,28 +26,16 @@ export class FileHash {
     this._commitId = commitId ? Maybe.some(commitId) : Maybe.none();
   }
 
-  get id(): FileHashId {
-    return this._id;
-  }
-
-  get filePath(): FilePath {
-    return this._filePath;
-  }
-
-  get hashValue(): HashValue {
-    return this._hashValue;
-  }
-
-  get committedAt(): Maybe<DateTime> {
-    return this._committedAt;
-  }
-
-  get commitId(): Maybe<CommitId> {
-    return this._commitId;
-  }
+  get id(): FileHashId { return this._id; }
+  get filePath(): FilePath { return this._filePath; }
+  get hashValue(): HashValue { return this._hashValue; }
+  get committedAt(): Maybe<DateTime> { return this._committedAt; }
+  get commitId(): Maybe<CommitId> { return this._commitId; }
 
   updateHash(newHash: HashValue): void {
     this._hashValue = newHash;
+    this._commitId = Maybe.none();
+    this._committedAt = Maybe.none();
   }
 
   commit(commitId: CommitId): void {

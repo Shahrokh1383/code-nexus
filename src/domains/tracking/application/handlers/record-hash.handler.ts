@@ -9,20 +9,20 @@ import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
 import { HashComparisonService } from '../../domain/services/hash-comparison.service';
-import { ReviewRequiredEvent } from '../../domain/events/review-required';
-import { ILinkedDocumentQueryPort } from '../ports/linked-document-query.port';
+import { DiffCalculatorService } from '../../domain/services/diff-calculator.service';
+import { ContentDiffDto } from '../dto/content-diff.dto';
+import { DiffLine } from '../../domain/value-objects/diff-line';
 
 export class RecordHashHandler implements ICommandHandler<RecordHashCommand, void> {
   constructor(
     private readonly repository: ITrackingRepository,
-    private readonly linkedDocQuery: ILinkedDocumentQueryPort
+    private readonly diffService: DiffCalculatorService // FIXED: Inject Domain Service
   ) {}
 
   async execute(command: RecordHashCommand): Promise<Result<void, string>> {
     try {
       const filePath = new FilePath(command.filePath);
-      const newHash = HashValue.fromContent(command.content);
-
+      const newHash = HashValue.fromContent(command.newContent);
       const existing = await this.repository.findHashByPath(filePath);
 
       if (existing) {
@@ -30,33 +30,35 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         const event = comparison.detectChanges(existing.hashValue, newHash, filePath);
 
         if (event) {
+          let diffDto: ContentDiffDto | null = null;
+          if (command.oldContent !== null) {
+            const diffEntity = this.diffService.calculate(
+              command.oldContent, command.newContent, filePath, existing.hashValue, newHash
+            );
+            diffDto = {
+              filePath: diffEntity.filePath.value,
+              oldHash: diffEntity.oldHash.value,
+              newHash: diffEntity.newHash.value,
+              // FIXED: Explicit typing for DiffLine to resolve implicit 'any'
+              addedLines: diffEntity.addedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type })),
+              removedLines: diffEntity.removedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type })),
+              modifiedLines: diffEntity.modifiedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type }))
+            };
+          }
+          
           existing.updateHash(newHash);
-          await this.repository.saveHash(existing);
+          await this.repository.saveHash(existing, diffDto);
           await EventBus.getInstance().emit(event);
-          await this.emitReviewRequired(filePath);
         }
       } else {
-        const fileHash = new FileHash(
-          new FileHashId(UuidGenerator.generate()),
-          filePath,
-          newHash
-        );
-        await this.repository.saveHash(fileHash);
+        const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);
+        await this.repository.saveHash(fileHash, null);
       }
 
       return Result.ok(undefined);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to record hash';
       return Result.fail(message);
-    }
-  }
-
-  private async emitReviewRequired(filePath: FilePath): Promise<void> {
-    const linkedDocs = await this.linkedDocQuery.findLinkedDocuments(filePath.value);
-    for (const docId of linkedDocs) {
-      await EventBus.getInstance().emit(
-        new ReviewRequiredEvent(docId, filePath, 'OUTDATED')
-      );
     }
   }
 }

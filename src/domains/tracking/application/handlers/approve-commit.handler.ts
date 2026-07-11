@@ -10,24 +10,33 @@ import { DateTime } from '../../../shared-kernel/types/date-time';
 import { CommitStatus } from '../../domain/value-objects/commit-status';
 import { CommitApprovedEvent } from '../../domain/events/commit-approved';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
+import { ILinkedDocumentQueryPort } from '../ports/linked-document-query.port';
 
 export class ApproveCommitHandler implements ICommandHandler<ApproveCommitCommand, void> {
-  constructor(private readonly repository: ITrackingRepository) {}
+  constructor(
+    private readonly repository: ITrackingRepository,
+    private readonly linkedDocQuery: ILinkedDocumentQueryPort
+  ) {}
 
   async execute(command: ApproveCommitCommand): Promise<Result<void, string>> {
     try {
       const documentId = new DocumentId(command.documentId);
+      
+      const linkedFilePaths = await this.linkedDocQuery.findLinkedFiles(documentId.value);
+      
       const allHashes = await this.repository.findAllHashes();
-      const linkedHashes = allHashes.filter((h) =>
-        h.commitId.isNone || h.committedAt.isNone
-      );
+      const pendingLinkedHashes = allHashes.filter((h) => {
+        const isLinked = linkedFilePaths.includes(h.filePath.value);
+        const isPending = h.commitId.isNone || h.committedAt.isNone;
+        return isLinked && isPending;
+      });
 
-      if (linkedHashes.length === 0) {
+      if (pendingLinkedHashes.length === 0) {
         return Result.ok(undefined);
       }
 
       const commitId = new CommitId(UuidGenerator.generate());
-      for (const hash of linkedHashes) {
+      for (const hash of pendingLinkedHashes) {
         hash.commit(commitId);
         await this.repository.saveHash(hash);
       }
@@ -35,7 +44,7 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
       const commit = new GranularCommit(
         commitId,
         documentId,
-        linkedHashes,
+        pendingLinkedHashes,
         DateTime.now(),
         CommitStatus.approved()
       );
@@ -43,11 +52,7 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
       await this.repository.saveCommit(commit);
 
       await EventBus.getInstance().emit(
-        new CommitApprovedEvent(
-          commitId,
-          documentId,
-          commit.getLinkedFiles()
-        )
+        new CommitApprovedEvent(commitId, documentId, commit.getLinkedFiles())
       );
 
       return Result.ok(undefined);

@@ -27,6 +27,7 @@ export enum IpcChannels {
   TRACKING_APPROVE_COMMIT =   'tracking:approveCommit',
   TRACKING_GET_PENDING_CHANGES =  'tracking:getPendingChanges',
   TRACKING_GET_COMMIT_HISTORY =   'tracking:getCommitHistory',
+  TRACKING_GET_FILE_DIFF = 'tracking:getFileDiff',
   NOTIFICATION_GET_WARNINGS = 'notification:get-warnings',
   NOTIFICATION_DISMISS = 'notification:dismiss',
 }

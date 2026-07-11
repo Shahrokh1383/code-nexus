@@ -3,7 +3,6 @@ import { Result } from '../../../shared-kernel/types/result';
 import { GetPendingChangesQuery } from '../queries/get-pending-changes.query';
 import { FileHashDto } from '../dto/file-hash.dto';
 import { ITrackingRepository } from '../../domain/repository/tracking-repository.interface';
-import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 import { ILinkedDocumentQueryPort } from '../ports/linked-document-query.port';
 
 export class GetPendingChangesHandler implements IQueryHandler<GetPendingChangesQuery, FileHashDto[]> {
@@ -18,16 +17,11 @@ export class GetPendingChangesHandler implements IQueryHandler<GetPendingChanges
       const pendingHashes = allHashes.filter((h) => h.commitId.isNone);
 
       let filtered = pendingHashes;
+      
+      // CRITICAL FIX: O(1) lookup instead of N+1 query loop
       if (query.documentId) {
-        const documentId = new DocumentId(query.documentId);
-        const docPaths: string[] = [];
-        for (const hash of pendingHashes) {
-          const linked = await this.linkedDocQuery.findLinkedDocuments(hash.filePath.value);
-          if (linked.some((d) => d.equals(documentId))) {
-            docPaths.push(hash.filePath.value);
-          }
-        }
-        filtered = pendingHashes.filter((h) => docPaths.includes(h.filePath.value));
+        const linkedFiles = await this.linkedDocQuery.findLinkedFiles(query.documentId);
+        filtered = pendingHashes.filter((h) => linkedFiles.includes(h.filePath.value));
       }
 
       const dtos: FileHashDto[] = filtered.map((h) => ({

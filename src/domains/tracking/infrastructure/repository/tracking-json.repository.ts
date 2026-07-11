@@ -10,6 +10,7 @@ import { CommitId } from '../../domain/value-objects/commit-id';
 import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 import { CommitStatus } from '../../domain/value-objects/commit-status';
+import { ContentDiffDto } from '../../application/dto/content-diff.dto';
 
 interface HashEntrySchema {
   id: string;
@@ -17,6 +18,7 @@ interface HashEntrySchema {
   hashValue: string;
   committedAt: string | null;
   commitId: string | null;
+  diff: ContentDiffDto | null; // NEW: Stores lightweight diff metadata
 }
 
 interface CommitEntrySchema {
@@ -57,10 +59,18 @@ export class TrackingJsonRepository implements ITrackingRepository {
     return Object.values(index.hashes).map((e) => this.mapHashEntryToEntity(e));
   }
 
-  async saveHash(fileHash: FileHash): Promise<void> {
+  async saveHash(fileHash: FileHash, diff?: ContentDiffDto | null): Promise<void> {
     const index = await this.readIndex();
-    index.hashes[fileHash.filePath.value] = this.mapHashEntityToEntry(fileHash);
+    const existing = index.hashes[fileHash.filePath.value];
+    index.hashes[fileHash.filePath.value] = this.mapHashEntityToEntry(fileHash, existing?.diff, diff);
     await this.writeIndex(index);
+  }
+
+  async findDiffByPath(filePath: FilePath): Promise<ContentDiffDto | null> {
+    const index = await this.readIndex();
+    const entry = index.hashes[filePath.value];
+    if (!entry) return null;
+    return entry.diff;
   }
 
   async findCommitById(commitId: CommitId): Promise<GranularCommit | null> {
@@ -84,19 +94,13 @@ export class TrackingJsonRepository implements ITrackingRepository {
 
   async findPendingCommits(): Promise<GranularCommit[]> {
     const index = await this.readIndex();
-    return index.commits
-      .filter((c) => c.status === 'PENDING')
-      .map((c) => this.mapCommitEntryToEntity(c, index));
+    return index.commits.filter((c) => c.status === 'PENDING').map((c) => this.mapCommitEntryToEntity(c, index));
   }
 
   async findCommitsByDocument(documentId: DocumentId): Promise<GranularCommit[]> {
     const index = await this.readIndex();
-    return index.commits
-      .filter((c) => c.documentId === documentId.value)
-      .map((c) => this.mapCommitEntryToEntity(c, index));
+    return index.commits.filter((c) => c.documentId === documentId.value).map((c) => this.mapCommitEntryToEntity(c, index));
   }
-
-  // ── Private helpers ─────────────────────────────────
 
   private async readIndex(): Promise<TrackingIndexSchema> {
     try {
@@ -122,13 +126,15 @@ export class TrackingJsonRepository implements ITrackingRepository {
     );
   }
 
-  private mapHashEntityToEntry(fileHash: FileHash): HashEntrySchema {
+  private mapHashEntityToEntry(fileHash: FileHash, existingDiff: ContentDiffDto | null = null, newDiff: ContentDiffDto | null | undefined = undefined): HashEntrySchema {
+    const diffToSave = newDiff !== undefined ? newDiff : existingDiff;
     return {
       id: fileHash.id.value,
       filePath: fileHash.filePath.value,
       hashValue: fileHash.hashValue.value,
       committedAt: fileHash.committedAt.isSome ? fileHash.committedAt.getOrNull()!.toISO() : null,
       commitId: fileHash.commitId.isSome ? fileHash.commitId.getOrNull()!.value : null,
+      diff: diffToSave
     };
   }
 
