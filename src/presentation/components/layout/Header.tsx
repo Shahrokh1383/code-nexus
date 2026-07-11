@@ -31,12 +31,18 @@ export function Header(): JSX.Element {
       ariaLabel: 'File Browser',
     },
     {
-      // ➕ NEW: Documentation Navigation Entry
       icon: 'fa-book-open',
       label: 'Docs',
       action: () => navigate('/docs'),
       shouldShow: () => !!workspace,
       ariaLabel: 'Documentation Manager',
+    },
+    {
+      icon: 'fa-clock-rotate-left',  // FontAwesome icon for history/tracking
+      label: 'Tracking',
+      action: () => navigate('/tracking'),
+      shouldShow: () => !!workspace,
+      ariaLabel: 'Tracking & Commits',
     },
     {
       icon: 'fa-right-from-bracket',

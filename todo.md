@@ -13,14 +13,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ---
 
-## Phase 4: Documentation Context (Docs Folder & Orphan Detection)
-**Objective:** Detect the documentation folder, track documents, identify orphaned docs, and handle folder renaming.
-**Duration Estimate:** 2-3 days
-**Dependencies:** Phase 3 (FileSystem Context)
-**Constitution References:** Section VI.3 (Documentation Folder Resilience), Section VI.7 (Orphaned Documents)
-
-### Files to Create
-
 
 
 ## Phase 5: Tracking Context (Hashing, Diff Detection, Baseline Commits)

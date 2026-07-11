@@ -16,13 +16,13 @@
     "src\\application",
     "src\\types",
     "src\\domains\\project",
-    "src\\presentation",
     "src\\domains\\shared-kernel",
-    "src\\domains\\tracking"
+    "src\\domains\\tracking",
+    "src\\domains"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-11T10:24:16.272Z",
+  "lastModified": "2026-07-11T15:35:26.235Z",
   "version": 1
 }

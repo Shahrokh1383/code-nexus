@@ -1,10 +1,10 @@
-// src/App.tsx
 import { type JSX, useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Header } from './presentation/components/layout/Header';
 import { WelcomePage } from './presentation/pages/WelcomePage';
 import { FileBrowserPage } from './presentation/pages/FileBrowserPage';
 import { DocumentManagerPage } from './presentation/pages/DocumentManagerPage';
+import { TrackingPage } from './presentation/pages/TrackingPage';
 import { useWorkspace } from './presentation/hooks/useWorkspace';
 
 export default function App(): JSX.Element {
@@ -20,20 +20,16 @@ function AppBootstrap(): JSX.Element {
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const location = useLocation();
 
-  // 1. Bootstrap: Rehydrate state from backend on mount
   useEffect(() => {
     rehydrate().finally(() => setIsBootstrapping(false));
   }, [rehydrate]);
 
-  // 2. Route Guard: Redirect to home if workspace is lost but URL is protected
   useEffect(() => {
     if (!isBootstrapping && !workspace && location.pathname !== '/') {
-      // We don't navigate programmatically here to avoid loops; 
-      // we let the render logic below handle the <Navigate /> component.
+      // Route guard handled in render
     }
   }, [isBootstrapping, workspace, location]);
 
-  // 3. Loading State: Prevent UI flash
   if (isBootstrapping) {
     return (
       <div className="app-bootstrap-loader">
@@ -45,7 +41,6 @@ function AppBootstrap(): JSX.Element {
     );
   }
 
-  // 4. Guard Logic: If no workspace and not on Welcome page, force redirect
   if (!workspace && location.pathname !== '/') {
     return <Navigate to="/" replace />;
   }
@@ -58,6 +53,7 @@ function AppBootstrap(): JSX.Element {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/files" element={<FileBrowserPage />} />
           <Route path="/docs" element={<DocumentManagerPage />} />
+          <Route path="/tracking" element={<TrackingPage />} />
         </Routes>
       </main>
     </div>
