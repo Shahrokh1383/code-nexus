@@ -1,0 +1,14 @@
+{
+  "workspaceId": "C:/Users/--------------------/Desktop/CodeNexus",
+  "docsFolderPath": null,
+  "ignorePatterns": [
+    "node_modules/",
+    ".git/",
+    "dist/",
+    "build/",
+    ".doclink/",
+    "*.log"
+  ],
+  "schemaVersion": "1.0",
+  "docFolder": null
+}

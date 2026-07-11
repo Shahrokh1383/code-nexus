@@ -1,21 +1,27 @@
 import type { JSX } from 'react';
 
 interface CommitButtonProps {
-  documentId: string;
+  documentId: string | null;
   pendingCount: number;
   onApprove: (documentId: string) => void;
   isLoading: boolean;
 }
 
 export function CommitButton({ documentId, pendingCount, onApprove, isLoading }: CommitButtonProps): JSX.Element {
-  const isDisabled = pendingCount === 0 || isLoading;
+  const isDisabled = !documentId || pendingCount === 0 || isLoading;
 
   return (
     <button
       className={`btn btn-primary commit-button ${isDisabled ? 'commit-button--disabled' : ''}`}
-      onClick={() => onApprove(documentId)}
+      onClick={() => documentId && onApprove(documentId)}
       disabled={isDisabled}
-      title={isDisabled ? 'No pending changes to commit' : 'Approve commit for this document'}
+      title={
+        !documentId
+          ? 'Select a document first'
+          : pendingCount === 0
+            ? 'No pending changes to commit'
+            : 'Approve commit for the selected document'
+      }
     >
       {isLoading ? (
         <>

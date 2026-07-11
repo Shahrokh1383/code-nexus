@@ -25,6 +25,20 @@ export class EventBus {
     this._handlers.set(eventType, existing);
   }
 
+  unregister<T extends DomainEvent>(
+    eventType: string,
+    handler: IDomainEventHandler<T>
+  ): void {
+    const existing = this._handlers.get(eventType);
+    if (!existing) return;
+    const filtered = existing.filter((h) => h !== handler);
+    if (filtered.length === 0) {
+      this._handlers.delete(eventType);
+    } else {
+      this._handlers.set(eventType, filtered);
+    }
+  }
+
   async emit(event: DomainEvent): Promise<void> {
     const handlers = this._handlers.get(event.eventType) ?? [];
     for (const handler of handlers) {

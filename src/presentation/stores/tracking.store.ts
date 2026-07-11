@@ -47,7 +47,8 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
       get().fetchPendingChanges(documentId);
       get().fetchCommitHistory(documentId);
     } else {
-      get().fetchPendingChanges(); // Fetch all if no document selected
+      // Fetch all pending changes when no document is selected (global overview)
+      get().fetchPendingChanges();
       set({ commitHistory: [] });
     }
   },
@@ -102,6 +103,7 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await invokeIpc<unknown>(IpcChannels.TRACKING_APPROVE_COMMIT, workspace.id, documentId);
+      // Refresh data for the committed document
       await get().fetchPendingChanges(documentId);
       await get().fetchCommitHistory(documentId);
     } catch (error) {

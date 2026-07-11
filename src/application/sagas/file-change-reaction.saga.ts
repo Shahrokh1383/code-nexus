@@ -17,39 +17,59 @@ export class FileChangeReactionSaga {
   private readonly workspaceRoot: string;
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
 
+  // Store handler references for later unregistration
+  private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
+  private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
+  private readonly changesDetectedHandler: IDomainEventHandler<ChangesDetectedEvent>;
+
   constructor(workspaceRoot: string, linkedDocQuery: ILinkedDocumentQueryPort) {
     this.eventBus = EventBus.getInstance();
     this.workspaceRoot = workspaceRoot;
     this.linkedDocQuery = linkedDocQuery;
-  }
 
-  register(): void {
-    this.eventBus.register('FileModified', {
+    // Create handlers bound to this instance
+    this.fileModifiedHandler = {
       handle: async (event: FileModifiedEvent): Promise<void> => {
         await this.onFileChanged(event.path.value);
       },
-    } as IDomainEventHandler<FileModifiedEvent>);
+    };
 
-    this.eventBus.register('FileDiscovered', {
+    this.fileDiscoveredHandler = {
       handle: async (event: FileDiscoveredEvent): Promise<void> => {
         if (!event.isDirectory) {
           await this.onFileChanged(event.path.value);
         }
       },
-    } as IDomainEventHandler<FileDiscoveredEvent>);
+    };
 
-    this.eventBus.register('ChangesDetectedEvent', {
+    this.changesDetectedHandler = {
       handle: async (event: ChangesDetectedEvent): Promise<void> => {
         await this.onChangesDetected(event);
       },
-    } as IDomainEventHandler<ChangesDetectedEvent>);
+    };
+  }
+
+  register(): void {
+    this.eventBus.register('FileModified', this.fileModifiedHandler);
+    this.eventBus.register('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.register('ChangesDetectedEvent', this.changesDetectedHandler);
+  }
+
+  unregister(): void {
+    this.eventBus.unregister('FileModified', this.fileModifiedHandler);
+    this.eventBus.unregister('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
   private async onFileChanged(filePath: string): Promise<void> {
+    if (filePath.startsWith('.doclink') || filePath === '.doclink') {
+      return;
+    }
+
     const repository = new TrackingJsonRepository(this.workspaceRoot);
     const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
     const diffAdapter = new DiffCalculatorAdapter();
-    const diffService = new DiffCalculatorService(diffAdapter); // Wired correctly
+    const diffService = new DiffCalculatorService(diffAdapter);
 
     const handler = new DetectChangesHandler(contentReader, repository, diffService);
     await handler.execute(new DetectChangesCommand(filePath));

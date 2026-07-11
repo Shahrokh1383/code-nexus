@@ -16,6 +16,7 @@ import { RecentWorkspacesAdapter, RecentWorkspaceDto } from '../../infrastructur
 import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
 import { WorkspaceClosedEvent } from '../../../src/domains/project/domain/events/workspace-closed';
 import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
+import { startWatcher, stopWatcher } from '../../bootstrap/watcher-lifecycle'; // NEW
 
 interface IpcResponse<T> {
   success: boolean;
@@ -49,13 +50,14 @@ export function registerProjectHandlers(): void {
         if (result.isSuccess) {
           const dto = result.getValue();
           if (dto) {
-            // Track in recent workspaces
             await recentAdapter.addOrUpdate({
               id: dto.id,
               rootPath: dto.rootPath,
               lastOpened: new Date().toISOString(),
             });
           }
+          // Start file watching and tracking saga for this workspace
+          await startWatcher(rootPath);
         }
 
         return result.fold<IpcResponse<unknown>>(
@@ -76,16 +78,11 @@ export function registerProjectHandlers(): void {
     IpcChannels.PROJECT_GET_WORKSPACE,
     async (_event, workspaceId: string): Promise<IpcResponse<unknown>> => {
       try {
-        // The workspace ID is the normalized root path (see InitializeWorkspaceHandler).
-        // No registry needed – derive rootPath directly from the ID.
         const rootPath = workspaceId;
-
         const db = new JsonDatabase(rootPath);
         const workspaceRepo = new WorkspaceJsonRepository(db);
         const handler = new GetWorkspaceHandler(workspaceRepo);
-
         const result = await handler.execute(new GetWorkspaceQuery(workspaceId));
-
         return result.fold<IpcResponse<unknown>>(
           (dto) => ({ success: true, data: dto }),
           (error) => ({ success: false, error })
@@ -104,18 +101,13 @@ export function registerProjectHandlers(): void {
     IpcChannels.PROJECT_CHANGE_SCOPE,
     async (_event, workspaceId: string, newRootPath: string): Promise<IpcResponse<unknown>> => {
       try {
-        // The workspace ID is the old root path
         const oldRootPath = workspaceId;
-
         const db = new JsonDatabase(oldRootPath);
         const workspaceRepo = new WorkspaceJsonRepository(db);
         const handler = new ChangeWorkspaceScopeHandler(workspaceRepo);
-
         const result = await handler.execute(new ChangeWorkspaceScopeCommand(workspaceId, newRootPath));
-
-        // The handler will create a new workspace with an ID derived from newRootPath,
-        // so the client must update its stored ID. No registry update needed.
-
+        // TODO: On successful scope change, stop watcher for old root and start for new root?
+        // For now, the old watcher remains; you might want to restart it on scope change.
         return result.fold<IpcResponse<unknown>>(
           () => ({ success: true }),
           (error) => ({ success: false, error })
@@ -134,7 +126,7 @@ export function registerProjectHandlers(): void {
     IpcChannels.PROJECT_CLOSE,
     async (_event, workspaceId: string): Promise<IpcResponse<void>> => {
       try {
-        // Always emit event to notify FileSystem context to stop Chokidar watcher
+        await stopWatcher(); // Stop file watching and saga before emitting closed event
         eventBus.emit(new WorkspaceClosedEvent(new WorkspaceId(workspaceId)));
         return { success: true };
       } catch (error) {

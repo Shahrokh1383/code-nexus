@@ -16,12 +16,12 @@ import { WorkspaceDto } from '../dto/workspace.dto';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 
 const DEFAULT_IGNORE_PATTERNS = [
-  'node_modules/',
-  '.git/',
-  'dist/',
-  'build/',
-  '.doclink/',
-  '*.log',
+  '**/node_modules/**',
+  '**/.git/**',
+  '**/dist/**',
+  '**/build/**',
+  '**/.doclink/**',
+  '**/*.log',
 ];
 
 export class InitializeWorkspaceHandler implements ICommandHandler<InitializeWorkspaceCommand, WorkspaceDto> {

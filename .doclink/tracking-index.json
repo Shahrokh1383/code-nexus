@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "hashes": {
+    ".doclink/file-index.json": {
+      "id": "80f159c1-c5cf-466f-9659-c3266a9015a7",
+      "filePath": ".doclink/file-index.json",
+      "hashValue": "30d932393f2a45adcc845bdc87660d98358abc72b61dbdd5d34e5b28453fb6a3",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    }
+  },
+  "commits": []
+}
