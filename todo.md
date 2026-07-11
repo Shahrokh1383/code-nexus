@@ -30,20 +30,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 ### Files to Create
 
 
-#### Application Layer
-- `src/domains/tracking/application/commands/record-hash.command.ts` — `RecordHashCommand`. Payload: `filePath: string`, `content: string`.
-- `src/domains/tracking/application/handlers/record-hash.handler.ts` — Calculates hash. Compares with stored hash. If changed, creates `ContentDiff`. Saves new hash as PENDING. Emits `ChangesDetectedEvent`. Emits `ReviewRequiredEvent`.
-- `src/domains/tracking/application/commands/detect-changes.command.ts` — `DetectChangesCommand`. Payload: `filePath: string`. Triggered by FileSystem watcher.
-- `src/domains/tracking/application/handlers/detect-changes.handler.ts` — Reads file content via adapter. Calls `record-hash` logic. If file is linked to documents, emits `ReviewRequiredEvent` for each linked document.
-- `src/domains/tracking/application/commands/approve-commit.command.ts` — `ApproveCommitCommand`. Payload: `documentId: string`.
-- `src/domains/tracking/application/handlers/approve-commit.handler.ts` — Finds all PENDING hashes linked to this document. Marks them as APPROVED. Creates `GranularCommit`. Emits `CommitApprovedEvent`. ONLY affects this document's hashes. Other documents remain PENDING.
-- `src/domains/tracking/application/queries/get-pending-changes.query.ts` — `GetPendingChangesQuery`. Payload: `documentId?: string`.
-- `src/domains/tracking/application/handlers/get-pending-changes.handler.ts` — Returns all PENDING hashes. If `documentId` provided, filters to files linked to that document.
-- `src/domains/tracking/application/queries/get-commit-history.query.ts` — `GetCommitHistoryQuery`. Payload: `documentId: string`.
-- `src/domains/tracking/application/handlers/get-commit-history.handler.ts` — Returns approved commits for document, sorted by date.
-- `src/domains/tracking/application/dto/file-hash.dto.ts` — Plain object. Properties: `filePath`, `hashValue`, `committedAt`, `status`.
-- `src/domains/tracking/application/dto/content-diff.dto.ts` — Plain object. Properties: `filePath`, `oldHash`, `newHash`, `addedLines`, `removedLines`, `modifiedLines`.
-- `src/domains/tracking/application/dto/granular-commit.dto.ts` — Plain object. Properties: `id`, `documentId`, `filePaths`, `committedAt`, `status`.
+
 
 #### Infrastructure Layer
 - `src/domains/tracking/infrastructure/repository/tracking-json.repository.ts` — Implements `ITrackingRepository`. Stores in `.doclink/commits.json` and `.doclink/file-index.json` (hash section). Structure: `{ version, commits: [], pendingHashes: {} }`.

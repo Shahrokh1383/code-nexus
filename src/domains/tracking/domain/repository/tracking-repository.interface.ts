@@ -6,6 +6,7 @@ import { DocumentId } from '../../../documentation/domain/value-objects/document
 
 export interface ITrackingRepository {
   findHashByPath(filePath: FilePath): Promise<FileHash | null>;
+  findAllHashes(): Promise<FileHash[]>;
   saveHash(fileHash: FileHash): Promise<void>;
   findCommitById(commitId: CommitId): Promise<GranularCommit | null>;
   saveCommit(commit: GranularCommit): Promise<void>;
