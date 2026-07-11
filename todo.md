@@ -29,22 +29,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ### Files to Create
 
-#### Domain Layer
-- `src/domains/tracking/domain/entities/file-hash.ts` — `FileHash` entity. Properties: `id` (FileHashId), `filePath` (FilePath), `hashValue` (HashValue), `committedAt` (Maybe<DateTime>), `commitId` (Maybe<CommitId>). Methods: `updateHash(newHash)`, `commit(commitId)`.
-- `src/domains/tracking/domain/entities/content-diff.ts` — `ContentDiff` entity. Properties: `id` (DiffId), `filePath` (FilePath), `oldHash` (HashValue), `newHash` (HashValue), `addedLines` (DiffLine[]), `removedLines` (DiffLine[]), `modifiedLines` (DiffLine[]). Methods: `isEmpty(): boolean`.
-- `src/domains/tracking/domain/entities/granular-commit.ts` — `GranularCommit` aggregate root. Properties: `id` (CommitId), `documentId` (DocumentId), `fileHashes` (FileHash[]), `committedAt` (DateTime), `status` (CommitStatus: PENDING | APPROVED). Methods: `approve()`, `getLinkedFiles(): FilePath[]`.
-- `src/domains/tracking/domain/value-objects/file-hash-id.ts` — Extends Identifier.
-- `src/domains/tracking/domain/value-objects/diff-id.ts` — Extends Identifier.
-- `src/domains/tracking/domain/value-objects/commit-id.ts` — Extends Identifier.
-- `src/domains/tracking/domain/value-objects/hash-value.ts` — Extends Value Object. Wraps SHA-256 hex string. Validates 64 chars. Factory: `fromContent(content: string)` (normalizes LF).
-- `src/domains/tracking/domain/value-objects/diff-line.ts` — `DiffLine` value object. Properties: `lineNumber` (number), `content` (string), `type` (ADDED | REMOVED | MODIFIED).
-- `src/domains/tracking/domain/value-objects/commit-status.ts` — Enum-like value object. `PENDING` or `APPROVED`. Immutable.
-- `src/domains/tracking/domain/events/changes-detected.ts` — `ChangesDetectedEvent`. Payload: `filePath`, `oldHash`, `newHash`, `diffId`.
-- `src/domains/tracking/domain/events/commit-approved.ts` — `CommitApprovedEvent`. Payload: `commitId`, `documentId`, `filePaths`.
-- `src/domains/tracking/domain/events/review-required.ts` — `ReviewRequiredEvent`. Payload: `documentId`, `filePath`, `changeType`.
-- `src/domains/tracking/domain/repository/tracking-repository.interface.ts` — `ITrackingRepository`. Methods: `findHashByPath`, `saveHash`, `findCommitById`, `saveCommit`, `findPendingCommits`, `findCommitsByDocument`.
-- `src/domains/tracking/domain/services/diff-calculator.service.ts` — `DiffCalculatorService`. Domain service. Takes old content and new content. Returns `ContentDiff`. Algorithm: Line-by-line comparison (simple LCS or Myers diff). Optimized for code files. PURE logic — no file system access.
-- `src/domains/tracking/domain/services/hash-comparison.service.ts` — `HashComparisonService`. Domain service. Takes `HashValue` old and new. Returns `boolean` (changed). If changed, returns `ChangesDetectedEvent`.
 
 #### Application Layer
 - `src/domains/tracking/application/commands/record-hash.command.ts` — `RecordHashCommand`. Payload: `filePath: string`, `content: string`.
@@ -108,7 +92,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ### Domain Layer
 
-#### Code‑to‑Document Links (existing, unchanged)
+#### Code‑to‑Document Links
 
 - `src/domains/linking/domain/entities/code-to-doc-link.ts`  
   `CodeToDocLink` aggregate root.  
@@ -118,7 +102,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/domains/linking/domain/value-objects/link-id.ts` – Extends Identifier.
 - `src/domains/linking/domain/value-objects/link-type.ts` – Enum‑like value object. `DIRECT` or `INHERITED`. Immutable.
 
-#### Document‑to‑Document Links (new)
+#### Document‑to‑Document Links
 
 - `src/domains/linking/domain/entities/document-to-document-link.ts`  
   `DocumentToDocumentLink` aggregate root.  
@@ -170,7 +154,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
   Creates new INHERITED code links to each `newDocumentId`.  
   Returns migrated links. Emits `LinksMigratedEvent`. PURE logic.
 
-- `src/domains/linking/domain/services/document-link-validator.service.ts` (optional)  
+- `src/domains/linking/domain/services/document-link-validator.service.ts`
   Ensures no circular document links.
 
 ---
