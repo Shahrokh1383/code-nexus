@@ -22,8 +22,11 @@ export enum IpcChannels {
   DOCUMENTATION_SYNC_FILES = 'docs:syncFiles',
   LINKING_CREATE = 'linking:create',
   LINKING_DELETE = 'linking:delete',
-  TRACKING_GET_STATUS = 'tracking:get-status',
-  TRACKING_COMMIT = 'tracking:commit',
+  TRACKING_RECORD_HASH = 'tracking:recordHash',
+  TRACKING_DETECT_CHANGES =   'tracking:detectChanges',
+  TRACKING_APPROVE_COMMIT =   'tracking:approveCommit',
+  TRACKING_GET_PENDING_CHANGES =  'tracking:getPendingChanges',
+  TRACKING_GET_COMMIT_HISTORY =   'tracking:getCommitHistory',
   NOTIFICATION_GET_WARNINGS = 'notification:get-warnings',
   NOTIFICATION_DISMISS = 'notification:dismiss',
 }

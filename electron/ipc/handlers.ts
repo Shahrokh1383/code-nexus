@@ -3,6 +3,7 @@ import { IpcChannels } from './channels';
 import { registerProjectHandlers } from './handlers/project-handlers';
 import { registerFilesystemHandlers } from './handlers/filesystem-handlers';
 import { registerDocumentationHandlers } from './handlers/documentation-handlers';
+import { registerTrackingHandlers } from './handlers/tracking-handlers';
 
 /**
  * Registers all IPC handlers for the main process.
@@ -25,4 +26,5 @@ export function registerIpcHandlers(): void {
   registerProjectHandlers();
   registerFilesystemHandlers();
   registerDocumentationHandlers();
+  registerTrackingHandlers();
 }
