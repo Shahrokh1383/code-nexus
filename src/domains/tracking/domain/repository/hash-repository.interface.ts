@@ -7,4 +7,5 @@ export interface IHashRepository {
   findAllHashes(): Promise<FileHash[]>;
   saveHash(fileHash: FileHash, diff?: ContentDiffDto | null): Promise<void>;
   findDiffByPath(filePath: FilePath): Promise<ContentDiffDto | null>;
+  deleteHashByPath(filePath: FilePath): Promise<void>;
 }

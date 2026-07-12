@@ -61,6 +61,12 @@ export class TrackingJsonRepository implements IHashRepository {
     return entry.diff;
   }
 
+  async deleteHashByPath(filePath: FilePath): Promise<void> {
+    const index = await this.readIndex();
+    delete index.hashes[filePath.value];
+    await this.writeIndex(index);
+  }
+
   private async readIndex(): Promise<TrackingIndexSchema> {
     try {
       const data = await this.db.read<TrackingIndexSchema>(TRACKING_INDEX_FILE);

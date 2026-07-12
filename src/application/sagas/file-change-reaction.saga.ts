@@ -2,6 +2,7 @@ import { EventBus } from '../../domains/shared-kernel/events/event-bus';
 import { IDomainEventHandler } from '../../domains/shared-kernel/events/domain-event-handler.interface';
 import { FileModifiedEvent } from '../../domains/filesystem/domain/events/file-modified';
 import { FileDiscoveredEvent } from '../../domains/filesystem/domain/events/file-discovered';
+import { FileExcludedEvent } from '../../domains/filesystem/domain/events/file-excluded';
 import { ChangesDetectedEvent } from '../../domains/tracking/domain/events/changes-detected';
 import { ReviewRequiredEvent } from '../../domains/tracking/domain/events/review-required';
 import { DetectChangesCommand } from '../../domains/tracking/application/commands/detect-changes.command';
@@ -20,6 +21,7 @@ export class FileChangeReactionSaga {
   // Store handler references for later unregistration
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
+  private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
   private readonly changesDetectedHandler: IDomainEventHandler<ChangesDetectedEvent>;
 
   constructor(workspaceRoot: string, linkedDocQuery: ILinkedDocumentQueryPort) {
@@ -42,6 +44,12 @@ export class FileChangeReactionSaga {
       },
     };
 
+    this.fileExcludedHandler = {
+      handle: async (event: FileExcludedEvent): Promise<void> => {
+        await this.onFileExcluded(event);
+      },
+    };
+
     this.changesDetectedHandler = {
       handle: async (event: ChangesDetectedEvent): Promise<void> => {
         await this.onChangesDetected(event);
@@ -52,19 +60,21 @@ export class FileChangeReactionSaga {
   register(): void {
     this.eventBus.register('FileModified', this.fileModifiedHandler);
     this.eventBus.register('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.register('FileExcluded', this.fileExcludedHandler);
     this.eventBus.register('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
   unregister(): void {
     this.eventBus.unregister('FileModified', this.fileModifiedHandler);
     this.eventBus.unregister('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.unregister('FileExcluded', this.fileExcludedHandler);
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
   private async onFileChanged(filePath: string): Promise<void> {
     const normalized = filePath.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') {
-        return;
+      return;
     }
 
     const repository = new TrackingJsonRepository(this.workspaceRoot);
@@ -74,6 +84,11 @@ export class FileChangeReactionSaga {
 
     const handler = new DetectChangesHandler(contentReader, repository, diffService);
     await handler.execute(new DetectChangesCommand(filePath));
+  }
+
+  private async onFileExcluded(event: FileExcludedEvent): Promise<void> {
+    const repository = new TrackingJsonRepository(this.workspaceRoot);
+    await repository.deleteHashByPath(event.path);
   }
 
   private async onChangesDetected(event: ChangesDetectedEvent): Promise<void> {

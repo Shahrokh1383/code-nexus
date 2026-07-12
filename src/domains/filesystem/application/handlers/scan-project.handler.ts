@@ -50,6 +50,7 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
       const rootPath = new FilePath('.');
       const scanResult = this.scanService.scan(rootPath, ignorePatterns, fileMetadata);
 
+      await this.fileSystemRepo.clear();
       await this.saveTree(scanResult.rootFolder);
 
       for (const event of scanResult.events) {

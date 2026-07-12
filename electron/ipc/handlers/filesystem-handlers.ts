@@ -17,6 +17,7 @@ import { RemoveIgnorePatternCommand } from '../../../src/domains/filesystem/appl
 import { RemoveIgnorePatternHandler } from '../../../src/domains/filesystem/application/handlers/remove-ignore-pattern.handler';
 import { GetIgnoredFilesQuery } from '../../../src/domains/filesystem/application/queries/get-ignored-files.query';
 import { GetIgnoredFilesHandler } from '../../../src/domains/filesystem/application/handlers/get-ignored-files.handler';
+import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -107,8 +108,8 @@ export function registerFilesystemHandlers(): void {
       }
 
       try {
-        const { configRepo } = createRepositories(rootPath);
-        const handler = new AddIgnorePatternHandler(configRepo);
+        const { configRepo, fileSystemRepo } = createRepositories(rootPath);
+        const handler = new AddIgnorePatternHandler(configRepo, fileSystemRepo, EventBus.getInstance());
 
         const result = await handler.execute(new AddIgnorePatternCommand(workspaceId as string, pattern));
 

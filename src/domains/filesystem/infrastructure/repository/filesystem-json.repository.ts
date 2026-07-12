@@ -114,6 +114,10 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     return results;
   }
 
+  async clear(): Promise<void> {
+    await this.writeIndex( { version: '1.0', lastScan: null, files: {} });
+  }
+
   private async readIndex(): Promise<FileIndexSchema> {
     try {
       return await this.db.read<FileIndexSchema>(this.filename);
