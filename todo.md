@@ -10,47 +10,11 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 **Rule:** You may NOT skip phases. Each phase must be fully implemented and tested before proceeding to the next.
 
 
-
----
-
-
-
-## Phase 5: Tracking Context (Hashing, Diff Detection, Baseline Commits)
-**Objective:** Calculate content hashes, detect changes, manage per-document commit state, and track line-level diffs.
-**Constitution References:** Section VI.5 (Tracking & Granular Commits), Section VII (Commandments 11, 15)
-
-### Files to Create
-
-
-
-
-
-#### Presentation Layer
-- `src/presentation/hooks/useTracking.ts` — Hook. Exposes: `pendingChanges`, `commitHistory`, `approveCommit(docId)`, `isLoading`.
-- `src/presentation/components/tracking/PendingChangesList.tsx` — Shows pending changes grouped by document. Each item shows file path, old/new hash, diff summary.
-- `src/presentation/components/tracking/DiffViewer.tsx` — Side-by-side diff view. Shows added lines (green), removed lines (red), modified lines (yellow). Uses monospaced font.
-- `src/presentation/components/tracking/CommitButton.tsx` — Button to approve commit for a specific document. Disabled if no pending changes for that document.
-- `src/presentation/components/tracking/CommitHistory.tsx` — List of approved commits for a document. Shows timestamp, files committed.
-- `src/presentation/stores/tracking.store.ts` — Zustand store. Holds pending changes, commit history.
-
-### Deliverables
-- [ ] SHA-256 hashes are calculated for all files during scan
-- [ ] Modifying a file updates its hash and marks it as PENDING
-- [ ] Diff viewer shows exact line changes (added/removed/modified)
-- [ ] Approving a commit for Document A only clears hashes linked to Document A
-- [ ] Document B's pending changes remain active after Document A's commit
-- [ ] Commit history is persisted in `.doclink/commits.json`
-- [ ] Hash comparison is identical across Windows, macOS, and Linux
-
----
-
 ---
 
 ## Phase 6: Linking Context (Many-to-Many Code↔Doc & Doc↔Doc Links, Auto Migration)
 
 **Objective:** Create and manage code‑to‑document **and** document‑to‑document links, handle document splits, and auto‑migrate code links via Saga when a parent document is deleted.
-
-**Duration Estimate:** 3‑4 days
 
 **Dependencies:** Phase 4 (Documentation), Phase 5 (Tracking)
 
