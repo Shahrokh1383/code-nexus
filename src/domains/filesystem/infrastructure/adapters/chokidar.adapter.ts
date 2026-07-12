@@ -28,7 +28,7 @@ export class ChokidarAdapter {
     this.stopWatching();
     this.rootPath = PathUtils.normalize(rootPath);
 
-    const ignored = ignorePatterns.map((p) => p.pattern);
+    const ignored = ignorePatterns.map(p => this.toChokidarPatter(p));
 
     this.watcher = chokidar.watch(rootPath, {
       ignored,
@@ -170,5 +170,15 @@ export class ChokidarAdapter {
     } catch {
       return null;
     }
+  }
+
+  private toChokidarPatter(pattern: IgnorePattern): string {
+    const raw = pattern.pattern
+    if (raw.includes('/') || /[*?[\]]/.test(raw)) {
+      return raw;
+    }
+
+    const name = raw.endsWith('/') ? raw.slice(0, -1) : raw;
+    return `**/${name}`;
   }
 }

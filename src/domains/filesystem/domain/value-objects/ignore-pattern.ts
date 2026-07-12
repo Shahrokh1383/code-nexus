@@ -21,9 +21,15 @@ export class IgnorePattern {
   matches(path: string): boolean {
     const normalized = PathUtils.normalize(path);
 
+    // --- Simple segment name (no slashes, no wildcards) ---
+    if (!this._pattern.includes('/') && !/[?*[\]]/.test(this._pattern)) {
+      const name = this._pattern.endsWith('/') ? this._pattern.slice(0,   -1) : this._pattern;
+      return normalized.split('/').some(segment => segment === name);
+    }
+
     if (this._pattern.endsWith('/')) {
       const dirName = this._pattern.slice(0, -1);
-      return normalized === dirName || normalized.startsWith(this._pattern);
+      return normalized === dirName || normalized.startsWith(this.  _pattern);
     }
 
     if (this._pattern === normalized) {
