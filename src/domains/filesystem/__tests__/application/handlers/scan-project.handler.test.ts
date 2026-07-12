@@ -19,6 +19,10 @@ import { ScanCompletedEvent } from '../../../domain/events/scan-completed';
 import { FileDiscoveredEvent } from '../../../domain/events/file-discovered';
 import { Identifier } from '../../../../shared-kernel/types/identifier';
 
+// ---------------------------------------------------------------------------
+// Mocks
+// ---------------------------------------------------------------------------
+
 class MockWorkspaceRepository implements IWorkspaceRepository {
   private workspaces: Workspace[] = [];
 
@@ -105,7 +109,15 @@ class MockFileSystemRepository implements IFileSystemRepository {
     }
     return result;
   }
+
+  async clear(): Promise<void> {
+    this.nodes.clear();
+  }
 }
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
 
 describe('ScanProjectHandler', () => {
   let handler: ScanProjectHandler;

@@ -4,7 +4,12 @@ import { IProjectConfigRepository } from '../../../../project/domain/repository/
 import { ProjectConfig } from '../../../../project/domain/entities/project-config';
 import { WorkspaceId } from '../../../../project/domain/value-objects/workspace-id';
 import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { IFileSystemRepository } from '../../../../filesystem/domain/repository/filesystem-repository.interface';
+import { FileNode } from '../../../../filesystem/domain/entities/file-node';
+import { FolderNode } from '../../../../filesystem/domain/entities/folder-node';
+import { EventBus } from '../../../../shared-kernel/events/event-bus';
 
+// --- Mock: ProjectConfigRepository (already exists, kept intact) ---
 class MockProjectConfigRepository implements IProjectConfigRepository {
   private configs: ProjectConfig[] = [];
 
@@ -19,9 +24,27 @@ class MockProjectConfigRepository implements IProjectConfigRepository {
   }
 }
 
+// --- Mock: FileSystemRepository ---
+class MockFileSystemRepository implements IFileSystemRepository {
+  private nodes: Array<FileNode | FolderNode> = [];
+
+  async findAll(): Promise<Array<FileNode | FolderNode>> {
+    return this.nodes;
+  }
+
+  // Stub other methods as needed; they are not called in these tests
+  async findByPath(): Promise<FileNode | FolderNode | null> { return null; }
+  async findChildrenOf(): Promise<Array<FileNode | FolderNode>> { return []; }
+  async findByPattern(): Promise<FileNode[]> { return []; }
+  async delete(): Promise<void> {}
+  async clear(): Promise<void> {}
+}
+
 describe('AddIgnorePatternHandler', () => {
   let handler: AddIgnorePatternHandler;
   let configRepo: MockProjectConfigRepository;
+  let fileSystemRepo: MockFileSystemRepository;
+  let eventBus: EventBus;
 
   const createConfig = (workspaceId: string, patterns: string[] = []): ProjectConfig => {
     return new ProjectConfig(
@@ -34,7 +57,13 @@ describe('AddIgnorePatternHandler', () => {
 
   beforeEach(() => {
     configRepo = new MockProjectConfigRepository();
-    handler = new AddIgnorePatternHandler(configRepo);
+    fileSystemRepo = new MockFileSystemRepository();
+    eventBus = EventBus.getInstance();   // use the real singleton, just mock emit indirectly if needed
+    handler = new AddIgnorePatternHandler(configRepo, fileSystemRepo, eventBus);
+  });
+
+  afterEach(() => {
+    eventBus.clear(); // clean up any registered handlers
   });
 
   it('should add a valid ignore pattern to config', async () => {

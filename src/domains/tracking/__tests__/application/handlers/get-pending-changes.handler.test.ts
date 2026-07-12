@@ -1,6 +1,6 @@
 import { GetPendingChangesHandler } from '../../../application/handlers/get-pending-changes.handler';
 import { GetPendingChangesQuery } from '../../../application/queries/get-pending-changes.query';
-import { ITrackingRepository } from '../../../domain/repository/tracking-repository.interface';
+import { IHashRepository } from '../../../domain/repository/hash-repository.interface';
 import { ILinkedDocumentQueryPort } from '../../../application/ports/linked-document-query.port';
 import { FileHash } from '../../../domain/entities/file-hash';
 import { FileHashId } from '../../../domain/value-objects/file-hash-id';
@@ -10,25 +10,24 @@ import { DocumentId } from '../../../../documentation/domain/value-objects/docum
 
 describe('GetPendingChangesHandler', () => {
   let handler: GetPendingChangesHandler;
-  let mockRepo: jest.Mocked<ITrackingRepository>;
+  let mockHashRepo: jest.Mocked<IHashRepository>;
   let mockLinkedDocQuery: jest.Mocked<ILinkedDocumentQueryPort>;
 
   beforeEach(() => {
-    mockRepo = {
+    mockHashRepo = {
       findHashByPath: jest.fn(),
       findAllHashes: jest.fn(),
       saveHash: jest.fn().mockResolvedValue(undefined),
-      findCommitById: jest.fn(),
-      saveCommit: jest.fn().mockResolvedValue(undefined),
-      findPendingCommits: jest.fn(),
-      findCommitsByDocument: jest.fn(),
+      findDiffByPath: jest.fn(),
+      deleteHashByPath: jest.fn(),
     };
 
     mockLinkedDocQuery = {
-      findLinkedDocuments: jest.fn().mockResolvedValue([]),
+      findLinkedDocuments: jest.fn().mockResolvedValue([]), // may be unused but kept for interface
+      findLinkedFiles: jest.fn().mockResolvedValue([]),
     };
 
-    handler = new GetPendingChangesHandler(mockRepo, mockLinkedDocQuery);
+    handler = new GetPendingChangesHandler(mockHashRepo, mockLinkedDocQuery);
   });
 
   it('should return all pending hashes when no documentId', async () => {
@@ -37,7 +36,7 @@ describe('GetPendingChangesHandler', () => {
       new FilePath('src/app.ts'),
       new HashValue('a'.repeat(64))
     );
-    mockRepo.findAllHashes.mockResolvedValue([pendingHash]);
+    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash]);
 
     const result = await handler.execute(new GetPendingChangesQuery());
 
@@ -59,11 +58,10 @@ describe('GetPendingChangesHandler', () => {
       new FilePath('src/other.ts'),
       new HashValue('b'.repeat(64))
     );
-    mockRepo.findAllHashes.mockResolvedValue([pendingHash1, pendingHash2]);
-    mockLinkedDocQuery.findLinkedDocuments.mockImplementation(async (path: string) => {
-      if (path === 'src/app.ts') return [new DocumentId('doc-1')];
-      return [];
-    });
+    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash1, pendingHash2]);
+
+    // findLinkedFiles now returns file paths linked to the given document ID
+    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts']);
 
     const result = await handler.execute(new GetPendingChangesQuery('doc-1'));
 
@@ -87,7 +85,7 @@ describe('GetPendingChangesHandler', () => {
     const { CommitId } = require('../../../domain/value-objects/commit-id');
     approvedHash.commit(new CommitId('commit-1'));
 
-    mockRepo.findAllHashes.mockResolvedValue([pendingHash, approvedHash]);
+    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash, approvedHash]);
 
     const result = await handler.execute(new GetPendingChangesQuery());
 
@@ -98,7 +96,7 @@ describe('GetPendingChangesHandler', () => {
   });
 
   it('should return empty array when no pending hashes', async () => {
-    mockRepo.findAllHashes.mockResolvedValue([]);
+    mockHashRepo.findAllHashes.mockResolvedValue([]);
 
     const result = await handler.execute(new GetPendingChangesQuery());
 

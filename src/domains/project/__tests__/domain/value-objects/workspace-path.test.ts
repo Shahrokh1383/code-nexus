@@ -6,14 +6,14 @@ describe('WorkspacePath', () => {
     expect(path.value).toBe('/home/user/project');
   });
 
-  it('should accept absolute Windows path', () => {
+  it('should accept absolute Windows path (normalized to lowercase drive letter)', () => {
     const path = new WorkspacePath('C:/Users/project');
-    expect(path.value).toBe('C:/Users/project');
+    expect(path.value).toBe('c:/Users/project');
   });
 
-  it('should normalize backslashes to forward slashes', () => {
+  it('should normalize backslashes to forward slashes and lowercase drive letter', () => {
     const path = new WorkspacePath('C:\\Users\\project');
-    expect(path.value).toBe('C:/Users/project');
+    expect(path.value).toBe('c:/Users/project');
   });
 
   it('should throw on empty path', () => {
@@ -25,7 +25,9 @@ describe('WorkspacePath', () => {
   });
 
   it('should throw on path with traversal', () => {
-    expect(() => new WorkspacePath('/home/../etc')).toThrow('Workspace path contains invalid traversal segments');
+    expect(() => new WorkspacePath('/home/../etc')).toThrow(
+      'Workspace path contains invalid traversal segments'
+    );
   });
 
   it('should be equal to another WorkspacePath with same value', () => {

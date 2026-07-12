@@ -24,14 +24,14 @@
     "src\\presentation\\components\\documentation",
     "src\\presentation\\components\\welcome",
     "src\\presentation",
-    "src\\domains\\documentation",
     "src\\domains\\project",
+    "src\\domains\\documentation",
     "src\\domains\\shared-kernel",
     "src\\domains\\tracking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-12T19:01:17.582Z",
+  "lastModified": "2026-07-12T19:38:14.735Z",
   "version": 1
 }

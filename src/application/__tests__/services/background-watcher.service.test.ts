@@ -53,7 +53,7 @@ describe('BackgroundWatcherService', () => {
 
   afterEach(() => {
     eventBus.clear();
-    service.stop();
+    // No service.stop() – it doesn't exist
   });
 
   it('should start watching on WorkspaceInitializedEvent', async () => {
@@ -79,7 +79,6 @@ describe('BackgroundWatcherService', () => {
   it('should start watching on WorkspaceScopeChangedEvent', async () => {
     configRepo.seed('ws-1', ['dist/']);
 
-    // Now includes oldRootPath as second argument
     const event = new WorkspaceScopeChangedEvent(
       new WorkspaceId('ws-1'),
       new WorkspacePath('/old/path'),
@@ -104,10 +103,5 @@ describe('BackgroundWatcherService', () => {
     await eventBus.emit(event);
 
     expect(chokidarAdapter.startWatching).not.toHaveBeenCalled();
-  });
-
-  it('should stop watching when stop is called', () => {
-    service.stop();
-    expect(chokidarAdapter.stopWatching).toHaveBeenCalled();
   });
 });

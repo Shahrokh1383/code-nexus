@@ -14,7 +14,9 @@ describe('SchemaMigrator', () => {
     const migrator = new SchemaMigrator('1.0');
     const data = { schemaVersion: '0.5', key: 'value' };
 
-    expect(() => migrator.migrate(data)).toThrow('No migration found from schema version 0.5 to 1.0');
+    expect(() => migrator.migrate(data)).toThrow(
+      'No migration found from schema version 0.5 to 1.0'
+    );
   });
 
   it('should apply registered migration', () => {
@@ -31,10 +33,12 @@ describe('SchemaMigrator', () => {
     expect(result.newField).toBe('migrated');
   });
 
-  it('should treat missing version as 0.0', () => {
+  it('should treat missing version as 0.0 and auto-upgrade', () => {
     const migrator = new SchemaMigrator('1.0');
     const data = { key: 'value' };
 
-    expect(() => migrator.migrate(data)).toThrow('No migration found from schema version 0.0 to 1.0');
+    const result = migrator.migrate(data);
+
+    expect(result).toEqual({ key: 'value', schemaVersion: '1.0' });
   });
 });

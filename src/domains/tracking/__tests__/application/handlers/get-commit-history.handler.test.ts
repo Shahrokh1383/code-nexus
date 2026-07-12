@@ -1,6 +1,6 @@
 import { GetCommitHistoryHandler } from '../../../application/handlers/get-commit-history.handler';
 import { GetCommitHistoryQuery } from '../../../application/queries/get-commit-history.query';
-import { ITrackingRepository } from '../../../domain/repository/tracking-repository.interface';
+import { ICommitRepository } from '../../../domain/repository/commit-repository.interface';
 import { GranularCommit } from '../../../domain/entities/granular-commit';
 import { CommitId } from '../../../domain/value-objects/commit-id';
 import { DocumentId } from '../../../../documentation/domain/value-objects/document-id';
@@ -13,20 +13,17 @@ import { CommitStatus } from '../../../domain/value-objects/commit-status';
 
 describe('GetCommitHistoryHandler', () => {
   let handler: GetCommitHistoryHandler;
-  let mockRepo: jest.Mocked<ITrackingRepository>;
+  let mockCommitRepo: jest.Mocked<ICommitRepository>;
 
   beforeEach(() => {
-    mockRepo = {
-      findHashByPath: jest.fn(),
-      findAllHashes: jest.fn(),
-      saveHash: jest.fn().mockResolvedValue(undefined),
-      findCommitById: jest.fn(),
-      saveCommit: jest.fn().mockResolvedValue(undefined),
-      findPendingCommits: jest.fn(),
-      findCommitsByDocument: jest.fn(),
+    mockCommitRepo = {
+      findById: jest.fn(),
+      findByDocument: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+      findAll: jest.fn(),
     };
 
-    handler = new GetCommitHistoryHandler(mockRepo);
+    handler = new GetCommitHistoryHandler(mockCommitRepo);
   });
 
   it('should return approved commits sorted by date descending', async () => {
@@ -57,7 +54,7 @@ describe('GetCommitHistoryHandler', () => {
       CommitStatus.approved()
     );
 
-    mockRepo.findCommitsByDocument.mockResolvedValue([commit1, commit2]);
+    mockCommitRepo.findByDocument.mockResolvedValue([commit1, commit2]);
 
     const result = await handler.execute(new GetCommitHistoryQuery('doc-1'));
 
@@ -84,7 +81,7 @@ describe('GetCommitHistoryHandler', () => {
       CommitStatus.pending()
     );
 
-    mockRepo.findCommitsByDocument.mockResolvedValue([approvedCommit, pendingCommit]);
+    mockCommitRepo.findByDocument.mockResolvedValue([approvedCommit, pendingCommit]);
 
     const result = await handler.execute(new GetCommitHistoryQuery('doc-1'));
 
@@ -95,7 +92,7 @@ describe('GetCommitHistoryHandler', () => {
   });
 
   it('should return empty array when no commits exist', async () => {
-    mockRepo.findCommitsByDocument.mockResolvedValue([]);
+    mockCommitRepo.findByDocument.mockResolvedValue([]);
 
     const result = await handler.execute(new GetCommitHistoryQuery('doc-1'));
 

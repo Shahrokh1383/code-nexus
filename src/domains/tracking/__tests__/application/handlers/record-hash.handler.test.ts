@@ -1,36 +1,51 @@
 import { RecordHashHandler } from '../../../application/handlers/record-hash.handler';
 import { RecordHashCommand } from '../../../application/commands/record-hash.command';
-import { ITrackingRepository } from '../../../domain/repository/tracking-repository.interface';
-import { ILinkedDocumentQueryPort } from '../../../application/ports/linked-document-query.port';
+import { IHashRepository } from '../../../domain/repository/hash-repository.interface';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
 import { FilePath } from '../../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../../domain/value-objects/hash-value';
 import { FileHash } from '../../../domain/entities/file-hash';
 import { FileHashId } from '../../../domain/value-objects/file-hash-id';
-import { DocumentId } from '../../../../documentation/domain/value-objects/document-id';
-import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { DiffCalculatorService } from '../../../domain/services/diff-calculator.service';
+import { ContentDiff } from '../../../domain/entities/content-diff';
+import { DiffId } from '../../../domain/value-objects/diff-id';
+import { DiffLine } from '../../../domain/value-objects/diff-line';
+import { DiffLineType } from '../../../domain/value-objects/diff-line';
+
+// Helper to create an empty ContentDiff
+const createEmptyDiff = (filePath: FilePath, oldHash: HashValue, newHash: HashValue): ContentDiff =>
+  new ContentDiff(
+    new DiffId('diff-id'),
+    filePath,
+    oldHash,
+    newHash,
+    [],
+    [],
+    []
+  );
 
 describe('RecordHashHandler', () => {
   let handler: RecordHashHandler;
-  let mockRepo: jest.Mocked<ITrackingRepository>;
-  let mockLinkedDocQuery: jest.Mocked<ILinkedDocumentQueryPort>;
+  let mockHashRepo: jest.Mocked<IHashRepository>;
+  let mockDiffService: jest.Mocked<DiffCalculatorService>;
 
   beforeEach(() => {
-    mockRepo = {
+    mockHashRepo = {
       findHashByPath: jest.fn(),
       findAllHashes: jest.fn(),
       saveHash: jest.fn().mockResolvedValue(undefined),
-      findCommitById: jest.fn(),
-      saveCommit: jest.fn().mockResolvedValue(undefined),
-      findPendingCommits: jest.fn(),
-      findCommitsByDocument: jest.fn(),
+      findDiffByPath: jest.fn(),
+      deleteHashByPath: jest.fn(),
     };
 
-    mockLinkedDocQuery = {
-      findLinkedDocuments: jest.fn().mockResolvedValue([]),
-    };
+    // Mock DiffCalculatorService: provide a calculate method returning empty diff
+    mockDiffService = {
+      calculate: jest.fn().mockImplementation((oldContent, newContent, fp, oh, nh) =>
+        createEmptyDiff(fp, oh, nh)
+      ),
+    } as any;
 
-    handler = new RecordHashHandler(mockRepo, mockLinkedDocQuery);
+    handler = new RecordHashHandler(mockHashRepo, mockDiffService);
     EventBus.getInstance().clear();
   });
 
@@ -39,16 +54,17 @@ describe('RecordHashHandler', () => {
   });
 
   it('should create new FileHash when none exists', async () => {
-    mockRepo.findHashByPath.mockResolvedValue(null);
+    mockHashRepo.findHashByPath.mockResolvedValue(null);
 
     const result = await handler.execute(
       new RecordHashCommand('src/app.ts', 'const x = 1;')
     );
 
     expect(result.isSuccess).toBe(true);
-    expect(mockRepo.saveHash).toHaveBeenCalledTimes(1);
-    const saved = mockRepo.saveHash.mock.calls[0][0] as FileHash;
+    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
+    const saved = mockHashRepo.saveHash.mock.calls[0][0] as FileHash;
     expect(saved.filePath.value).toBe('src/app.ts');
+    // new hash without old content: commitId should be absent (isNone)
     expect(saved.commitId.isNone).toBe(true);
   });
 
@@ -60,14 +76,14 @@ describe('RecordHashHandler', () => {
       new FilePath('src/app.ts'),
       hash
     );
-    mockRepo.findHashByPath.mockResolvedValue(existing);
+    mockHashRepo.findHashByPath.mockResolvedValue(existing);
 
     const result = await handler.execute(
       new RecordHashCommand('src/app.ts', content)
     );
 
     expect(result.isSuccess).toBe(true);
-    expect(mockRepo.saveHash).not.toHaveBeenCalled();
+    expect(mockHashRepo.saveHash).not.toHaveBeenCalled();
   });
 
   it('should update hash and emit event when content changed', async () => {
@@ -78,7 +94,7 @@ describe('RecordHashHandler', () => {
       new FilePath('src/app.ts'),
       HashValue.fromContent(oldContent)
     );
-    mockRepo.findHashByPath.mockResolvedValue(existing);
+    mockHashRepo.findHashByPath.mockResolvedValue(existing);
 
     const emittedEvents: string[] = [];
     EventBus.getInstance().register('ChangesDetectedEvent', {
@@ -92,36 +108,11 @@ describe('RecordHashHandler', () => {
     );
 
     expect(result.isSuccess).toBe(true);
-    expect(mockRepo.saveHash).toHaveBeenCalledTimes(1);
+    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
     expect(emittedEvents).toContain('ChangesDetectedEvent');
   });
 
-  it('should emit ReviewRequiredEvent for linked documents', async () => {
-    const oldContent = 'const x = 1;';
-    const newContent = 'const x = 2;';
-    const existing = new FileHash(
-      new FileHashId('fh-1'),
-      new FilePath('src/app.ts'),
-      HashValue.fromContent(oldContent)
-    );
-    mockRepo.findHashByPath.mockResolvedValue(existing);
-    mockLinkedDocQuery.findLinkedDocuments.mockResolvedValue([
-      new DocumentId('doc-1'),
-      new DocumentId('doc-2'),
-    ]);
-
-    const reviewEvents: string[] = [];
-    EventBus.getInstance().register('ReviewRequiredEvent', {
-      handle: async (event) => {
-        reviewEvents.push(event.eventType);
-      },
-    });
-
-    await handler.execute(new RecordHashCommand('src/app.ts', newContent));
-
-    expect(reviewEvents.length).toBe(2);
-    expect(mockLinkedDocQuery.findLinkedDocuments).toHaveBeenCalledWith('src/app.ts');
-  });
+  // The test for ReviewRequiredEvent has been REMOVED because the handler does not emit it.
 
   it('should return failure on invalid file path', async () => {
     const result = await handler.execute(

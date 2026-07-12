@@ -1,29 +1,44 @@
 import { ApproveCommitHandler } from '../../../application/handlers/approve-commit.handler';
 import { ApproveCommitCommand } from '../../../application/commands/approve-commit.command';
-import { ITrackingRepository } from '../../../domain/repository/tracking-repository.interface';
+import { IHashRepository } from '../../../domain/repository/hash-repository.interface';
+import { ICommitRepository } from '../../../domain/repository/commit-repository.interface';
+import { ILinkedDocumentQueryPort } from '../../../application/ports/linked-document-query.port';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
 import { FileHash } from '../../../domain/entities/file-hash';
 import { FileHashId } from '../../../domain/value-objects/file-hash-id';
 import { FilePath } from '../../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../../domain/value-objects/hash-value';
 import { DocumentId } from '../../../../documentation/domain/value-objects/document-id';
+import { CommitId } from '../../../domain/value-objects/commit-id';
 
 describe('ApproveCommitHandler', () => {
   let handler: ApproveCommitHandler;
-  let mockRepo: jest.Mocked<ITrackingRepository>;
+  let mockHashRepo: jest.Mocked<IHashRepository>;
+  let mockCommitRepo: jest.Mocked<ICommitRepository>;
+  let mockLinkedDocQuery: jest.Mocked<ILinkedDocumentQueryPort>;
 
   beforeEach(() => {
-    mockRepo = {
+    mockHashRepo = {
       findHashByPath: jest.fn(),
       findAllHashes: jest.fn().mockResolvedValue([]),
       saveHash: jest.fn().mockResolvedValue(undefined),
-      findCommitById: jest.fn(),
-      saveCommit: jest.fn().mockResolvedValue(undefined),
-      findPendingCommits: jest.fn(),
-      findCommitsByDocument: jest.fn(),
+      findDiffByPath: jest.fn(),
+      deleteHashByPath: jest.fn(),
     };
 
-    handler = new ApproveCommitHandler(mockRepo);
+    mockCommitRepo = {
+      findById: jest.fn(),
+      findByDocument: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+      findAll: jest.fn(),
+    };
+
+    mockLinkedDocQuery = {
+      findLinkedDocuments: jest.fn().mockResolvedValue([]),
+      findLinkedFiles: jest.fn().mockResolvedValue([]),
+    };
+
+    handler = new ApproveCommitHandler(mockHashRepo, mockCommitRepo, mockLinkedDocQuery);
     EventBus.getInstance().clear();
   });
 
@@ -37,7 +52,9 @@ describe('ApproveCommitHandler', () => {
       new FilePath('src/app.ts'),
       new HashValue('a'.repeat(64))
     );
-    mockRepo.findAllHashes.mockResolvedValue([pendingHash]);
+    // The handler will call findAllHashes (returns pendingHash) and findLinkedFiles
+    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash]);
+    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts']);
 
     const emittedEvents: string[] = [];
     EventBus.getInstance().register('CommitApprovedEvent', {
@@ -51,21 +68,22 @@ describe('ApproveCommitHandler', () => {
     );
 
     expect(result.isSuccess).toBe(true);
-    expect(mockRepo.saveHash).toHaveBeenCalledTimes(1);
-    expect(mockRepo.saveCommit).toHaveBeenCalledTimes(1);
+    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
+    expect(mockCommitRepo.save).toHaveBeenCalledTimes(1);
     expect(emittedEvents).toContain('CommitApprovedEvent');
   });
 
   it('should do nothing when no pending hashes exist', async () => {
-    mockRepo.findAllHashes.mockResolvedValue([]);
+    // findAllHashes returns empty, so no linked files needed
+    mockHashRepo.findAllHashes.mockResolvedValue([]);
 
     const result = await handler.execute(
       new ApproveCommitCommand('doc-1')
     );
 
     expect(result.isSuccess).toBe(true);
-    expect(mockRepo.saveHash).not.toHaveBeenCalled();
-    expect(mockRepo.saveCommit).not.toHaveBeenCalled();
+    expect(mockHashRepo.saveHash).not.toHaveBeenCalled();
+    expect(mockCommitRepo.save).not.toHaveBeenCalled();
   });
 
   it('should only affect hashes without commitId', async () => {
@@ -79,17 +97,17 @@ describe('ApproveCommitHandler', () => {
       new FilePath('src/other.ts'),
       new HashValue('b'.repeat(64))
     );
-    // Simulate approved by calling commit
-    const { CommitId } = require('../../../domain/value-objects/commit-id');
+    // simulate approved by calling commit
     approvedHash.commit(new CommitId('commit-old'));
 
-    mockRepo.findAllHashes.mockResolvedValue([pendingHash, approvedHash]);
+    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash, approvedHash]);
+    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts', 'src/other.ts']); // both linked, but only pending will be processed
 
     await handler.execute(new ApproveCommitCommand('doc-1'));
 
     // Only the pending hash should be saved
-    expect(mockRepo.saveHash).toHaveBeenCalledTimes(1);
-    const saved = mockRepo.saveHash.mock.calls[0][0] as FileHash;
+    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
+    const saved = mockHashRepo.saveHash.mock.calls[0][0] as FileHash;
     expect(saved.id.value).toBe('fh-1');
   });
 

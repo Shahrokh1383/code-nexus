@@ -64,7 +64,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 - `src/domains/linking/domain/events/link-created.ts` – `LinkCreatedEvent` (can be for code or doc link, distinguished by payload: `linkId`, `type` (code or doc), `sourceId`, `targetId`).  
 - `src/domains/linking/domain/events/link-broken.ts` – `LinkBrokenEvent`.  
 - `src/domains/linking/domain/events/links-migrated.ts` – `LinksMigratedEvent` (for code links migrated).  
-- `src/domains/linking/domain/events/document-link-created.ts` – `DocumentLinkCreatedEvent` (optional, but keeps granularity).  
+- `src/domains/linking/domain/events/document-link-created.ts` – `DocumentLinkCreatedEvent` 
 - `src/domains/linking/domain/events/document-link-broken.ts` – `DocumentLinkBrokenEvent`.
 
 #### Repository Interfaces
