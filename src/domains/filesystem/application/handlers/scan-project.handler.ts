@@ -14,7 +14,9 @@ import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { FilePath } from '../../domain/value-objects/file-path';
 import { FileNode } from '../../domain/entities/file-node';
 import { FolderNode } from '../../domain/entities/folder-node';
-
+import { FileExcludedEvent } from '../../domain/events/file-excluded';
+import { FileNodeId } from '../../domain/value-objects/file-node-id';
+import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
 import { IFileSystemAdapter } from '../ports/file-system-adapter.interface';
 
 export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, FileTreeDto> {
@@ -43,13 +45,38 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
         return Result.fail(`Project config not found for workspace: ${command.workspaceId}`);
       }
 
-      const ignorePatterns = this.buildIgnorePatterns(config.ignorePatterns);
+      // ---- Remember old index before clearing ----
+      const oldNodes = await this.fileSystemRepo.findAll();
+      const oldFilePaths = new Set<string>();
+      for (const node of oldNodes) {
+        if (node instanceof FileNode) {
+          oldFilePaths.add(node.path.value);
+        }
+      }
 
+      const ignorePatterns = this.buildIgnorePatterns(config.ignorePatterns);
       const fileMetadata = await this.fileSystemAdapter.scanDirectory(workspace.rootPath.value);
 
       const rootPath = new FilePath('.');
       const scanResult = this.scanService.scan(rootPath, ignorePatterns, fileMetadata);
 
+      // ---- Collect new file paths ----
+      const newFilePaths = new Set<string>();
+      this.collectFilePaths(scanResult.rootFolder, newFilePaths);
+
+      // ---- Emit FileExcluded for files that vanished ----
+      for (const oldPath of oldFilePaths) {
+        if (!newFilePaths.has(oldPath)) {
+          // We don't have the original node id here, but FileExcludedEvent only needs the path.
+          // The id is not used in the saga for deletion (only path). Use a dummy id to satisfy the event.
+          this.eventBus.emit(new FileExcludedEvent(
+            new FileNodeId(UuidGenerator.generate()), // dummy, not used for deletion
+            new FilePath(oldPath)
+          ));
+        }
+      }
+
+      // ---- Rebuild the index ----
       await this.fileSystemRepo.clear();
       await this.saveTree(scanResult.rootFolder);
 
@@ -78,6 +105,16 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
       }
     }
     return patterns;
+  }
+
+  private collectFilePaths(node: FileNode | FolderNode, out: Set<string>): void {
+    if (node instanceof FileNode) {
+      out.add(node.path.value);
+    } else if (node instanceof FolderNode) {
+      for (const child of node.children) {
+        this.collectFilePaths(child, out);
+      }
+    }
   }
 
   private async saveTree(node: FileNode | FolderNode): Promise<void> {

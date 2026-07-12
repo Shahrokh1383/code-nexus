@@ -8,6 +8,9 @@ import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects
 import { ILinkedDocumentQueryPort } from '../../src/domains/tracking/application/ports/linked-document-query.port';
 import { DocumentId } from '../../src/domains/documentation/domain/value-objects/document-id';
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
+import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
+import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
+import { IDomainEventHandler } from '../../src/domains/shared-kernel/events/domain-event-handler.interface';
 
 class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
   async findLinkedDocuments(_filePath: string): Promise<DocumentId[]> { return []; }
@@ -16,15 +19,10 @@ class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
 
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
+let ignorePatternChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent> | null = null;
 
-/**
- * Converts directory‑only ignore patterns (ending with '/')
- * into recursive globs that Chokidar will apply to all nested files.
- * Example: '.doclink/' -> '** /.doclink/**' (spaces added to prevent formatting)
- */
 function toWatcherGlob(pattern: string): string {
   if (pattern.endsWith('/')) {
-    // Match any path that contains the directory at any depth
     return `**/${pattern}**`;
   }
   return pattern;
@@ -40,7 +38,6 @@ export async function startWatcher(rootPath: string): Promise<void> {
   const ignorePatternStrings = config ? config.ignorePatterns : [];
   const globPatterns = ignorePatternStrings.map(toWatcherGlob);
 
-  // Create IgnorePattern objects for the scan service (they handle matching internally)
   const ignorePatterns = globPatterns.map((p) => {
     try {
       return new IgnorePattern(p);
@@ -55,6 +52,16 @@ export async function startWatcher(rootPath: string): Promise<void> {
   const linkedDocQuery = new StubLinkedDocumentQueryPort();
   currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery);
   currentSaga.register();
+
+  // Register listener for ignore pattern changes
+  const eventBus = EventBus.getInstance();
+  ignorePatternChangedHandler = {
+    handle: async (event: IgnorePatternsChangedEvent): Promise<void> => {
+      // Restart the watcher for the affected workspace
+      await startWatcher(event.workspaceId.value);
+    },
+  };
+  eventBus.register('IgnorePatternsChanged', ignorePatternChangedHandler);
 }
 
 export async function stopWatcher(): Promise<void> {
@@ -65,5 +72,9 @@ export async function stopWatcher(): Promise<void> {
   if (currentSaga) {
     currentSaga.unregister();
     currentSaga = null;
+  }
+  if (ignorePatternChangedHandler) {
+    EventBus.getInstance().unregister('IgnorePatternsChanged', ignorePatternChangedHandler);
+    ignorePatternChangedHandler = null;
   }
 }

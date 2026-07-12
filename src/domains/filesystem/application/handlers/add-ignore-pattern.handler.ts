@@ -6,6 +6,7 @@ import { IFileSystemRepository } from '../../domain/repository/filesystem-reposi
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { AddIgnorePatternCommand } from '../commands/add-ignore-pattern.command';
 import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
+import { IgnorePatternsChangedEvent } from '../../domain/events/ignore-patterns-changed';
 import { FileExcludedEvent } from '../../domain/events/file-excluded';
 import { FileNode } from '../../domain/entities/file-node';
 
@@ -38,6 +39,8 @@ export class AddIgnorePatternHandler implements ICommandHandler<AddIgnorePattern
           }
         }
       }
+
+      await this.eventBus.emit(new IgnorePatternsChangedEvent(new WorkspaceId(command.workspaceId)));
 
       return Result.ok(undefined);
     } catch (error) {
