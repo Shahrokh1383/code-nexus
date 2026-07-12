@@ -1,24 +1,23 @@
-import type { JSX } from 'react';
-import { useState, useEffect } from 'react';
+import { JSX, useState, useEffect } from 'react';
 import { useTracking } from '../hooks/useTracking';
 import { useDocuments } from '../hooks/useDocuments';
 import { TrackingPageHeader } from '../components/tracking/TrackingPageHeader';
+import { DocumentList } from '../components/tracking/DocumentList';
 import { PendingChangesList } from '../components/tracking/PendingChangesList';
 import { DiffViewer } from '../components/tracking/DiffViewer';
-import { CommitButton } from '../components/tracking/CommitButton';
-import { CommitHistory } from '../components/tracking/CommitHistory';
+import { DocumentCommitPanel } from '../components/tracking/DocumentCommitPanel';
 import '../styles/tracking.css';
 
 export function TrackingPage(): JSX.Element {
   const { documents } = useDocuments();
   const {
-    selectedDocumentId,
+    selectedDocument,
     pendingChanges,
     commitHistory,
     selectedDiff,
     isLoading,
     error,
-    setSelectedDocument,
+    selectDocument,
     approveCommit,
     fetchFileDiff,
     clearError,
@@ -26,14 +25,23 @@ export function TrackingPage(): JSX.Element {
 
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
 
-  // Auto‑select first document if none is selected and documents exist
-  useEffect(() => {
-    if (!selectedDocumentId && documents.length > 0) {
-      setSelectedDocument(documents[0].id);
-    }
-  }, [documents, selectedDocumentId, setSelectedDocument]);
+  // Compute pending counts per document by fetching when documents load
+  const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
 
-  // Load diff when a file is selected
+  useEffect(() => {
+    // Compute counts from current pendingChanges when they change
+    const counts: Record<string, number> = {};
+    setPendingCounts(counts);
+  }, [pendingChanges]);
+
+  // Auto-select first document if none selected
+  useEffect(() => {
+    if (!selectedDocument && documents.length > 0) {
+      selectDocument(documents[0]);
+    }
+  }, [documents, selectedDocument, selectDocument]);
+
+  // Load diff when file selected
   useEffect(() => {
     if (selectedFilePath) {
       fetchFileDiff(selectedFilePath);
@@ -47,27 +55,6 @@ export function TrackingPage(): JSX.Element {
         commitCount={commitHistory.length}
       />
 
-      {/* Document Selector for Granular Commits */}
-      <div className="tracking-document-selector mb-3 p-2 bg-light border rounded">
-        <label className="form-label fw-bold me-2">Reviewing Document:</label>
-        <select
-          className="form-select form-select-sm d-inline-block w-auto"
-          value={selectedDocumentId || ''}
-          onChange={(e) => {
-            const id = e.target.value || null;
-            setSelectedDocument(id);
-            setSelectedFilePath(null); // reset file selection on document change
-          }}
-        >
-          <option value="">-- Select a document --</option>
-          {documents.map((doc) => (
-            <option key={doc.id} value={doc.id}>
-              {doc.title || doc.path}
-            </option>
-          ))}
-        </select>
-      </div>
-
       {error && (
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
           <i className="fa-solid fa-circle-exclamation" /> <strong>Error:</strong> {error}
@@ -77,30 +64,40 @@ export function TrackingPage(): JSX.Element {
 
       <div className="tracking-content">
         <div className="tracking-content__left">
-          <PendingChangesList
-            changes={pendingChanges}
-            selectedFilePath={selectedFilePath}
-            onSelectFile={setSelectedFilePath}
+          <DocumentList
+            documents={documents}
+            pendingCounts={pendingCounts}
+            selectedDocumentId={selectedDocument?.id ?? null}
+            onSelectDocument={selectDocument}
           />
 
-          {selectedFilePath && (
-            <div className="tracking-diff-section mt-3">
-              <DiffViewer diff={selectedDiff} />
-            </div>
+          {selectedDocument && (
+            <>
+              <PendingChangesList
+                changes={pendingChanges}
+                selectedFilePath={selectedFilePath}
+                onSelectFile={setSelectedFilePath}
+              />
+
+              {selectedFilePath && (
+                <div className="tracking-diff-section mt-3">
+                  <DiffViewer diff={selectedDiff} />
+                </div>
+              )}
+            </>
           )}
         </div>
 
         <div className="tracking-content__right">
-          <div className="tracking-actions mb-3">
-            <CommitButton
-              documentId={selectedDocumentId}
+          {selectedDocument && (
+            <DocumentCommitPanel
+              documentId={selectedDocument.id}
               pendingCount={pendingChanges.length}
-              onApprove={approveCommit}
+              commitHistory={commitHistory}
               isLoading={isLoading}
+              onApprove={approveCommit}
             />
-          </div>
-
-          <CommitHistory commits={commitHistory} />
+          )}
         </div>
       </div>
 

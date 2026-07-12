@@ -3,6 +3,7 @@ import { IpcChannels } from '../../../electron/ipc/channels';
 import { FileHashDto } from '../../domains/tracking/application/dto/file-hash.dto';
 import { GranularCommitDto } from '../../domains/tracking/application/dto/granular-commit.dto';
 import { ContentDiffDto } from '../../domains/tracking/application/dto/content-diff.dto';
+import { DocumentDto } from '../../domains/documentation/application/dto/document.dto';
 import { useWorkspaceStore } from './workspace.store';
 
 interface IpcResponse<T> {
@@ -12,14 +13,14 @@ interface IpcResponse<T> {
 }
 
 interface TrackingState {
-  selectedDocumentId: string | null;
+  selectedDocument: DocumentDto | null;
   pendingChanges: FileHashDto[];
   commitHistory: GranularCommitDto[];
   selectedDiff: ContentDiffDto | null;
   isLoading: boolean;
   error: string | null;
 
-  setSelectedDocument: (documentId: string | null) => void;
+  setSelectedDocument: (doc: DocumentDto | null) => void;
   fetchPendingChanges: (documentId?: string) => Promise<void>;
   fetchCommitHistory: (documentId: string) => Promise<void>;
   fetchFileDiff: (filePath: string) => Promise<void>;
@@ -34,20 +35,19 @@ const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T
 };
 
 export const useTrackingStore = create<TrackingState>((set, get) => ({
-  selectedDocumentId: null,
+  selectedDocument: null,
   pendingChanges: [],
   commitHistory: [],
   selectedDiff: null,
   isLoading: false,
   error: null,
 
-  setSelectedDocument: (documentId) => {
-    set({ selectedDocumentId: documentId, selectedDiff: null });
-    if (documentId) {
-      get().fetchPendingChanges(documentId);
-      get().fetchCommitHistory(documentId);
+  setSelectedDocument: (doc) => {
+    set({ selectedDocument: doc, selectedDiff: null });
+    if (doc) {
+      get().fetchPendingChanges(doc.id);
+      get().fetchCommitHistory(doc.id);
     } else {
-      // Fetch all pending changes when no document is selected (global overview)
       get().fetchPendingChanges();
       set({ commitHistory: [] });
     }
@@ -103,7 +103,6 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await invokeIpc<unknown>(IpcChannels.TRACKING_APPROVE_COMMIT, workspace.id, documentId);
-      // Refresh data for the committed document
       await get().fetchPendingChanges(documentId);
       await get().fetchCommitHistory(documentId);
     } catch (error) {

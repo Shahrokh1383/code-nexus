@@ -4,14 +4,14 @@ import { DetectChangesCommand } from '../commands/detect-changes.command';
 import { IFileContentReader } from '../ports/file-content-reader.interface';
 import { RecordHashCommand } from '../commands/record-hash.command';
 import { RecordHashHandler } from './record-hash.handler';
-import { ITrackingRepository } from '../../domain/repository/tracking-repository.interface';
+import { IHashRepository } from '../../domain/repository/hash-repository.interface';
 import { DiffCalculatorService } from '../../domain/services/diff-calculator.service';
 
 export class DetectChangesHandler implements ICommandHandler<DetectChangesCommand, void> {
   constructor(
     private readonly contentReader: IFileContentReader,
-    private readonly repository: ITrackingRepository,
-    private readonly diffService: DiffCalculatorService // FIXED: Inject Domain Service
+    private readonly repository: IHashRepository,
+    private readonly diffService: DiffCalculatorService
   ) {}
 
   async execute(command: DetectChangesCommand): Promise<Result<void, string>> {

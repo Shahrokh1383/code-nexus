@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { IpcChannels } from '../channels';
 import { TrackingJsonRepository } from '../../../src/domains/tracking/infrastructure/repository/tracking-json.repository';
+import { CommitsJsonRepository } from '../../../src/domains/tracking/infrastructure/repository/commits-json.repository';
 import { FileContentReaderAdapter } from '../../../src/domains/tracking/infrastructure/adapters/file-content-reader.adapter';
 import { DiffCalculatorAdapter } from '../../../src/domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../../src/domains/tracking/domain/services/diff-calculator.service';
@@ -38,7 +39,8 @@ class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
   async findLinkedFiles(_documentId: string): Promise<string[]> { return []; }
 }
 
-function createTrackingRepository(workspaceRoot: string) { return new TrackingJsonRepository(workspaceRoot); }
+function createHashRepository(workspaceRoot: string) { return new TrackingJsonRepository(workspaceRoot); }
+function createCommitRepository(workspaceRoot: string) { return new CommitsJsonRepository(workspaceRoot); }
 function createLinkedDocQuery(): ILinkedDocumentQueryPort { return new StubLinkedDocumentQueryPort(); }
 function createDiffService(): DiffCalculatorService { return new DiffCalculatorService(new DiffCalculatorAdapter()); }
 
@@ -48,7 +50,7 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new RecordHashHandler(createTrackingRepository(rootPath), createDiffService());
+      const handler = new RecordHashHandler(createHashRepository(rootPath), createDiffService());
       const result = await handler.execute(new RecordHashCommand(filePath, content));
       return result.fold<IpcResponse<unknown>>(
         () => ({ success: true }),
@@ -62,7 +64,11 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new DetectChangesHandler(new FileContentReaderAdapter(rootPath), createTrackingRepository(rootPath), createDiffService());
+      const handler = new DetectChangesHandler(
+        new FileContentReaderAdapter(rootPath),
+        createHashRepository(rootPath),
+        createDiffService()
+      );
       const result = await handler.execute(new DetectChangesCommand(filePath));
       return result.fold<IpcResponse<unknown>>(
         () => ({ success: true }),
@@ -76,7 +82,11 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new ApproveCommitHandler(createTrackingRepository(rootPath), createLinkedDocQuery());
+      const handler = new ApproveCommitHandler(
+        createHashRepository(rootPath),
+        createCommitRepository(rootPath),
+        createLinkedDocQuery()
+      );
       const result = await handler.execute(new ApproveCommitCommand(documentId));
       return result.fold<IpcResponse<unknown>>(
         () => ({ success: true }),
@@ -90,7 +100,10 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new GetPendingChangesHandler(createTrackingRepository(rootPath), createLinkedDocQuery());
+      const handler = new GetPendingChangesHandler(
+        createHashRepository(rootPath),
+        createLinkedDocQuery()
+      );
       const result = await handler.execute(new GetPendingChangesQuery(documentId));
       return result.fold<IpcResponse<FileHashDto[]>>(
         (dtos) => ({ success: true, data: dtos }),
@@ -104,7 +117,7 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new GetCommitHistoryHandler(createTrackingRepository(rootPath));
+      const handler = new GetCommitHistoryHandler(createCommitRepository(rootPath));
       const result = await handler.execute(new GetCommitHistoryQuery(documentId));
       return result.fold<IpcResponse<GranularCommitDto[]>>(
         (dtos) => ({ success: true, data: dtos }),
@@ -118,7 +131,7 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new GetFileDiffHandler(createTrackingRepository(rootPath));
+      const handler = new GetFileDiffHandler(createHashRepository(rootPath));
       const result = await handler.execute(new GetFileDiffQuery(filePath));
       return result.fold<IpcResponse<ContentDiffDto | null>>(
         (diff) => ({ success: true, data: diff }),

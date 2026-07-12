@@ -2,7 +2,7 @@ import { ICommandHandler } from '../../../shared-kernel/application/command-hand
 import { Result } from '../../../shared-kernel/types/result';
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { RecordHashCommand } from '../commands/record-hash.command';
-import { ITrackingRepository } from '../../domain/repository/tracking-repository.interface';
+import { IHashRepository } from '../../domain/repository/hash-repository.interface';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
 import { FileHash } from '../../domain/entities/file-hash';
@@ -15,7 +15,7 @@ import { DiffLine } from '../../domain/value-objects/diff-line';
 
 export class RecordHashHandler implements ICommandHandler<RecordHashCommand, void> {
   constructor(
-    private readonly repository: ITrackingRepository,
+    private readonly repository: IHashRepository,
     private readonly diffService: DiffCalculatorService
   ) {}
 

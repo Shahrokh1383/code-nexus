@@ -2,16 +2,16 @@ import { IQueryHandler } from '../../../shared-kernel/application/query-handler.
 import { Result } from '../../../shared-kernel/types/result';
 import { GetCommitHistoryQuery } from '../queries/get-commit-history.query';
 import { GranularCommitDto } from '../dto/granular-commit.dto';
-import { ITrackingRepository } from '../../domain/repository/tracking-repository.interface';
+import { ICommitRepository } from '../../domain/repository/commit-repository.interface';
 import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 
 export class GetCommitHistoryHandler implements IQueryHandler<GetCommitHistoryQuery, GranularCommitDto[]> {
-  constructor(private readonly repository: ITrackingRepository) {}
+  constructor(private readonly commitRepo: ICommitRepository) {}
 
   async execute(query: GetCommitHistoryQuery): Promise<Result<GranularCommitDto[], string>> {
     try {
       const documentId = new DocumentId(query.documentId);
-      const commits = await this.repository.findCommitsByDocument(documentId);
+      const commits = await this.commitRepo.findByDocument(documentId);
 
       const approvedCommits = commits
         .filter((c) => c.status.isApproved)
