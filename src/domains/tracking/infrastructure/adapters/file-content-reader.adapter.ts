@@ -21,4 +21,8 @@ export class FileContentReaderAdapter implements IFileContentReader {
   updateCache(filePath: string, content: string): void {
     FileContentReaderAdapter.cache.set(filePath, content);
   }
+
+  static clearCache(): void {
+    FileContentReaderAdapter.cache.clear();
+  }
 }

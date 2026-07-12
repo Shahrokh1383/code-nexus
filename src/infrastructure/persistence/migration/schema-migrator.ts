@@ -14,7 +14,9 @@ export class SchemaMigrator {
   }
 
   migrate(data: Record<string, unknown>): Record<string, unknown> {
-    const version = (data.schemaVersion as string) || '0.0';
+    // Support both 'version' and 'schemaVersion' fields used across JSON schemas
+    const versionKey = 'version' in data ? 'version' : 'schemaVersion';
+    const version = (data[versionKey] as string) || '0.0';
 
     if (version === this.currentVersion) {
       return data;
@@ -22,13 +24,17 @@ export class SchemaMigrator {
 
     const migration = this.migrations.get(version);
     if (!migration) {
+      if (version === '0.0') {
+        data[versionKey] = this.currentVersion;
+        return data;
+      }
       throw new Error(
         `No migration found from schema version ${version} to ${this.currentVersion}`
       );
     }
 
     const migrated = migration(data);
-    migrated.schemaVersion = this.currentVersion;
+    migrated[versionKey] = this.currentVersion;
     return migrated;
   }
 }

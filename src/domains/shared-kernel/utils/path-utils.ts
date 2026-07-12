@@ -1,12 +1,18 @@
 export class PathUtils {
 
+  // PathUtils.normalize – add lowercase drive letter
   static normalize(path: string): string {
-    return path
+    let normalized = path
       .replace(/\\/g, '/')
       .replace(/\/+/g, '/')
       .replace(/\/$/, '');
-  }
 
+    // Lowercase the drive letter (Windows only). e.g., 'C:/' → 'c:/'
+    normalized = normalized.replace(/^([A-Z]):\//, (_, letter: string) =>
+      letter.toLowerCase() + ':/'
+    );
+    return normalized;
+  }
   static join(...paths: string[]): string {
     const normalized = paths.map((p) => this.normalize(p));
     return normalized.join('/').replace(/\/+/g, '/');

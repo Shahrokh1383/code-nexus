@@ -12,16 +12,28 @@ export class JsonDatabase {
     await fs.mkdir(this.doclinkPath, { recursive: true });
   }
 
-  async read<T>(filename: string): Promise<T> {
+  async read<T>(filename: string, retries = 3): Promise<T> {
     const filePath = PathUtils.join(this.doclinkPath, filename);
-    const content = await fs.readFile(filePath, 'utf-8');
-    return JSON.parse(content) as T;
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const content = await fs.readFile(filePath, 'utf-8');
+        if (content.trim().length === 0) {
+          throw new Error('File is empty');
+        }
+        return JSON.parse(content) as T;
+      } catch (error) {
+        if (attempt === retries) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 50 * attempt));
+      }
+    }
+    throw new Error('Unreachable');
   }
 
   async write<T>(filename: string, data: T): Promise<void> {
     await this.ensureDoclinkExists();
     const filePath = PathUtils.join(this.doclinkPath, filename);
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    const json = JSON.stringify(data, null, 2);
+    await fs.writeFile(filePath, json, 'utf-8');
   }
 
   async writeTextFile(filename: string, content: string): Promise<void> {

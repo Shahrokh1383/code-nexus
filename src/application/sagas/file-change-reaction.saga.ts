@@ -62,8 +62,9 @@ export class FileChangeReactionSaga {
   }
 
   private async onFileChanged(filePath: string): Promise<void> {
-    if (filePath.startsWith('.doclink') || filePath === '.doclink') {
-      return;
+    const normalized = filePath.replace(/\\/g, '/');
+    if (normalized.startsWith('.doclink/') || normalized === '.doclink') {
+        return;
     }
 
     const repository = new TrackingJsonRepository(this.workspaceRoot);

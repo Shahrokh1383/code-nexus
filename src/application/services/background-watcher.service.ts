@@ -1,4 +1,3 @@
-// src/application/services/background-watcher.service.ts
 import { EventBus } from '../../domains/shared-kernel/events/event-bus';
 import { IDomainEventHandler } from '../../domains/shared-kernel/events/domain-event-handler.interface';
 import { DomainEvent } from '../../domains/shared-kernel/events/domain-event';
@@ -8,6 +7,7 @@ import { ChokidarAdapter } from '../../domains/filesystem/infrastructure/adapter
 import { IgnorePattern } from '../../domains/filesystem/domain/value-objects/ignore-pattern';
 import { IProjectConfigRepository } from '../../domains/project/domain/repository/project-config-repository.interface';
 import { WorkspaceId } from '../../domains/project/domain/value-objects/workspace-id';
+import { FileContentReaderAdapter } from '../../domains/tracking/infrastructure/adapters/file-content-reader.adapter';
 
 export class BackgroundWatcherService implements IDomainEventHandler<DomainEvent> {
   private readonly eventBus: EventBus;
@@ -33,19 +33,19 @@ export class BackgroundWatcherService implements IDomainEventHandler<DomainEvent
     }
   }
 
-  private async startWatching(workspaceId: WorkspaceId, rootPath: string): Promise<void> {
+  private async startWatching(workspaceId: WorkspaceId, rootPath: string) : Promise<void> {
     this.chokidarAdapter.stopWatching();
+    FileContentReaderAdapter.clearCache();
 
     const config = await this.configRepo.findByWorkspaceId(workspaceId);
     if (!config) {
       return;
     }
 
-    const ignorePatterns = config.ignorePatterns.map((p) => new IgnorePattern(p));
-    this.chokidarAdapter.startWatching(rootPath, ignorePatterns);
-  }
+    const mandatoryIgnores = ['**/.doclink/**'];
+    const allPatterns = [...mandatoryIgnores, ...config.ignorePatterns];
+    const ignorePatterns = allPatterns.map((p) => new IgnorePattern(p));
 
-  stop(): void {
-    this.chokidarAdapter.stopWatching();
+    this.chokidarAdapter.startWatching(rootPath, ignorePatterns);
   }
 }

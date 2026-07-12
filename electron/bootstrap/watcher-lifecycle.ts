@@ -1,4 +1,3 @@
-// electron/bootstrap/watcher-lifecycle.ts
 import { ChokidarAdapter } from '../../src/domains/filesystem/infrastructure/adapters/chokidar.adapter';
 import { FileChangeReactionSaga } from '../../src/application/sagas/file-change-reaction.saga';
 import { ProjectConfigJsonRepository } from '../../src/domains/project/infrastructure/repository/project-config-json.repository';
@@ -8,11 +7,8 @@ import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/da
 import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects/ignore-pattern';
 import { ILinkedDocumentQueryPort } from '../../src/domains/tracking/application/ports/linked-document-query.port';
 import { DocumentId } from '../../src/domains/documentation/domain/value-objects/document-id';
-import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
-import { WorkspaceClosedEvent } from '../../src/domains/project/domain/events/workspace-closed';
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
 
-// Stub for the not-yet-implemented Linking context
 class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
   async findLinkedDocuments(_filePath: string): Promise<DocumentId[]> { return []; }
   async findLinkedFiles(_documentId: string): Promise<string[]> { return []; }
@@ -21,17 +17,31 @@ class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
 
+/**
+ * Converts directory‑only ignore patterns (ending with '/')
+ * into recursive globs that Chokidar will apply to all nested files.
+ * Example: '.doclink/' -> '** /.doclink/**' (spaces added to prevent formatting)
+ */
+function toWatcherGlob(pattern: string): string {
+  if (pattern.endsWith('/')) {
+    // Match any path that contains the directory at any depth
+    return `**/${pattern}**`;
+  }
+  return pattern;
+}
+
 export async function startWatcher(rootPath: string): Promise<void> {
-  // Ensure any previous watcher is stopped
   await stopWatcher();
 
-  // Read project config to get ignore patterns
   const db = new JsonDatabase(rootPath);
   const configRepo = new ProjectConfigJsonRepository(db, new SchemaMigrator(DATABASE_SCHEMA_VERSION));
   const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
   
   const ignorePatternStrings = config ? config.ignorePatterns : [];
-  const ignorePatterns = ignorePatternStrings.map((p) => {
+  const globPatterns = ignorePatternStrings.map(toWatcherGlob);
+
+  // Create IgnorePattern objects for the scan service (they handle matching internally)
+  const ignorePatterns = globPatterns.map((p) => {
     try {
       return new IgnorePattern(p);
     } catch {
@@ -39,11 +49,9 @@ export async function startWatcher(rootPath: string): Promise<void> {
     }
   }).filter((p): p is IgnorePattern => p !== null);
 
-  // Start file watcher
   currentWatcher = new ChokidarAdapter();
   currentWatcher.startWatching(rootPath, ignorePatterns);
 
-  // Start the tracking saga
   const linkedDocQuery = new StubLinkedDocumentQueryPort();
   currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery);
   currentSaga.register();

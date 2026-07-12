@@ -23,7 +23,7 @@ export class ChokidarAdapter {
   constructor() {
     this.eventBus = EventBus.getInstance();
   }
-
+  
   startWatching(rootPath: string, ignorePatterns: IgnorePattern[]): FSWatcher {
     this.stopWatching();
     this.rootPath = PathUtils.normalize(rootPath);

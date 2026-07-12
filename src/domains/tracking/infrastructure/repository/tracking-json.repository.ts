@@ -18,7 +18,7 @@ interface HashEntrySchema {
   hashValue: string;
   committedAt: string | null;
   commitId: string | null;
-  diff: ContentDiffDto | null; // NEW: Stores lightweight diff metadata
+  diff: ContentDiffDto | null;
 }
 
 interface CommitEntrySchema {
@@ -104,11 +104,14 @@ export class TrackingJsonRepository implements ITrackingRepository {
 
   private async readIndex(): Promise<TrackingIndexSchema> {
     try {
-        const data = await this.db.read<TrackingIndexSchema>(TRACKING_INDEX_FILE);
-        const migrated = this.migrator.migrate(data as unknown as Record<string, unknown>);
-        return migrated as unknown as TrackingIndexSchema;
-    } catch {
+      const data = await this.db.read<TrackingIndexSchema>  (TRACKING_INDEX_FILE);
+      const migrated = this.migrator.migrate(data as unknown as   Record<string, unknown>);
+      return migrated as unknown as TrackingIndexSchema;
+    } catch (error) {
+      if (error instanceof Error && (error as NodeJS.ErrnoException).code   === 'ENOENT') {
         return { version: SCHEMA_VERSION, hashes: {}, commits: [] };
+      }
+      throw error;
     }
   }
 

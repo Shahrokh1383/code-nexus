@@ -12,15 +12,13 @@
     "README.md",
     "package-lock.json",
     "src\\domains\\shared-kernel\\__tests__",
-    "src\\application",
     "src\\types",
     "src\\presentation\\styles",
-    "src\\domains",
-    "src\\infrastructure"
+    "src\\presentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-11T18:04:42.063Z",
+  "lastModified": "2026-07-12T10:29:19.780Z",
   "version": 1
 }
