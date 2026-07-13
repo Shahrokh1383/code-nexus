@@ -31,11 +31,14 @@
     "src\\presentation\\styles\\app.css",
     "src\\domains\\tracking",
     "src\\domains\\shared-kernel",
-    "src\\domains\\documentation"
+    "src\\domains\\documentation",
+    "src\\infrastructure",
+    "src\\domains",
+    "src\\application"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-13T17:55:09.497Z",
+  "lastModified": "2026-07-13T20:28:15.616Z",
   "version": 1
 }

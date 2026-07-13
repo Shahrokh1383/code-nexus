@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "links": [
+    {
+      "id": "86ec6c32-1d9d-488e-969d-62eea8e8db56",
+      "parentDocumentId": "b21e2b98-b2c5-4ade-aa86-d7a62bcc04c2",
+      "childDocumentId": "9e9b8708-64c1-4303-8aea-8476a368fb36",
+      "type": "DIRECT",
+      "createdAt": "2026-07-13T20:23:04.839Z"
+    },
+    {
+      "id": "9cc0634e-e33c-479c-ad11-904f55a484b9",
+      "parentDocumentId": "8860c940-2bd1-4e5f-85db-a06a946a2c7f",
+      "childDocumentId": "7bc893bb-2aca-4413-b480-93e643c77d6d",
+      "type": "DIRECT",
+      "createdAt": "2026-07-13T20:23:34.790Z"
+    },
+    {
+      "id": "b0d60f3b-3852-4bb4-ba00-111949799530",
+      "parentDocumentId": "8860c940-2bd1-4e5f-85db-a06a946a2c7f",
+      "childDocumentId": "2a3cbd3a-5986-4481-b346-027a1ad5612d",
+      "type": "DIRECT",
+      "createdAt": "2026-07-13T20:33:22.485Z"
+    }
+  ]
+}

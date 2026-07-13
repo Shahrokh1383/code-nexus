@@ -1,4 +1,6 @@
-import { JSX, useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { JSX } from 'react';
+import { useSearchableList } from '../../hooks/linking/useSearchableList';
+import './TargetDocumentSelector.css';
 
 interface DocumentOption {
   id: string;
@@ -16,68 +18,24 @@ export function TargetDocumentSelector({
   selectedDocumentId,
   onSelectDocument,
 }: TargetDocumentSelectorProps): JSX.Element {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [focusedIndex, setFocusedIndex] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+  const {
+    searchTerm,
+    setSearchTerm,
+    filteredItems: filteredDocuments,
+    focusedIndex,
+    inputRef,
+    listRef,
+    handleKeyDown,
+    handleSelect,
+    clearSearch,
+  } = useSearchableList<DocumentOption>({
+    items: documents,
+    getId: (doc) => doc.id,
+    getSearchText: (doc) => doc.title,
+    onSelect: onSelectDocument,
+  });
 
   const selectedDocument = documents.find(d => d.id === selectedDocumentId) ?? null;
-
-  const filteredDocuments = useMemo(() => {
-    if (!searchTerm.trim()) return documents;
-    const lower = searchTerm.toLowerCase();
-    return documents.filter(d => d.title.toLowerCase().includes(lower));
-  }, [documents, searchTerm]);
-
-  useEffect(() => {
-    setFocusedIndex(0);
-  }, [searchTerm]);
-
-  const handleSelect = useCallback(
-    (id: string) => {
-      onSelectDocument(id);
-      setSearchTerm('');
-      inputRef.current?.blur();
-    },
-    [onSelectDocument]
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (filteredDocuments.length === 0) return;
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setFocusedIndex(prev => (prev + 1) % filteredDocuments.length);
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setFocusedIndex(prev => (prev - 1 + filteredDocuments.length) % filteredDocuments.length);
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (filteredDocuments[focusedIndex]) {
-            handleSelect(filteredDocuments[focusedIndex].id);
-          }
-          break;
-        case 'Escape':
-          e.preventDefault();
-          setSearchTerm('');
-          inputRef.current?.blur();
-          break;
-      }
-    },
-    [filteredDocuments, focusedIndex, handleSelect]
-  );
-
-  useEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
-    const item = list.children[focusedIndex] as HTMLLIElement | undefined;
-    if (item) {
-      item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }
-  }, [focusedIndex]);
 
   if (documents.length === 0) {
     return (
@@ -89,52 +47,37 @@ export function TargetDocumentSelector({
   }
 
   return (
-    <div className="mb-3 target-doc-selector">
+    <div className="target-doc-selector">
       {selectedDocument && (
         <div className="mb-2 d-flex align-items-center gap-2">
           <span className="text-secondary fw-medium" style={{ fontSize: 'var(--cn-font-size-sm)' }}>
             Linking to:
           </span>
-          <span
-            className="badge d-inline-flex align-items-center gap-1"
-            style={{
-              backgroundColor: 'var(--cn-primary-muted)',
-              color: 'var(--cn-primary)',
-              fontSize: 'var(--cn-font-size-sm)',
-              fontWeight: 'var(--cn-font-weight-semibold)',
-              padding: '0.35em 0.65em',
-            }}
-          >
+          <span className="badge target-doc-badge">
             <i className="fa-solid fa-file-lines fa-fw" />
             {selectedDocument.title}
           </span>
         </div>
       )}
 
-      <div className="input-group input-group-sm mb-2">
-        <span className="input-group-text" style={{ backgroundColor: 'var(--cn-bg-secondary)', borderColor: 'var(--cn-border-default)' }}>
+      <div className="input-group input-group-sm mb-2 target-doc-input-group">
+        <span className="input-group-text">
           <i className="fa-solid fa-magnifying-glass text-secondary" />
         </span>
         <input
           ref={inputRef}
           type="text"
-          className="form-control"
+          className="form-control target-doc-input"
           placeholder="Search documents..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
-          style={{
-            backgroundColor: 'var(--cn-bg-secondary)',
-            borderColor: 'var(--cn-border-default)',
-            color: 'var(--cn-text-primary)',
-          }}
         />
         {searchTerm && (
           <button
-            className="btn btn-outline-secondary btn-sm"
+            className="btn btn-outline-secondary btn-sm target-doc-clear-btn"
             type="button"
-            onClick={() => { setSearchTerm(''); inputRef.current?.focus(); }}
-            style={{ borderColor: 'var(--cn-border-default)' }}
+            onClick={clearSearch}
             title="Clear search"
           >
             <i className="fa-solid fa-times" />
@@ -142,52 +85,34 @@ export function TargetDocumentSelector({
         )}
       </div>
 
-      <ul
-        ref={listRef}
-        className="list-unstyled m-0 target-doc-list"
-        style={{
-          maxHeight: '220px',
-          overflowY: 'auto',
-          border: '1px solid var(--cn-border-light)',
-          borderRadius: 'var(--cn-radius-md)',
-          backgroundColor: 'var(--cn-bg-secondary)',
-          padding: '4px',
-        }}
-      >
+      <ul ref={listRef} className="target-doc-list">
         {filteredDocuments.length === 0 ? (
-          <li className="p-3 text-center text-secondary" style={{ fontSize: 'var(--cn-font-size-sm)' }}>
+          <li className="target-doc-empty">
             No documents match your search.
           </li>
         ) : (
           filteredDocuments.map((doc, index) => {
             const isSelected = doc.id === selectedDocumentId;
             const isFocused = index === focusedIndex;
+            
+            let itemClass = 'target-doc-item';
+            if (isSelected) itemClass += ' selected';
+            else if (isFocused) itemClass += ' focused';
+
             return (
               <li
                 key={doc.id}
-                className={`d-flex align-items-center gap-2 py-2 px-3 rounded ${isSelected ? 'fw-semibold' : ''}`}
-                style={{
-                  cursor: 'pointer',
-                  backgroundColor: isSelected
-                    ? 'var(--cn-primary-muted)'
-                    : isFocused
-                    ? 'var(--cn-bg-hover)'
-                    : 'transparent',
-                  color: isSelected ? 'var(--cn-primary)' : 'var(--cn-text-primary)',
-                  transition: 'background-color 0.1s ease',
-                }}
+                className={itemClass}
                 onClick={() => handleSelect(doc.id)}
-                onMouseEnter={() => setFocusedIndex(index)}
                 role="option"
                 aria-selected={isSelected}
               >
                 <i
-                  className={`fa-solid ${isSelected ? 'fa-circle-check text-primary' : 'fa-file-lines text-secondary'}`}
-                  style={{ width: '1.2em' }}
+                  className={`fa-solid target-doc-item-icon ${isSelected ? 'fa-circle-check text-primary' : 'fa-file-lines text-secondary'}`}
                 />
                 <span>{doc.title}</span>
                 {isSelected && (
-                  <span className="ms-auto" style={{ fontSize: 'var(--cn-font-size-xs)', color: 'var(--cn-text-disabled)' }}>
+                  <span className="target-doc-active-label">
                     active
                   </span>
                 )}

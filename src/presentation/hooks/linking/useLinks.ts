@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
-import { useLinkingStore } from '../stores/linking.store';
-import { useWorkspaceStore } from '../stores/workspace.store';
+import { useLinkingStore } from '../../stores/linking.store';
+import { useWorkspaceStore } from '../../stores/workspace.store';
 
 export function useLinks() {
   const workspace = useWorkspaceStore((s) => s.workspace);

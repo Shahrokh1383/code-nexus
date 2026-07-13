@@ -3,12 +3,7 @@ import { IpcChannels } from '../../../electron/ipc/channels';
 import { DocumentDto } from '../../domains/documentation/application/dto/document.dto';
 import { DocFolderDto } from '../../domains/documentation/application/dto/doc-folder.dto';
 import { useWorkspaceStore } from './workspace.store';
-
-interface IpcResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
+import { invokeIpc } from '../utils/ipc-invoke';
 
 interface GetAllDocumentsResponse {
   documents: DocumentDto[];
@@ -30,14 +25,6 @@ interface DocumentationState {
   clearError: () => void;
 }
 
-const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
-  const response = (await window.electronAPI.invoke(channel, ...args)) as IpcResponse<T>;
-  if (!response.success) {
-    throw new Error(response.error || 'Unknown IPC error');
-  }
-  return response.data as T;
-};
-
 export const useDocumentationStore = create<DocumentationState>((set, get) => ({
   documents: [],
   docFolder: null,
@@ -51,12 +38,9 @@ export const useDocumentationStore = create<DocumentationState>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      // Sync silently – remove documents whose files have been deleted
       try {
         await invokeIpc<void>(IpcChannels.DOCUMENTATION_SYNC_FILES, workspace.id);
-      } catch {
-        // sync failure is non‑fatal
-      }
+      } catch { /* sync failure is non‑fatal */ }
 
       const result = await invokeIpc<GetAllDocumentsResponse>(
         IpcChannels.DOCUMENTATION_GET_ALL, workspace.id

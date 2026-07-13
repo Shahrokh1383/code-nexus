@@ -3,12 +3,7 @@ import { IpcChannels } from '../../../electron/ipc/channels';
 import { CodeToDocLinkDto, CodeFileSummaryDto } from '../../domains/linking/application/dto/link.dto';
 import { DocumentLinkDto } from '../../domains/linking/application/dto/document-link.dto';
 import { useWorkspaceStore } from './workspace.store';
-
-interface IpcResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
+import { invokeIpc } from '../utils/ipc-invoke';
 
 interface LinkingState {
   codeLinks: CodeToDocLinkDto[];
@@ -25,14 +20,7 @@ interface LinkingState {
   removeDocumentLink: (linkId: string) => Promise<void>;
   createBulkCodeLinks: (codeFileIds: string[], documentId: string) => Promise<void>;
   clearError: () => void;
-
 }
-
-const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
-  const response = (await window.electronAPI.invoke(channel, ...args)) as IpcResponse<T>;
-  if (!response.success) throw new Error(response.error || 'Unknown IPC error');
-  return response.data as T;
-};
 
 export const useLinkingStore = create<LinkingState>((set, get) => ({
   codeLinks: [],

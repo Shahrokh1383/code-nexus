@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useLinkingStore } from '../stores/linking.store';
+import { useLinkingStore } from '../../stores/linking.store';
 
 export function useUnlinkedFiles(currentDocumentId: string | null) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
