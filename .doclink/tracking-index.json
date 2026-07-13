@@ -12,19 +12,19 @@
     ".road_analyzer_exclude.json": {
       "id": "976dc7b1-9b6d-4141-850b-95e0ecb44160",
       "filePath": ".road_analyzer_exclude.json",
-      "hashValue": "f68400b8abba359cc1b44f58b21e10ffb8b4330cde15f9cc998c15018243518f",
+      "hashValue": "0b3a41e798f181d29569674cac853fc97ab7e91e2120df1dbaab7bc70faf998f",
       "committedAt": null,
       "commitId": null,
       "diff": {
         "filePath": ".road_analyzer_exclude.json",
-        "oldHash": "f68400b8abba359cc1b44f58b21e10ffb8b4330cde15f9cc998c15018243518f",
-        "newHash": "f68400b8abba359cc1b44f58b21e10ffb8b4330cde15f9cc998c15018243518f",
+        "oldHash": "0b3a41e798f181d29569674cac853fc97ab7e91e2120df1dbaab7bc70faf998f",
+        "newHash": "0b3a41e798f181d29569674cac853fc97ab7e91e2120df1dbaab7bc70faf998f",
         "addedLines": [],
         "removedLines": [],
         "modifiedLines": [
           {
             "lineNumber": 39,
-            "content": "  \"lastModified\": \"2026-07-13T17:01:45.890Z\",",
+            "content": "  \"lastModified\": \"2026-07-13T17:55:09.497Z\",",
             "type": "MODIFIED"
           }
         ]
@@ -44,176 +44,4371 @@
         "removedLines": [
           {
             "lineNumber": 1,
-            "content": "electron\\ipc\\handlers.ts :",
+            "content": "src\\domains\\linking\\application\\queries\\get-unlinked-codefiles.query.ts :",
             "type": "REMOVED"
           },
           {
             "lineNumber": 2,
-            "content": "import { ipcMain, dialog } from 'electron';",
+            "content": "import { IQuery } from '../../../shared-kernel/application/query.interface';",
             "type": "REMOVED"
           },
           {
             "lineNumber": 3,
-            "content": "import { IpcChannels } from './channels';",
+            "content": "",
             "type": "REMOVED"
           },
           {
             "lineNumber": 4,
-            "content": "import { registerProjectHandlers } from './handlers/project-handlers';",
+            "content": "export class GetUnlinkedCodefilesQuery implements IQuery {",
             "type": "REMOVED"
           },
           {
             "lineNumber": 5,
-            "content": "import { registerFilesystemHandlers } from './handlers/filesystem-handlers';",
+            "content": "  constructor() {}",
             "type": "REMOVED"
           },
           {
             "lineNumber": 6,
-            "content": "import { registerDocumentationHandlers } from './handlers/documentation-handlers';",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 7,
-            "content": "import { registerTrackingHandlers } from './handlers/tracking-handlers';",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 8,
-            "content": "import { registerLinkingHandlers } from './handlers/linking-handlers';",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 9,
-            "content": "",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 10,
-            "content": "/**",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 11,
-            "content": " * Registers all IPC handlers for the main process.",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 12,
-            "content": " */",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 13,
-            "content": "export function registerIpcHandlers(): void {",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 14,
-            "content": "  // Infrastructure‑level handlers (no domain imports)",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 15,
-            "content": "  ipcMain.handle(IpcChannels.DIALOG_OPEN_FOLDER, async () => {",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 16,
-            "content": "    const result = await dialog.showOpenDialog({",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 17,
-            "content": "      properties: ['openDirectory'],",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 18,
-            "content": "    });",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 19,
-            "content": "",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 20,
-            "content": "    if (result.canceled) {",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 21,
-            "content": "      return { success: true, data: [] };",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 22,
-            "content": "    }",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 23,
-            "content": "",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 24,
-            "content": "    return { success: true, data: result.filePaths };",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 25,
-            "content": "  });",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 26,
-            "content": "",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 27,
-            "content": "  // Domain‑specific handlers",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 28,
-            "content": "  registerProjectHandlers();",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 29,
-            "content": "  registerFilesystemHandlers();",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 30,
-            "content": "  registerDocumentationHandlers();",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 31,
-            "content": "  registerTrackingHandlers();",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 32,
-            "content": "  registerLinkingHandlers();",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 33,
             "content": "}",
             "type": "REMOVED"
           },
           {
-            "lineNumber": 34,
+            "lineNumber": 7,
             "content": "",
             "type": "REMOVED"
           },
           {
+            "lineNumber": 8,
+            "content": "src\\domains\\linking\\application\\handlers\\get-unlinked-codefiles.handler.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 9,
+            "content": "import { IQueryHandler } from '../../../shared-kernel/application/query-handler.interface';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 10,
+            "content": "import { Result } from '../../../shared-kernel/types/result';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 11,
+            "content": "import { ILinkRepository } from '../../domain/repository/link-repository.interface';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 12,
+            "content": "import { ICodeFileQueryPort } from '../ports/code-file-query.port';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 13,
+            "content": "import { CodeFileSummaryDto } from '../dto/link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 14,
+            "content": "import { GetUnlinkedCodefilesQuery } from '../queries/get-unlinked-codefiles.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 15,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 16,
+            "content": "export class GetUnlinkedCodefilesHandler implements IQueryHandler<GetUnlinkedCodefilesQuery, CodeFileSummaryDto[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 17,
+            "content": "  constructor(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 18,
+            "content": "    private readonly linkRepository: ILinkRepository,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 19,
+            "content": "    private readonly codeFileQueryPort: ICodeFileQueryPort",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 20,
+            "content": "  ) {}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 21,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 22,
+            "content": "  async execute(_query: GetUnlinkedCodefilesQuery): Promise<Result<CodeFileSummaryDto[], string>> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 23,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 24,
+            "content": "      const allCodeFiles = await this.codeFileQueryPort.getAllCodeFiles();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 25,
+            "content": "      const allLinks = await this.linkRepository.findAll();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 26,
+            "content": "      ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 27,
+            "content": "      const linkedFileIds = new Set(allLinks.map(l => l.codeFileId.value));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 28,
+            "content": "      const unlinked = allCodeFiles.filter(f => !linkedFileIds.has(f.id));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 29,
+            "content": "      ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 30,
+            "content": "      return Result.ok(unlinked);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 31,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 32,
+            "content": "      const message = error instanceof Error ? error.message : 'Failed to fetch unlinked code files';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 33,
+            "content": "      return Result.fail(message);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
             "lineNumber": 35,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 37,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 38,
+            "content": "src\\domains\\linking\\application\\ports\\code-file-query.port.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 39,
+            "content": "import { CodeFileSummaryDto } from '../dto/link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 40,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 41,
+            "content": "/**",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 42,
+            "content": " * Anti-Corruption Layer port to query Code Files from the FileSystem bounded context.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 43,
+            "content": " */",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 44,
+            "content": "export interface ICodeFileQueryPort {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "  getAllCodeFiles(): Promise<CodeFileSummaryDto[]>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "src\\presentation\\hooks\\useUnlinkedFiles.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "import { useState, useCallback, useMemo } from 'react';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "import { useLinkingStore } from '../stores/linking.store';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "export function useUnlinkedFiles(currentDocumentId: string | null) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "  const { unlinkedFiles, createCodeLink, createBulkCodeLinks } = useLinkingStore();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "  const isAllSelected = useMemo(() => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "    if (unlinkedFiles.length === 0) return false;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "    return unlinkedFiles.every(f => selectedIds.has(f.id));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "  }, [selectedIds, unlinkedFiles]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 61,
+            "content": "  const isIndeterminate = useMemo(() => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 62,
+            "content": "    if (selectedIds.size === 0) return false;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 63,
+            "content": "    return !isAllSelected;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "  }, [selectedIds.size, isAllSelected]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 65,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 66,
+            "content": "  const toggleFile = useCallback((fileId: string) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 67,
+            "content": "    setSelectedIds(prev => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 68,
+            "content": "      const next = new Set(prev);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 69,
+            "content": "      if (next.has(fileId)) next.delete(fileId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 70,
+            "content": "      else next.add(fileId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 71,
+            "content": "      return next;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 72,
+            "content": "    });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 73,
+            "content": "  }, []);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 74,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 75,
+            "content": "  const toggleAll = useCallback(() => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 76,
+            "content": "    setSelectedIds(prev => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 77,
+            "content": "      if (prev.size === unlinkedFiles.length) return new Set();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 78,
+            "content": "      return new Set(unlinkedFiles.map(f => f.id));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 79,
+            "content": "    });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 80,
+            "content": "  }, [unlinkedFiles]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 81,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 82,
+            "content": "  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 83,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 84,
+            "content": "  const handleQuickLink = useCallback(async (fileId: string) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 85,
+            "content": "    if (!currentDocumentId) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 86,
+            "content": "    await createCodeLink(fileId, currentDocumentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "  }, [currentDocumentId, createCodeLink]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 88,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 89,
+            "content": "  const handleBulkLink = useCallback(async () => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 90,
+            "content": "    if (!currentDocumentId || selectedIds.size === 0) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 91,
+            "content": "    await createBulkCodeLinks(Array.from(selectedIds), currentDocumentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 92,
+            "content": "    clearSelection();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 93,
+            "content": "  }, [selectedIds, currentDocumentId, createBulkCodeLinks, clearSelection]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 94,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 95,
+            "content": "  return {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 96,
+            "content": "    selectedIds,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 97,
+            "content": "    isAllSelected,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 98,
+            "content": "    isIndeterminate,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 99,
+            "content": "    toggleFile,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 100,
+            "content": "    toggleAll,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 101,
+            "content": "    clearSelection,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 102,
+            "content": "    handleQuickLink,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 103,
+            "content": "    handleBulkLink,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 104,
+            "content": "  };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 105,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 106,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 107,
+            "content": "src\\presentation\\components\\linking\\UnlinkedFilesList.tsx :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 108,
+            "content": "import { JSX } from 'react';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 109,
+            "content": "import { CodeFileSummaryDto } from '../../../domains/linking/application/dto/link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 110,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 111,
+            "content": "interface UnlinkedFilesListProps {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 112,
+            "content": "  files: CodeFileSummaryDto[];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 113,
+            "content": "  selectedIds: Set<string>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 114,
+            "content": "  onToggleFile: (id: string) => void;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 115,
+            "content": "  onToggleAll: () => void;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 116,
+            "content": "  onBulkLink: () => void;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 117,
+            "content": "  onQuickLink: (id: string) => void;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 118,
+            "content": "  isAllSelected: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 119,
+            "content": "  isIndeterminate: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 120,
+            "content": "  currentDocumentTitle: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 121,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 122,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 123,
+            "content": "export function UnlinkedFilesList({",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 124,
+            "content": "  files,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 125,
+            "content": "  selectedIds,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 126,
+            "content": "  onToggleFile,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 127,
+            "content": "  onToggleAll,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 128,
+            "content": "  onBulkLink,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 129,
+            "content": "  onQuickLink,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 130,
+            "content": "  isAllSelected,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 131,
+            "content": "  isIndeterminate,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 132,
+            "content": "  currentDocumentTitle,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 133,
+            "content": "}: UnlinkedFilesListProps): JSX.Element {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 134,
+            "content": "  if (files.length === 0) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 135,
+            "content": "    return (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 136,
+            "content": "      <div className=\"unlinked-empty\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 137,
+            "content": "        <i className=\"fa-solid fa-check-circle fa-3x text-success mb-3\"></i>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 138,
+            "content": "        <h5 className=\"fw-semibold\">All code files are linked!</h5>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 139,
+            "content": "        <p className=\"text-secondary\">No unlinked files found in this project.</p>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 140,
+            "content": "      </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 141,
+            "content": "    );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 142,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 143,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 144,
+            "content": "  return (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 145,
+            "content": "    <div className=\"unlinked-container\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 146,
+            "content": "      <div className=\"unlinked-toolbar\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 147,
+            "content": "        <label className=\"unlinked-select-all\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 148,
+            "content": "          <input",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 149,
+            "content": "            type=\"checkbox\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 150,
+            "content": "            className=\"form-check-input me-2\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 151,
+            "content": "            checked={isAllSelected}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 152,
+            "content": "            ref={el => { if (el) el.indeterminate = isIndeterminate; }}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 153,
+            "content": "            onChange={onToggleAll}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 154,
+            "content": "          />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 155,
+            "content": "          <span className=\"fw-medium\">{selectedIds.size > 0 ? `${selectedIds.size} selected` : 'Select All'}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 156,
+            "content": "        </label>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 157,
+            "content": "        <button",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 158,
+            "content": "          className=\"btn btn-sm btn-ghost ms-auto\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 159,
+            "content": "          onClick={() => onToggleAll()}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 160,
+            "content": "          title={isAllSelected ? 'Deselect all' : 'Select all'}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 161,
+            "content": "        >",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 162,
+            "content": "          <i className={`fa-solid ${isAllSelected ? 'fa-square-check' : 'fa-square'}`}></i>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 163,
+            "content": "        </button>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 164,
+            "content": "      </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 165,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 166,
+            "content": "      <div className=\"unlinked-list\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 167,
+            "content": "        {files.map(file => (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 168,
+            "content": "          <div",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 169,
+            "content": "            key={file.id}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 170,
+            "content": "            className={`unlinked-item ${selectedIds.has(file.id) ? 'selected' : ''}`}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 171,
+            "content": "          >",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 172,
+            "content": "            <label className=\"unlinked-item-label\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 173,
+            "content": "              <input",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 174,
+            "content": "                type=\"checkbox\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 175,
+            "content": "                className=\"form-check-input me-3\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 176,
+            "content": "                checked={selectedIds.has(file.id)}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 177,
+            "content": "                onChange={() => onToggleFile(file.id)}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 178,
+            "content": "              />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 179,
+            "content": "              <i className=\"fa-solid fa-file-code text-primary me-2\"></i>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 180,
+            "content": "              <div className=\"unlinked-item-info\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 181,
+            "content": "                <span className=\"unlinked-item-name\">{file.name}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 182,
+            "content": "                <span className=\"unlinked-item-path text-secondary\">{file.path}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 183,
+            "content": "              </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 184,
+            "content": "            </label>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 185,
+            "content": "            <button",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 186,
+            "content": "              className=\"btn btn-sm btn-outline-primary ms-3\"",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 187,
+            "content": "              onClick={() => onQuickLink(file.id)}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 188,
+            "content": "              title={`Link to ${currentDocumentTitle}`}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 189,
+            "content": "            >",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 190,
+            "content": "              <i className=\"fa-solid fa-link me-1\"></i> Link",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 191,
+            "content": "            </button>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 192,
+            "content": "          </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 193,
+            "content": "        ))}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 194,
+            "content": "      </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 195,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 196,
+            "content": "      {selectedIds.size > 0 && (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 197,
+            "content": "        <div className=\"unlinked-bulk-bar\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 198,
+            "content": "          <span className=\"text-secondary\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 199,
+            "content": "            <i className=\"fa-solid fa-link me-2\"></i>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 200,
+            "content": "            Link {selectedIds.size} selected file{selectedIds.size > 1 ? 's' : ''} to <strong>{currentDocumentTitle}</strong>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 201,
+            "content": "          </span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 202,
+            "content": "          <button className=\"btn btn-primary btn-sm ms-auto\" onClick={onBulkLink}>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 203,
+            "content": "            Apply Links",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 204,
+            "content": "          </button>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 205,
+            "content": "        </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 206,
+            "content": "      )}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 207,
+            "content": "    </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 208,
+            "content": "  );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 209,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 210,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 211,
+            "content": "src\\presentation\\stores\\linking.store.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 212,
+            "content": "import { create } from 'zustand';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 213,
+            "content": "import { IpcChannels } from '../../../electron/ipc/channels';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 214,
+            "content": "import { CodeToDocLinkDto, CodeFileSummaryDto } from '../../domains/linking/application/dto/link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 215,
+            "content": "import { DocumentLinkDto } from '../../domains/linking/application/dto/document-link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 216,
+            "content": "import { useWorkspaceStore } from './workspace.store';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 217,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 218,
+            "content": "interface IpcResponse<T> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 219,
+            "content": "  success: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 220,
+            "content": "  data?: T;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 221,
+            "content": "  error?: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 222,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 223,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 224,
+            "content": "interface LinkingState {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 225,
+            "content": "  codeLinks: CodeToDocLinkDto[];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 226,
+            "content": "  documentLinks: DocumentLinkDto[];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 227,
+            "content": "  unlinkedFiles: CodeFileSummaryDto[];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 228,
+            "content": "  isLoading: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 229,
+            "content": "  error: string | null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 230,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 231,
+            "content": "  fetchGraphData: () => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 232,
+            "content": "  fetchLinksForDocument: (documentId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 233,
+            "content": "  createCodeLink: (codeFileId: string, documentId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 234,
+            "content": "  createDocumentLink: (parentDocumentId: string, childDocumentId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 235,
+            "content": "  removeCodeLink: (linkId: string, documentId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 236,
+            "content": "  removeDocumentLink: (linkId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 237,
+            "content": "  createBulkCodeLinks: (codeFileIds: string[], documentId: string) => Promise<void>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 238,
+            "content": "  clearError: () => void;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 239,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 240,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 241,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 242,
+            "content": "const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 243,
+            "content": "  const response = (await window.electronAPI.invoke(channel, ...args)) as IpcResponse<T>;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 244,
+            "content": "  if (!response.success) throw new Error(response.error || 'Unknown IPC error');",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 245,
+            "content": "  return response.data as T;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 246,
+            "content": "};",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 247,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 248,
+            "content": "export const useLinkingStore = create<LinkingState>((set, get) => ({",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 249,
+            "content": "  codeLinks: [],",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 250,
+            "content": "  documentLinks: [],",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 251,
+            "content": "  unlinkedFiles: [],",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 252,
+            "content": "  isLoading: false,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 253,
+            "content": "  error: null,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 254,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 255,
+            "content": "  fetchGraphData: async () => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 256,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 257,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 258,
+            "content": "    set({ isLoading: true, error: null });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 259,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 260,
+            "content": "      const unlinked = await invokeIpc<CodeFileSummaryDto[]>(IpcChannels.LINKING_GET_UNLINKED_CODEFILES, workspace.id);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 261,
+            "content": "      set({ unlinkedFiles: unlinked || [], isLoading: false });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 262,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 263,
+            "content": "      const message = error instanceof Error ? error.message : 'Failed to fetch linking data';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 264,
+            "content": "      set({ error: message, isLoading: false });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 265,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 266,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 267,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 268,
+            "content": "  fetchLinksForDocument: async (documentId: string) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 269,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 270,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 271,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 272,
+            "content": "      const codeLinks = await invokeIpc<CodeToDocLinkDto[]>(IpcChannels.LINKING_GET_LINKS_FOR_DOCUMENT, workspace.id, documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 273,
+            "content": "      const docParents = await invokeIpc<DocumentLinkDto[]>(IpcChannels.LINKING_GET_DOCUMENT_PARENTS, workspace.id, documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 274,
+            "content": "      set({ codeLinks: codeLinks || [], documentLinks: docParents || [] });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 275,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 276,
+            "content": "      console.error('Failed to fetch document links', error);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 277,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 278,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 279,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 280,
+            "content": "  createCodeLink: async (codeFileId, documentId) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 281,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 282,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 283,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 284,
+            "content": "      await invokeIpc<void>(IpcChannels.LINKING_CREATE_LINK, workspace.id, codeFileId, documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 285,
+            "content": "      await get().fetchGraphData();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 286,
+            "content": "      await get().fetchLinksForDocument(documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 287,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 288,
+            "content": "      set({ error: error instanceof Error ? error.message : 'Failed to create code link' });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 289,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 290,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 291,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 292,
+            "content": "  createDocumentLink: async (parentDocumentId, childDocumentId) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 293,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 294,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 295,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 296,
+            "content": "      await invokeIpc<void>(IpcChannels.LINKING_CREATE_DOCUMENT_LINK, workspace.id, parentDocumentId, childDocumentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 297,
+            "content": "      await get().fetchGraphData();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 298,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 299,
+            "content": "      set({ error: error instanceof Error ? error.message : 'Failed to create document link' });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 300,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 301,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 302,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 303,
+            "content": "  removeCodeLink: async (linkId, documentId) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 304,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 305,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 306,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 307,
+            "content": "      await invokeIpc<void>(IpcChannels.LINKING_REMOVE_LINK, workspace.id, linkId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 308,
+            "content": "      await get().fetchGraphData();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 309,
+            "content": "      await get().fetchLinksForDocument(documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 310,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 311,
+            "content": "      set({ error: error instanceof Error ? error.message : 'Failed to remove code link' });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 312,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 313,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 314,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 315,
+            "content": "  removeDocumentLink: async (linkId) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 316,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 317,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 318,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 319,
+            "content": "      await invokeIpc<void>(IpcChannels.LINKING_REMOVE_DOCUMENT_LINK, workspace.id, linkId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 320,
+            "content": "      await get().fetchGraphData();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 321,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 322,
+            "content": "      set({ error: error instanceof Error ? error.message : 'Failed to remove document link' });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 323,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 324,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 325,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 326,
+            "content": "  createBulkCodeLinks: async (codeFileIds, documentId) => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 327,
+            "content": "    const workspace = useWorkspaceStore.getState().workspace;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 328,
+            "content": "    if (!workspace) return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 329,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 330,
+            "content": "        await invokeIpc<void>(IpcChannels.LINKING_CREATE_BULK_CODE_LINKS, workspace.id, codeFileIds, documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 331,
+            "content": "        await get().fetchGraphData();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 332,
+            "content": "        await get().fetchLinksForDocument(documentId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 333,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 334,
+            "content": "        set({ error: error instanceof Error ? error.message : 'Failed to create bulk links' });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 335,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 336,
+            "content": "  },",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 337,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 338,
+            "content": "  clearError: () => set({ error: null }),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 339,
+            "content": "}));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 340,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 341,
+            "content": "src\\domains\\linking\\infrastructure\\repository\\link-json.repository.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 342,
+            "content": "import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 343,
+            "content": "import { SchemaMigrator } from '../../../../infrastructure/persistence/migration/schema-migrator';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 344,
+            "content": "import { ILinkRepository } from '../../domain/repository/link-repository.interface';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 345,
+            "content": "import { CodeToDocLink } from '../../domain/entities/code-to-doc-link';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 346,
+            "content": "import { LinkId } from '../../domain/value-objects/link-id';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 347,
+            "content": "import { DocumentId } from '../../../documentation/domain/value-objects/document-id';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 348,
+            "content": "import { FileNodeId } from '../../../filesystem/domain/value-objects/file-node-id';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 349,
+            "content": "import { LinkType } from '../../domain/value-objects/link-type';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 350,
+            "content": "import { DateTime } from '../../../shared-kernel/types/date-time';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 351,
+            "content": "import { Maybe } from '../../../shared-kernel/types/maybe';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 352,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 353,
+            "content": "interface CodeToDocLinkSchema {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 354,
+            "content": "  id: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 355,
+            "content": "  codeFileId: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 356,
+            "content": "  documentId: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 357,
+            "content": "  type: 'DIRECT' | 'INHERITED';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 358,
+            "content": "  createdAt: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 359,
+            "content": "  migratedAt: string | null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 360,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 361,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 362,
+            "content": "interface LinksIndexSchema {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 363,
+            "content": "  version: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 364,
+            "content": "  links: CodeToDocLinkSchema[];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 365,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 366,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 367,
+            "content": "const LINKS_INDEX_FILE = 'links.json';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 368,
+            "content": "const SCHEMA_VERSION = '1.0';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 369,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 370,
+            "content": "export class LinkJsonRepository implements ILinkRepository {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 371,
+            "content": "  private readonly db: JsonDatabase;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 372,
+            "content": "  private readonly migrator: SchemaMigrator;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 373,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 374,
+            "content": "  constructor(workspaceRoot: string) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 375,
+            "content": "    this.db = new JsonDatabase(workspaceRoot);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 376,
+            "content": "    this.migrator = new SchemaMigrator(SCHEMA_VERSION);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 377,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 378,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 379,
+            "content": "  async findById(id: LinkId): Promise<CodeToDocLink | null> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 380,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 381,
+            "content": "    const entry = index.links.find(l => l.id === id.value);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 382,
+            "content": "    return entry ? this.mapToEntity(entry) : null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 383,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 384,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 385,
+            "content": "  async findByDocument(documentId: DocumentId): Promise<CodeToDocLink[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 386,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 387,
+            "content": "    return index.links",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 388,
+            "content": "      .filter(l => l.documentId === documentId.value)",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 389,
+            "content": "      .map(e => this.mapToEntity(e));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 390,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 391,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 392,
+            "content": "  async findByCodeFile(codeFileId: FileNodeId): Promise<CodeToDocLink[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 393,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 394,
+            "content": "    return index.links",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 395,
+            "content": "      .filter(l => l.codeFileId === codeFileId.value)",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 396,
+            "content": "      .map(e => this.mapToEntity(e));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 397,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 398,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 399,
+            "content": "  async findByCodeFileAndDocument(codeFileId: FileNodeId, documentId: DocumentId): Promise<CodeToDocLink | null> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 400,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 401,
+            "content": "    const entry = index.links.find(l => l.codeFileId === codeFileId.value && l.documentId === documentId.value);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 402,
+            "content": "    return entry ? this.mapToEntity(entry) : null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 403,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 404,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 405,
+            "content": "  async save(link: CodeToDocLink): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 406,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 407,
+            "content": "    const entryIndex = index.links.findIndex(l => l.id === link.id.value);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 408,
+            "content": "    const entry = this.mapToEntry(link);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 409,
+            "content": "    ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 410,
+            "content": "    if (entryIndex >= 0) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 411,
+            "content": "      index.links[entryIndex] = entry;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 412,
+            "content": "    } else {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 413,
+            "content": "      index.links.push(entry);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 414,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 415,
+            "content": "    ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 416,
+            "content": "    await this.writeIndex(index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 417,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 418,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 419,
+            "content": "  async delete(id: LinkId): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 420,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 421,
+            "content": "    index.links = index.links.filter(l => l.id !== id.value);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 422,
+            "content": "    await this.writeIndex(index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 423,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 424,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 425,
+            "content": "  async findAll(): Promise<CodeToDocLink[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 426,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 427,
+            "content": "    return index.links.map(e => this.mapToEntity(e));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 428,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 429,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 430,
+            "content": "  private async readIndex(): Promise<LinksIndexSchema> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 431,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 432,
+            "content": "      const data = await this.db.read<LinksIndexSchema>(LINKS_INDEX_FILE);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 433,
+            "content": "      const migrated = this.migrator.migrate(data as unknown as Record<string, unknown>);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 434,
+            "content": "      return migrated as unknown as LinksIndexSchema;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 435,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 436,
+            "content": "      if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 437,
+            "content": "        return { version: SCHEMA_VERSION, links: [] };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 438,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 439,
+            "content": "      throw error;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 440,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 441,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 442,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 443,
+            "content": "  private async writeIndex(index: LinksIndexSchema): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 444,
+            "content": "    await this.db.write(LINKS_INDEX_FILE, index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 445,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 446,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 447,
+            "content": "  private mapToEntity(entry: CodeToDocLinkSchema): CodeToDocLink {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 448,
+            "content": "    return CodeToDocLink.reconstitute(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 449,
+            "content": "      new LinkId(entry.id),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 450,
+            "content": "      new FileNodeId(entry.codeFileId),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 451,
+            "content": "      new DocumentId(entry.documentId),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 452,
+            "content": "      entry.type === 'DIRECT' ? LinkType.direct() : LinkType.inherited(),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 453,
+            "content": "      DateTime.fromISO(entry.createdAt),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 454,
+            "content": "      entry.migratedAt ? Maybe.some(DateTime.fromISO(entry.migratedAt)) : Maybe.none<DateTime>()",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 455,
+            "content": "    );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 456,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 457,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 458,
+            "content": "  private mapToEntry(link: CodeToDocLink): CodeToDocLinkSchema {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 459,
+            "content": "    return {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 460,
+            "content": "      id: link.id.value,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 461,
+            "content": "      codeFileId: link.codeFileId.value,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 462,
+            "content": "      documentId: link.documentId.value,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 463,
+            "content": "      type: link.type.value,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 464,
+            "content": "      createdAt: link.createdAt.toISO(),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 465,
+            "content": "      migratedAt: link.migratedAt.map(d => d.toISO()).getOrNull()",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 466,
+            "content": "    };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 467,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 468,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 469,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 470,
+            "content": "src\\domains\\filesystem\\infrastructure\\repository\\filesystem-json.repository.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 471,
+            "content": "import { IFileSystemRepository } from '../../domain/repository/filesystem-repository.interface';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 472,
+            "content": "import { FileNode } from '../../domain/entities/file-node';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 473,
+            "content": "import { FolderNode } from '../../domain/entities/folder-node';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 474,
+            "content": "import { FileNodeId } from '../../domain/value-objects/file-node-id';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 475,
+            "content": "import { FolderNodeId } from '../../domain/value-objects/folder-node-id';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 476,
+            "content": "import { FilePath } from '../../domain/value-objects/file-path';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 477,
+            "content": "import { FileSize } from '../../domain/value-objects/file-size';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 478,
+            "content": "import { FileHash } from '../../domain/value-objects/file-hash';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 479,
+            "content": "import { DateTime } from '../../../shared-kernel/types/date-time';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 480,
+            "content": "import { Maybe } from '../../../shared-kernel/types/maybe';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 481,
+            "content": "import { Identifier } from '../../../shared-kernel/types/identifier';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 482,
+            "content": "import { JsonDatabase } from '../../../../infrastructure/persistence/json-database';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 483,
+            "content": "import { FileIndexSchema } from '../../../../infrastructure/persistence/database-schema';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 484,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 485,
+            "content": "export class FileSystemJsonRepository implements IFileSystemRepository {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 486,
+            "content": "  private readonly filename = 'file-index.json';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 487,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 488,
+            "content": "  constructor(private readonly db: JsonDatabase) {}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 489,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 490,
+            "content": "  async findById(id: Identifier): Promise<FileNode | FolderNode | null> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 491,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 492,
+            "content": "    for (const [path, entry] of Object.entries(index.files)) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 493,
+            "content": "      if (entry.id === id.value) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 494,
+            "content": "        return this.mapEntryToNode(path, entry);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 495,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 496,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 497,
+            "content": "    return null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 498,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 499,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 500,
+            "content": "  async findByPath(path: FilePath): Promise<FileNode | FolderNode | null> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 501,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 502,
+            "content": "    const entry = index.files[path.value];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 503,
+            "content": "    if (!entry) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 504,
+            "content": "      return null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 505,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 506,
+            "content": "    return this.mapEntryToNode(path.value, entry);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 507,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 508,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 509,
+            "content": "  async save(entity: FileNode | FolderNode): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 510,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 511,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 512,
+            "content": "    const hash = entity instanceof FileNode ? entity.hash.getOrNull()?.value ?? null : null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 513,
+            "content": "    const size = entity instanceof FileNode ? entity.size.bytes : 0;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 514,
+            "content": "    const lastModified = entity instanceof FileNode",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 515,
+            "content": "      ? entity.lastModified.toISO()",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 516,
+            "content": "      : DateTime.now().toISO();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 517,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 518,
+            "content": "    index.files[entity.path.value] = {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 519,
+            "content": "      id: entity.id.value,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 520,
+            "content": "      hash,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 521,
+            "content": "      lastModified,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 522,
+            "content": "      size,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 523,
+            "content": "      isDirectory: entity instanceof FolderNode,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 524,
+            "content": "    };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 525,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 526,
+            "content": "    await this.writeIndex(index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 527,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 528,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 529,
+            "content": "  async delete(id: Identifier): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 530,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 531,
+            "content": "    for (const [path, entry] of Object.entries(index.files)) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 532,
+            "content": "      if (entry.id === id.value) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 533,
+            "content": "        delete index.files[path];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 534,
+            "content": "        await this.writeIndex(index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 535,
+            "content": "        return;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 536,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 537,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 538,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 539,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 540,
+            "content": "  async exists(id: Identifier): Promise<boolean> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 541,
+            "content": "    const found = await this.findById(id);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 542,
+            "content": "    return found !== null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 543,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 544,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 545,
+            "content": "  async findAll(): Promise<Array<FileNode | FolderNode>> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 546,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 547,
+            "content": "    return Object.entries(index.files).map(([path, entry]) => this.mapEntryToNode(path, entry));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 548,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 549,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 550,
+            "content": "  async findChildrenOf(parentPath: FilePath): Promise<Array<FileNode | FolderNode>> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 551,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 552,
+            "content": "    const prefix = parentPath.value === '.' ? '' : parentPath.value + '/';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 553,
+            "content": "    const children: Array<FileNode | FolderNode> = [];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 554,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 555,
+            "content": "    for (const [path, entry] of Object.entries(index.files)) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 556,
+            "content": "      if (prefix === '') {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 557,
+            "content": "        if (!path.includes('/') && path !== '.') {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 558,
+            "content": "          children.push(this.mapEntryToNode(path, entry));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 559,
+            "content": "        }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 560,
+            "content": "      } else {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 561,
+            "content": "        if (path.startsWith(prefix) && !path.slice(prefix.length).includes('/')) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 562,
+            "content": "          children.push(this.mapEntryToNode(path, entry));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 563,
+            "content": "        }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 564,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 565,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 566,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 567,
+            "content": "    return children;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 568,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 569,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 570,
+            "content": "  async findByPattern(pattern: string): Promise<FileNode[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 571,
+            "content": "    const index = await this.readIndex();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 572,
+            "content": "    const results: FileNode[] = [];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 573,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 574,
+            "content": "    for (const [path, entry] of Object.entries(index.files)) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 575,
+            "content": "      if (entry.isDirectory) continue;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 576,
+            "content": "      if (path.includes(pattern)) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 577,
+            "content": "        const node = this.mapEntryToNode(path, entry);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 578,
+            "content": "        if (node instanceof FileNode) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 579,
+            "content": "          results.push(node);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 580,
+            "content": "        }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 581,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 582,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 583,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 584,
+            "content": "    return results;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 585,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 586,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 587,
+            "content": "  async clear(): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 588,
+            "content": "    await this.writeIndex( { version: '1.0', lastScan: null, files: {} });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 589,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 590,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 591,
+            "content": "  private async readIndex(): Promise<FileIndexSchema> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 592,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 593,
+            "content": "      return await this.db.read<FileIndexSchema>(this.filename);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 594,
+            "content": "    } catch {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 595,
+            "content": "      return { version: '1.0', lastScan: null, files: {} };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 596,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 597,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 598,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 599,
+            "content": "  private async writeIndex(index: FileIndexSchema): Promise<void> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 600,
+            "content": "    await this.db.write(this.filename, index);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 601,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 602,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 603,
+            "content": "  private mapEntryToNode(path: string, entry: FileIndexSchema['files'][string]): FileNode | FolderNode {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 604,
+            "content": "    const filePath = new FilePath(path);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 605,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 606,
+            "content": "    if (entry.isDirectory) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 607,
+            "content": "      return new FolderNode(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 608,
+            "content": "        new FolderNodeId(entry.id),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 609,
+            "content": "        filePath,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 610,
+            "content": "        filePath.getName()",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 611,
+            "content": "      );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 612,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 613,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 614,
+            "content": "    return new FileNode(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 615,
+            "content": "      new FileNodeId(entry.id),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 616,
+            "content": "      filePath,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 617,
+            "content": "      filePath.getName(),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 618,
+            "content": "      filePath.getParentPath(),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 619,
+            "content": "      new FileSize(entry.size),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 620,
+            "content": "      DateTime.fromISO(entry.lastModified),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 621,
+            "content": "      entry.hash ? Maybe.some(new FileHash(entry.hash)) : Maybe.none<FileHash>(),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 622,
+            "content": "      false",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 623,
+            "content": "    );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 624,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 625,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 626,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 627,
+            "content": "electron\\ipc\\handlers\\linking-handlers.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 628,
+            "content": "import { ipcMain } from 'electron';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 629,
+            "content": "import { IpcChannels } from '../channels';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 630,
+            "content": "import { JsonDatabase } from '../../../src/infrastructure/persistence/json-database';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 631,
+            "content": "import { LinkJsonRepository } from '../../../src/domains/linking/infrastructure/repository/link-json.repository';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 632,
+            "content": "import { DocumentLinkJsonRepository } from '../../../src/domains/linking/infrastructure/repository/document-link-json.repository';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 633,
+            "content": "import { DocumentJsonRepository } from '../../../src/domains/documentation/infrastructure/repository/document-json.repository';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 634,
+            "content": "import { DocumentLinkValidatorService } from '../../../src/domains/linking/domain/services/document-link-validator.service';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 635,
+            "content": "import { LinkMigrationService } from '../../../src/domains/linking/domain/services/link-migration.service';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 636,
+            "content": "import { ICodeFileQueryPort } from '../../../src/domains/linking/application/ports/code-file-query.port';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 637,
+            "content": "import { CodeFileSummaryDto } from '../../../src/domains/linking/application/dto/link.dto';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 638,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 639,
+            "content": "// Commands & Handlers",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 640,
+            "content": "import { CreateLinkCommand } from '../../../src/domains/linking/application/commands/create-link.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 641,
+            "content": "import { CreateLinkHandler } from '../../../src/domains/linking/application/handlers/create-link.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 642,
+            "content": "import { RemoveLinkCommand } from '../../../src/domains/linking/application/commands/remove-link.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 643,
+            "content": "import { RemoveLinkHandler } from '../../../src/domains/linking/application/handlers/remove-link.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 644,
+            "content": "import { CreateDocumentLinkCommand } from '../../../src/domains/linking/application/commands/create-document-link.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 645,
+            "content": "import { CreateDocumentLinkHandler } from '../../../src/domains/linking/application/handlers/create-document-link.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 646,
+            "content": "import { RemoveDocumentLinkCommand } from '../../../src/domains/linking/application/commands/remove-document-link.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 647,
+            "content": "import { RemoveDocumentLinkHandler } from '../../../src/domains/linking/application/handlers/remove-document-link.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 648,
+            "content": "import { MigrateLinksCommand } from '../../../src/domains/linking/application/commands/migrate-links.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 649,
+            "content": "import { MigrateLinksHandler } from '../../../src/domains/linking/application/handlers/migrate-links.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 650,
+            "content": "import { CreateBulkCodeLinksCommand } from '../../../src/domains/linking/application/commands/create-bulk-code-links.command';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 651,
+            "content": "import { CreateBulkCodeLinksHandler, BulkCreateResult } from '../../../src/domains/linking/application/handlers/create-bulk-code-links.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 652,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 653,
+            "content": "// Queries & Handlers",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 654,
+            "content": "import { GetLinksForDocumentQuery } from '../../../src/domains/linking/application/queries/get-links-for-document.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 655,
+            "content": "import { GetLinksForDocumentHandler } from '../../../src/domains/linking/application/handlers/get-links-for-document.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 656,
+            "content": "import { GetLinksForCodeFileQuery } from '../../../src/domains/linking/application/queries/get-links-for-codefile.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 657,
+            "content": "import { GetLinksForCodeFileHandler } from '../../../src/domains/linking/application/handlers/get-links-for-codefile.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 658,
+            "content": "import { GetUnlinkedCodefilesQuery } from '../../../src/domains/linking/application/queries/get-unlinked-codefiles.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 659,
+            "content": "import { GetUnlinkedCodefilesHandler } from '../../../src/domains/linking/application/handlers/get-unlinked-codefiles.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 660,
+            "content": "import { GetDocumentChildrenQuery } from '../../../src/domains/linking/application/queries/get-document-children.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 661,
+            "content": "import { GetDocumentChildrenHandler } from '../../../src/domains/linking/application/handlers/get-document-children.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 662,
+            "content": "import { GetDocumentParentsQuery } from '../../../src/domains/linking/application/queries/get-document-parents.query';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 663,
+            "content": "import { GetDocumentParentsHandler } from '../../../src/domains/linking/application/handlers/get-document-parents.handler';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 664,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 665,
+            "content": "interface IpcResponse<T> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 666,
+            "content": "  success: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 667,
+            "content": "  data?: T;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 668,
+            "content": "  error?: string;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 669,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 670,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 671,
+            "content": "/**",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 672,
+            "content": " * Anti-Corruption Layer (ACL) Adapter.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 673,
+            "content": " * Allows the Linking context to query FileSystem data without importing FileSystem domain classes directly.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 674,
+            "content": " */",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 675,
+            "content": "class FilesystemCodeFileQueryAdapter implements ICodeFileQueryPort {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 676,
+            "content": "  constructor(private readonly db: JsonDatabase) {}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 677,
+            "content": "  ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 678,
+            "content": "  async getAllCodeFiles(): Promise<CodeFileSummaryDto[]> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 679,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 680,
+            "content": "      const index = await this.db.read<any>('files.json');",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 681,
+            "content": "      return Object.entries(index.files || {})",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 682,
+            "content": "        .filter(([_, entry]: [string, any]) => !entry.isDirectory)",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 683,
+            "content": "        .map(([path, entry]: [string, any]) => ({",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 684,
+            "content": "          id: entry.id,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 685,
+            "content": "          name: path.split('/').pop() || path,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 686,
+            "content": "          path: path",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 687,
+            "content": "        }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 688,
+            "content": "    } catch {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 689,
+            "content": "      return [];",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 690,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 691,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 692,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 693,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 694,
+            "content": "function createLinkingDependencies(rootPath: string) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 695,
+            "content": "  const db = new JsonDatabase(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 696,
+            "content": "  const linkRepo = new LinkJsonRepository(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 697,
+            "content": "  const docLinkRepo = new DocumentLinkJsonRepository(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 698,
+            "content": "  const documentRepo = new DocumentJsonRepository(db);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 699,
+            "content": "  ",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 700,
+            "content": "  const validator = new DocumentLinkValidatorService(docLinkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 701,
+            "content": "  const migrationService = new LinkMigrationService();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 702,
+            "content": "  const codeFilePort = new FilesystemCodeFileQueryAdapter(db);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 703,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 704,
+            "content": "  return { linkRepo, docLinkRepo, documentRepo, validator, migrationService, codeFilePort };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 705,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 706,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 707,
+            "content": "function validateWorkspaceId(workspaceId: unknown): string | null {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 708,
+            "content": "  if (typeof workspaceId !== 'string' || workspaceId.trim().length === 0) return null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 709,
+            "content": "  return workspaceId.trim();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 710,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 711,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 712,
+            "content": "export function registerLinkingHandlers(): void {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 713,
+            "content": "  // 1. Create Code Link",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 714,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_CREATE_LINK, async (_event, workspaceId: unknown, codeFileId: string, documentId: string): Promise<IpcResponse<void>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 715,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 716,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 717,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 718,
+            "content": "      const { linkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 719,
+            "content": "      const handler = new CreateLinkHandler(linkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 720,
+            "content": "      const result = await handler.execute(new CreateLinkCommand(codeFileId, documentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 721,
+            "content": "      return result.fold<IpcResponse<void>>(() => ({ success: true }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 722,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 723,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 724,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 725,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 726,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 727,
+            "content": "  // 2. Remove Code Link",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 728,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_REMOVE_LINK, async (_event, workspaceId: unknown, linkId: string): Promise<IpcResponse<void>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 729,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 730,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 731,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 732,
+            "content": "      const { linkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 733,
+            "content": "      const handler = new RemoveLinkHandler(linkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 734,
+            "content": "      const result = await handler.execute(new RemoveLinkCommand(linkId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 735,
+            "content": "      return result.fold<IpcResponse<void>>(() => ({ success: true }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 736,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 737,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 738,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 739,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 740,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 741,
+            "content": "  // 3. Create Document Link",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 742,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_CREATE_DOCUMENT_LINK, async (_event, workspaceId: unknown, parentDocumentId: string, childDocumentId: string): Promise<IpcResponse<void>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 743,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 744,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 745,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 746,
+            "content": "      const { docLinkRepo, documentRepo, validator } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 747,
+            "content": "      const handler = new CreateDocumentLinkHandler(docLinkRepo, documentRepo, validator);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 748,
+            "content": "      const result = await handler.execute(new CreateDocumentLinkCommand(parentDocumentId, childDocumentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 749,
+            "content": "      return result.fold<IpcResponse<void>>(() => ({ success: true }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 750,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 751,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 752,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 753,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 754,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 755,
+            "content": "  // 4. Remove Document Link",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 756,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_REMOVE_DOCUMENT_LINK, async (_event, workspaceId: unknown, linkId: string): Promise<IpcResponse<void>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 757,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 758,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 759,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 760,
+            "content": "      const { docLinkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 761,
+            "content": "      const handler = new RemoveDocumentLinkHandler(docLinkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 762,
+            "content": "      const result = await handler.execute(new RemoveDocumentLinkCommand(linkId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 763,
+            "content": "      return result.fold<IpcResponse<void>>(() => ({ success: true }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 764,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 765,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 766,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 767,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 768,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 769,
+            "content": "  // 5. Migrate Links",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 770,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_MIGRATE_LINKS, async (_event, workspaceId: unknown, oldDocumentId: string, newDocumentIds: string[]): Promise<IpcResponse<void>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 771,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 772,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 773,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 774,
+            "content": "      const { linkRepo, migrationService } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 775,
+            "content": "      const handler = new MigrateLinksHandler(linkRepo, migrationService);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 776,
+            "content": "      const result = await handler.execute(new MigrateLinksCommand(oldDocumentId, newDocumentIds));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 777,
+            "content": "      return result.fold<IpcResponse<void>>(() => ({ success: true }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 778,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 779,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 780,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 781,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 782,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 783,
+            "content": "  // 6. Get Links For Document",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 784,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_GET_LINKS_FOR_DOCUMENT, async (_event, workspaceId: unknown, documentId: string): Promise<IpcResponse<unknown>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 785,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 786,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 787,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 788,
+            "content": "      const { linkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 789,
+            "content": "      const handler = new GetLinksForDocumentHandler(linkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 790,
+            "content": "      const result = await handler.execute(new GetLinksForDocumentQuery(documentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 791,
+            "content": "      return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 792,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 793,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 794,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 795,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 796,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 797,
+            "content": "  // 7. Get Links For CodeFile",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 798,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_GET_LINKS_FOR_CODEFILE, async (_event, workspaceId: unknown, codeFileId: string): Promise<IpcResponse<unknown>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 799,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 800,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 801,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 802,
+            "content": "      const { linkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 803,
+            "content": "      const handler = new GetLinksForCodeFileHandler(linkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 804,
+            "content": "      const result = await handler.execute(new GetLinksForCodeFileQuery(codeFileId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 805,
+            "content": "      return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 806,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 807,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 808,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 809,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 810,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 811,
+            "content": "  // 8. Get Unlinked CodeFiles",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 812,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_GET_UNLINKED_CODEFILES, async (_event, workspaceId: unknown): Promise<IpcResponse<unknown>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 813,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 814,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 815,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 816,
+            "content": "      const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 817,
+            "content": "      const handler = new GetUnlinkedCodefilesHandler(linkRepo, codeFilePort);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 818,
+            "content": "      const result = await handler.execute(new GetUnlinkedCodefilesQuery());",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 819,
+            "content": "      return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 820,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 821,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 822,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 823,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 824,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 825,
+            "content": "  // 9. Get Document Children",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 826,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_GET_DOCUMENT_CHILDREN, async (_event, workspaceId: unknown, parentDocumentId: string): Promise<IpcResponse<unknown>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 827,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 828,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 829,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 830,
+            "content": "      const { docLinkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 831,
+            "content": "      const handler = new GetDocumentChildrenHandler(docLinkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 832,
+            "content": "      const result = await handler.execute(new GetDocumentChildrenQuery(parentDocumentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 833,
+            "content": "      return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 834,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 835,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 836,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 837,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 838,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 839,
+            "content": "  // 10. Get Document Parents",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 840,
+            "content": "  ipcMain.handle(IpcChannels.LINKING_GET_DOCUMENT_PARENTS, async (_event, workspaceId: unknown, childDocumentId: string): Promise<IpcResponse<unknown>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 841,
+            "content": "    const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 842,
+            "content": "    if (!rootPath) return { success: false, error: 'Invalid workspace ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 843,
+            "content": "    try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 844,
+            "content": "      const { docLinkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 845,
+            "content": "      const handler = new GetDocumentParentsHandler(docLinkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 846,
+            "content": "      const result = await handler.execute(new GetDocumentParentsQuery(childDocumentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 847,
+            "content": "      return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 848,
+            "content": "    } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 849,
+            "content": "      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 850,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 851,
+            "content": "  });",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 852,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 853,
+            "content": "  // 11. Create Bulk Code Links",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 854,
+            "content": "  ipcMain.handle(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 855,
+            "content": "    IpcChannels.LINKING_CREATE_BULK_CODE_LINKS,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 856,
+            "content": "    async (_event, workspaceId: unknown, codeFileIds: string[],   documentId: string): Promise<IpcResponse<BulkCreateResult>> => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 857,
+            "content": "      const rootPath = validateWorkspaceId(workspaceId);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 858,
+            "content": "      if (!rootPath) return { success: false, error: 'Invalid workspace   ID' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 859,
+            "content": "      try {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 860,
+            "content": "        const { linkRepo } = createLinkingDependencies(rootPath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 861,
+            "content": "        const handler = new CreateBulkCodeLinksHandler(linkRepo);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 862,
+            "content": "        const result = await handler.execute(new CreateBulkCodeLinksCommand (codeFileIds, documentId));",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 863,
+            "content": "        return result.fold<IpcResponse<BulkCreateResult>>(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 864,
+            "content": "          (data) => ({ success: true, data }),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 865,
+            "content": "          (error) => ({ success: false, error })",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 866,
+            "content": "        );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 867,
+            "content": "      } catch (error) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 868,
+            "content": "        return { success: false, error: error instanceof Error ? error. message : 'Unknown error' };",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 869,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 870,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 871,
+            "content": "  );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 872,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 873,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 874,
             "content": "",
             "type": "REMOVED"
           }
@@ -288,561 +4483,581 @@
     "roadmap.txt": {
       "id": "02892747-c2f7-4843-b6fb-c4c0bddc67cd",
       "filePath": "roadmap.txt",
-      "hashValue": "d55cc8ae6b80d6e210a905e0becea2d0d4b49a76046188e8f2cac820a9cca6c7",
+      "hashValue": "c61e2adafb80165ac01a9904e546a2c34975d4c523fb0e3c39798e54cf2a8bc5",
       "committedAt": null,
       "commitId": null,
       "diff": {
         "filePath": "roadmap.txt",
-        "oldHash": "d55cc8ae6b80d6e210a905e0becea2d0d4b49a76046188e8f2cac820a9cca6c7",
-        "newHash": "d55cc8ae6b80d6e210a905e0becea2d0d4b49a76046188e8f2cac820a9cca6c7",
+        "oldHash": "c61e2adafb80165ac01a9904e546a2c34975d4c523fb0e3c39798e54cf2a8bc5",
+        "newHash": "c61e2adafb80165ac01a9904e546a2c34975d4c523fb0e3c39798e54cf2a8bc5",
         "addedLines": [
           {
             "lineNumber": 5,
-            "content": "Generated: 2026-07-13T17:01:45.899Z",
+            "content": "Generated: 2026-07-13T17:55:09.503Z",
             "type": "ADDED"
           },
           {
             "lineNumber": 6,
-            "content": "Total Entries: 161",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 32,
-            "content": "├── 📁 application/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 33,
-            "content": "│   ├── 📁 sagas/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 34,
-            "content": "│   │   ├── 📄 document-split.saga.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 35,
-            "content": "│   │   └── 📄 file-change-reaction.saga.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 36,
-            "content": "│   └── 📁 services/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 37,
-            "content": "│       └── 📄 background-watcher.service.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 38,
-            "content": "├── 📁 domains/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 39,
-            "content": "│   ├── 📁 linking/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 40,
-            "content": "│   │   ├── 📁 application/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 41,
-            "content": "│   │   │   ├── 📁 commands/",
+            "content": "Total Entries: 190",
             "type": "ADDED"
           },
           {
             "lineNumber": 42,
-            "content": "│   │   │   │   ├── 📄 create-document-link.command.ts",
+            "content": "│   │   │   │   ├── 📄 add-ignore-pattern.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 43,
-            "content": "│   │   │   │   ├── 📄 create-link.command.ts",
+            "content": "│   │   │   │   ├── 📄 remove-ignore-pattern.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 44,
-            "content": "│   │   │   │   ├── 📄 migrate-links.command.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 45,
-            "content": "│   │   │   │   ├── 📄 remove-document-link.command.ts",
+            "content": "│   │   │   │   └── 📄 scan-project.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 46,
-            "content": "│   │   │   │   └── 📄 remove-link.command.ts",
+            "content": "│   │   │   │   ├── 📄 file-node.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 47,
-            "content": "│   │   │   ├── 📁 dto/",
+            "content": "│   │   │   │   ├── 📄 file-tree.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 48,
-            "content": "│   │   │   │   ├── 📄 code-to-doc-link.dto.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 49,
-            "content": "│   │   │   │   ├── 📄 document-link.dto.ts",
+            "content": "│   │   │   │   └── 📄 folder-node.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 50,
-            "content": "│   │   │   │   ├── 📄 link-graph.dto.ts",
+            "content": "│   │   │   │   ├── 📄 add-ignore-pattern.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 51,
-            "content": "│   │   │   │   └── 📄 link.dto.ts",
+            "content": "│   │   │   │   ├── 📄 get-file-tree.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 52,
-            "content": "│   │   │   ├── 📁 handlers/",
+            "content": "│   │   │   │   ├── 📄 get-ignored-files.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 53,
-            "content": "│   │   │   │   ├── 📄 create-document-link.handler.ts",
+            "content": "│   │   │   │   ├── 📄 remove-ignore-pattern.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 54,
-            "content": "│   │   │   │   ├── 📄 create-link.handler.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 55,
-            "content": "│   │   │   │   ├── 📄 get-document-children.handler.ts",
+            "content": "│   │   │   │   └── 📄 scan-project.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 56,
-            "content": "│   │   │   │   ├── 📄 get-document-parents.handler.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 57,
-            "content": "│   │   │   │   ├── 📄 get-links-for-codefile.handler.ts",
+            "content": "│   │   │   │   └── 📄 file-system-adapter.interface.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 58,
-            "content": "│   │   │   │   ├── 📄 get-links-for-document.handler.ts",
+            "content": "│   │   │       ├── 📄 get-file-tree.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 59,
-            "content": "│   │   │   │   ├── 📄 get-unlinked-codefiles.handler.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 60,
-            "content": "│   │   │   │   ├── 📄 migrate-links.handler.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 61,
-            "content": "│   │   │   │   ├── 📄 remove-document-link.handler.ts",
+            "content": "│   │   │       └── 📄 get-ignored-files.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 62,
-            "content": "│   │   │   │   └── 📄 remove-link.handler.ts",
+            "content": "│   │   │   │   ├── 📄 file-node.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 63,
-            "content": "│   │   │   ├── 📁 ports/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 64,
-            "content": "│   │   │   │   └── 📄 code-file-query.port.ts",
+            "content": "│   │   │   │   └── 📄 folder-node.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 65,
-            "content": "│   │   │   └── 📁 queries/",
+            "content": "│   │   │   │   ├── 📄 file-deleted.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 66,
-            "content": "│   │   │       ├── 📄 get-document-children.query.ts",
+            "content": "│   │   │   │   ├── 📄 file-discovered.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 67,
-            "content": "│   │   │       ├── 📄 get-document-parents.query.ts",
+            "content": "│   │   │   │   ├── 📄 file-excluded.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 68,
-            "content": "│   │   │       ├── 📄 get-links-for-codefile.query.ts",
+            "content": "│   │   │   │   ├── 📄 file-modified.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 69,
-            "content": "│   │   │       ├── 📄 get-links-for-document.query.ts",
+            "content": "│   │   │   │   ├── 📄 file-moved.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 70,
-            "content": "│   │   │       └── 📄 get-unlinked-codefiles.query.ts",
+            "content": "│   │   │   │   ├── 📄 ignore-patterns-changed.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 71,
-            "content": "│   │   ├── 📁 domain/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 72,
-            "content": "│   │   │   ├── 📁 entities/",
+            "content": "│   │   │   │   └── 📄 scan-completed.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 73,
-            "content": "│   │   │   │   ├── 📄 code-to-doc-link.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 74,
-            "content": "│   │   │   │   ├── 📄 document-to-document-link.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 75,
-            "content": "│   │   │   │   └── 📄 link-graph.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 76,
-            "content": "│   │   │   ├── 📁 events/",
+            "content": "│   │   │   │   └── 📄 filesystem-repository.interface.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 77,
-            "content": "│   │   │   │   ├── 📄 document-link-broken.ts",
+            "content": "│   │   │       ├── 📄 file-hash.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 78,
-            "content": "│   │   │   │   ├── 📄 document-link-created.ts",
+            "content": "│   │   │       ├── 📄 file-node-id.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 79,
-            "content": "│   │   │   │   ├── 📄 link-broken.ts",
+            "content": "│   │   │       ├── 📄 file-path.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 80,
-            "content": "│   │   │   │   ├── 📄 link-created.ts",
+            "content": "│   │   │       ├── 📄 file-size.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 81,
-            "content": "│   │   │   │   └── 📄 links-migrated.ts",
+            "content": "│   │   │       ├── 📄 folder-node-id.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 82,
-            "content": "│   │   │   ├── 📁 repository/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 83,
-            "content": "│   │   │   │   ├── 📄 document-link-repository.interface.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 84,
-            "content": "│   │   │   │   └── 📄 link-repository.interface.ts",
+            "content": "│   │   │       └── 📄 ignore-pattern.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 85,
-            "content": "│   │   │   ├── 📁 services/",
+            "content": "│   │       │   ├── 📄 chokidar.adapter.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 86,
-            "content": "│   │   │   │   ├── 📄 document-link-validator.service.ts",
+            "content": "│   │       │   ├── 📄 ignore-parser.adapter.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 87,
-            "content": "│   │   │   │   └── 📄 link-migration.service.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 88,
-            "content": "│   │   │   └── 📁 value-objects/",
+            "content": "│   │       │   └── 📄 node-fs.adapter.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 89,
-            "content": "│   │   │       ├── 📄 document-link-id.ts",
+            "content": "│   │           └── 📄 filesystem-json.repository.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 90,
-            "content": "│   │   │       ├── 📄 link-graph-id.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 91,
-            "content": "│   │   │       ├── 📄 link-id.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 92,
-            "content": "│   │   │       └── 📄 link-type.ts",
+            "content": "│   └── 📁 linking/",
             "type": "ADDED"
           },
           {
             "lineNumber": 93,
-            "content": "│   │   └── 📁 infrastructure/",
+            "content": "│       │   │   ├── 📄 create-bulk-code-links.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 94,
-            "content": "│   │       └── 📁 repository/",
+            "content": "│       │   │   ├── 📄 create-document-link.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 95,
-            "content": "│   │           ├── 📄 document-link-json.repository.ts",
+            "content": "│       │   │   ├── 📄 create-link.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 96,
-            "content": "│   │           └── 📄 link-json.repository.ts",
+            "content": "│       │   │   ├── 📄 migrate-links.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 97,
-            "content": "│   └── 📁 shared-kernel/",
+            "content": "│       │   │   ├── 📄 remove-document-link.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 98,
-            "content": "│       ├── 📁 application/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 99,
-            "content": "│       │   ├── 📄 command-handler.interface.ts",
+            "content": "│       │   │   └── 📄 remove-link.command.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 100,
-            "content": "│       │   ├── 📄 command.interface.ts",
+            "content": "│       │   │   ├── 📄 code-to-doc-link.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 101,
-            "content": "│       │   ├── 📄 query-handler.interface.ts",
+            "content": "│       │   │   ├── 📄 document-link.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 102,
-            "content": "│       │   └── 📄 query.interface.ts",
+            "content": "│       │   │   ├── 📄 link-graph.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 103,
-            "content": "│       ├── 📁 events/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 104,
-            "content": "│       │   ├── 📄 domain-event-handler.interface.ts",
+            "content": "│       │   │   └── 📄 link.dto.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 105,
-            "content": "│       │   ├── 📄 domain-event.ts",
+            "content": "│       │   │   ├── 📄 create-bulk-code-links.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 106,
-            "content": "│       │   └── 📄 event-bus.ts",
+            "content": "│       │   │   ├── 📄 create-document-link.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 107,
-            "content": "│       ├── 📁 exceptions/",
+            "content": "│       │   │   ├── 📄 create-link.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 108,
-            "content": "│       │   ├── 📄 domain-exception.ts",
+            "content": "│       │   │   ├── 📄 get-document-children.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 109,
-            "content": "│       │   ├── 📄 invalid-state-exception.ts",
+            "content": "│       │   │   ├── 📄 get-document-parents.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 110,
-            "content": "│       │   └── 📄 not-found-exception.ts",
+            "content": "│       │   │   ├── 📄 get-links-for-codefile.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 111,
-            "content": "│       ├── 📁 repository/",
+            "content": "│       │   │   ├── 📄 get-links-for-document.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 112,
-            "content": "│       │   └── 📄 repository.interface.ts",
+            "content": "│       │   │   ├── 📄 get-unlinked-codefiles.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 113,
-            "content": "│       ├── 📁 types/",
+            "content": "│       │   │   ├── 📄 migrate-links.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 114,
-            "content": "│       │   ├── 📄 aggregate-root.ts",
+            "content": "│       │   │   ├── 📄 remove-document-link.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 115,
-            "content": "│       │   ├── 📄 date-time.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 116,
-            "content": "│       │   ├── 📄 identifier.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 117,
-            "content": "│       │   ├── 📄 maybe.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 118,
-            "content": "│       │   ├── 📄 result.ts",
+            "content": "│       │   │   └── 📄 remove-link.handler.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 119,
-            "content": "│       │   └── 📄 value-object.ts",
+            "content": "│       │       ├── 📄 get-document-children.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 120,
-            "content": "│       └── 📁 utils/",
+            "content": "│       │       ├── 📄 get-document-parents.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 121,
-            "content": "│           ├── 📄 hash-utils.ts",
+            "content": "│       │       ├── 📄 get-links-for-codefile.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 122,
-            "content": "│           ├── 📄 path-utils.ts",
+            "content": "│       │       ├── 📄 get-links-for-document.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 123,
-            "content": "│           └── 📄 uuid-generator.ts",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 124,
-            "content": "├── 📁 infrastructure/",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 125,
-            "content": "│   └── 📁 persistence/",
+            "content": "│       │       └── 📄 get-unlinked-codefiles.query.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 126,
-            "content": "│       ├── 📁 migration/",
+            "content": "│       │   │   ├── 📄 code-to-doc-link.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 127,
-            "content": "│       │   └── 📄 schema-migrator.ts",
+            "content": "│       │   │   ├── 📄 document-to-document-link.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 128,
-            "content": "│       ├── 📄 database-schema.ts",
+            "content": "│       │   │   └── 📄 link-graph.ts",
             "type": "ADDED"
           },
           {
-            "lineNumber": 129,
-            "content": "│       └── 📄 json-database.ts",
+            "lineNumber": 130,
+            "content": "│       │   │   ├── 📄 document-link-broken.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 131,
+            "content": "│       │   │   ├── 📄 document-link-created.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 132,
-            "content": "│   │   └── 📁 linking/",
+            "content": "│       │   │   ├── 📄 link-broken.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 133,
-            "content": "│   │       ├── 📄 DocumentHierarchy.tsx",
+            "content": "│       │   │   ├── 📄 link-created.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 134,
-            "content": "│   │       ├── 📄 LinkBadge.tsx",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 135,
-            "content": "│   │       ├── 📄 LinkCreatorDrawer.tsx",
+            "content": "│       │   │   └── 📄 links-migrated.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 136,
-            "content": "│   │       ├── 📄 LinkGraph.tsx",
+            "content": "│       │   │   ├── 📄 document-link-repository.interface.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 137,
-            "content": "│   │       ├── 📄 LinkingPageHeader.tsx",
+            "content": "│       │   │   └── 📄 link-repository.interface.ts",
             "type": "ADDED"
           },
           {
-            "lineNumber": 138,
-            "content": "│   │       └── 📄 UnlinkedFilesList.tsx",
+            "lineNumber": 139,
+            "content": "│       │   │   ├── 📄 document-link-validator.service.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 140,
+            "content": "│       │   │   └── 📄 link-migration.service.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 142,
+            "content": "│       │       ├── 📄 document-link-id.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 143,
+            "content": "│       │       ├── 📄 link-graph-id.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 144,
+            "content": "│       │       ├── 📄 link-id.ts",
             "type": "ADDED"
           },
           {
             "lineNumber": 145,
-            "content": "│   │   ├── 📄 useLinks.ts",
+            "content": "│       │       └── 📄 link-type.ts",
             "type": "ADDED"
           },
           {
-            "lineNumber": 155,
-            "content": "│   │   ├── 📄 linking.store.ts",
+            "lineNumber": 148,
+            "content": "│               ├── 📄 document-link-json.repository.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 149,
+            "content": "│               └── 📄 link-json.repository.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 156,
+            "content": "├── 📁 presentation/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 157,
+            "content": "│   ├── 📁 components/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 158,
+            "content": "│   │   └── 📁 linking/",
             "type": "ADDED"
           },
           {
             "lineNumber": 159,
+            "content": "│   │       ├── 📄 DocumentHierarchy.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 160,
+            "content": "│   │       ├── 📄 FileTreePickerModal.css",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 161,
+            "content": "│   │       ├── 📄 FileTreePickerModal.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 162,
+            "content": "│   │       ├── 📄 LinkBadge.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 163,
+            "content": "│   │       ├── 📄 LinkGraph.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 164,
+            "content": "│   │       ├── 📄 LinkingPageHeader.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 165,
+            "content": "│   │       ├── 📄 UnlinkedFilesList.css",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 166,
+            "content": "│   │       └── 📄 UnlinkedFilesList.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 167,
+            "content": "│   ├── 📁 hooks/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 168,
+            "content": "│   │   ├── 📄 useBackgroundWatcher.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 169,
+            "content": "│   │   ├── 📄 useDocuments.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 170,
+            "content": "│   │   ├── 📄 useFileTree.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 171,
+            "content": "│   │   ├── 📄 useIgnorePatterns.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 172,
+            "content": "│   │   ├── 📄 useIpc.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 173,
+            "content": "│   │   ├── 📄 useLinks.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 174,
+            "content": "│   │   ├── 📄 useRecentWorkspaces.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 175,
+            "content": "│   │   ├── 📄 useTheme.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 176,
+            "content": "│   │   ├── 📄 useTracking.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 177,
+            "content": "│   │   ├── 📄 useUnlinkedFiles.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 178,
+            "content": "│   │   └── 📄 useWorkspace.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 179,
+            "content": "│   ├── 📁 pages/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 180,
+            "content": "│   │   └── 📄 LinkingPage.tsx",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 181,
+            "content": "│   ├── 📁 stores/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 182,
+            "content": "│   │   ├── 📄 documentation.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 183,
+            "content": "│   │   ├── 📄 filesystem.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 184,
+            "content": "│   │   ├── 📄 linking.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 185,
+            "content": "│   │   ├── 📄 tracking.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 186,
+            "content": "│   │   └── 📄 workspace.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 187,
+            "content": "│   └── 📁 styles/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 188,
             "content": "│       └── 📄 linking.css",
             "type": "ADDED"
           }
@@ -850,84 +5065,369 @@
         "removedLines": [
           {
             "lineNumber": 5,
-            "content": "Generated: 2026-07-13T15:14:56.498Z",
+            "content": "Generated: 2026-07-13T17:46:48.439Z",
             "type": "REMOVED"
           },
           {
             "lineNumber": 6,
-            "content": "Total Entries: 66",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 34,
-            "content": "│   │   ├── 📁 layout/",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 35,
-            "content": "│   │   │   └── 📄 Header.tsx",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 36,
-            "content": "│   │   └── 📁 tracking/",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 37,
-            "content": "│   │       ├── 📄 CommitButton.tsx",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 38,
-            "content": "│   │       ├── 📄 CommitHistory.tsx",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 39,
-            "content": "│   │       ├── 📄 DiffViewer.tsx",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 40,
-            "content": "│   │       ├── 📄 DocumentCommitPanel.tsx",
-            "type": "REMOVED"
-          },
-          {
-            "lineNumber": 41,
-            "content": "│   │       ├── 📄 DocumentList.tsx",
+            "content": "Total Entries: 146",
             "type": "REMOVED"
           },
           {
             "lineNumber": 42,
-            "content": "│   │       ├── 📄 PendingChangesList.tsx",
+            "content": "│   │   │   │   ├── 📄 delete-document.command.ts",
             "type": "REMOVED"
           },
           {
             "lineNumber": 43,
-            "content": "│   │       └── 📄 TrackingPageHeader.tsx",
+            "content": "│   │   │   │   ├── 📄 detect-docs-folder-relocation.command.ts",
             "type": "REMOVED"
           },
           {
-            "lineNumber": 62,
-            "content": "│       ├── 📄 app.css",
+            "lineNumber": 44,
+            "content": "│   │   │   │   └── 📄 register-docs-folder.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "│   │   │   │   ├── 📄 doc-folder.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "│   │   │   │   └── 📄 document.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "│   │   │   │   ├── 📄 delete-document.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "│   │   │   │   ├── 📄 detect-docs-folder-relocation.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "│   │   │   │   ├── 📄 document-cleanup-on-file-delete.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "│   │   │   │   ├── 📄 get-all-documents.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "│   │   │   │   ├── 📄 get-orphaned-documents.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "│   │   │   │   └── 📄 register-docs-folder.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "│   │   │   │   ├── 📄 document-folder-scanner-port.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "│   │   │   │   └── 📄 file-deletion-port.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "│   │   │       ├── 📄 get-all-documents.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "│   │   │       └── 📄 get-orphaned-documents.query.ts",
             "type": "REMOVED"
           },
           {
             "lineNumber": 63,
-            "content": "│       └── 📄 tracking.css",
+            "content": "│   │   │   │   ├── 📄 doc-folder.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "│   │   │   │   └── 📄 document.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 66,
+            "content": "│   │   │   │   ├── 📄 docs-folder-relocated.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 67,
+            "content": "│   │   │   │   ├── 📄 document-deleted.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 68,
+            "content": "│   │   │   │   ├── 📄 document-discovered.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 69,
+            "content": "│   │   │   │   └── 📄 orphan-detected.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 71,
+            "content": "│   │   │   │   ├── 📄 doc-folder-repository.interface.ts",
             "type": "REMOVED"
           },
           {
             "lineNumber": 72,
-            "content": "📄 reminder.md",
+            "content": "│   │   │   │   └── 📄 document-repository.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 76,
+            "content": "│   │   │       ├── 📄 doc-folder-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 77,
+            "content": "│   │   │       ├── 📄 doc-folder-signature.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 78,
+            "content": "│   │   │       ├── 📄 document-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 79,
+            "content": "│   │   │       └── 📄 document-path.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 82,
+            "content": "│   │       │   ├── 📄 docs-folder-detector.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 83,
+            "content": "│   │       │   ├── 📄 node-fs-deletion.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 84,
+            "content": "│   │       │   └── 📄 node-fs-document-scanner.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 86,
+            "content": "│   │           ├── 📄 doc-folder-json.repository.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "│   │           └── 📄 document-json.repository.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 88,
+            "content": "│   └── 📁 filesystem/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 91,
+            "content": "│       │   │   ├── 📄 add-ignore-pattern.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 92,
+            "content": "│       │   │   ├── 📄 remove-ignore-pattern.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 93,
+            "content": "│       │   │   └── 📄 scan-project.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 95,
+            "content": "│       │   │   ├── 📄 file-node.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 96,
+            "content": "│       │   │   ├── 📄 file-tree.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 97,
+            "content": "│       │   │   └── 📄 folder-node.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 99,
+            "content": "│       │   │   ├── 📄 add-ignore-pattern.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 100,
+            "content": "│       │   │   ├── 📄 get-file-tree.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 101,
+            "content": "│       │   │   ├── 📄 get-ignored-files.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 102,
+            "content": "│       │   │   ├── 📄 remove-ignore-pattern.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 103,
+            "content": "│       │   │   └── 📄 scan-project.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 107,
+            "content": "│       │       ├── 📄 get-file-tree.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 108,
+            "content": "│       │       └── 📄 get-ignored-files.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 111,
+            "content": "│       │   │   ├── 📄 file-node.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 112,
+            "content": "│       │   │   └── 📄 folder-node.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 114,
+            "content": "│       │   │   ├── 📄 file-deleted.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 115,
+            "content": "│       │   │   ├── 📄 file-discovered.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 116,
+            "content": "│       │   │   ├── 📄 file-excluded.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 117,
+            "content": "│       │   │   ├── 📄 file-modified.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 118,
+            "content": "│       │   │   ├── 📄 file-moved.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 119,
+            "content": "│       │   │   ├── 📄 ignore-patterns-changed.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 120,
+            "content": "│       │   │   └── 📄 scan-completed.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 122,
+            "content": "│       │   │   └── 📄 filesystem-repository.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 124,
+            "content": "│       │   │   └── 📄 scan-project.service.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 126,
+            "content": "│       │       ├── 📄 file-hash.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 127,
+            "content": "│       │       ├── 📄 file-node-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 128,
+            "content": "│       │       ├── 📄 file-path.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 129,
+            "content": "│       │       ├── 📄 file-size.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 130,
+            "content": "│       │       ├── 📄 folder-node-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 131,
+            "content": "│       │       └── 📄 ignore-pattern.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 133,
+            "content": "│           ├── 📁 adapters/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 134,
+            "content": "│           │   ├── 📄 chokidar.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 135,
+            "content": "│           │   ├── 📄 ignore-parser.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 136,
+            "content": "│           │   └── 📄 node-fs.adapter.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 138,
+            "content": "│               └── 📄 filesystem-json.repository.ts",
             "type": "REMOVED"
           }
         ],
         "modifiedLines": [
           {
-            "lineNumber": 151,
-            "content": "│   │   └── 📄 LinkingPage.tsx",
+            "lineNumber": 39,
+            "content": "│   ├── 📁 filesystem/",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 75,
+            "content": "│   │   │   │   └── 📄 scan-project.service.ts",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 117,
+            "content": "│       │   │   └── 📄 code-file-query.port.ts",
             "type": "MODIFIED"
           }
         ]
@@ -1189,127 +5689,22 @@
     "electron/ipc/handlers/linking-handlers.ts": {
       "id": "cb355a3b-1d6c-4c04-a375-52b217e77ec7",
       "filePath": "electron/ipc/handlers/linking-handlers.ts",
-      "hashValue": "138d3100501985e745628905b247632f91d4219ae7042eb5bf04196a1f7d7103",
+      "hashValue": "4cf5f054dd13f5b7b191d40e0fd47a1636c946d69fb17314a29ba87f976b8770",
       "committedAt": null,
       "commitId": null,
       "diff": {
         "filePath": "electron/ipc/handlers/linking-handlers.ts",
-        "oldHash": "138d3100501985e745628905b247632f91d4219ae7042eb5bf04196a1f7d7103",
-        "newHash": "138d3100501985e745628905b247632f91d4219ae7042eb5bf04196a1f7d7103",
-        "addedLines": [
-          {
-            "lineNumber": 23,
-            "content": "import { CreateBulkCodeLinksCommand } from '../../../src/domains/linking/application/commands/create-bulk-code-links.command';",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 24,
-            "content": "import { CreateBulkCodeLinksHandler, BulkCreateResult } from '../../../src/domains/linking/application/handlers/create-bulk-code-links.handler';",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 225,
-            "content": "",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 226,
-            "content": "  // 11. Create Bulk Code Links",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 227,
-            "content": "  ipcMain.handle(",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 228,
-            "content": "    IpcChannels.LINKING_CREATE_BULK_CODE_LINKS,",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 229,
-            "content": "    async (_event, workspaceId: unknown, codeFileIds: string[],   documentId: string): Promise<IpcResponse<BulkCreateResult>> => {",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 230,
-            "content": "      const rootPath = validateWorkspaceId(workspaceId);",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 231,
-            "content": "      if (!rootPath) return { success: false, error: 'Invalid workspace   ID' };",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 232,
-            "content": "      try {",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 233,
-            "content": "        const { linkRepo } = createLinkingDependencies(rootPath);",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 234,
-            "content": "        const handler = new CreateBulkCodeLinksHandler(linkRepo);",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 235,
-            "content": "        const result = await handler.execute(new CreateBulkCodeLinksCommand (codeFileIds, documentId));",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 236,
-            "content": "        return result.fold<IpcResponse<BulkCreateResult>>(",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 237,
-            "content": "          (data) => ({ success: true, data }),",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 238,
-            "content": "          (error) => ({ success: false, error })",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 239,
-            "content": "        );",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 240,
-            "content": "      } catch (error) {",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 241,
-            "content": "        return { success: false, error: error instanceof Error ? error. message : 'Unknown error' };",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 242,
-            "content": "      }",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 243,
-            "content": "    }",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 244,
-            "content": "  );",
-            "type": "ADDED"
-          }
-        ],
+        "oldHash": "4cf5f054dd13f5b7b191d40e0fd47a1636c946d69fb17314a29ba87f976b8770",
+        "newHash": "4cf5f054dd13f5b7b191d40e0fd47a1636c946d69fb17314a29ba87f976b8770",
+        "addedLines": [],
         "removedLines": [],
-        "modifiedLines": []
+        "modifiedLines": [
+          {
+            "lineNumber": 53,
+            "content": "      const index = await this.db.read<any>('file-index.json');",
+            "type": "MODIFIED"
+          }
+        ]
       }
     },
     "electron/ipc/handlers/project-handlers.ts": {
@@ -1467,28 +5862,10 @@
     "src/presentation/pages/LinkingPage.tsx": {
       "id": "356d2f0c-919e-431a-8e24-968548ab77d2",
       "filePath": "src/presentation/pages/LinkingPage.tsx",
-      "hashValue": "3f5600de77197816571d7658c3269c3f3728f7c4e96c8dbfb4d4e4f5e7df3322",
+      "hashValue": "4c9e7fcc5826c4ecac7dbd9f881d360da177e7c5df3accb9358a9549a77a79a2",
       "committedAt": null,
       "commitId": null,
-      "diff": {
-        "filePath": "src/presentation/pages/LinkingPage.tsx",
-        "oldHash": "3f5600de77197816571d7658c3269c3f3728f7c4e96c8dbfb4d4e4f5e7df3322",
-        "newHash": "3f5600de77197816571d7658c3269c3f3728f7c4e96c8dbfb4d4e4f5e7df3322",
-        "addedLines": [],
-        "removedLines": [],
-        "modifiedLines": [
-          {
-            "lineNumber": 17,
-            "content": "    fetchLinksForDocument, clearError, createBulkCodeLinks ",
-            "type": "MODIFIED"
-          },
-          {
-            "lineNumber": 81,
-            "content": "          <LinkGraph centerDocument={selectedDoc} codeLinks={codeLinks} />",
-            "type": "MODIFIED"
-          }
-        ]
-      }
+      "diff": null
     },
     "src/presentation/pages/TrackingPage.tsx": {
       "id": "a2b790d9-f255-4030-b2a0-a0ded62cd7b1",
@@ -5510,10 +9887,35 @@
     ".git/index": {
       "id": "39835e9d-3a21-48b3-aafb-f4c7a6206324",
       "filePath": ".git/index",
-      "hashValue": "47273cac4050d6d7192a72caeaf24d804e7a9d38a9067ae2a79b7eaa40e94beb",
+      "hashValue": "91a51abdadc448473a3909b03537330264b30cf03cc1c518a2c0622e7ec45843",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": ".git/index",
+        "oldHash": "91a51abdadc448473a3909b03537330264b30cf03cc1c518a2c0622e7ec45843",
+        "newHash": "91a51abdadc448473a3909b03537330264b30cf03cc1c518a2c0622e7ec45843",
+        "addedLines": [
+          {
+            "lineNumber": 339,
+            "content": "y�\u001b8�����\"D\u0007>�$lO�^7\"�\u001b@'��D",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 339,
+            "content": "y�\u001b8�����pk3k�Wr\"�\u000fQ[����-�\u0003�",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 14,
+            "content": "�m-:��\u0012�Ǘ���\u0000\u001felectron/windows/main-window.ts\u0000\u0000\u0000jN�[!F�$jN� \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0003V��O�\u0013\u0002�>B����Ly�γ0W\u0000\u0010eslint.config.js\u0000\u0000jNph\u0003�\u0016`jU&�\u0019�AL\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�⛲��CK�)�wZ���S�\u0000\u0007fix.txt\u0000\u0000\u0000jNpn\b�լjT�u2du�\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�⛲��CK�)�wZ���S�\u0000\bfix2.txt\u0000\u0000jN�[!U��jN� \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001���\u0012���l�6\bZn�\u0018�Egoa\u0000",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     }
   }
 }

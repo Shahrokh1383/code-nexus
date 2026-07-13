@@ -50,7 +50,7 @@ class FilesystemCodeFileQueryAdapter implements ICodeFileQueryPort {
   
   async getAllCodeFiles(): Promise<CodeFileSummaryDto[]> {
     try {
-      const index = await this.db.read<any>('files.json');
+      const index = await this.db.read<any>('file-index.json');
       return Object.entries(index.files || {})
         .filter(([_, entry]: [string, any]) => !entry.isDirectory)
         .map(([path, entry]: [string, any]) => ({

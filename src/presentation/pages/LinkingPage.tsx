@@ -1,35 +1,62 @@
 import { JSX, useState, useEffect } from 'react';
 import { useLinks } from '../hooks/useLinks';
 import { useDocuments } from '../hooks/useDocuments';
+import { useFileTree } from '../hooks/useFileTree';
 import { LinkingPageHeader } from '../components/linking/LinkingPageHeader';
 import { LinkGraph } from '../components/linking/LinkGraph';
 import { DocumentHierarchy } from '../components/linking/DocumentHierarchy';
 import { UnlinkedFilesList } from '../components/linking/UnlinkedFilesList';
 import { FileTreePickerModal } from '../components/linking/FileTreePickerModal';
 import { useUnlinkedFiles } from '../hooks/useUnlinkedFiles';
+import { TargetDocumentSelector } from '../components/linking/TargetDocumentSelector';
 import '../styles/linking.css';
 import '../components/linking/UnlinkedFilesList.css';
 
 export function LinkingPage(): JSX.Element {
   const { documents } = useDocuments();
-  const { 
-    codeLinks, documentLinks, unlinkedFiles, isLoading, error, 
-    fetchLinksForDocument, clearError, createBulkCodeLinks 
+  const {
+    codeLinks,
+    documentLinks,
+    unlinkedFiles,
+    isLoading,
+    error,
+    fetchLinksForDocument,
+    clearError,
+    createBulkCodeLinks,
+    fetchGraphData
   } = useLinks();
+
+  const { scanProject, isScanning, tree } = useFileTree();
 
   const [activeTab, setActiveTab] = useState<'graph' | 'hierarchy' | 'unlinked'>('graph');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
 
+  // Select first document on load
   useEffect(() => {
     if (documents.length > 0 && !selectedDocId) {
       setSelectedDocId(documents[0].id);
     }
   }, [documents, selectedDocId]);
 
+  // Fetch links when selected document changes
   useEffect(() => {
     if (selectedDocId) fetchLinksForDocument(selectedDocId);
   }, [selectedDocId, fetchLinksForDocument]);
+
+  // Ensure file index is populated before unlinked query
+  useEffect(() => {
+    if (!tree && !isScanning) {
+      scanProject();
+    }
+  }, [tree, isScanning, scanProject]);
+
+  // Re‑fetch unlinked list after scan completes
+  useEffect(() => {
+    if (tree && !isScanning) {
+      fetchGraphData();
+    }
+  }, [tree, isScanning, fetchGraphData]);
 
   const selectedDoc = documents.find(d => d.id === selectedDocId) || null;
   const currentDocTitle = selectedDoc?.title ?? 'document';
@@ -84,17 +111,24 @@ export function LinkingPage(): JSX.Element {
           <DocumentHierarchy documents={documents} documentLinks={documentLinks} />
         )}
         {activeTab === 'unlinked' && (
-          <UnlinkedFilesList 
-            files={unlinkedFiles}
-            selectedIds={selectedIds}
-            onToggleFile={toggleFile}
-            onToggleAll={toggleAll}
-            onBulkLink={handleBulkLink}
-            onQuickLink={handleQuickLink}
-            isAllSelected={isAllSelected}
-            isIndeterminate={isIndeterminate}
-            currentDocumentTitle={currentDocTitle}
-          />
+          <>
+            <TargetDocumentSelector
+              documents={documents}
+              selectedDocumentId={selectedDocId}
+              onSelectDocument={setSelectedDocId}
+            />
+            <UnlinkedFilesList 
+              files={unlinkedFiles}
+              selectedIds={selectedIds}
+              onToggleFile={toggleFile}
+              onToggleAll={toggleAll}
+              onBulkLink={handleBulkLink}
+              onQuickLink={handleQuickLink}
+              isAllSelected={isAllSelected}
+              isIndeterminate={isIndeterminate}
+              currentDocumentTitle={currentDocTitle}
+            />
+          </>
         )}
       </div>
 

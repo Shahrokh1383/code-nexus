@@ -24,18 +24,18 @@
     "src\\presentation\\components\\documentation",
     "src\\presentation\\components\\welcome",
     "src\\domains\\project",
-    "src\\domains\\filesystem",
     "src\\presentation\\components\\tracking",
     "src\\presentation\\components\\layout",
     "src\\presentation\\pages\\TrackingPage.tsx",
     "src\\presentation\\styles\\tracking.css",
     "src\\presentation\\styles\\app.css",
-    "src\\domains\\documentation",
-    "src\\domains\\tracking"
+    "src\\domains\\tracking",
+    "src\\domains\\shared-kernel",
+    "src\\domains\\documentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-13T17:01:45.890Z",
+  "lastModified": "2026-07-13T17:55:09.497Z",
   "version": 1
 }
