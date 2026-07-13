@@ -47,7 +47,7 @@ interface IpcResponse<T> {
  */
 class FilesystemCodeFileQueryAdapter implements ICodeFileQueryPort {
   constructor(private readonly db: JsonDatabase) {}
-  
+
   async getAllCodeFiles(): Promise<CodeFileSummaryDto[]> {
     try {
       const index = await this.db.read<any>('file-index.json');
@@ -60,6 +60,25 @@ class FilesystemCodeFileQueryAdapter implements ICodeFileQueryPort {
         }));
     } catch {
       return [];
+    }
+  }
+
+  async getCodeFileById(id: string): Promise<CodeFileSummaryDto | null> {
+    try {
+      const index = await this.db.read<any>('file-index.json');
+      const files = index.files || {};
+      for (const [path, entry] of Object.entries(files) as [string, any][]) {
+        if (entry.id === id && !entry.isDirectory) {
+          return {
+            id: entry.id,
+            name: path.split('/').pop() || path,
+            path: path
+          };
+        }
+      }
+      return null;
+    } catch {
+      return null;
     }
   }
 }
@@ -172,8 +191,8 @@ export function registerLinkingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const { linkRepo } = createLinkingDependencies(rootPath);
-      const handler = new GetLinksForCodeFileHandler(linkRepo);
+      const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);
+      const handler = new GetLinksForCodeFileHandler(linkRepo, codeFilePort);
       const result = await handler.execute(new GetLinksForCodeFileQuery(codeFileId));
       return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));
     } catch (error) {
@@ -226,19 +245,19 @@ export function registerLinkingHandlers(): void {
   // 11. Create Bulk Code Links
   ipcMain.handle(
     IpcChannels.LINKING_CREATE_BULK_CODE_LINKS,
-    async (_event, workspaceId: unknown, codeFileIds: string[],   documentId: string): Promise<IpcResponse<BulkCreateResult>> => {
+    async (_event, workspaceId: unknown, codeFileIds: string[], documentId: string): Promise<IpcResponse<BulkCreateResult>> => {
       const rootPath = validateWorkspaceId(workspaceId);
-      if (!rootPath) return { success: false, error: 'Invalid workspace   ID' };
+      if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
       try {
         const { linkRepo } = createLinkingDependencies(rootPath);
         const handler = new CreateBulkCodeLinksHandler(linkRepo);
-        const result = await handler.execute(new CreateBulkCodeLinksCommand (codeFileIds, documentId));
+        const result = await handler.execute(new CreateBulkCodeLinksCommand(codeFileIds, documentId));
         return result.fold<IpcResponse<BulkCreateResult>>(
           (data) => ({ success: true, data }),
           (error) => ({ success: false, error })
         );
       } catch (error) {
-        return { success: false, error: error instanceof Error ? error. message : 'Unknown error' };
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
       }
     }
   );

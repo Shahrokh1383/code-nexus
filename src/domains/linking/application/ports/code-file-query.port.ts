@@ -5,4 +5,5 @@ import { CodeFileSummaryDto } from '../dto/link.dto';
  */
 export interface ICodeFileQueryPort {
   getAllCodeFiles(): Promise<CodeFileSummaryDto[]>;
+  getCodeFileById(id: string): Promise<CodeFileSummaryDto | null>;
 }

@@ -1,25 +1,36 @@
 import { IQueryHandler } from '../../../shared-kernel/application/query-handler.interface';
 import { Result } from '../../../shared-kernel/types/result';
 import { ILinkRepository } from '../../domain/repository/link-repository.interface';
+import { ICodeFileQueryPort } from '../ports/code-file-query.port';
 import { FileNodeId } from '../../../filesystem/domain/value-objects/file-node-id';
 import { GetLinksForCodeFileQuery } from '../queries/get-links-for-codefile.query';
 import { CodeToDocLinkDto } from '../dto/link.dto';
 
 export class GetLinksForCodeFileHandler implements IQueryHandler<GetLinksForCodeFileQuery, CodeToDocLinkDto[]> {
-  constructor(private readonly linkRepository: ILinkRepository) {}
+  constructor(
+    private readonly linkRepository: ILinkRepository,
+    private readonly codeFileQueryPort: ICodeFileQueryPort
+  ) {}
 
   async execute(query: GetLinksForCodeFileQuery): Promise<Result<CodeToDocLinkDto[], string>> {
     try {
       const codeFileId = new FileNodeId(query.codeFileId);
       const links = await this.linkRepository.findByCodeFile(codeFileId);
-      
+
+      // Fetch code file metadata via Anti-Corruption Layer
+      const codeFile = await this.codeFileQueryPort.getCodeFileById(query.codeFileId);
+      const codeFileName = codeFile?.name ?? 'Unknown';
+      const codeFilePath = codeFile?.path ?? 'Unknown';
+
       const dtos: CodeToDocLinkDto[] = links.map(link => ({
         id: link.id.value,
         codeFileId: link.codeFileId.value,
         documentId: link.documentId.value,
         type: link.type.value,
         createdAt: link.createdAt.toISO(),
-        migratedAt: link.migratedAt.map(d => d.toISO()).getOrNull()
+        migratedAt: link.migratedAt.map(d => d.toISO()).getOrNull(),
+        codeFileName,
+        codeFilePath
       }));
 
       return Result.ok(dtos);
