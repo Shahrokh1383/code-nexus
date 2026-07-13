@@ -63,3 +63,17 @@ export interface GetWarningsResponse {
 export interface DismissWarningRequest {
   warningId: string;
 }
+export interface CreateCodeLinkRequest {
+  codeFileId: string;
+  documentId: string;
+}
+
+export interface CreateDocumentLinkRequest {
+  parentDocumentId: string;
+  childDocumentId: string;
+}
+
+export interface MigrateLinksRequest {
+  oldDocumentId: string;
+  newDocumentIds: string[];
+}
