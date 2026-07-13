@@ -5,18 +5,20 @@ import { LinkingPageHeader } from '../components/linking/LinkingPageHeader';
 import { LinkGraph } from '../components/linking/LinkGraph';
 import { DocumentHierarchy } from '../components/linking/DocumentHierarchy';
 import { UnlinkedFilesList } from '../components/linking/UnlinkedFilesList';
-import { LinkCreatorDrawer } from '../components/linking/LinkCreatorDrawer';
+import { FileTreePickerModal } from '../components/linking/FileTreePickerModal';
+import { useUnlinkedFiles } from '../hooks/useUnlinkedFiles';
 import '../styles/linking.css';
+import '../components/linking/UnlinkedFilesList.css';
 
 export function LinkingPage(): JSX.Element {
   const { documents } = useDocuments();
   const { 
     codeLinks, documentLinks, unlinkedFiles, isLoading, error, 
-    fetchLinksForDocument, createCodeLink, createDocumentLink, clearError 
+    fetchLinksForDocument, clearError, createBulkCodeLinks 
   } = useLinks();
 
   const [activeTab, setActiveTab] = useState<'graph' | 'hierarchy' | 'unlinked'>('graph');
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,6 +32,21 @@ export function LinkingPage(): JSX.Element {
   }, [selectedDocId, fetchLinksForDocument]);
 
   const selectedDoc = documents.find(d => d.id === selectedDocId) || null;
+  const currentDocTitle = selectedDoc?.title ?? 'document';
+
+  const {
+    selectedIds,
+    isAllSelected,
+    isIndeterminate,
+    toggleFile,
+    toggleAll,
+    handleQuickLink,
+    handleBulkLink,
+  } = useUnlinkedFiles(selectedDocId);
+
+  const handleModalLink = (fileIds: string[], documentId: string) => {
+    createBulkCodeLinks(fileIds, documentId);
+  };
 
   return (
     <div className="linking-page">
@@ -37,7 +54,7 @@ export function LinkingPage(): JSX.Element {
         totalCodeLinks={codeLinks.length} 
         totalDocLinks={documentLinks.length} 
         unlinkedCount={unlinkedFiles.length}
-        onCreateLink={() => setIsDrawerOpen(true)} 
+        onCreateLink={() => setIsModalOpen(true)} 
       />
 
       {error && (
@@ -61,23 +78,32 @@ export function LinkingPage(): JSX.Element {
 
       <div className="flex-grow-1 overflow-auto">
         {activeTab === 'graph' && (
-          <LinkGraph centerDocument={selectedDoc} codeLinks={codeLinks} documents={documents} />
+          <LinkGraph centerDocument={selectedDoc} codeLinks={codeLinks} />
         )}
         {activeTab === 'hierarchy' && (
           <DocumentHierarchy documents={documents} documentLinks={documentLinks} />
         )}
         {activeTab === 'unlinked' && (
-          <UnlinkedFilesList files={unlinkedFiles} onLink={() => setIsDrawerOpen(true)} />
+          <UnlinkedFilesList 
+            files={unlinkedFiles}
+            selectedIds={selectedIds}
+            onToggleFile={toggleFile}
+            onToggleAll={toggleAll}
+            onBulkLink={handleBulkLink}
+            onQuickLink={handleQuickLink}
+            isAllSelected={isAllSelected}
+            isIndeterminate={isIndeterminate}
+            currentDocumentTitle={currentDocTitle}
+          />
         )}
       </div>
 
-      <LinkCreatorDrawer 
-        isOpen={isDrawerOpen} 
-        onClose={() => setIsDrawerOpen(false)} 
-        documents={documents}
-        codeFiles={unlinkedFiles}
-        onCreateCodeLink={createCodeLink}
-        onCreateDocLink={createDocumentLink}
+      <FileTreePickerModal
+        isOpen={isModalOpen}
+        documents={documents.map(d => ({ id: d.id, title: d.title }))}
+        initialDocumentId={selectedDocId ?? ''}
+        onClose={() => setIsModalOpen(false)}
+        onLink={handleModalLink}
       />
       
       {isLoading && (

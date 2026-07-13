@@ -23,7 +23,9 @@ interface LinkingState {
   createDocumentLink: (parentDocumentId: string, childDocumentId: string) => Promise<void>;
   removeCodeLink: (linkId: string, documentId: string) => Promise<void>;
   removeDocumentLink: (linkId: string) => Promise<void>;
+  createBulkCodeLinks: (codeFileIds: string[], documentId: string) => Promise<void>;
   clearError: () => void;
+
 }
 
 const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
@@ -107,6 +109,18 @@ export const useLinkingStore = create<LinkingState>((set, get) => ({
       await get().fetchGraphData();
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to remove document link' });
+    }
+  },
+
+  createBulkCodeLinks: async (codeFileIds, documentId) => {
+    const workspace = useWorkspaceStore.getState().workspace;
+    if (!workspace) return;
+    try {
+        await invokeIpc<void>(IpcChannels.LINKING_CREATE_BULK_CODE_LINKS, workspace.id, codeFileIds, documentId);
+        await get().fetchGraphData();
+        await get().fetchLinksForDocument(documentId);
+    } catch (error) {
+        set({ error: error instanceof Error ? error.message : 'Failed to create bulk links' });
     }
   },
 

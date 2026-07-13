@@ -20,6 +20,8 @@ import { RemoveDocumentLinkCommand } from '../../../src/domains/linking/applicat
 import { RemoveDocumentLinkHandler } from '../../../src/domains/linking/application/handlers/remove-document-link.handler';
 import { MigrateLinksCommand } from '../../../src/domains/linking/application/commands/migrate-links.command';
 import { MigrateLinksHandler } from '../../../src/domains/linking/application/handlers/migrate-links.handler';
+import { CreateBulkCodeLinksCommand } from '../../../src/domains/linking/application/commands/create-bulk-code-links.command';
+import { CreateBulkCodeLinksHandler, BulkCreateResult } from '../../../src/domains/linking/application/handlers/create-bulk-code-links.handler';
 
 // Queries & Handlers
 import { GetLinksForDocumentQuery } from '../../../src/domains/linking/application/queries/get-links-for-document.query';
@@ -220,4 +222,24 @@ export function registerLinkingHandlers(): void {
       return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   });
+
+  // 11. Create Bulk Code Links
+  ipcMain.handle(
+    IpcChannels.LINKING_CREATE_BULK_CODE_LINKS,
+    async (_event, workspaceId: unknown, codeFileIds: string[],   documentId: string): Promise<IpcResponse<BulkCreateResult>> => {
+      const rootPath = validateWorkspaceId(workspaceId);
+      if (!rootPath) return { success: false, error: 'Invalid workspace   ID' };
+      try {
+        const { linkRepo } = createLinkingDependencies(rootPath);
+        const handler = new CreateBulkCodeLinksHandler(linkRepo);
+        const result = await handler.execute(new CreateBulkCodeLinksCommand (codeFileIds, documentId));
+        return result.fold<IpcResponse<BulkCreateResult>>(
+          (data) => ({ success: true, data }),
+          (error) => ({ success: false, error })
+        );
+      } catch (error) {
+        return { success: false, error: error instanceof Error ? error. message : 'Unknown error' };
+      }
+    }
+  );
 }

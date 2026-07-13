@@ -38,6 +38,7 @@ export enum IpcChannels {
   LINKING_GET_UNLINKED_CODEFILES = 'linking:getUnlinkedCodeFiles',
   LINKING_GET_DOCUMENT_CHILDREN = 'linking:getDocumentChildren',
   LINKING_GET_DOCUMENT_PARENTS = 'linking:getDocumentParents',
+  LINKING_CREATE_BULK_CODE_LINKS = 'linking:createBulkCodeLinks',
   NOTIFICATION_GET_WARNINGS = 'notification:get-warnings',
   NOTIFICATION_DISMISS = 'notification:dismiss',
 }

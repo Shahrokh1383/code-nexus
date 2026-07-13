@@ -58,10 +58,10 @@
 
 .graph-node {
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: filter 0.2s ease;
 }
 .graph-node:hover {
-  transform: scale(1.05);
+  filter: drop-shadow(0 0 4px rgba(var(--cn-primary-rgb), 0.5));
 }
 
 /* Hierarchy Tree */

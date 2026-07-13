@@ -1,0 +1,96 @@
+/* Unlinked Files Container */
+.unlinked-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.unlinked-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--cn-space-8);
+  color: var(--cn-text-secondary);
+  text-align: center;
+}
+
+.unlinked-toolbar {
+  display: flex;
+  align-items: center;
+  padding: var(--cn-space-3) var(--cn-space-4);
+  background-color: var(--cn-bg-secondary);
+  border-bottom: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-md) var(--cn-radius-md) 0 0;
+}
+
+.unlinked-select-all {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.unlinked-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--cn-space-2) 0;
+}
+
+.unlinked-item {
+  display: flex;
+  align-items: center;
+  padding: var(--cn-space-2) var(--cn-space-4);
+  border-radius: var(--cn-radius-md);
+  transition: background-color 0.15s ease;
+  margin: 0 var(--cn-space-2);
+}
+
+.unlinked-item:hover {
+  background-color: var(--cn-bg-hover);
+}
+
+.unlinked-item.selected {
+  background-color: rgba(var(--cn-primary-rgb), 0.05);
+}
+
+.unlinked-item-label {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.unlinked-item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.unlinked-item-name {
+  font-weight: var(--cn-font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unlinked-item-path {
+  font-size: var(--cn-font-size-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unlinked-bulk-bar {
+  display: flex;
+  align-items: center;
+  padding: var(--cn-space-3) var(--cn-space-4);
+  background-color: var(--cn-bg-elevated);
+  border-top: 1px solid var(--cn-border-default);
+  border-radius: 0 0 var(--cn-radius-md) var(--cn-radius-md);
+  font-size: var(--cn-font-size-sm);
+  position: sticky;
+  bottom: 0;
+}

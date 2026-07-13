@@ -3,33 +3,100 @@ import { CodeFileSummaryDto } from '../../../domains/linking/application/dto/lin
 
 interface UnlinkedFilesListProps {
   files: CodeFileSummaryDto[];
-  onLink: (fileId: string) => void;
+  selectedIds: Set<string>;
+  onToggleFile: (id: string) => void;
+  onToggleAll: () => void;
+  onBulkLink: () => void;
+  onQuickLink: (id: string) => void;
+  isAllSelected: boolean;
+  isIndeterminate: boolean;
+  currentDocumentTitle: string;
 }
 
-export function UnlinkedFilesList({ files, onLink }: UnlinkedFilesListProps): JSX.Element {
+export function UnlinkedFilesList({
+  files,
+  selectedIds,
+  onToggleFile,
+  onToggleAll,
+  onBulkLink,
+  onQuickLink,
+  isAllSelected,
+  isIndeterminate,
+  currentDocumentTitle,
+}: UnlinkedFilesListProps): JSX.Element {
   if (files.length === 0) {
     return (
-      <div className="text-center p-5 text-secondary">
-        <i className="fa-solid fa-check-circle fa-2x mb-3 text-success"></i>
-        <p>All code files are linked to documentation!</p>
+      <div className="unlinked-empty">
+        <i className="fa-solid fa-check-circle fa-3x text-success mb-3"></i>
+        <h5 className="fw-semibold">All code files are linked!</h5>
+        <p className="text-secondary">No unlinked files found in this project.</p>
       </div>
     );
   }
 
   return (
-    <div className="list-group list-group-flush">
-      {files.map(file => (
-        <div key={file.id} className="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0 py-3">
-          <div>
-            <i className="fa-solid fa-file-code text-warning me-2"></i>
-            <span className="fw-medium">{file.name}</span>
-            <div className="text-secondary" style={{ fontSize: 'var(--cn-font-size-xs)' }}>{file.path}</div>
+    <div className="unlinked-container">
+      <div className="unlinked-toolbar">
+        <label className="unlinked-select-all">
+          <input
+            type="checkbox"
+            className="form-check-input me-2"
+            checked={isAllSelected}
+            ref={el => { if (el) el.indeterminate = isIndeterminate; }}
+            onChange={onToggleAll}
+          />
+          <span className="fw-medium">{selectedIds.size > 0 ? `${selectedIds.size} selected` : 'Select All'}</span>
+        </label>
+        <button
+          className="btn btn-sm btn-ghost ms-auto"
+          onClick={() => onToggleAll()}
+          title={isAllSelected ? 'Deselect all' : 'Select all'}
+        >
+          <i className={`fa-solid ${isAllSelected ? 'fa-square-check' : 'fa-square'}`}></i>
+        </button>
+      </div>
+
+      <div className="unlinked-list">
+        {files.map(file => (
+          <div
+            key={file.id}
+            className={`unlinked-item ${selectedIds.has(file.id) ? 'selected' : ''}`}
+          >
+            <label className="unlinked-item-label">
+              <input
+                type="checkbox"
+                className="form-check-input me-3"
+                checked={selectedIds.has(file.id)}
+                onChange={() => onToggleFile(file.id)}
+              />
+              <i className="fa-solid fa-file-code text-primary me-2"></i>
+              <div className="unlinked-item-info">
+                <span className="unlinked-item-name">{file.name}</span>
+                <span className="unlinked-item-path text-secondary">{file.path}</span>
+              </div>
+            </label>
+            <button
+              className="btn btn-sm btn-outline-primary ms-3"
+              onClick={() => onQuickLink(file.id)}
+              title={`Link to ${currentDocumentTitle}`}
+            >
+              <i className="fa-solid fa-link me-1"></i> Link
+            </button>
           </div>
-          <button className="btn btn-sm btn-ghost" onClick={() => onLink(file.id)}>
-            <i className="fa-solid fa-link me-1"></i> Link
+        ))}
+      </div>
+
+      {selectedIds.size > 0 && (
+        <div className="unlinked-bulk-bar">
+          <span className="text-secondary">
+            <i className="fa-solid fa-link me-2"></i>
+            Link {selectedIds.size} selected file{selectedIds.size > 1 ? 's' : ''} to <strong>{currentDocumentTitle}</strong>
+          </span>
+          <button className="btn btn-primary btn-sm ms-auto" onClick={onBulkLink}>
+            Apply Links
           </button>
         </div>
-      ))}
+      )}
     </div>
   );
 }
