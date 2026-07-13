@@ -22,91 +22,10 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ---
 
-### Domain Layer
 
-#### Code‑to‑Document Links
 
-- `src/domains/linking/domain/entities/code-to-doc-link.ts`  
-  `CodeToDocLink` aggregate root.  
-  Properties: `id` (LinkId), `codeFileId` (FileNodeId), `documentId` (DocumentId), `type` (LinkType), `createdAt` (DateTime), `migratedAt` (Maybe<DateTime>).  
-  Methods: `markAsInherited()`, `break()`.
 
-- `src/domains/linking/domain/value-objects/link-id.ts` – Extends Identifier.
-- `src/domains/linking/domain/value-objects/link-type.ts` – Enum‑like value object. `DIRECT` or `INHERITED`. Immutable.
-
-#### Document‑to‑Document Links
-
-- `src/domains/linking/domain/entities/document-to-document-link.ts`  
-  `DocumentToDocumentLink` aggregate root.  
-  Properties: `id` (DocumentLinkId), `parentDocumentId` (DocumentId), `childDocumentId` (DocumentId), `type` (LinkType), `createdAt` (DateTime).  
-  Methods: `markAsInherited()`, `break()`.  
-
-  **Why this entity?** It represents a hierarchical relationship between documents. When a parent is split, we create links from parent to children. Later, if the parent is deleted, the `DocumentSplitSaga` queries these links to find all children and migrates code‑to‑document links accordingly.
-
-- `src/domains/linking/domain/value-objects/document-link-id.ts` – Extends Identifier.
-
-#### Shared Entities
-
-- `src/domains/linking/domain/entities/link-graph.ts`  
-  `LinkGraph` entity (manages both link types).  
-  Properties: `id` (LinkGraphId), `codeLinks` (CodeToDocLink[]), `documentLinks` (DocumentToDocumentLink[]).  
-  Methods:  
-  - `addCodeLink(link)` / `addDocumentLink(link)`  
-  - `removeCodeLink(id)` / `removeDocumentLink(id)`  
-  - `findByDocument(docId): { codeLinks, childDocumentLinks, parentDocumentLinks }`  
-  - `findByCodeFile(fileId)`  
-  - `migrateCodeLinksFromParent(parentDocId, childDocIds): CodeToDocLink[]` – moves/duplicates code links from parent to children.
-
-- `src/domains/linking/domain/value-objects/link-graph-id.ts` – Extends Identifier.
-
-#### Domain Events
-
-- `src/domains/linking/domain/events/link-created.ts` – `LinkCreatedEvent` (can be for code or doc link, distinguished by payload: `linkId`, `type` (code or doc), `sourceId`, `targetId`).  
-- `src/domains/linking/domain/events/link-broken.ts` – `LinkBrokenEvent`.  
-- `src/domains/linking/domain/events/links-migrated.ts` – `LinksMigratedEvent` (for code links migrated).  
-- `src/domains/linking/domain/events/document-link-created.ts` – `DocumentLinkCreatedEvent` 
-- `src/domains/linking/domain/events/document-link-broken.ts` – `DocumentLinkBrokenEvent`.
-
-#### Repository Interfaces
-
-- `src/domains/linking/domain/repository/link-repository.interface.ts`  
-  `ILinkRepository` – for code‑to‑document links.  
-  Methods: `findById`, `findByDocument`, `findByCodeFile`, `findByCodeFileAndDocument`, `save`, `delete`, `findAll`.
-
-- `src/domains/linking/domain/repository/document-link-repository.interface.ts`  
-  `IDocumentLinkRepository` – for document‑to‑document links.  
-  Methods: `findById`, `findByParentDocument`, `findByChildDocument`, `findByParentAndChild`, `save`, `delete`, `findChildrenOf(parentDocId): DocumentId[]`.
-
-#### Domain Services
-
-- `src/domains/linking/domain/services/link-migration.service.ts`  
-  `LinkMigrationService`.  
-  Takes `oldDocumentId` and `newDocumentIds`.  
-  Finds all DIRECT code links to `oldDocumentId`.  
-  Creates new INHERITED code links to each `newDocumentId`.  
-  Returns migrated links. Emits `LinksMigratedEvent`. PURE logic.
-
-- `src/domains/linking/domain/services/document-link-validator.service.ts`
-  Ensures no circular document links.
-
----
-
-### Application Layer
-
-#### Code‑to‑Document Commands & Queries (unchanged)
-
-- `src/domains/linking/application/commands/create-link.command.ts` – `CreateLinkCommand`. Payload: `codeFileId`, `documentId`.
-- `src/domains/linking/application/handlers/create-link.handler.ts` – Validates, creates `CodeToDocLink` (DIRECT), saves, emits event.
-- `src/domains/linking/application/commands/remove-link.command.ts` – `RemoveLinkCommand`. Payload: `linkId`.
-- `src/domains/linking/application/handlers/remove-link.handler.ts` – Removes code link.
-- `src/domains/linking/application/queries/get-links-for-document.query.ts` – `GetLinksForDocumentQuery`. Payload: `documentId`.
-- `src/domains/linking/application/handlers/get-links-for-document.handler.ts` – Returns code links for document.
-- `src/domains/linking/application/queries/get-links-for-codefile.query.ts` – `GetLinksForCodeFileQuery`.
-- `src/domains/linking/application/handlers/get-links-for-codefile.handler.ts`.
-- `src/domains/linking/application/queries/get-unlinked-codefiles.query.ts`.
-- `src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts`.
-
-#### Document‑to‑Document Commands & Queries (new)
+#### Document‑to‑Document Commands & Queries
 
 - `src/domains/linking/application/commands/create-document-link.command.ts` – `CreateDocumentLinkCommand`. Payload: `parentDocumentId: string`, `childDocumentId: string`.
 - `src/domains/linking/application/handlers/create-document-link.handler.ts` – Validates both documents exist, ensures no duplicate, creates `DocumentToDocumentLink` (DIRECT), saves, emits `DocumentLinkCreatedEvent`. Optionally emits `OrphanClearance` if child was orphaned (context via EventBus).
@@ -184,7 +103,7 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 - [ ] User can link a code file to multiple documents (existing).
 - [ ] User can link a document to multiple code files (existing).
-- [ ] User can link a parent document to multiple child documents (new).
+- [ ] User can link a parent document to multiple child documents
 - [ ] Deleting a parent document with linked children auto‑migrates code links from the parent to all children (enhanced).
 - [ ] INHERITED links (both code and doc) are visually distinct from DIRECT links in UI.
 - [ ] Unlinked code files are shown in a dedicated alert panel (existing).
