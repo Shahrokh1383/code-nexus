@@ -31,13 +31,12 @@ export function useFileTreePicker(
   const [activeTab, setActiveTab] = useState<PickerTab>('code');
   const [selectedFileIds, setSelectedFileIds] = useState<Set<string>>(new Set());
   const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set());
-  const [targetDocumentId, setTargetDocumentId] = useState(initialDocumentId);
 
+  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setSelectedFileIds(new Set());
       setSelectedDocumentIds(new Set());
-      setTargetDocumentId(initialDocumentId);
       setActiveTab('code');
       if (!tree) scanProject();
     }
@@ -91,9 +90,10 @@ export function useFileTreePicker(
     }
   }, [tree, isAllFilesSelected]);
 
+  // Filter out the target document so a document cannot link to itself
   const documentSourceList = useMemo(
-    () => documents.filter(d => d.id !== targetDocumentId),
-    [documents, targetDocumentId]
+    () => documents.filter(d => d.id !== initialDocumentId),
+    [documents, initialDocumentId]
   );
 
   return {
@@ -103,8 +103,6 @@ export function useFileTreePicker(
     setActiveTab,
     selectedFileIds,
     selectedDocumentIds,
-    targetDocumentId,
-    setTargetDocumentId,
     toggleFile,
     toggleFolder,
     toggleDocument,

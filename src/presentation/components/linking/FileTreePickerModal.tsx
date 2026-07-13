@@ -1,6 +1,5 @@
 import { JSX } from 'react';
 import { useFileTreePicker } from '../../hooks/linking/useFileTreePicker';
-import { TargetDocumentSelector } from './TargetDocumentSelector';
 import { FileTreeNode } from './FileTreeNode';
 import { DocumentSourceList } from './DocumentSourceList';
 import { LinkingTabs } from './LinkingTabs';
@@ -24,14 +23,18 @@ export function FileTreePickerModal({
   const picker = useFileTreePicker(isOpen, documents, initialDocumentId);
 
   const handleLink = () => {
+    // Safety check: Ensure we actually have a target document
+    if (!initialDocumentId) return;
+
     if (picker.activeTab === 'code') {
-      if (picker.selectedFileIds.size === 0 || !picker.targetDocumentId) return;
-      onLink(Array.from(picker.selectedFileIds), picker.targetDocumentId, 'code');
+      if (picker.selectedFileIds.size === 0) return;
+      onLink(Array.from(picker.selectedFileIds), initialDocumentId, 'code');
     } else {
-      if (picker.selectedDocumentIds.size === 0 || !picker.targetDocumentId) return;
-      const sourceIds = Array.from(picker.selectedDocumentIds).filter(id => id !== picker.targetDocumentId);
+      if (picker.selectedDocumentIds.size === 0) return;
+      // Filter out the target document just in case it slipped into the selection
+      const sourceIds = Array.from(picker.selectedDocumentIds).filter(id => id !== initialDocumentId);
       if (sourceIds.length === 0) return;
-      onLink(sourceIds, picker.targetDocumentId, 'document');
+      onLink(sourceIds, initialDocumentId, 'document');
     }
     onClose();
   };
@@ -44,6 +47,7 @@ export function FileTreePickerModal({
   if (!isOpen) return null;
 
   const isLinkDisabled = 
+    !initialDocumentId || // Disable if no target document is selected in the parent
     (picker.activeTab === 'code' && picker.selectedFileIds.size === 0) ||
     (picker.activeTab === 'document' && picker.selectedDocumentIds.size === 0);
 
@@ -58,11 +62,7 @@ export function FileTreePickerModal({
         </div>
 
         <div className="file-picker-body">
-          <TargetDocumentSelector
-            documents={documents}
-            selectedDocumentId={picker.targetDocumentId}
-            onSelectDocument={picker.setTargetDocumentId}
-          />
+          {/* TargetDocumentSelector removed: Target is now fixed via initialDocumentId */}
 
           <LinkingTabs 
             tabs={tabs} 

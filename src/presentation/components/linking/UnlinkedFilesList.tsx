@@ -40,7 +40,7 @@ export function UnlinkedFilesList({
         <label className="unlinked-select-all">
           <input
             type="checkbox"
-            className="form-check-input me-2"
+            className="unlinked-checkbox me-2"
             checked={isAllSelected}
             ref={el => { if (el) el.indeterminate = isIndeterminate; }}
             onChange={onToggleAll}
@@ -65,14 +65,14 @@ export function UnlinkedFilesList({
             <label className="unlinked-item-label">
               <input
                 type="checkbox"
-                className="form-check-input me-3"
+                className="unlinked-checkbox me-3"
                 checked={selectedIds.has(file.id)}
                 onChange={() => onToggleFile(file.id)}
               />
               <i className="fa-solid fa-file-code text-primary me-2"></i>
               <div className="unlinked-item-info">
                 <span className="unlinked-item-name">{file.name}</span>
-                <span className="unlinked-item-path text-secondary">{file.path}</span>
+                <span className="unlinked-item-path">{file.path}</span>
               </div>
             </label>
             <button

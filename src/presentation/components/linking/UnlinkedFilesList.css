@@ -1,8 +1,12 @@
-/* Unlinked Files Container */
+/* ============================================================
+   Unlinked Files List – Themed, no Bootstrap defaults
+   ============================================================ */
+
 .unlinked-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--cn-bg-primary); /* added safety */
 }
 
 .unlinked-empty {
@@ -29,6 +33,7 @@
   align-items: center;
   margin-bottom: 0;
   cursor: pointer;
+  color: var(--cn-text-primary);
 }
 
 .unlinked-list {
@@ -44,6 +49,7 @@
   border-radius: var(--cn-radius-md);
   transition: background-color 0.15s ease;
   margin: 0 var(--cn-space-2);
+  background-color: transparent;
 }
 
 .unlinked-item:hover {
@@ -51,7 +57,7 @@
 }
 
 .unlinked-item.selected {
-  background-color: rgba(var(--cn-primary-rgb), 0.05);
+  background-color: var(--cn-primary-muted);
 }
 
 .unlinked-item-label {
@@ -61,6 +67,7 @@
   min-width: 0;
   cursor: pointer;
   margin-bottom: 0;
+  color: var(--cn-text-primary);
 }
 
 .unlinked-item-info {
@@ -81,6 +88,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--cn-text-secondary);
 }
 
 .unlinked-bulk-bar {
@@ -93,4 +101,37 @@
   font-size: var(--cn-font-size-sm);
   position: sticky;
   bottom: 0;
+}
+
+/* Custom checkbox (replaces Bootstrap form-check-input) */
+.unlinked-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--cn-border-default);
+  border-radius: 4px;
+  background-color: var(--cn-bg-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.unlinked-checkbox:checked {
+  background-color: var(--cn-primary);
+  border-color: var(--cn-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.unlinked-checkbox:indeterminate {
+  background-color: var(--cn-primary-muted);
+  border-color: var(--cn-primary);
+}
+
+.unlinked-checkbox:focus-visible {
+  outline: 2px solid var(--cn-primary);
+  outline-offset: 2px;
 }

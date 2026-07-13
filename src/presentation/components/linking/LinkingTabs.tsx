@@ -14,16 +14,21 @@ interface LinkingTabsProps {
 
 export function LinkingTabs({ tabs, activeTab, onTabChange }: LinkingTabsProps): JSX.Element {
   return (
-    <div className="linking-tabs">
-      {tabs.map(tab => (
+    <nav className="linking-tabs" role="tablist" aria-label="Linking page navigation">
+      {tabs.map((tab) => (
         <button
           key={tab.id}
-          className={`linking-tab ${activeTab === tab.id ? 'active' : ''}`}
+          className={`linking-tab ${activeTab === tab.id ? 'linking-tab--active' : ''}`}
           onClick={() => onTabChange(tab.id)}
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          aria-controls={`${tab.id}-panel`}
+          id={`${tab.id}-tab`}
         >
-          <i className={`fa-solid ${tab.icon} me-2`}></i> {tab.label}
+          <i className={`fa-solid ${tab.icon} linking-tab__icon`} />
+          <span className="linking-tab__label">{tab.label}</span>
         </button>
       ))}
-    </div>
+    </nav>
   );
 }

@@ -36,60 +36,68 @@ export function PersistentDocumentSelector({
 
   if (documents.length === 0) {
     return (
-      <div className="p-3 text-center" style={{ color: 'var(--cn-text-secondary)' }}>
-        <i className="fa-solid fa-triangle-exclamation me-2" />
-        No documents found.
+      <div className="document-selector__empty">
+        <i className="fa-solid fa-triangle-exclamation" />
+        <span>No documents found</span>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="linking-sidebar__search">
+    <div className="document-selector">
+      <div className="document-selector__search">
+        <i className="fa-solid fa-search document-selector__search-icon" />
         <input
           ref={inputRef}
           type="text"
+          className="document-selector__input"
           placeholder="Search documents..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
+          aria-label="Search documents"
         />
         {searchTerm && (
           <button
-            className="btn-ghost"
-            style={{ position: 'absolute', right: 8, top: 5, padding: '2px 6px', fontSize: '0.8rem' }}
+            type="button"
+            className="document-selector__clear-btn"
             onClick={clearSearch}
-            title="Clear"
+            aria-label="Clear search"
+            title="Clear search"
           >
             <i className="fa-solid fa-times" />
           </button>
         )}
       </div>
 
-      <ul ref={listRef} className="linking-sidebar__list" style={{ flex: 1, overflowY: 'auto', padding: '0 var(--cn-space-2)' }}>
+      <ul 
+        ref={listRef} 
+        className="document-selector__list" 
+        role="listbox"
+        aria-label="Documents list"
+      >
         {filteredItems.length === 0 ? (
-          <li className="linking-sidebar__item" style={{ justifyContent: 'center', color: 'var(--cn-text-secondary)' }}>
-            No matches
+          <li className="document-selector__no-results">
+            <span>No matches found</span>
           </li>
         ) : (
           filteredItems.map((doc, index) => {
             const isSelected = doc.id === selectedDocumentId;
             const isFocused = index === focusedIndex;
-            let className = 'linking-sidebar__item';
-            if (isSelected) className += ' linking-sidebar__item--active';
-            else if (isFocused) className += ' linking-sidebar__item--focused'; // we can add a subtle style
-
+            
             return (
               <li
                 key={doc.id}
-                className={className}
-                style={isFocused && !isSelected ? { backgroundColor: 'var(--cn-bg-hover)' } : undefined}
+                className={`document-selector__item ${isSelected ? 'document-selector__item--active' : ''} ${isFocused && !isSelected ? 'document-selector__item--focused' : ''}`}
                 onClick={() => handleSelect(doc.id)}
                 role="option"
                 aria-selected={isSelected}
+                tabIndex={0}
               >
-                <i className={`fa-solid fa-fw ${isSelected ? 'fa-circle-check' : 'fa-file-lines'}`} style={{ color: isSelected ? 'var(--cn-primary)' : 'var(--cn-text-secondary)' }} />
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.title}</span>
+                <i 
+                  className={`fa-solid fa-fw document-selector__icon ${isSelected ? 'document-selector__icon--active' : ''}`} 
+                />
+                <span className="document-selector__title">{doc.title}</span>
               </li>
             );
           })
