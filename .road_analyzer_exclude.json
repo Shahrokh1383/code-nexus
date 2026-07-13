@@ -25,9 +25,6 @@
     "src\\presentation\\components\\welcome",
     "src\\presentation",
     "src\\domains\\project",
-    "src\\domains\\documentation",
-    "src\\domains\\shared-kernel",
-    "src\\domains\\tracking",
     "src\\infrastructure",
     "src\\application",
     "src\\domains\\filesystem"
@@ -35,6 +32,6 @@
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-13T12:26:51.413Z",
+  "lastModified": "2026-07-13T14:09:21.194Z",
   "version": 1
 }

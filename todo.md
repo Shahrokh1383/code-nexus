@@ -22,41 +22,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 
 ---
 
-
-
-
-#### Document‑to‑Document Commands & Queries
-
-- `src/domains/linking/application/commands/create-document-link.command.ts` – `CreateDocumentLinkCommand`. Payload: `parentDocumentId: string`, `childDocumentId: string`.
-- `src/domains/linking/application/handlers/create-document-link.handler.ts` – Validates both documents exist, ensures no duplicate, creates `DocumentToDocumentLink` (DIRECT), saves, emits `DocumentLinkCreatedEvent`. Optionally emits `OrphanClearance` if child was orphaned (context via EventBus).
-- `src/domains/linking/application/commands/remove-document-link.command.ts` – `RemoveDocumentLinkCommand`. Payload: `linkId: string`.
-- `src/domains/linking/application/handlers/remove-document-link.handler.ts` – Removes document link.
-- `src/domains/linking/application/queries/get-document-children.query.ts` – `GetDocumentChildrenQuery`. Payload: `parentDocumentId: string`.
-- `src/domains/linking/application/handlers/get-document-children.handler.ts` – Uses `IDocumentLinkRepository.findChildrenOf` to return child document IDs.
-- `src/domains/linking/application/queries/get-document-parents.query.ts` – `GetDocumentParentsQuery`. Payload: `childDocumentId: string`.
-- `src/domains/linking/application/handlers/get-document-parents.handler.ts` – Returns parent documents.
-
-#### Migration Command (enhanced)
-
-- `src/domains/linking/application/commands/migrate-links.command.ts` – Unchanged (payload: `oldDocumentId`, `newDocumentIds`).
-- `src/domains/linking/application/handlers/migrate-links.handler.ts` – Same as before, but now the Saga will obtain `newDocumentIds` by querying the document‑to‑document links.
-
-#### DTOs
-
-- `src/domains/linking/application/dto/code-to-doc-link.dto.ts` – unchanged.
-- `src/domains/linking/application/dto/document-link.dto.ts` – new: `{ id, parentDocumentId, childDocumentId, type, createdAt }`.
-- `src/domains/linking/application/dto/link-graph.dto.ts` – now includes both code links and document links for a given document.
-
----
-
-### Infrastructure Layer
-
-- `src/domains/linking/infrastructure/repository/link-json.repository.ts` – implements `ILinkRepository`. Stores in `.doclink/links.json` (code links).
-- `src/domains/linking/infrastructure/repository/document-link-json.repository.ts` – implements `IDocumentLinkRepository`. Stores in `.doclink/document-links.json`. Structure: `{ version, links: [{ id, parentDocumentId, childDocumentId, type, createdAt }] }`.
-- `src/domains/linking/infrastructure/adapters/link-migration.engine.ts` – pure logic, unchanged.
-
----
-
 ### Application Orchestration (Cross-Domain)
 
 - `src/application/sagas/document-split.saga.ts` – **DocumentSplitSaga**.  
