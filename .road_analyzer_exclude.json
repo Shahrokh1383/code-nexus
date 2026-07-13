@@ -23,15 +23,15 @@
     "src\\presentation\\components\\file-tree",
     "src\\presentation\\components\\documentation",
     "src\\presentation\\components\\welcome",
-    "src\\presentation",
     "src\\domains\\project",
     "src\\infrastructure",
     "src\\application",
-    "src\\domains\\filesystem"
+    "src\\domains\\filesystem",
+    "src\\domains"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-13T14:09:21.194Z",
+  "lastModified": "2026-07-13T15:14:56.496Z",
   "version": 1
 }

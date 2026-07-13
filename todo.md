@@ -23,20 +23,6 @@ This roadmap breaks the CodeNexus project into 10 discrete phases. Each phase bu
 ---
 
 
-
-### Presentation Layer
-
-- `src/presentation/hooks/useLinks.ts` – extends to expose `createDocumentLink`, `removeDocumentLink`, `getDocumentChildren`, `getDocumentParents`.
-- `src/presentation/components/linking/LinkCreator.tsx` – now supports two modes: code‑to‑document and document‑to‑document (e.g., a document tree to select parent/child).
-- `src/presentation/components/linking/DocumentHierarchy.tsx` – new component to visualize parent‑child document links.
-- `src/presentation/components/linking/LinkGraph.tsx` – updated to show document‑to‑document edges (dotted lines, different color).
-- `src/presentation/components/linking/LinkBadge.tsx` – shows count of both code links and document links.
-- `src/presentation/components/linking/UnlinkedFilesAlert.tsx` – unchanged.
-- `src/presentation/pages/LinkingPage.tsx` – full page with tabs or sections for code links and document links.
-- `src/presentation/stores/linking.store.ts` – holds both link types.
-
----
-
 ### Deliverables (updated)
 
 - [ ] User can link a code file to multiple documents (existing).

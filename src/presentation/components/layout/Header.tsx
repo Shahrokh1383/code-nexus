@@ -38,11 +38,18 @@ export function Header(): JSX.Element {
       ariaLabel: 'Documentation Manager',
     },
     {
-      icon: 'fa-clock-rotate-left',  // FontAwesome icon for history/tracking
+      icon: 'fa-clock-rotate-left',
       label: 'Tracking',
       action: () => navigate('/tracking'),
       shouldShow: () => !!workspace,
       ariaLabel: 'Tracking & Commits',
+    },
+    {
+      icon: 'fa-diagram-project',
+      label: 'Links',
+      action: () => navigate('/linking'),
+      shouldShow: () => !!workspace,
+      ariaLabel: 'Knowledge Graph & Links',
     },
     {
       icon: 'fa-right-from-bracket',

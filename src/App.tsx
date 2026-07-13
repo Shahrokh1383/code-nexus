@@ -6,6 +6,7 @@ import { FileBrowserPage } from './presentation/pages/FileBrowserPage';
 import { DocumentManagerPage } from './presentation/pages/DocumentManagerPage';
 import { TrackingPage } from './presentation/pages/TrackingPage';
 import { useWorkspace } from './presentation/hooks/useWorkspace';
+import { LinkingPage } from './presentation/pages/LinkingPage';
 
 export default function App(): JSX.Element {
   return (
@@ -54,6 +55,7 @@ function AppBootstrap(): JSX.Element {
           <Route path="/files" element={<FileBrowserPage />} />
           <Route path="/docs" element={<DocumentManagerPage />} />
           <Route path="/tracking" element={<TrackingPage />} />
+          <Route path="/linking" element={<LinkingPage />} />
         </Routes>
       </main>
     </div>
