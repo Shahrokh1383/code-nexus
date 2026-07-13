@@ -1,8 +1,12 @@
 import { JSX, useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { DocumentDto } from '../../../domains/documentation/application/dto/document.dto';
+
+interface DocumentOption {
+  id: string;
+  title: string;
+}
 
 interface TargetDocumentSelectorProps {
-  documents: DocumentDto[];
+  documents: DocumentOption[];
   selectedDocumentId: string | null;
   onSelectDocument: (documentId: string) => void;
 }
@@ -12,13 +16,11 @@ export function TargetDocumentSelector({
   selectedDocumentId,
   onSelectDocument,
 }: TargetDocumentSelectorProps): JSX.Element {
-  // ---- state ----
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  // ---- derived ----
   const selectedDocument = documents.find(d => d.id === selectedDocumentId) ?? null;
 
   const filteredDocuments = useMemo(() => {
@@ -27,12 +29,10 @@ export function TargetDocumentSelector({
     return documents.filter(d => d.title.toLowerCase().includes(lower));
   }, [documents, searchTerm]);
 
-  // reset focus when search changes
   useEffect(() => {
     setFocusedIndex(0);
   }, [searchTerm]);
 
-  // ---- handlers ----
   const handleSelect = useCallback(
     (id: string) => {
       onSelectDocument(id);
@@ -70,7 +70,6 @@ export function TargetDocumentSelector({
     [filteredDocuments, focusedIndex, handleSelect]
   );
 
-  // keep focused item visible in scroll
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
@@ -80,7 +79,6 @@ export function TargetDocumentSelector({
     }
   }, [focusedIndex]);
 
-  // ---- edge case: no documents at all ----
   if (documents.length === 0) {
     return (
       <div className="mb-3 p-3 bg-warning-subtle rounded">
@@ -92,7 +90,6 @@ export function TargetDocumentSelector({
 
   return (
     <div className="mb-3 target-doc-selector">
-      {/* --- currently selected indicator --- */}
       {selectedDocument && (
         <div className="mb-2 d-flex align-items-center gap-2">
           <span className="text-secondary fw-medium" style={{ fontSize: 'var(--cn-font-size-sm)' }}>
@@ -114,7 +111,6 @@ export function TargetDocumentSelector({
         </div>
       )}
 
-      {/* --- search input --- */}
       <div className="input-group input-group-sm mb-2">
         <span className="input-group-text" style={{ backgroundColor: 'var(--cn-bg-secondary)', borderColor: 'var(--cn-border-default)' }}>
           <i className="fa-solid fa-magnifying-glass text-secondary" />
@@ -146,7 +142,6 @@ export function TargetDocumentSelector({
         )}
       </div>
 
-      {/* --- document list --- */}
       <ul
         ref={listRef}
         className="list-unstyled m-0 target-doc-list"
@@ -170,9 +165,7 @@ export function TargetDocumentSelector({
             return (
               <li
                 key={doc.id}
-                className={`d-flex align-items-center gap-2 py-2 px-3 rounded ${
-                  isSelected ? 'fw-semibold' : ''
-                }`}
+                className={`d-flex align-items-center gap-2 py-2 px-3 rounded ${isSelected ? 'fw-semibold' : ''}`}
                 style={{
                   cursor: 'pointer',
                   backgroundColor: isSelected

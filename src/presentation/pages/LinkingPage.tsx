@@ -7,8 +7,9 @@ import { LinkGraph } from '../components/linking/LinkGraph';
 import { DocumentHierarchy } from '../components/linking/DocumentHierarchy';
 import { UnlinkedFilesList } from '../components/linking/UnlinkedFilesList';
 import { FileTreePickerModal } from '../components/linking/FileTreePickerModal';
-import { useUnlinkedFiles } from '../hooks/useUnlinkedFiles';
 import { TargetDocumentSelector } from '../components/linking/TargetDocumentSelector';
+import { useUnlinkedFiles } from '../hooks/useUnlinkedFiles';
+import { useLinkingStore } from '../stores/linking.store';
 import '../styles/linking.css';
 import '../components/linking/UnlinkedFilesList.css';
 
@@ -71,8 +72,19 @@ export function LinkingPage(): JSX.Element {
     handleBulkLink,
   } = useUnlinkedFiles(selectedDocId);
 
-  const handleModalLink = (fileIds: string[], documentId: string) => {
-    createBulkCodeLinks(fileIds, documentId);
+  // Modal handler: dispatch code-file or document-to-document linking
+  const handleModalLink = (sourceIds: string[], targetDocumentId: string, sourceType: 'code' | 'document') => {
+    if (sourceType === 'code') {
+      createBulkCodeLinks(sourceIds, targetDocumentId);
+    } else {
+      // document-to-document: create link for each selected document (target is parent, selected are children)
+      const store = useLinkingStore.getState();
+      sourceIds.forEach(id => {
+        store.createDocumentLink(targetDocumentId, id);
+      });
+      // refresh graph data after bulk doc linking
+      fetchGraphData();
+    }
   };
 
   return (

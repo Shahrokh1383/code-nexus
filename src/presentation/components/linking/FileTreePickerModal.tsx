@@ -3,6 +3,7 @@ import { FolderNodeDto } from '../../../domains/filesystem/application/dto/folde
 import { FileNodeDto } from '../../../domains/filesystem/application/dto/file-node.dto';
 import { useFileSystemStore } from '../../stores/filesystem.store';
 import { useFileTree } from '../../hooks/useFileTree';
+import { TargetDocumentSelector } from './TargetDocumentSelector';
 import './FileTreePickerModal.css';
 
 interface FileTreePickerModalProps {
@@ -10,9 +11,13 @@ interface FileTreePickerModalProps {
   documents: { id: string; title: string }[];
   initialDocumentId: string;
   onClose: () => void;
-  onLink: (fileIds: string[], documentId: string) => void;
+  onLink: (sourceIds: string[], targetDocumentId: string, sourceType: 'code' | 'document') => void;
 }
 
+// ---- Tab type ----
+type PickerTab = 'code' | 'document';
+
+// ---- TreeNode (file tree) ---- 
 interface TreeNodeProps {
   node: FolderNodeDto | FileNodeDto;
   depth: number;
@@ -32,19 +37,13 @@ function getAllFileIds(node: FolderNodeDto | FileNodeDto): string[] {
 
 function TreeNode({ node, depth, selectedIds, onToggleFile, onToggleFolder }: TreeNodeProps): JSX.Element {
   const [expanded, setExpanded] = useState(false);
-
   const folder = isFolder(node) ? node : null;
   const file = !folder ? (node as FileNodeDto) : null;
 
   const allChildIds = useMemo(() => (folder ? getAllFileIds(folder) : []), [folder]);
-  const selectedChildCount = folder
-    ? allChildIds.filter(id => selectedIds.has(id)).length
-    : 0;
-
+  const selectedChildCount = folder ? allChildIds.filter(id => selectedIds.has(id)).length : 0;
   const isFolderChecked = folder ? selectedChildCount === allChildIds.length : false;
-  const isFolderIndeterminate = folder
-    ? selectedChildCount > 0 && selectedChildCount < allChildIds.length
-    : false;
+  const isFolderIndeterminate = folder ? selectedChildCount > 0 && selectedChildCount < allChildIds.length : false;
 
   const handleFolderCheckbox = () => {
     if (!folder) return;
@@ -79,9 +78,7 @@ function TreeNode({ node, depth, selectedIds, onToggleFile, onToggleFolder }: Tr
               type="checkbox"
               className="form-check-input"
               checked={isFolderChecked}
-              ref={el => {
-                if (el) el.indeterminate = isFolderIndeterminate;
-              }}
+              ref={el => { if (el) el.indeterminate = isFolderIndeterminate; }}
               onChange={handleFolderCheckbox}
             />
           </label>
@@ -112,6 +109,7 @@ function TreeNode({ node, depth, selectedIds, onToggleFile, onToggleFolder }: Tr
   return <></>;
 }
 
+// ---- Main Modal ----
 export function FileTreePickerModal({
   isOpen,
   documents,
@@ -121,45 +119,77 @@ export function FileTreePickerModal({
 }: FileTreePickerModalProps): JSX.Element | null {
   const { tree, isScanning } = useFileSystemStore();
   const { scanProject } = useFileTree();
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const [activeTab, setActiveTab] = useState<PickerTab>('code');
+  const [selectedFileIds, setSelectedFileIds] = useState<Set<string>>(new Set());
+  const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set());
   const [targetDocumentId, setTargetDocumentId] = useState(initialDocumentId);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // reset state when modal opens
   useEffect(() => {
-    if (isOpen && !tree) scanProject();
-  }, [isOpen, tree, scanProject]);
+    if (isOpen) {
+      setSelectedFileIds(new Set());
+      setSelectedDocumentIds(new Set());
+      setTargetDocumentId(initialDocumentId);
+      setActiveTab('code');
+      if (!tree) scanProject();
+    }
+  }, [isOpen, initialDocumentId, tree, scanProject]);
 
-  useEffect(() => {
-    setSelectedIds(new Set());
-    setTargetDocumentId(initialDocumentId);
-  }, [isOpen, initialDocumentId]);
-
+  // file selection
   const toggleFile = useCallback((id: string) => {
-    setSelectedIds(prev => {
+    setSelectedFileIds(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      next.has(id) ? next.delete(id) : next.add(id);
       return next;
     });
   }, []);
 
   const toggleFolder = useCallback((folder: FolderNodeDto, select: boolean) => {
     const ids = getAllFileIds(folder);
-    setSelectedIds(prev => {
+    setSelectedFileIds(prev => {
       const next = new Set(prev);
-      for (const id of ids) {
-        if (select) next.add(id);
-        else next.delete(id);
-      }
+      ids.forEach(id => select ? next.add(id) : next.delete(id));
       return next;
     });
   }, []);
 
+  // document selection
+  const toggleDocument = useCallback((id: string) => {
+    setSelectedDocumentIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
+
+  const handleSelectAllDocuments = () => {
+    setSelectedDocumentIds(prev => {
+      if (prev.size === documents.length) return new Set();
+      return new Set(documents.map(d => d.id));
+    });
+  };
+
   const handleLink = () => {
-    if (selectedIds.size === 0 || !targetDocumentId) return;
-    onLink(Array.from(selectedIds), targetDocumentId);
+    if (activeTab === 'code') {
+      if (selectedFileIds.size === 0 || !targetDocumentId) return;
+      onLink(Array.from(selectedFileIds), targetDocumentId, 'code');
+    } else {
+      if (selectedDocumentIds.size === 0 || !targetDocumentId) return;
+      // filter out target doc from source (prevent self-link)
+      const sourceIds = Array.from(selectedDocumentIds).filter(id => id !== targetDocumentId);
+      if (sourceIds.length === 0) return;
+      onLink(sourceIds, targetDocumentId, 'document');
+    }
     onClose();
   };
+
+  // compute count for the tab label
+  const documentSourceList = useMemo(
+    () => documents.filter(d => d.id !== targetDocumentId),
+    [documents, targetDocumentId]
+  );
 
   if (!isOpen) return null;
 
@@ -167,60 +197,125 @@ export function FileTreePickerModal({
     <div className="file-picker-backdrop" onClick={onClose}>
       <div className="file-picker-modal" ref={modalRef} onClick={e => e.stopPropagation()}>
         <div className="file-picker-header">
-          <h5 className="mb-0">Select Code Files</h5>
+          <h5 className="mb-0">Create Link</h5>
           <button className="btn btn-ghost" onClick={onClose}>
             <i className="fa-solid fa-times"></i>
           </button>
         </div>
+
         <div className="file-picker-body">
-          <div className="mb-3">
-            <label className="form-label small fw-medium text-secondary">Target Document</label>
-            <select
-              className="form-select"
-              value={targetDocumentId}
-              onChange={e => setTargetDocumentId(e.target.value)}
+          {/* ---- Target document picker (searchable, keyboard‑navigable) ---- */}
+          <TargetDocumentSelector
+            documents={documents}
+            selectedDocumentId={targetDocumentId}
+            onSelectDocument={setTargetDocumentId}
+          />
+
+          {/* ---- Tab switcher ---- */}
+          <div className="linking-tabs" style={{ marginTop: '12px' }}>
+            <button
+              className={`linking-tab ${activeTab === 'code' ? 'active' : ''}`}
+              onClick={() => setActiveTab('code')}
             >
-              {documents.map(doc => (
-                <option key={doc.id} value={doc.id}>{doc.title}</option>
-              ))}
-            </select>
+              <i className="fa-solid fa-file-code me-1"></i> Code Files
+            </button>
+            <button
+              className={`linking-tab ${activeTab === 'document' ? 'active' : ''}`}
+              onClick={() => setActiveTab('document')}
+            >
+              <i className="fa-solid fa-file-lines me-1"></i> Documents
+            </button>
           </div>
-          <div className="file-picker-tree">
-            {isScanning || !tree ? (
-              <div className="text-center p-4 text-secondary">
-                <i className="fa-solid fa-spinner fa-spin me-2"></i> Scanning project...
-              </div>
-            ) : (
-              <>
-                <div className="tree-actions mb-2">
-                  <button
-                    className="btn btn-sm btn-ghost"
-                    onClick={() => {
-                      if (!tree) return;
-                      const allIds = getAllFileIds(tree);
-                      if (selectedIds.size === allIds.length) setSelectedIds(new Set());
-                      else setSelectedIds(new Set(allIds));
-                    }}
-                  >
-                    {tree && selectedIds.size === getAllFileIds(tree).length ? 'Deselect All' : 'Select All'}
-                  </button>
+
+          {/* ---- Source list based on active tab ---- */}
+          {activeTab === 'code' && (
+            <div className="file-picker-tree">
+              {isScanning || !tree ? (
+                <div className="text-center p-4 text-secondary">
+                  <i className="fa-solid fa-spinner fa-spin me-2"></i> Scanning project...
                 </div>
-                <TreeNode
-                  node={tree}
-                  depth={0}
-                  selectedIds={selectedIds}
-                  onToggleFile={toggleFile}
-                  onToggleFolder={toggleFolder}
-                />
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <div className="tree-actions mb-2">
+                    <button
+                      className="btn btn-sm btn-ghost"
+                      onClick={() => {
+                        if (!tree) return;
+                        const allIds = getAllFileIds(tree);
+                        if (selectedFileIds.size === allIds.length) setSelectedFileIds(new Set());
+                        else setSelectedFileIds(new Set(allIds));
+                      }}
+                    >
+                      {tree && selectedFileIds.size === getAllFileIds(tree).length ? 'Deselect All' : 'Select All'}
+                    </button>
+                  </div>
+                  <TreeNode
+                    node={tree}
+                    depth={0}
+                    selectedIds={selectedFileIds}
+                    onToggleFile={toggleFile}
+                    onToggleFolder={toggleFolder}
+                  />
+                </>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'document' && (
+            <div
+              className="file-picker-tree"
+              style={{ maxHeight: '50vh', overflowY: 'auto' }}
+            >
+              <div className="tree-actions mb-2">
+                <button className="btn btn-sm btn-ghost" onClick={handleSelectAllDocuments}>
+                  {selectedDocumentIds.size === documentSourceList.length ? 'Deselect All' : 'Select All'}
+                </button>
+              </div>
+              {documentSourceList.length === 0 ? (
+                <p className="text-secondary p-3 text-center">No other documents available.</p>
+              ) : (
+                documentSourceList.map(doc => {
+                  const isChecked = selectedDocumentIds.has(doc.id);
+                  return (
+                    <label
+                      key={doc.id}
+                      className="d-flex align-items-center py-2 px-2 rounded hover-bg"
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--cn-bg-hover)')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                    >
+                      <input
+                        type="checkbox"
+                        className="form-check-input me-2"
+                        checked={isChecked}
+                        onChange={() => toggleDocument(doc.id)}
+                      />
+                      <i className="fa-solid fa-file-lines text-primary me-2"></i>
+                      <span>{doc.title}</span>
+                    </label>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
+
         <div className="file-picker-footer">
-          <span className="text-secondary small">{selectedIds.size} file{selectedIds.size !== 1 ? 's' : ''} selected</span>
+          <span className="text-secondary small">
+            {activeTab === 'code'
+              ? `${selectedFileIds.size} file${selectedFileIds.size !== 1 ? 's' : ''} selected`
+              : `${selectedDocumentIds.size} document${selectedDocumentIds.size !== 1 ? 's' : ''} selected`}
+          </span>
           <div>
             <button className="btn btn-ghost me-2" onClick={onClose}>Cancel</button>
-            <button className="btn btn-primary" disabled={selectedIds.size === 0} onClick={handleLink}>
+            <button
+              className="btn btn-primary"
+              disabled={
+                (activeTab === 'code' && selectedFileIds.size === 0) ||
+                (activeTab === 'document' && selectedDocumentIds.size === 0)
+              }
+              onClick={handleLink}
+            >
               Link Selected
             </button>
           </div>
