@@ -1,7 +1,7 @@
-import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
-import { FileNodeId } from '../../../filesystem/domain/value-objects/file-node-id';
-import { CodeToDocLink } from '../../domain/entities/code-to-doc-link';
-import { LinkMigrationService } from '../../domain/services/link-migration.service';
+import { DocumentId } from '../../../../documentation/domain/value-objects/document-id';
+import { FileNodeId } from '../../../../filesystem/domain/value-objects/file-node-id';
+import { CodeToDocLink } from '../../../domain/entities/code-to-doc-link';
+import { LinkMigrationService } from '../../../domain/services/link-migration.service';
 
 describe('LinkMigrationService', () => {
   let service: LinkMigrationService;
