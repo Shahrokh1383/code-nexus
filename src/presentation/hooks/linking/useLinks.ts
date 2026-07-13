@@ -19,8 +19,17 @@ export function useLinks() {
   }, [store.createDocumentLink]);
 
   return {
-    ...store,
+    codeLinks: store.codeLinks,
+    documentLinks: store.documentLinks,
+    unlinkedFiles: store.unlinkedFiles,
+    isLoading: store.isLoading,
+    error: store.error,
+    clearError: store.clearError,
+    fetchLinksForDocument: store.fetchLinksForDocument,
+    fetchGraphData: store.fetchGraphData,
     createCodeLink: handleCreateCodeLink,
     createDocumentLink: handleCreateDocumentLink,
+    removeCodeLink: store.removeCodeLink,
+    removeDocumentLink: store.removeDocumentLink,
   };
 }

@@ -158,8 +158,8 @@ export function registerLinkingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const { linkRepo } = createLinkingDependencies(rootPath);
-      const handler = new GetLinksForDocumentHandler(linkRepo);
+      const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);
+      const handler = new GetLinksForDocumentHandler(linkRepo, codeFilePort);
       const result = await handler.execute(new GetLinksForDocumentQuery(documentId));
       return result.fold<IpcResponse<unknown>>((dto) => ({ success: true, data: dto }), (error) => ({ success: false, error }));
     } catch (error) {

@@ -9,7 +9,8 @@
     "**/.doclink/**",
     "**/*.log",
     "coverage",
-    "dist-electron"
+    "dist-electron",
+    "public"
   ],
   "schemaVersion": "1.0",
   "docFolder": {

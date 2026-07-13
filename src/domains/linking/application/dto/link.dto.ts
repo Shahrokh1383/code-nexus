@@ -5,6 +5,8 @@ export interface CodeToDocLinkDto {
   type: 'DIRECT' | 'INHERITED';
   createdAt: string;
   migratedAt: string | null;
+  codeFileName: string;
+  codeFilePath: string;
 }
 
 export interface CodeFileSummaryDto {
