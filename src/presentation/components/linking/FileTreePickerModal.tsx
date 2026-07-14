@@ -1,8 +1,10 @@
-import { JSX } from 'react';
+import { JSX, useState } from 'react';
 import { useFileTreePicker } from '../../hooks/linking/useFileTreePicker';
 import { FileTreeNode } from './FileTreeNode';
 import { DocumentSourceList } from './DocumentSourceList';
 import { LinkingTabs } from './LinkingTabs';
+import { SearchBar } from '../common/SearchBar';
+import { useFilteredFileTree, getAllFolderIds } from '../../hooks/linking/useFilteredFileTree';
 import './FileTreePickerModal.css';
 
 interface FileTreePickerModalProps {
@@ -21,17 +23,20 @@ export function FileTreePickerModal({
   onLink,
 }: FileTreePickerModalProps): JSX.Element | null {
   const picker = useFileTreePicker(isOpen, documents, initialDocumentId);
+  const [codeSearchTerm, setCodeSearchTerm] = useState('');
+
+  const filteredTree = useFilteredFileTree(picker.tree, codeSearchTerm);
+
+  // Derive expanded folder IDs: when searching, expand all matching folders to show matches
+  const expandedFolderIds = codeSearchTerm.trim() ? new Set(filteredTree ? getAllFolderIds(filteredTree) : []) : new Set<string>();
 
   const handleLink = () => {
-    // Safety check: Ensure we actually have a target document
     if (!initialDocumentId) return;
-
     if (picker.activeTab === 'code') {
       if (picker.selectedFileIds.size === 0) return;
       onLink(Array.from(picker.selectedFileIds), initialDocumentId, 'code');
     } else {
       if (picker.selectedDocumentIds.size === 0) return;
-      // Filter out the target document just in case it slipped into the selection
       const sourceIds = Array.from(picker.selectedDocumentIds).filter(id => id !== initialDocumentId);
       if (sourceIds.length === 0) return;
       onLink(sourceIds, initialDocumentId, 'document');
@@ -47,7 +52,7 @@ export function FileTreePickerModal({
   if (!isOpen) return null;
 
   const isLinkDisabled = 
-    !initialDocumentId || // Disable if no target document is selected in the parent
+    !initialDocumentId ||
     (picker.activeTab === 'code' && picker.selectedFileIds.size === 0) ||
     (picker.activeTab === 'document' && picker.selectedDocumentIds.size === 0);
 
@@ -62,8 +67,6 @@ export function FileTreePickerModal({
         </div>
 
         <div className="file-picker-body">
-          {/* TargetDocumentSelector removed: Target is now fixed via initialDocumentId */}
-
           <LinkingTabs 
             tabs={tabs} 
             activeTab={picker.activeTab} 
@@ -72,6 +75,13 @@ export function FileTreePickerModal({
 
           {picker.activeTab === 'code' && (
             <div className="file-picker-tree">
+              <SearchBar
+                value={codeSearchTerm}
+                onChange={setCodeSearchTerm}
+                placeholder="Search files..."
+                onClear={() => setCodeSearchTerm('')}
+                aria-label="Search files"
+              />
               {picker.isScanning || !picker.tree ? (
                 <div className="text-center p-4 text-secondary">
                   <i className="fa-solid fa-spinner fa-spin me-2"></i> Scanning project...
@@ -84,11 +94,12 @@ export function FileTreePickerModal({
                     </button>
                   </div>
                   <FileTreeNode
-                    node={picker.tree}
+                    node={filteredTree ?? picker.tree}
                     depth={0}
                     selectedIds={picker.selectedFileIds}
                     onToggleFile={picker.toggleFile}
                     onToggleFolder={picker.toggleFolder}
+                    expandedFolderIds={expandedFolderIds}
                   />
                 </>
               )}

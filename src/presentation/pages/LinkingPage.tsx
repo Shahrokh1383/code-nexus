@@ -12,6 +12,7 @@ import { FileTreePickerModal } from '../components/linking/FileTreePickerModal';
 import { PersistentDocumentSelector } from '../components/linking/PersistentDocumentSelector';
 import { LinkingTabs } from '../components/linking/LinkingTabs';
 import '../styles/linking.css';
+import '../styles/search-bar.css';
 import '../components/linking/UnlinkedFilesList.css';
 
 export function LinkingPage(): JSX.Element {

@@ -1,4 +1,4 @@
-import { JSX, useState, useMemo } from 'react';
+import { JSX, useState, useMemo, useEffect } from 'react';
 import { FolderNodeDto } from '../../../domains/filesystem/application/dto/folder-node.dto';
 import { FileNodeDto } from '../../../domains/filesystem/application/dto/file-node.dto';
 import { isFolderNode, getAllFileIds } from '../../hooks/linking/useFileTreePicker';
@@ -9,6 +9,7 @@ interface FileTreeNodeProps {
   selectedIds: Set<string>;
   onToggleFile: (id: string) => void;
   onToggleFolder: (folder: FolderNodeDto, select: boolean) => void;
+  expandedFolderIds?: Set<string>; // NEW
 }
 
 export function FileTreeNode({ 
@@ -16,11 +17,29 @@ export function FileTreeNode({
   depth, 
   selectedIds, 
   onToggleFile, 
-  onToggleFolder 
+  onToggleFolder,
+  expandedFolderIds,
 }: FileTreeNodeProps): JSX.Element {
-  const [expanded, setExpanded] = useState(false);
   const folder = isFolderNode(node) ? node : null;
   const file = !folder ? (node as FileNodeDto) : null;
+  
+  // Local expanded state; if external control is provided, use that
+  const [localExpanded, setLocalExpanded] = useState(false);
+  const isExpanded = folder
+    ? (expandedFolderIds ? expandedFolderIds.has(folder.id) : localExpanded)
+    : false;
+
+  // Sync local with external when controlled
+  useEffect(() => {
+    if (folder && expandedFolderIds) {
+      setLocalExpanded(expandedFolderIds.has(folder.id));
+    }
+  }, [folder, expandedFolderIds]);
+
+  const toggleExpand = () => {
+    if (expandedFolderIds) return; // fully controlled, do nothing; parent handles expansion
+    setLocalExpanded(prev => !prev);
+  };
 
   const allChildIds = useMemo(() => (folder ? getAllFileIds(folder) : []), [folder]);
   const selectedChildCount = folder ? allChildIds.filter(id => selectedIds.has(id)).length : 0;
@@ -31,8 +50,6 @@ export function FileTreeNode({
     if (!folder) return;
     onToggleFolder(folder, !isFolderChecked);
   };
-
-  const toggleExpand = () => setExpanded(prev => !prev);
 
   if (file) {
     return (
@@ -65,12 +82,12 @@ export function FileTreeNode({
             />
           </label>
           <span className="tree-folder-icon" onClick={toggleExpand}>
-            <i className={`fa-solid ${expanded ? 'fa-chevron-down' : 'fa-chevron-right'} me-2`}></i>
-            <i className={`fa-solid ${expanded ? 'fa-folder-open' : 'fa-folder'} text-warning me-2`}></i>
+            <i className={`fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'} me-2`}></i>
+            <i className={`fa-solid ${isExpanded ? 'fa-folder-open' : 'fa-folder'} text-warning me-2`}></i>
             <span>{folder.name}</span>
           </span>
         </div>
-        {expanded && (
+        {isExpanded && (
           <div className="tree-children">
             {folder.children.map(child => (
               <FileTreeNode
@@ -80,6 +97,7 @@ export function FileTreeNode({
                 selectedIds={selectedIds}
                 onToggleFile={onToggleFile}
                 onToggleFolder={onToggleFolder}
+                expandedFolderIds={expandedFolderIds}
               />
             ))}
           </div>

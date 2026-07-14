@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 import { useSearchableList } from '../../hooks/linking/useSearchableList';
+import { SearchBar } from '../common/SearchBar';
 
 interface DocumentOption {
   id: string;
@@ -45,31 +46,15 @@ export function PersistentDocumentSelector({
 
   return (
     <div className="document-selector">
-      <div className="document-selector__search">
-        <i className="fa-solid fa-search document-selector__search-icon" />
-        <input
-          ref={inputRef}
-          type="text"
-          className="document-selector__input"
-          placeholder="Search documents..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={handleKeyDown}
-          aria-label="Search documents"
-        />
-        {searchTerm && (
-          <button
-            type="button"
-            className="document-selector__clear-btn"
-            onClick={clearSearch}
-            aria-label="Clear search"
-            title="Clear search"
-          >
-            <i className="fa-solid fa-times" />
-          </button>
-        )}
-      </div>
-
+      <SearchBar
+        value={searchTerm}
+        onChange={setSearchTerm}
+        placeholder="Search documents..."
+        onClear={clearSearch}
+        onKeyDown={handleKeyDown}
+        aria-label="Search documents"
+        inputRef={inputRef}
+      />
       <ul 
         ref={listRef} 
         className="document-selector__list" 

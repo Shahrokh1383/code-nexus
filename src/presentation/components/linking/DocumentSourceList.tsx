@@ -1,4 +1,6 @@
 import { JSX } from 'react';
+import { useSearchableList } from '../../hooks/linking/useSearchableList';
+import { SearchBar } from '../common/SearchBar';
 
 interface DocumentOption {
   id: string;
@@ -18,19 +20,42 @@ export function DocumentSourceList({
   onToggleDocument,
   onSelectAll,
 }: DocumentSourceListProps): JSX.Element {
+  const {
+    searchTerm,
+    setSearchTerm,
+    filteredItems,
+    inputRef,
+    handleKeyDown,
+    clearSearch,
+  } = useSearchableList<DocumentOption>({
+    items: documents,
+    getId: (doc) => doc.id,
+    getSearchText: (doc) => doc.title,
+    onSelect: () => {},
+  });
+
   const isAllSelected = documents.length > 0 && selectedIds.size === documents.length;
 
   return (
     <div className="file-picker-tree" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-      <div className="tree-actions mb-2">
+      <SearchBar
+        value={searchTerm}
+        onChange={setSearchTerm}
+        placeholder="Search documents..."
+        onClear={clearSearch}
+        onKeyDown={handleKeyDown}
+        aria-label="Search documents"
+        inputRef={inputRef}
+      />
+      <div className="tree-actions mb-2 mt-2">
         <button className="btn btn-sm btn-ghost" onClick={onSelectAll}>
           {isAllSelected ? 'Deselect All' : 'Select All'}
         </button>
       </div>
-      {documents.length === 0 ? (
-        <p className="text-secondary p-3 text-center">No other documents available.</p>
+      {filteredItems.length === 0 ? (
+        <p className="text-secondary p-3 text-center">No documents found.</p>
       ) : (
-        documents.map(doc => {
+        filteredItems.map(doc => {
           const isChecked = selectedIds.has(doc.id);
           return (
             <label

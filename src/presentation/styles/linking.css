@@ -72,33 +72,6 @@
   height: 100%;
   background-color: transparent;
 }
-
-.document-selector__search {
-  position: relative;
-  margin-bottom: var(--cn-space-2);
-}
-
-.document-selector__search-icon {
-  position: absolute;
-  left: var(--cn-space-3);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--cn-text-secondary);
-  font-size: var(--cn-font-size-sm);
-  pointer-events: none;
-}
-
-.document-selector__input {
-  width: 100%;
-  padding: var(--cn-space-2) var(--cn-space-3) var(--cn-space-2) calc(var(--cn-space-3) + 16px + var(--cn-space-2));
-  background-color: var(--cn-bg-primary);
-  border: 1px solid var(--cn-border-default);
-  border-radius: var(--cn-radius-md);
-  color: var(--cn-text-primary);
-  font-size: var(--cn-font-size-sm);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
 .document-selector__input:focus {
   border-color: var(--cn-primary);
   box-shadow: 0 0 0 3px var(--cn-primary-muted);
@@ -107,25 +80,6 @@
 
 .document-selector__input::placeholder {
   color: var(--cn-text-secondary);
-}
-
-.document-selector__clear-btn {
-  position: absolute;
-  right: var(--cn-space-2);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: var(--cn-radius-sm);
-  color: var(--cn-text-secondary);
-  font-size: var(--cn-font-size-xs);
-  cursor: pointer;
 }
 
 .document-selector__clear-btn:hover {
