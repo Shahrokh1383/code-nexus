@@ -28,6 +28,10 @@ import { DateTime } from '../../../src/domains/shared-kernel/types/date-time';
 import { PathUtils } from '../../../src/domains/shared-kernel/utils/path-utils';
 import { DocumentDeletedEvent } from '../../../src/domains/documentation/domain/events/document-deleted';
 
+// Linking Infrastructure Imports for Self-Healing Sync
+import { LinkJsonRepository } from '../../../src/domains/linking/infrastructure/repository/link-json.repository';
+import { DocumentLinkJsonRepository } from '../../../src/domains/linking/infrastructure/repository/document-link-json.repository';
+
 interface IpcResponse<T> {
   success: boolean;
   data?: T;
@@ -234,7 +238,7 @@ export function registerDocumentationHandlers(): void {
     }
   );
 
-  // ── SYNC FILES (add new, remove deleted) ──
+  // ── SYNC FILES (add new, remove deleted, self-heal link counts) ──
   ipcMain.handle(
     IpcChannels.DOCUMENTATION_SYNC_FILES,
     async (_event, workspaceId: unknown): Promise<IpcResponse<void>> => {
@@ -291,6 +295,30 @@ export function registerDocumentationHandlers(): void {
             0
           );
           await documentRepo.save(document);
+        }
+
+        // ─── SELF-HEALING: Recalculate link counts for all documents ───────────
+        try {
+          const linkRepo = new LinkJsonRepository(rootPath);
+          const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
+          
+          // Re-fetch existing docs to include newly added ones
+          const allCurrentDocs = await documentRepo.findAll();
+
+          for (const doc of allCurrentDocs) {
+            const codeLinks = await linkRepo.findByDocument(doc.id);
+            const parentDocLinks = await docLinkRepo.findByParentDocument(doc.id);
+            const childDocLinks = await docLinkRepo.findByChildDocument(doc.id);
+            
+            const totalCount = codeLinks.length + parentDocLinks.length + childDocLinks.length;
+            
+            if (doc.linkCount !== totalCount) {
+              doc.updateLinkCount(totalCount);
+              await documentRepo.save(doc);
+            }
+          }
+        } catch (error) {
+          console.error('Failed to self-heal document link counts', error);
         }
 
         return { success: true };

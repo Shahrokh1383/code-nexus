@@ -8,6 +8,7 @@ import { DocumentLinkValidatorService } from '../../../src/domains/linking/domai
 import { LinkMigrationService } from '../../../src/domains/linking/domain/services/link-migration.service';
 import { ICodeFileQueryPort } from '../../../src/domains/linking/application/ports/code-file-query.port';
 import { CodeFileSummaryDto } from '../../../src/domains/linking/application/dto/link.dto';
+import { DocumentId } from '../../../src/domains/documentation/domain/value-objects/document-id';
 
 // Commands & Handlers
 import { CreateLinkCommand } from '../../../src/domains/linking/application/commands/create-link.command';
@@ -34,10 +35,16 @@ import { GetDocumentChildrenQuery } from '../../../src/domains/linking/applicati
 import { GetDocumentChildrenHandler } from '../../../src/domains/linking/application/handlers/get-document-children.handler';
 import { GetDocumentParentsQuery } from '../../../src/domains/linking/application/queries/get-document-parents.query';
 import { GetDocumentParentsHandler } from '../../../src/domains/linking/application/handlers/get-document-parents.handler';
+
 import { IDomainEventHandler } from '../../../src/domains/shared-kernel/events/domain-event-handler.interface';
-// Event‑driven cross‑context migration
 import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
 import { DocumentDeletedEvent } from '../../../src/domains/documentation/domain/events/document-deleted';
+
+// Linking Domain Events
+import { LinkCreatedEvent } from '../../../src/domains/linking/domain/events/link-created';
+import { LinkBrokenEvent } from '../../../src/domains/linking/domain/events/link-broken';
+import { DocumentLinkCreatedEvent } from '../../../src/domains/linking/domain/events/document-link-created';
+import { DocumentLinkBrokenEvent } from '../../../src/domains/linking/domain/events/document-link-broken';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -107,7 +114,8 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
 
 // Global workspace root for event‑driven operations (single‑window app)
 let currentWorkspaceRoot: string | null = null;
- class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeletedEvent> {
+
+class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeletedEvent> {
   async handle(event: DocumentDeletedEvent): Promise<void> {
     const rootPath = currentWorkspaceRoot;
     if (!rootPath) return;
@@ -135,6 +143,75 @@ let currentWorkspaceRoot: string | null = null;
     } catch (error) {
       console.error('Failed to migrate links after document deletion', error);
     }
+  }
+}
+
+// ─── Cross-Domain Event Subscribers for Link Count Synchronization ───────────
+
+async function recalculateAndSaveDocumentLinkCount(rootPath: string, documentId: string): Promise<void> {
+  try {
+    const db = new JsonDatabase(rootPath);
+    const docRepo = new DocumentJsonRepository(db);
+    const linkRepo = new LinkJsonRepository(rootPath);
+    const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
+    
+    const docId = new DocumentId(documentId);
+    const doc = await docRepo.findById(docId);
+    if (!doc) return;
+
+    const codeLinks = await linkRepo.findByDocument(docId);
+    const parentDocLinks = await docLinkRepo.findByParentDocument(docId);
+    const childDocLinks = await docLinkRepo.findByChildDocument(docId);
+    
+    const totalCount = codeLinks.length + parentDocLinks.length + childDocLinks.length;
+    
+    if (doc.linkCount !== totalCount) {
+      doc.updateLinkCount(totalCount);
+      await docRepo.save(doc);
+    }
+  } catch (error) {
+    console.error(`Failed to update document link count for ${documentId}`, error);
+  }
+}
+
+class LinkCreatedEventHandler implements IDomainEventHandler<LinkCreatedEvent> {
+  async handle(event: LinkCreatedEvent): Promise<void> {
+    const rootPath = currentWorkspaceRoot;
+    if (!rootPath) return;
+    
+    // In CodeToDocLink, category is 'code', sourceId is codeFileId, targetId is documentId
+    if (event.category === 'code') {
+      await recalculateAndSaveDocumentLinkCount(rootPath, event.targetId);
+    }
+  }
+}
+
+class LinkBrokenEventHandler implements IDomainEventHandler<LinkBrokenEvent> {
+  async handle(event: LinkBrokenEvent): Promise<void> {
+    const rootPath = currentWorkspaceRoot;
+    if (!rootPath) return;
+    
+    if (event.category === 'code') {
+      await recalculateAndSaveDocumentLinkCount(rootPath, event.targetId);
+    }
+  }
+}
+
+class DocumentLinkCreatedEventHandler implements IDomainEventHandler<DocumentLinkCreatedEvent> {
+  async handle(event: DocumentLinkCreatedEvent): Promise<void> {
+    const rootPath = currentWorkspaceRoot;
+    if (!rootPath) return;
+    await recalculateAndSaveDocumentLinkCount(rootPath, event.parentDocumentId);
+    await recalculateAndSaveDocumentLinkCount(rootPath, event.childDocumentId);
+  }
+}
+
+class DocumentLinkBrokenEventHandler implements IDomainEventHandler<DocumentLinkBrokenEvent> {
+  async handle(event: DocumentLinkBrokenEvent): Promise<void> {
+    const rootPath = currentWorkspaceRoot;
+    if (!rootPath) return;
+    await recalculateAndSaveDocumentLinkCount(rootPath, event.parentDocumentId);
+    await recalculateAndSaveDocumentLinkCount(rootPath, event.childDocumentId);
   }
 }
 
@@ -310,7 +387,11 @@ export function registerLinkingHandlers(): void {
     }
   );
 
-  // Register cross‑context event listener for automatic link migration on document deletion
+  // ─── Register cross‑context event listeners ───────────────────────────────
   const eventBus = EventBus.getInstance();
   eventBus.register('DocumentDeletedEvent', new DocumentDeletedEventHandler());
+  eventBus.register('LinkCreatedEvent', new LinkCreatedEventHandler());
+  eventBus.register('LinkBrokenEvent', new LinkBrokenEventHandler());
+  eventBus.register('DocumentLinkCreatedEvent', new DocumentLinkCreatedEventHandler());
+  eventBus.register('DocumentLinkBrokenEvent', new DocumentLinkBrokenEventHandler());
 }

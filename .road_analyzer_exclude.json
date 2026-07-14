@@ -19,9 +19,7 @@
     "src\\presentation\\styles\\documentation.css",
     "src\\presentation\\pages\\WelcomePage.tsx",
     "src\\presentation\\pages\\FileBrowserPage.tsx",
-    "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\presentation\\components\\file-tree",
-    "src\\presentation\\components\\documentation",
     "src\\presentation\\components\\welcome",
     "src\\domains\\project",
     "src\\presentation\\components\\tracking",
@@ -33,12 +31,17 @@
     "src\\domains\\shared-kernel",
     "src\\infrastructure",
     "src\\application",
-    "src\\domains\\documentation",
-    "src\\domains\\filesystem"
+    "src\\domains\\filesystem",
+    "src\\presentation\\components\\linking",
+    "src\\presentation\\hooks\\linking",
+    "src\\presentation\\styles",
+    "src\\presentation\\utils",
+    "src\\domains",
+    "src\\presentation\\pages\\LinkingPage.tsx"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-14T10:46:33.761Z",
+  "lastModified": "2026-07-14T11:10:35.152Z",
   "version": 1
 }
