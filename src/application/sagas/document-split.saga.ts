@@ -52,8 +52,11 @@ export class DocumentSplitSaga {
 
     if (childrenResult.isFailure) return;
 
-    const childIds = childrenResult.getValue() ?? [];
-    if (childIds.length === 0) return;
+    // childrenResult now returns DocumentLinkDto[], extract child document IDs
+    const childrenDtos = childrenResult.getValue() ?? [];
+    if (childrenDtos.length === 0) return;
+
+    const childIds = childrenDtos.map(dto => dto.childDocumentId);
 
     // 2. Migrate code links from deleted parent to all children
     const migrateResult = await this.migrateLinksHandler.execute(
@@ -75,6 +78,5 @@ export class DocumentSplitSaga {
             }
         }
     }
-
   }
 }

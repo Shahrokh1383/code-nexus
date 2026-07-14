@@ -16,6 +16,46 @@
       "type": "DIRECT",
       "createdAt": "2026-07-14T10:01:12.419Z",
       "migratedAt": null
+    },
+    {
+      "id": "5b5399ce-9619-4c23-be2e-d7cb6e792268",
+      "codeFileId": "774f4855-da03-40a4-946c-b2c6058c19f2",
+      "documentId": "9e9b8708-64c1-4303-8aea-8476a368fb36",
+      "type": "INHERITED",
+      "createdAt": "2026-07-14T10:41:39.075Z",
+      "migratedAt": "2026-07-14T10:41:39.075Z"
+    },
+    {
+      "id": "65c38b25-ad3b-4094-8b41-9e295ad193df",
+      "codeFileId": "774f4855-da03-40a4-946c-b2c6058c19f2",
+      "documentId": "2a3cbd3a-5986-4481-b346-027a1ad5612d",
+      "type": "INHERITED",
+      "createdAt": "2026-07-14T10:41:39.074Z",
+      "migratedAt": "2026-07-14T10:41:39.074Z"
+    },
+    {
+      "id": "dec88bfd-365a-4c62-abd6-32f9372140f6",
+      "codeFileId": "60289661-d017-44f4-a9f6-4e29699949b7",
+      "documentId": "9e9b8708-64c1-4303-8aea-8476a368fb36",
+      "type": "INHERITED",
+      "createdAt": "2026-07-14T10:41:39.075Z",
+      "migratedAt": "2026-07-14T10:41:39.075Z"
+    },
+    {
+      "id": "2775a7f5-c3b3-4354-b181-971972fe1023",
+      "codeFileId": "d540d539-248c-46a8-b29b-4268bab1000f",
+      "documentId": "9e9b8708-64c1-4303-8aea-8476a368fb36",
+      "type": "INHERITED",
+      "createdAt": "2026-07-14T10:41:39.075Z",
+      "migratedAt": "2026-07-14T10:41:39.075Z"
+    },
+    {
+      "id": "6a2f04f6-dbb8-4f5e-96c0-bc9398955831",
+      "codeFileId": "d540d539-248c-46a8-b29b-4268bab1000f",
+      "documentId": "2a3cbd3a-5986-4481-b346-027a1ad5612d",
+      "type": "INHERITED",
+      "createdAt": "2026-07-14T10:41:39.074Z",
+      "migratedAt": "2026-07-14T10:41:39.074Z"
     }
   ]
 }

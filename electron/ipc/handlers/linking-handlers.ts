@@ -107,13 +107,7 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
 
 // Global workspace root for event‑driven operations (single‑window app)
 let currentWorkspaceRoot: string | null = null;
-
-/**
- * Listens to DocumentDeletedEvent from the Documentation context.
- * If the deleted document has children (other documents linked as children),
- * migrates all code‑to‑document links to those children automatically.
- */
-class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeletedEvent> {
+ class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeletedEvent> {
   async handle(event: DocumentDeletedEvent): Promise<void> {
     const rootPath = currentWorkspaceRoot;
     if (!rootPath) return;
@@ -126,8 +120,10 @@ class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeleted
       );
 
       if (childrenResult.isFailure) return;
-      const childrenIds = childrenResult.getValue();
-      if (!childrenIds || childrenIds.length === 0) return;
+      const childrenDtos = childrenResult.getValue();
+      if (!childrenDtos || childrenDtos.length === 0) return;
+
+      const childrenIds = childrenDtos.map(dto => dto.childDocumentId);
 
       const linkRepo = new LinkJsonRepository(rootPath);
       const migrationService = new LinkMigrationService();
