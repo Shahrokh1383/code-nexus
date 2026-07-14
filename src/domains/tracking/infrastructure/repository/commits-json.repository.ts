@@ -16,6 +16,7 @@ interface CommitEntrySchema {
   documentId: string;
   fileHashIds: string[];
   filePaths: string[];
+  hashValues: string[];
   committedAt: string;
   status: 'PENDING' | 'APPROVED';
 }
@@ -88,10 +89,11 @@ export class CommitsJsonRepository implements ICommitRepository {
   private mapToEntity(entry: CommitEntrySchema): GranularCommit {
     const fileHashes = entry.filePaths.map((path, idx) => {
       const hashId = entry.fileHashIds[idx] ?? '';
+      const hashValue = entry.hashValues[idx] ?? '';
       return new FileHash(
         new FileHashId(hashId),
         new FilePath(path),
-        new HashValue(''), // hash value not needed for commit display
+        new HashValue(hashValue),
         DateTime.now(),
         new CommitId(entry.id)
       );
@@ -111,6 +113,7 @@ export class CommitsJsonRepository implements ICommitRepository {
       documentId: commit.documentId.value,
       fileHashIds: commit.fileHashes.map((h) => h.id.value),
       filePaths: commit.fileHashes.map((h) => h.filePath.value),
+      hashValues: commit.fileHashes.map((h) => h.hashValue.value),
       committedAt: commit.committedAt.toISO(),
       status: commit.status.isApproved ? 'APPROVED' : 'PENDING',
     };

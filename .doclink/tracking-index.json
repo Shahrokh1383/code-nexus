@@ -2,7 +2,7 @@
   "version": "1.0",
   "hashes": {
     ".gitignore": {
-      "id": "eb697856-c230-4872-9f28-7c35beeb21b8",
+      "id": "5cfbadbe-998d-468c-a943-b1c302b4f4a7",
       "filePath": ".gitignore",
       "hashValue": "c7df2efb86cff9bd6db9f13710010e77110d7f96b7476b6e520c20f1223f8f85",
       "committedAt": null,
@@ -10,7 +10,7 @@
       "diff": null
     },
     ".road_analyzer_exclude.json": {
-      "id": "66c35422-d59f-4ac9-9c42-6977ee86d1c5",
+      "id": "9c8e1684-392d-49ed-91c7-8f5c86029eeb",
       "filePath": ".road_analyzer_exclude.json",
       "hashValue": "fc31f78cecd3fb91f84623edb4aebf58c4a97290bd6281b15970df87322eb407",
       "committedAt": null,
@@ -18,7 +18,7 @@
       "diff": null
     },
     "content.txt": {
-      "id": "80f5cda2-5b80-40d8-8d52-c0bb21ee2f8c",
+      "id": "e503fd9a-5af1-4701-97aa-79ee2ef87eb3",
       "filePath": "content.txt",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedAt": null,
@@ -26,7 +26,7 @@
       "diff": null
     },
     "electron-builder.json": {
-      "id": "51e39118-09ca-4676-a624-f7999ca5cea9",
+      "id": "289c423c-8fc2-4ba1-9802-c99c73b78a90",
       "filePath": "electron-builder.json",
       "hashValue": "7168ec2d263374cc6a4cc5afa912a22df60bc75cc91ca768f41417b793fd30bd",
       "committedAt": null,
@@ -34,7 +34,7 @@
       "diff": null
     },
     "eslint.config.js": {
-      "id": "ad89794f-99de-488a-857f-369edaf56ee6",
+      "id": "4c4f8c9f-0a51-466a-b74b-8a41939a109a",
       "filePath": "eslint.config.js",
       "hashValue": "a0974b7c10bbd129ed5de056119390c6898f8a21bd35583b632ac89a30451a24",
       "committedAt": null,
@@ -42,7 +42,7 @@
       "diff": null
     },
     "fix.txt": {
-      "id": "a6719642-7de8-4f92-863e-a5a6df99035b",
+      "id": "fdf584e6-9546-430d-9b7d-d86e6a7a908d",
       "filePath": "fix.txt",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedAt": null,
@@ -50,7 +50,7 @@
       "diff": null
     },
     "fix2.txt": {
-      "id": "a827742e-54ea-438a-9391-1c3854873604",
+      "id": "01fe2116-9e98-4158-b84c-85ee2c156b96",
       "filePath": "fix2.txt",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedAt": null,
@@ -58,7 +58,7 @@
       "diff": null
     },
     "index.html": {
-      "id": "55fd9bb9-4519-424a-bdb9-7edb65801568",
+      "id": "e94ab78b-7c78-4f71-a670-3665267f5ac3",
       "filePath": "index.html",
       "hashValue": "534b66b67abf7e06df1119f8d23580e51b4ffe0a8d36e39ab9609b3abfc57aa4",
       "committedAt": null,
@@ -66,7 +66,7 @@
       "diff": null
     },
     "package-lock.json": {
-      "id": "e62f115c-ff87-461b-8db8-6895057a4cbd",
+      "id": "5327742d-2f5b-440a-8b2f-11db219fa3ab",
       "filePath": "package-lock.json",
       "hashValue": "069a81e4684a125fb04c143e78e088f90d2bf1e7eece9e7c17d97c9ebd29a1ed",
       "committedAt": null,
@@ -74,7 +74,7 @@
       "diff": null
     },
     "package.json": {
-      "id": "ca703244-a7f0-4351-951d-e78129cc86a1",
+      "id": "c27ee4bd-0f48-4dca-8116-96e5fcebacf5",
       "filePath": "package.json",
       "hashValue": "d0e08a4114f9e12c275b54ff265e0ae9d86a7c5b4d99878991d278fb9ca04a22",
       "committedAt": null,
@@ -82,7 +82,7 @@
       "diff": null
     },
     "README.md": {
-      "id": "82be169a-0fc0-44e8-a356-a07cba6b7cb6",
+      "id": "37906f13-5d48-4467-ab7a-5655ed045ee9",
       "filePath": "README.md",
       "hashValue": "090b7a14f433affa5e60c4b8ea5f4c81f155b7a8d65c57494e85a0103e5751e6",
       "committedAt": null,
@@ -90,7 +90,7 @@
       "diff": null
     },
     "reminder.md": {
-      "id": "55c2122e-1f79-45d1-9511-c623a57a6199",
+      "id": "d98bf336-4704-41fd-9dd0-d8188579fc0f",
       "filePath": "reminder.md",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedAt": null,
@@ -98,7 +98,7 @@
       "diff": null
     },
     "roadmap.txt": {
-      "id": "e93c0c7b-bda6-44ca-a515-012eb0243dc7",
+      "id": "1ec8ba75-9f0a-4a0f-b6fc-ffa2695c9d47",
       "filePath": "roadmap.txt",
       "hashValue": "dce967c0b2eb9a43ffe52ff24f6799d237a6782b21aef465b82f8204483add52",
       "committedAt": null,
@@ -106,7 +106,7 @@
       "diff": null
     },
     "todo.md": {
-      "id": "25f0f03b-671d-4a03-86e4-d776f98e0e57",
+      "id": "70a9dda2-5672-424d-b2c6-961343d14c66",
       "filePath": "todo.md",
       "hashValue": "67a668c32257634b11223e25cc31fdda55a8c4c8e9a2d55e524f24bbe9fd4a9f",
       "committedAt": null,
@@ -114,7 +114,7 @@
       "diff": null
     },
     "tsconfig.electron.json": {
-      "id": "d1ae5f6e-db0e-4aa7-84e4-7c793ab9e3e6",
+      "id": "acca0a3a-1345-4761-a405-3d826f1d4857",
       "filePath": "tsconfig.electron.json",
       "hashValue": "ab76fd45e1f2770205db848c3fb95ad7f07849294f95d5d018bb5d9b67657c77",
       "committedAt": null,
@@ -122,7 +122,7 @@
       "diff": null
     },
     "tsconfig.json": {
-      "id": "9a84fd07-a431-48f7-b9e3-b9844e9f7a87",
+      "id": "084349bb-1d5a-4c64-af87-bf7bfd9b86c6",
       "filePath": "tsconfig.json",
       "hashValue": "14bdbfb84ee90f5619c93c601278a30ca34b0e063ebbe95e26b0d2161ee2ba78",
       "committedAt": null,
@@ -130,7 +130,7 @@
       "diff": null
     },
     "tsconfig.test.json": {
-      "id": "3a633e93-2a02-49c8-8453-563a636bd60d",
+      "id": "fbc3b604-9ed2-4a25-8fd3-47f0c2f4624e",
       "filePath": "tsconfig.test.json",
       "hashValue": "851ae7786274da504f4aeaa5eff146f25a4a5527af4a11290303ceefc87987d1",
       "committedAt": null,
@@ -138,7 +138,7 @@
       "diff": null
     },
     "vite.config.js": {
-      "id": "4a100914-a9e6-4229-8d4b-e298cede5333",
+      "id": "2690b041-c0ae-43f8-8f8e-cf49b7b03033",
       "filePath": "vite.config.js",
       "hashValue": "369b62429f0a6af8e9e9d387281dee620547b93b8282673cf93561ed774a2db1",
       "committedAt": null,
@@ -146,7 +146,7 @@
       "diff": null
     },
     "webpack.config.js": {
-      "id": "a6d88ab0-d5ae-4bc3-a64d-85124406eb16",
+      "id": "1515d807-6225-4ce3-b212-32a6a84e0260",
       "filePath": "webpack.config.js",
       "hashValue": "e53bd877b6b7460d401f409107279be512b028783a4f5ce5e42c60eab022b856",
       "committedAt": null,
@@ -154,7 +154,7 @@
       "diff": null
     },
     "electron/main.ts": {
-      "id": "186846a8-916a-4af0-9e75-0578df816569",
+      "id": "ab330c95-3741-467e-9e9d-6998b69519b6",
       "filePath": "electron/main.ts",
       "hashValue": "0be4e4e0dc198fe6a13bb9f558471aaadb312efcde32abe0ce4c529ab1f55bea",
       "committedAt": null,
@@ -162,7 +162,7 @@
       "diff": null
     },
     "electron/preload.ts": {
-      "id": "56ca6349-9027-4835-81bc-8c06d1310f6c",
+      "id": "bc76dcb7-e1ef-4819-85d6-873c5c74e508",
       "filePath": "electron/preload.ts",
       "hashValue": "8014770a0bf3fc16d00793450a20e29d83e7b0969b9de87ec1010057d1428cd7",
       "committedAt": null,
@@ -170,7 +170,7 @@
       "diff": null
     },
     "src/App.tsx": {
-      "id": "65ed3eb9-6d38-4fa6-9199-abd53027e767",
+      "id": "645478c3-f95f-4d54-a21e-8e24d4d075df",
       "filePath": "src/App.tsx",
       "hashValue": "6584dd7a1ec7736519230ab6af9235b1e78087ef51da90656d61964626400d91",
       "committedAt": null,
@@ -178,7 +178,7 @@
       "diff": null
     },
     "src/main.tsx": {
-      "id": "3c4aeb2a-a5a9-40c6-bbb4-bea118877a69",
+      "id": "b2e67928-2ce7-43aa-885a-51bc14914a42",
       "filePath": "src/main.tsx",
       "hashValue": "d174408b13c8fca862208847caa4876473039cff2a9b75a0fd69c94b948ebb0e",
       "committedAt": null,
@@ -186,7 +186,7 @@
       "diff": null
     },
     "src/setupTests.ts": {
-      "id": "0410d92d-d415-4713-ba86-f89eef7b3a6a",
+      "id": "e9c6137c-e46d-4571-8118-32c0fb719d67",
       "filePath": "src/setupTests.ts",
       "hashValue": "9e8d4851d9914f348293992c3c1d910faa7b95f3f19dc92437eeaff37f774abb",
       "committedAt": null,
@@ -194,7 +194,7 @@
       "diff": null
     },
     "src/vite-env.d.ts": {
-      "id": "aa29250a-a439-46e7-b4b4-d92468b80f1a",
+      "id": "1467fe9e-0be0-4d3e-b34f-44e774d5c967",
       "filePath": "src/vite-env.d.ts",
       "hashValue": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
       "committedAt": null,
@@ -202,7 +202,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Architecture_Diagram.png": {
-      "id": "5b1bc7f9-2564-4b87-bc2d-a7016e7c226d",
+      "id": "ebedad9a-0221-4274-97da-9993e86c8913",
       "filePath": "docs/guideline/CodeNexus_Architecture_Diagram.png",
       "hashValue": "224e12232c705926be4d064ff5d76676694d9cbb324dfeb4bad97c222e5e35ea",
       "committedAt": null,
@@ -210,7 +210,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Constitution.md": {
-      "id": "6699fc5b-9d96-433e-ba77-da6c88af6395",
+      "id": "6128c8d0-9b5c-4129-aeab-2a95f7123fff",
       "filePath": "docs/guideline/CodeNexus_Constitution.md",
       "hashValue": "09ea99afc34193d9ec63dc3558e959878e583b3b9d525e2c29124f54be7506ee",
       "committedAt": null,
@@ -218,7 +218,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_DataFlows.png": {
-      "id": "42ef9011-bae3-4a7e-80ea-060febc322f7",
+      "id": "5227e7d9-53c1-421c-8acf-250e152ca688",
       "filePath": "docs/guideline/CodeNexus_DataFlows.png",
       "hashValue": "be20e758002c83211af8ad4868d109c035fb6f22e649426ad9fa98c36bad10e4",
       "committedAt": null,
@@ -226,7 +226,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Phased_Roadmap.png": {
-      "id": "b0337c68-0fee-46a0-9e9b-ad8903563882",
+      "id": "a47522aa-dd81-4631-9f25-2c9d741dcd41",
       "filePath": "docs/guideline/CodeNexus_Phased_Roadmap.png",
       "hashValue": "7ccc7d3fe2a4f760cb63921d5c70f9a9bedaf7921f47966a36e26e5ad96abe31",
       "committedAt": null,
@@ -234,7 +234,7 @@
       "diff": null
     },
     "docs/guideline/howtotest.md": {
-      "id": "d759c055-d34d-40ae-8ca4-bd61d5c42d70",
+      "id": "f825e6f0-156a-4d14-a0b3-09075e747d48",
       "filePath": "docs/guideline/howtotest.md",
       "hashValue": "0e5e4889a3c0e9d8815ebeefb147e8d89ab5bb677a2a79df0de551fc97b85814",
       "committedAt": null,
@@ -242,7 +242,7 @@
       "diff": null
     },
     "docs/strategy/CodeNexus_Implementation_Roadmap.md": {
-      "id": "b13c7fa9-4878-4abf-9ce4-84d385fcdfcd",
+      "id": "e85d789b-4102-41a4-a8fc-c4c3c63e08b1",
       "filePath": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
       "hashValue": "afebd08731f7057073a50325529426e3d91aa98434cbf4dfd233dbf7a5c9c842",
       "committedAt": null,
@@ -250,7 +250,7 @@
       "diff": null
     },
     "docs/strategy/idea.md": {
-      "id": "14281202-0748-4ca6-9c3c-7fe527f287b8",
+      "id": "924412ea-67a0-4837-8560-6a65ba3243aa",
       "filePath": "docs/strategy/idea.md",
       "hashValue": "652a77f17058f95c90d97f5192b9b3d302692cbcdc463e559a8cf1050364416b",
       "committedAt": null,
@@ -258,7 +258,7 @@
       "diff": null
     },
     "docs/strategy/Summary.md": {
-      "id": "7ad2dc51-8321-4667-88a4-3846442b3745",
+      "id": "22f30112-4d6f-4256-8b6f-60b4fe2e0586",
       "filePath": "docs/strategy/Summary.md",
       "hashValue": "d573ef1107d7c01d787972707ca7c5272d358ce304a3c85248d083c93b6bdaa4",
       "committedAt": null,
@@ -266,7 +266,7 @@
       "diff": null
     },
     "electron/bootstrap/watcher-lifecycle.ts": {
-      "id": "8d4e645d-360e-475b-8163-f6735298dc45",
+      "id": "1180e48a-893b-4d05-9d05-1dd34390eeef",
       "filePath": "electron/bootstrap/watcher-lifecycle.ts",
       "hashValue": "4c26a12446a52438a64b6d800770a366c5ed42bda963549fbe727b164cc121b6",
       "committedAt": null,
@@ -274,7 +274,7 @@
       "diff": null
     },
     "electron/infrastructure/recent-workspaces.adapter.ts": {
-      "id": "7b2052bd-2073-45b8-82c3-b4faffb09b36",
+      "id": "098cc715-32ef-49c4-a707-1357c84623dc",
       "filePath": "electron/infrastructure/recent-workspaces.adapter.ts",
       "hashValue": "9028277fdb5eb1ac77cd26dddb3e5c9699069ecdb2c08f6b3ab73909e236823f",
       "committedAt": null,
@@ -282,7 +282,7 @@
       "diff": null
     },
     "electron/ipc/channels.ts": {
-      "id": "b1b13ac8-9b6f-4cab-85fe-5d8b44461f31",
+      "id": "cfd9f66f-da46-48d9-9675-707db6f9446f",
       "filePath": "electron/ipc/channels.ts",
       "hashValue": "fc5ef7569860c954ad175a9f48d4bb49e241267871f8234863f4cfdca28fedf4",
       "committedAt": null,
@@ -290,7 +290,7 @@
       "diff": null
     },
     "electron/ipc/handlers.ts": {
-      "id": "035ae5ca-2cbf-45d5-9610-fab3555f666b",
+      "id": "b878609f-20d0-428a-beb8-ef5157f45a45",
       "filePath": "electron/ipc/handlers.ts",
       "hashValue": "931f5dd0b9ed20ad60e77eb686602276329d1849074fa1dcc7942af205b31081",
       "committedAt": null,
@@ -298,7 +298,7 @@
       "diff": null
     },
     "electron/ipc/types.ts": {
-      "id": "bc38de13-b551-4414-95ee-08c326b2daed",
+      "id": "a9124886-0fea-4b9a-98e3-16830f9702d5",
       "filePath": "electron/ipc/types.ts",
       "hashValue": "da6413046cb6b009a673d77ff627a0c9d428f79b62415099e84480ff691354f3",
       "committedAt": null,
@@ -306,23 +306,15 @@
       "diff": null
     },
     "electron/windows/main-window.ts": {
-      "id": "3da43734-63a4-44b6-af9e-8d23433baea7",
+      "id": "b8ce7700-69b1-41a0-bd76-0c93d7e340b5",
       "filePath": "electron/windows/main-window.ts",
       "hashValue": "344e05a6edb2111403971cc3b0e7ca135fff4533bc61fd06a7291b30651977c0",
       "committedAt": null,
       "commitId": null,
       "diff": null
     },
-    "public/assets/logo.png": {
-      "id": "c2c213b0-4ea3-483a-a477-f850c2f94bb6",
-      "filePath": "public/assets/logo.png",
-      "hashValue": "2a25b9f9344e39d3d2e270102f146c5549b98fcf7fa51d4efa02600c2753ea26",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
     "src/types/electron-api.d.ts": {
-      "id": "9e05a6e4-edb5-49f3-a795-418f77bd9365",
+      "id": "2bb9838c-9aa0-4238-a2bf-3fa85bb57e0d",
       "filePath": "src/types/electron-api.d.ts",
       "hashValue": "770ed79de3e7ff343e2674d0112b6048110fb2c017d899f7c7f62ce62d402163",
       "committedAt": null,
@@ -330,7 +322,7 @@
       "diff": null
     },
     "electron/ipc/handlers/documentation-handlers.ts": {
-      "id": "bc89da42-9bf4-4cbe-aa24-b12e9ecfa5a7",
+      "id": "416e408d-4a5a-4995-8412-4c9da901d70c",
       "filePath": "electron/ipc/handlers/documentation-handlers.ts",
       "hashValue": "d4fdf672e49c1a8d78d629c6a04cc8044ebca08424ea9c4f417ef452e3cf42bd",
       "committedAt": null,
@@ -338,7 +330,7 @@
       "diff": null
     },
     "electron/ipc/handlers/filesystem-handlers.ts": {
-      "id": "a34111e7-10e2-4e89-b90e-753fd20cbf0f",
+      "id": "b083d7c9-df13-41f0-8f2c-955b81befef1",
       "filePath": "electron/ipc/handlers/filesystem-handlers.ts",
       "hashValue": "f4051b5d400d8aa2f27a6b5b3f08978e374e871bf3dfb786ecb2835469742bdb",
       "committedAt": null,
@@ -346,7 +338,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking-handlers.ts": {
-      "id": "0710b67e-c57c-4a11-b808-331efe125f1a",
+      "id": "5de08708-d6f1-4848-bc26-4d1dee0b0109",
       "filePath": "electron/ipc/handlers/linking-handlers.ts",
       "hashValue": "e907320708c14f4974fe3479d5cb14eadd6a6e0a639430766e1d2f98ec074e64",
       "committedAt": null,
@@ -354,7 +346,7 @@
       "diff": null
     },
     "electron/ipc/handlers/project-handlers.ts": {
-      "id": "d6b228ad-4201-487c-9227-f60b14344cd2",
+      "id": "dc6f10ed-3947-4ce6-96b4-54a41e17a467",
       "filePath": "electron/ipc/handlers/project-handlers.ts",
       "hashValue": "435823ddae212eaf7004389f027811a9f7674b2a223244e9aac558b7160fc0c5",
       "committedAt": null,
@@ -362,7 +354,7 @@
       "diff": null
     },
     "electron/ipc/handlers/tracking-handlers.ts": {
-      "id": "edbe3b61-87e1-420a-9a47-c7bf65413e16",
+      "id": "cc9f6d0b-88db-4d72-91ab-28813345c50d",
       "filePath": "electron/ipc/handlers/tracking-handlers.ts",
       "hashValue": "b838a13cb677d2c57ee117361c1c36b49254c6a20f81c99406ae535aebc6fffe",
       "committedAt": null,
@@ -370,7 +362,7 @@
       "diff": null
     },
     "src/application/sagas/document-split.saga.ts": {
-      "id": "82df15ce-fc14-49d6-9288-b0c359bb75bf",
+      "id": "cf0af5e8-4988-4753-98cf-25f46a0ab117",
       "filePath": "src/application/sagas/document-split.saga.ts",
       "hashValue": "6cc53a0824a849db5967e3fe38b66670472664576b2acebd5cdd1c728518a25b",
       "committedAt": null,
@@ -378,7 +370,7 @@
       "diff": null
     },
     "src/application/sagas/file-change-reaction.saga.ts": {
-      "id": "99f0a8c8-6883-45f0-bf06-c7b3d8001084",
+      "id": "84680e50-1c67-4c25-ba44-2db928ed988a",
       "filePath": "src/application/sagas/file-change-reaction.saga.ts",
       "hashValue": "176bdff547d4cefed0bc887dde9081d527745c1747d2feb092b5ef89dd9b41d5",
       "committedAt": null,
@@ -386,7 +378,7 @@
       "diff": null
     },
     "src/application/services/background-watcher.service.ts": {
-      "id": "4b0613ec-dcd9-459a-b6b2-af9d61ca3eb2",
+      "id": "fb8e42f6-0ed9-4158-af40-cc8324e3d34b",
       "filePath": "src/application/services/background-watcher.service.ts",
       "hashValue": "9f5876cbaa927fe0a6ea7798a92a4076556dd3822cfa501c15ae98d58df1c518",
       "committedAt": null,
@@ -394,7 +386,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/database-schema.ts": {
-      "id": "e000801b-68ab-445b-94c2-ad1b999062c6",
+      "id": "554496e8-883a-4194-a170-dbd646ad5281",
       "filePath": "src/infrastructure/persistence/database-schema.ts",
       "hashValue": "2fb9b5e56566e718703e991df83f4d11b86323c2b2456e45a9a2d78802b9dcf1",
       "committedAt": null,
@@ -402,7 +394,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/json-database.ts": {
-      "id": "70d0d305-6447-4232-9b02-c119f4534146",
+      "id": "adaf8880-86e5-4e14-9f68-c363c5ab59ea",
       "filePath": "src/infrastructure/persistence/json-database.ts",
       "hashValue": "80e104887ef08fd09fb5ff42867e7cf67d37566d89a4dc0a3f3f311191fd7764",
       "committedAt": null,
@@ -410,7 +402,7 @@
       "diff": null
     },
     "src/presentation/hooks/useBackgroundWatcher.ts": {
-      "id": "23716214-01e3-4bbd-bc1c-db8499823db8",
+      "id": "f5ad8752-9a56-491b-83c2-836bb08008c2",
       "filePath": "src/presentation/hooks/useBackgroundWatcher.ts",
       "hashValue": "338a749c98096887efa2a12384dc19461ae6d8ccbbfb973a3751b8f30249e01a",
       "committedAt": null,
@@ -418,7 +410,7 @@
       "diff": null
     },
     "src/presentation/hooks/useDocuments.ts": {
-      "id": "6a936e97-17b9-449f-a681-df9aebf6678e",
+      "id": "509d9f58-a162-47e2-b903-8d926d0dbaab",
       "filePath": "src/presentation/hooks/useDocuments.ts",
       "hashValue": "0b388eabc8060f7c2938a6f1918fc2b7b85e6b559e3c14575a2bf89d37ca8af6",
       "committedAt": null,
@@ -426,7 +418,7 @@
       "diff": null
     },
     "src/presentation/hooks/useFileTree.ts": {
-      "id": "868799ea-65e3-46ef-b934-d15c3df76938",
+      "id": "49735944-d44e-4a8c-9636-a6c5bdcd695c",
       "filePath": "src/presentation/hooks/useFileTree.ts",
       "hashValue": "0ee9b524703490f23fb3d390eedd7dfbf63899ade4fbac69a4f118a713e6e151",
       "committedAt": null,
@@ -434,7 +426,7 @@
       "diff": null
     },
     "src/presentation/hooks/useIgnorePatterns.ts": {
-      "id": "9e9ecc81-6f89-46d7-9f09-1fa0d3913e59",
+      "id": "44240df2-a02f-4a89-b413-bf818c7dcac0",
       "filePath": "src/presentation/hooks/useIgnorePatterns.ts",
       "hashValue": "6e2b23b7d6eb95823d865f632bbf2fc9018c7519913001186509c8220b6d8be6",
       "committedAt": null,
@@ -442,7 +434,7 @@
       "diff": null
     },
     "src/presentation/hooks/useIpc.ts": {
-      "id": "4d61f2a2-4836-4705-9867-bd6f0646e731",
+      "id": "04e71c39-9213-49e8-9352-791be66cee27",
       "filePath": "src/presentation/hooks/useIpc.ts",
       "hashValue": "d562d36f84eaf7edc2dd75c13609dd85688dbb1fad1a687e1973d38ac457254a",
       "committedAt": null,
@@ -450,7 +442,7 @@
       "diff": null
     },
     "src/presentation/hooks/useRecentWorkspaces.ts": {
-      "id": "d04d201f-d39e-407e-b5bd-2c16da351d7a",
+      "id": "f0d82cbb-becd-4b1a-949b-2c74e8b14c0c",
       "filePath": "src/presentation/hooks/useRecentWorkspaces.ts",
       "hashValue": "7aebbf7831f6ba6d031926e90f33d3026b35e40d026af8bcac72bfe8aaea2750",
       "committedAt": null,
@@ -458,7 +450,7 @@
       "diff": null
     },
     "src/presentation/hooks/useTheme.ts": {
-      "id": "5a2a5745-22bb-411a-ae30-280cf63a7a75",
+      "id": "088d04f9-6501-4437-bc9a-7234197dd4cd",
       "filePath": "src/presentation/hooks/useTheme.ts",
       "hashValue": "9310e6d56724e0b893f1242cc4f2c3fed8e769f277b8a542ff010acaf703aa0b",
       "committedAt": null,
@@ -466,7 +458,7 @@
       "diff": null
     },
     "src/presentation/hooks/useTracking.ts": {
-      "id": "7a922d70-1bb4-419c-bdc8-c8906d5fcece",
+      "id": "c7c36585-8998-4bba-8e0c-d674ae9e1d9b",
       "filePath": "src/presentation/hooks/useTracking.ts",
       "hashValue": "60450a2b4f5765f336a833053e2d4d70174f77569731fe3f8fd421877b3f1a6c",
       "committedAt": null,
@@ -474,7 +466,7 @@
       "diff": null
     },
     "src/presentation/hooks/useWorkspace.ts": {
-      "id": "1266fd51-c5a4-4aee-bfc4-f3637ca21148",
+      "id": "2f09032f-075a-4b1a-bfe3-e53905f1de53",
       "filePath": "src/presentation/hooks/useWorkspace.ts",
       "hashValue": "286d5259824d8ac92b04e169de446167ebb19ec63729b2e128f709127cf0fd9e",
       "committedAt": null,
@@ -482,7 +474,7 @@
       "diff": null
     },
     "src/presentation/pages/DocumentManagerPage.tsx": {
-      "id": "531dc28b-87d9-4ea7-82a0-51f9f266b1e0",
+      "id": "78997974-f1c5-4615-8b04-04c7e987f9e8",
       "filePath": "src/presentation/pages/DocumentManagerPage.tsx",
       "hashValue": "71c17e01818577ba9684738e999ef913b73a04c13f4e989273cbff82056da062",
       "committedAt": null,
@@ -490,7 +482,7 @@
       "diff": null
     },
     "src/presentation/pages/FileBrowserPage.tsx": {
-      "id": "8150ae9a-5baa-46da-9f8f-cdeecdedcbcf",
+      "id": "fc86de06-00e8-4073-972b-2219e515473c",
       "filePath": "src/presentation/pages/FileBrowserPage.tsx",
       "hashValue": "02d48da3668bd13205ab2e848cdee0b2f32ebebf6e37ec78e47bb0037a352433",
       "committedAt": null,
@@ -498,7 +490,7 @@
       "diff": null
     },
     "src/presentation/pages/LinkingPage.tsx": {
-      "id": "fcc54a25-87a1-4b1b-ab9e-1954047c0055",
+      "id": "3ab132e2-3fdb-4285-a906-dfb3547f4e01",
       "filePath": "src/presentation/pages/LinkingPage.tsx",
       "hashValue": "690bc16a5275d3271b3d97df9403bfe30c1e3aa8fd99fdb0a0c4af559124a585",
       "committedAt": null,
@@ -506,7 +498,7 @@
       "diff": null
     },
     "src/presentation/pages/TrackingPage.tsx": {
-      "id": "a60c3985-7ce8-4cc0-8d2e-98d9d671154d",
+      "id": "37710ce0-7330-4c2a-8d3b-5b223122d348",
       "filePath": "src/presentation/pages/TrackingPage.tsx",
       "hashValue": "d31d6e020479267ada537840e58335d871cca8f35dca724a8f1100fe34f546ba",
       "committedAt": null,
@@ -514,7 +506,7 @@
       "diff": null
     },
     "src/presentation/pages/WelcomePage.tsx": {
-      "id": "82098e85-4830-4941-a641-d6bec00d3692",
+      "id": "3e25a3e1-0373-41e7-a11d-4feeeb058687",
       "filePath": "src/presentation/pages/WelcomePage.tsx",
       "hashValue": "1827f68500da6d540bfe56d848ad1c8995e88984c305c4bed23aad034c430001",
       "committedAt": null,
@@ -522,7 +514,7 @@
       "diff": null
     },
     "src/presentation/stores/documentation.store.ts": {
-      "id": "483e65f5-58ed-4105-9f43-4370566d2ae6",
+      "id": "af0bad23-b1bd-4efb-895f-4f9c8639a66a",
       "filePath": "src/presentation/stores/documentation.store.ts",
       "hashValue": "b80362a9d74a967059b8c62256d6454f5641bc412b407194811cb161de174a5d",
       "committedAt": null,
@@ -530,7 +522,7 @@
       "diff": null
     },
     "src/presentation/stores/filesystem.store.ts": {
-      "id": "ee36f846-b2a7-4da4-aee5-4afd6bfa2999",
+      "id": "c41ebe7e-9781-473b-b507-8d8aac53e51c",
       "filePath": "src/presentation/stores/filesystem.store.ts",
       "hashValue": "975b197867cdf972872b83ca424d65dc3fad129b080efd629c0b3509454f0006",
       "committedAt": null,
@@ -538,7 +530,7 @@
       "diff": null
     },
     "src/presentation/stores/linking.store.ts": {
-      "id": "796fa050-3427-482f-9e98-5bd3db9526c6",
+      "id": "795f8e41-39f1-4e96-ad0c-5d21b8508456",
       "filePath": "src/presentation/stores/linking.store.ts",
       "hashValue": "d23fc89f99f61ae6cb81344b2de460508a6ebaf7b9f876715259f2a8fbb3d23e",
       "committedAt": null,
@@ -546,7 +538,7 @@
       "diff": null
     },
     "src/presentation/stores/tracking.store.ts": {
-      "id": "02fef5b4-0650-4379-b627-c5ab35e75dc0",
+      "id": "0df83d42-424d-4b07-bf66-5b262d838fa3",
       "filePath": "src/presentation/stores/tracking.store.ts",
       "hashValue": "fed74e20f60a0266e50e62d6c8b96806ff0453f1cf2f9925ec20a98a92e957b8",
       "committedAt": null,
@@ -554,7 +546,7 @@
       "diff": null
     },
     "src/presentation/stores/workspace.store.ts": {
-      "id": "7a7d2024-d675-469e-855c-a295e45e6e06",
+      "id": "5820602b-0b66-468e-9679-3cdb776c0bf2",
       "filePath": "src/presentation/stores/workspace.store.ts",
       "hashValue": "e8085a78a6406b8eb746b30ee316b965d2a1147d26bd9019ab564308c50486cc",
       "committedAt": null,
@@ -562,15 +554,48 @@
       "diff": null
     },
     "src/presentation/styles/app.css": {
-      "id": "f78ad2b4-fe92-41da-8bbe-14069607ab9f",
+      "id": "4d028936-1a87-4232-aeb9-6ddb8168a161",
       "filePath": "src/presentation/styles/app.css",
       "hashValue": "2e123446e56b8689b26a0d4bd0b6d4e6cbc0a234f43c6c34b56fd16dd823cb2a",
-      "committedAt": "2026-07-14T17:58:52.948Z",
-      "commitId": "bca4d805-6b80-4078-aa7a-ea87b8116af4",
-      "diff": null
+      "committedAt": "2026-07-14T18:10:23.775Z",
+      "commitId": "e75832e8-deed-45e7-8add-0a26944905e5",
+      "diff": {
+        "filePath": "src/presentation/styles/app.css",
+        "oldHash": "ca11c1b0a9bccf8a28c8d16f4dd830b1ef9bda3a5191e79ef2519fd64524bd70",
+        "newHash": "2e123446e56b8689b26a0d4bd0b6d4e6cbc0a234f43c6c34b56fd16dd823cb2a",
+        "addedLines": [],
+        "removedLines": [
+          {
+            "lineNumber": 453,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 454,
+            "content": ".app-bootstrap-loader {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 455,
+            "content": "  src: format();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 456,
+            "content": "  stroke-width: 0%;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 457,
+            "content": "}",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "src/presentation/styles/documentation.css": {
-      "id": "f4a09ef9-6dd5-4ec5-af2d-d8984e36c600",
+      "id": "b0df7c49-ebdf-4303-a6d4-04338e5c12ca",
       "filePath": "src/presentation/styles/documentation.css",
       "hashValue": "a3b3bc0380d5acf3beba470c6a1e4cdd62cad022e9aa972699d203451a19aa15",
       "committedAt": null,
@@ -578,7 +603,7 @@
       "diff": null
     },
     "src/presentation/styles/file-browser.css": {
-      "id": "c759a5a5-9563-4021-8f1f-7eb64e5728bf",
+      "id": "4f50b9f4-0ea0-476e-b440-ad6facf5ac9e",
       "filePath": "src/presentation/styles/file-browser.css",
       "hashValue": "32392f0ea8657f04229c981f686e58558984337ddce4b6932c3facd9b5dfef76",
       "committedAt": null,
@@ -586,53 +611,33 @@
       "diff": null
     },
     "src/presentation/styles/linking.css": {
-      "id": "f8324e24-2803-498e-b4df-54e7acf21244",
+      "id": "20fb17c0-2b33-4787-85da-b20868e5b0a7",
       "filePath": "src/presentation/styles/linking.css",
-      "hashValue": "0aa2c5eedcb8fe59e3fbcbc760078b01d38b90955a165178231cf561c63b2030",
-      "committedAt": "2026-07-14T17:58:52.955Z",
-      "commitId": "bca4d805-6b80-4078-aa7a-ea87b8116af4",
+      "hashValue": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2",
+      "committedAt": null,
+      "commitId": null,
       "diff": {
         "filePath": "src/presentation/styles/linking.css",
-        "oldHash": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2",
-        "newHash": "0aa2c5eedcb8fe59e3fbcbc760078b01d38b90955a165178231cf561c63b2030",
-        "addedLines": [
+        "oldHash": "42227eaa691af0440246c4e6295f64ecdfd2b3eda6a937ad31e9f510240daff1",
+        "newHash": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2",
+        "addedLines": [],
+        "removedLines": [
           {
             "lineNumber": 256,
             "content": "",
-            "type": "ADDED"
+            "type": "REMOVED"
           },
           {
             "lineNumber": 257,
-            "content": ".btn-primary {",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 258,
-            "content": "  flex-direction: column;",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 259,
-            "content": "  color: #000;",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 260,
-            "content": "  display: block;",
-            "type": "ADDED"
-          },
-          {
-            "lineNumber": 261,
-            "content": "}",
-            "type": "ADDED"
+            "content": "ییخصیئصحخئ",
+            "type": "REMOVED"
           }
         ],
-        "removedLines": [],
         "modifiedLines": []
       }
     },
     "src/presentation/styles/recent-workspaces.css": {
-      "id": "74f60e23-a715-433f-b8b1-4f93efa7eb69",
+      "id": "ab1e451c-4f87-4112-b650-0ca831791f24",
       "filePath": "src/presentation/styles/recent-workspaces.css",
       "hashValue": "f288dd1b32d629a5bfdfd00182422a61e0681a5c175c00a3a27076ebc0ee4f0a",
       "committedAt": null,
@@ -640,7 +645,7 @@
       "diff": null
     },
     "src/presentation/styles/search-bar.css": {
-      "id": "b2ec0897-284b-42c5-bc0b-2034320b1f4c",
+      "id": "70caf74e-fa58-426f-b649-90eedf474a6d",
       "filePath": "src/presentation/styles/search-bar.css",
       "hashValue": "67a0156f6b9cb0b475641c8929de22fdda3f6ca47ff76c0460638ae429ab75f3",
       "committedAt": null,
@@ -648,7 +653,7 @@
       "diff": null
     },
     "src/presentation/styles/tracking.css": {
-      "id": "492d6447-f1b2-44f3-bd69-8adb2df255b3",
+      "id": "62fa2aa6-1858-4f99-921e-05651511bed6",
       "filePath": "src/presentation/styles/tracking.css",
       "hashValue": "0a5cc899fed6c2ada76407e84ecc2f70138dd4481a01c6bc9af8d341f9e17d3d",
       "committedAt": null,
@@ -656,7 +661,7 @@
       "diff": null
     },
     "src/presentation/styles/welcome-page.css": {
-      "id": "2ff5b527-1efb-4161-a366-6afaa04388b4",
+      "id": "fca88cc2-a5e4-4b4d-bc49-5ff69da4aa21",
       "filePath": "src/presentation/styles/welcome-page.css",
       "hashValue": "7c377aa3b5f13e70092c2f64a1c5c57f67c7fbe09fcbdbf3e03c11a51a492eda",
       "committedAt": null,
@@ -664,7 +669,7 @@
       "diff": null
     },
     "src/presentation/utils/ipc-invoke.ts": {
-      "id": "7284de16-97ae-42ad-a34c-115b4f9cd5f4",
+      "id": "b7f3facd-e1eb-4d6a-89f8-1e1cb97cca74",
       "filePath": "src/presentation/utils/ipc-invoke.ts",
       "hashValue": "8b7a8b7442eebc8ecd578d4177e5b7273c09b7e7c3534a4346edba8265c37642",
       "committedAt": null,
@@ -672,7 +677,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/adapter.ts": {
-      "id": "e64fbd6b-3536-4477-b8b2-837a662ae8a6",
+      "id": "71e6cbf1-a0f4-4739-aa35-31eb06111f3a",
       "filePath": "electron/ipc/handlers/linking/adapter.ts",
       "hashValue": "8cca28d99e7346e0824d3a1fdb57a6635afeed5b040d2e382f4bfcb5828e7bd2",
       "committedAt": null,
@@ -680,7 +685,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/code-link-ipc.ts": {
-      "id": "73e72aba-f21a-4124-9c8e-9b913e1d521f",
+      "id": "bddceb89-0376-44c1-ac58-1b703085e0d5",
       "filePath": "electron/ipc/handlers/linking/code-link-ipc.ts",
       "hashValue": "1c651c01f107355d03e4f76c76e6fe71da75e51ea128067c5db1e5252668fabd",
       "committedAt": null,
@@ -688,7 +693,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/dependencies.ts": {
-      "id": "9b10e7dc-ae07-4e9c-a11b-37ff5524b97f",
+      "id": "2628faec-009b-45fd-8de7-4885cb3a7d59",
       "filePath": "electron/ipc/handlers/linking/dependencies.ts",
       "hashValue": "92ced1ed6136198a6b25efd0833f9546c2390a62dac3f6b1a503402c6d92face",
       "committedAt": null,
@@ -696,7 +701,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/document-link-ipc.ts": {
-      "id": "43c71298-6350-432d-aad4-cf2b68899c79",
+      "id": "95aabbb2-c941-4726-a3c0-081e171bf494",
       "filePath": "electron/ipc/handlers/linking/document-link-ipc.ts",
       "hashValue": "d09ca403fdb5ae6df41f4461e8a67a743bea1c8640240ee48f769bfab0aac3eb",
       "committedAt": null,
@@ -704,7 +709,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/event-subscribers.ts": {
-      "id": "b8f67848-3a0a-480d-9390-1cb5338bcfe3",
+      "id": "bd2f3a59-96cf-4647-a504-8601a2e75fd9",
       "filePath": "electron/ipc/handlers/linking/event-subscribers.ts",
       "hashValue": "96ab1044b3d162598fbd47cad9f6c05d4878f9bdfb5e4e5658768d958c930401",
       "committedAt": null,
@@ -712,7 +717,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/index.ts": {
-      "id": "0df83a8d-1cbc-4537-b2a4-8a7fe7bd4215",
+      "id": "796d1a96-2293-4d74-8eb7-120029d02d8a",
       "filePath": "electron/ipc/handlers/linking/index.ts",
       "hashValue": "02edd7cbc7282be53694e311a9695ef317f141a47ea28365899e38e661f7bce8",
       "committedAt": null,
@@ -720,7 +725,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/migration-ipc.ts": {
-      "id": "660a6901-5d94-4670-a54f-ec6c7c10e683",
+      "id": "6c1f14f3-6dff-44bf-a3bc-b035d22c88f6",
       "filePath": "electron/ipc/handlers/linking/migration-ipc.ts",
       "hashValue": "fe8fd19804a527e8f28491619aeda636263781aebd792f48cc2a786aee080df4",
       "committedAt": null,
@@ -728,303 +733,15 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/workspace-context.ts": {
-      "id": "5b44e0cd-ffe7-4dc1-85f0-902b0c073967",
+      "id": "e4022150-0a13-48eb-b1d9-1326c08cfb0d",
       "filePath": "electron/ipc/handlers/linking/workspace-context.ts",
       "hashValue": "c7aea672eb02ec531cc9fa2c35f65d76356306c8e7fe9b3d4b3ae1d11610feef",
       "committedAt": null,
       "commitId": null,
       "diff": null
     },
-    "public/assets/bootstrap-pack/css/bootstrap.min.css": {
-      "id": "80d2228a-05cc-4368-9f18-9ba35e9b0fdd",
-      "filePath": "public/assets/bootstrap-pack/css/bootstrap.min.css",
-      "hashValue": "d85327d99c7a3ee1f9b5d0500d1370acea3ad2db39c163c2f51f232baedbdede",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/bootstrap-pack/js/bootstrap.min.js": {
-      "id": "eb1cb6ff-83a1-4d52-abf2-a51079aff510",
-      "filePath": "public/assets/bootstrap-pack/js/bootstrap.min.js",
-      "hashValue": "7b0f14895d69247fd88e93840489cfd47c55bd3fd27eb0a6c12a14cc5f492207",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/css/all.css": {
-      "id": "7e101289-abe1-4f44-89cd-ab64ed5a81ab",
-      "filePath": "public/assets/FontAwesome/css/all.css",
-      "hashValue": "c4cd5ef4a83e4fe86cb852ddfc987e7f7482350993f66b40a70e6842008ea292",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-brands-400.woff2": {
-      "id": "dca7febe-91d7-45a5-a670-755229731ddd",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-brands-400.woff2",
-      "hashValue": "28d4f4e6eaabdcf224084234d5f288f9a732780063e20b0b1f85b77b57e68602",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-chisel-regular-400.woff2": {
-      "id": "01bd3849-34bc-4927-9033-571b11ef7e8d",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-chisel-regular-400.woff2",
-      "hashValue": "0fa335abf06456c7003fd6279500826fa5e8f6dbb7bff2a84122f47f84e3bd03",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-duotone-900.woff2": {
-      "id": "3b01dd97-06a1-44a9-b892-acd75bf2a0ef",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-duotone-900.woff2",
-      "hashValue": "b3a3089facc9cf4a617e2c140b95f93a778fce94c01c6d8f2a8c7edf7aae9f1a",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-duotone-light-300.woff2": {
-      "id": "f22978cd-cfe2-4afc-8026-49ce709db84d",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-duotone-light-300.woff2",
-      "hashValue": "72dcb5220a372fe462770d427be1eb060b83d853a56ca59f592271c16b273d67",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-duotone-regular-400.woff2": {
-      "id": "62b6bf3c-ba3d-44c2-99de-7fae7b90bbb7",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-duotone-regular-400.woff2",
-      "hashValue": "2c1770b04d6565e004e48ec69b917d5214f240c8f55ce5022c09ca1c110c8f3f",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-duotone-thin-100.woff2": {
-      "id": "e37dc82f-4ed7-4c5d-878e-6efcdb86bfcb",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-duotone-thin-100.woff2",
-      "hashValue": "bdc443b3eeadc8d01e2a4720e83cfb3347dcc0607749f1f0ee4cf7a8d9cfa9d7",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-etch-solid-900.woff2": {
-      "id": "0bb920b0-57c8-497b-b6da-dd7fbab8b0a0",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-etch-solid-900.woff2",
-      "hashValue": "bc5377e2c8ac0aff8207d12520c1909099f3daa32ed73da5300a9eea8edee363",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-graphite-thin-100.woff2": {
-      "id": "9239de31-f6ef-4f51-9dd9-166e0c589c6f",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-graphite-thin-100.woff2",
-      "hashValue": "bc0b7fd104854679b8be7f00db4ac3661cca80b24fe4fa59109fce319308e81c",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-jelly-duo-regular-400.woff2": {
-      "id": "c181fc5c-263e-46ee-8529-201d65f7a7ba",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-jelly-duo-regular-400.woff2",
-      "hashValue": "6f8163a7ffa8abdfb86cb3a32e34a07b03ac62669bf6c5347cd347fcc32f5d46",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-jelly-fill-regular-400.woff2": {
-      "id": "a0f9949c-40e2-4e20-9408-0bf9f08e26e3",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-jelly-fill-regular-400.woff2",
-      "hashValue": "90d8aacb32afb25c6271e91077e9aa054747118959d820a0963a78fa2766cdba",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-jelly-regular-400.woff2": {
-      "id": "2f2cc2f8-539f-43fd-94e5-42dd8a29b792",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-jelly-regular-400.woff2",
-      "hashValue": "1d2e2ed3676b96d6fb6aa7489e8e2f6c1211166de527a5379a4f1eb4616bdfb8",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-light-300.woff2": {
-      "id": "72184e4a-9ed9-413c-8110-a3c42a4933f7",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-light-300.woff2",
-      "hashValue": "36b21c2aa5f3d72963ba8bb1968652810e5926e2c3a92499fccca7c61ebbcd1f",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-notdog-duo-solid-900.woff2": {
-      "id": "70fa0d7f-f081-40c8-bb7e-5efb0a4af4ff",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-notdog-duo-solid-900.woff2",
-      "hashValue": "2ce1e3cc0923514220e3c6fb253479c9ad9a39e6fa3d97bb55d722f8472cec2e",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-notdog-solid-900.woff2": {
-      "id": "c586f565-95c5-4a13-9d90-3d6c201ba754",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-notdog-solid-900.woff2",
-      "hashValue": "0583088343dc1e02be6497f87c10fffd0f51a76d83b7f279fe2bcfc61d0e6d90",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-regular-400.woff2": {
-      "id": "90dc8268-e251-4d63-acd0-bed2d4361489",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-regular-400.woff2",
-      "hashValue": "12e22f18e95c3e38ddfed39d4ea10dbc66262e77d41532e8e46db62f57f32279",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-duotone-light-300.woff2": {
-      "id": "1cf889ad-39cc-467f-9c13-bec36ac97b33",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-duotone-light-300.woff2",
-      "hashValue": "dc38dce6b2d6677c1a3bea9f13315634ba2835094f1c6246d7e22e9c41773393",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-duotone-regular-400.woff2": {
-      "id": "ba4a0705-0947-468f-a075-c8f422341665",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-duotone-regular-400.woff2",
-      "hashValue": "2c8ee9f518347422100856b360d19f868c992537eebacbeff033450cf7ac4b00",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-duotone-solid-900.woff2": {
-      "id": "6eb2eedb-c3ed-4502-9a6e-779e129fb724",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-duotone-solid-900.woff2",
-      "hashValue": "535c8f518f43adda388f1246dd9b36f9b5bb14e6d0c418aa6d1d1b6ce07c62da",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-duotone-thin-100.woff2": {
-      "id": "2df30766-423a-4d2c-b116-ac3340eb7acb",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-duotone-thin-100.woff2",
-      "hashValue": "cf154ad01162c5527028a6e04e28f5e83b3ba0bdb7ac25df4d03e14ee9eeac4a",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-light-300.woff2": {
-      "id": "71b8c65b-0f6f-42c7-af2a-58a0136f508a",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-light-300.woff2",
-      "hashValue": "c4bb97babc7efe0fd1ab008e8cf331d95614ebb06d68c00ae022fdd6a405ad45",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-regular-400.woff2": {
-      "id": "91c8160a-2715-4eab-a3b1-d20fd71ecbd7",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-regular-400.woff2",
-      "hashValue": "3b1600a6fd4647be9314e7ad4b2c5ae1db54ab34c66a6e7e25db657db7001159",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-solid-900.woff2": {
-      "id": "8ba6196c-08f1-461a-a8c5-08bead99a0b4",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-solid-900.woff2",
-      "hashValue": "207fbe4e40a9efe9974060a57ea2e1e81c5ab973c8da1d73b477b742c521a464",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-sharp-thin-100.woff2": {
-      "id": "716f4ccc-484e-4576-a343-9295c584ad52",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-sharp-thin-100.woff2",
-      "hashValue": "561a6552d80d603f85c5a42d78fd6a8814c42daeacf0e1b71ac087a41d85f51c",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-slab-press-regular-400.woff2": {
-      "id": "02f77297-acbe-4140-93d2-18dc798d0674",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-slab-press-regular-400.woff2",
-      "hashValue": "1ab2493c3f151797b81ebd50904cb9345841f0f411b552d45b2d4a3a459a08b3",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-slab-regular-400.woff2": {
-      "id": "ea0fdef8-ffda-410c-8ef2-6990883987cf",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-slab-regular-400.woff2",
-      "hashValue": "3cd8e1d584a07aab6adcd074c590ea39160194d2b3837bf1bc6a454484c0c64b",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-solid-900.woff2": {
-      "id": "f1cc8dce-9539-49d9-b211-b87e777cb1e9",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-solid-900.woff2",
-      "hashValue": "159b1a8ea23d71d5b5ed8c25db322fed25bfde4cf2991dc2765e409341bfec48",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-thin-100.woff2": {
-      "id": "216ddad5-5502-446e-9649-f540b905fd2f",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-thin-100.woff2",
-      "hashValue": "4e652901bdd92784d6025a08f4f9d5754d18241fa6918d1f2a785dfd3df0a3ce",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-thumbprint-light-300.woff2": {
-      "id": "ba22f8b1-2d4b-4e7e-8a83-a53700e24ff4",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-thumbprint-light-300.woff2",
-      "hashValue": "5d59a7b7357a35f40d055f3c6ab9d6df65897054f7bde35317d67c0ca22de2a0",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-utility-duo-semibold-600.woff2": {
-      "id": "750ddd5a-b211-430e-8b38-5cfc7fcbba62",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-utility-duo-semibold-600.woff2",
-      "hashValue": "8acce99704329111936ff526c03efdb90135886094c601bc5b02e36ec558c496",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-utility-fill-semibold-600.woff2": {
-      "id": "40e594fc-55d9-4d2f-9aae-49b5f93a0cca",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-utility-fill-semibold-600.woff2",
-      "hashValue": "bda0ba945d74311ec4678686552d9af808088cce33a677f27a369299f2cf1add",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-utility-semibold-600.woff2": {
-      "id": "c641a25a-5de4-4823-8468-d1eccd64a0f8",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-utility-semibold-600.woff2",
-      "hashValue": "70ea80c87aabe86a80a5b0a448394970aa52dba09ab21f26fd68b1e78e350037",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-v4compatibility.woff2": {
-      "id": "77cb12b5-3d63-4792-95b3-33f395dcb491",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-v4compatibility.woff2",
-      "hashValue": "ede39dee8d5b6319845e6e2f6cca23f51075482b631e0a83d48d540135324207",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
-    "public/assets/FontAwesome/webfonts/fa-whiteboard-semibold-600.woff2": {
-      "id": "dfdbf3db-5918-45ea-8d8c-879ff7f62cc4",
-      "filePath": "public/assets/FontAwesome/webfonts/fa-whiteboard-semibold-600.woff2",
-      "hashValue": "b52ab7fcf9695d604099a1e998037f38bc049b3ba8e7b989190d0c0437c98d36",
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
     "src/domains/shared-kernel/application/command-handler.interface.ts": {
-      "id": "6ff50399-0bca-44c3-ab30-546c3df28819",
+      "id": "99b241e6-199a-4d87-816b-39c42a32ad1f",
       "filePath": "src/domains/shared-kernel/application/command-handler.interface.ts",
       "hashValue": "fecf83826adfa2c9efe4a35f026603e7b44c2f7d1cb09420ce9a0f6531979979",
       "committedAt": null,
@@ -1032,7 +749,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/command.interface.ts": {
-      "id": "cadbf690-bdc2-42cd-b98d-cbf7b774dff0",
+      "id": "c3dfaf2d-2677-4c8c-bd22-aa8a8b8711af",
       "filePath": "src/domains/shared-kernel/application/command.interface.ts",
       "hashValue": "b8daccbdd5a3a8892348e3e5412e72ea868465f4c3aa8c3929e1a91f1c760fe5",
       "committedAt": null,
@@ -1040,7 +757,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/query-handler.interface.ts": {
-      "id": "c39ddb58-b595-4726-b16e-f38b0956569e",
+      "id": "b48dbf65-ede8-4c0e-8ac4-42dceb0f74a0",
       "filePath": "src/domains/shared-kernel/application/query-handler.interface.ts",
       "hashValue": "b2b069130c7dee6b13206b5e21e01a2b51ade1fb6fb116e24863e49efa20052d",
       "committedAt": null,
@@ -1048,7 +765,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/query.interface.ts": {
-      "id": "742b05dc-da13-4524-8444-b094accc864d",
+      "id": "c6873c3a-1519-4072-bc06-72299f431ecb",
       "filePath": "src/domains/shared-kernel/application/query.interface.ts",
       "hashValue": "d13c4dada321ba8e9df36a09d323d79d7c7948a4771f1ec0ed42ac1e0c731228",
       "committedAt": null,
@@ -1056,7 +773,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/domain-event-handler.interface.ts": {
-      "id": "573b1372-8797-4ff7-b06b-0bb03288740b",
+      "id": "77a8264e-6e10-4160-8d79-5fcf10e80f68",
       "filePath": "src/domains/shared-kernel/events/domain-event-handler.interface.ts",
       "hashValue": "02602b0e35f894a4ca8143077fa01f9655c078f0cb5b63d541c0a5fe0c813373",
       "committedAt": null,
@@ -1064,7 +781,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/domain-event.ts": {
-      "id": "382e4725-0086-4f37-a90d-27c1b11decb2",
+      "id": "167377a3-e1d8-4b9c-9cba-f673f79862b6",
       "filePath": "src/domains/shared-kernel/events/domain-event.ts",
       "hashValue": "2fad3839a26ad2018fbbb12a1adfeb21b5b5e722b4d20f46605e94deaecb3e47",
       "committedAt": null,
@@ -1072,7 +789,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/event-bus.ts": {
-      "id": "704abfae-481b-46bb-a265-c2970d128261",
+      "id": "527a12e7-0a30-4421-9256-0b398975d70b",
       "filePath": "src/domains/shared-kernel/events/event-bus.ts",
       "hashValue": "7b97caccd51c12bd3cce8ccb4782d84c88b281b18e5352e8d09d4c62a29d49b4",
       "committedAt": null,
@@ -1080,7 +797,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/domain-exception.ts": {
-      "id": "36968e25-4ac8-4f74-aba8-def9015fba05",
+      "id": "37bccaf8-3d88-427c-a2ea-784668490c02",
       "filePath": "src/domains/shared-kernel/exceptions/domain-exception.ts",
       "hashValue": "ee7cd5534f3857075a303240915c53b8d27498b01da21bda7f33875d4d94ca86",
       "committedAt": null,
@@ -1088,7 +805,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/invalid-state-exception.ts": {
-      "id": "90771696-0870-42a5-abc9-8aeb473b4a0a",
+      "id": "b9933ff5-1c63-4c27-8d5b-9f6f95d537e2",
       "filePath": "src/domains/shared-kernel/exceptions/invalid-state-exception.ts",
       "hashValue": "f2d9b5a32f9465df9ee545abeac3fdf4b37d899be5e1a033809d36198b21a49c",
       "committedAt": null,
@@ -1096,7 +813,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/not-found-exception.ts": {
-      "id": "428c156d-fc3e-49a0-9142-efb939beec6e",
+      "id": "7e4586f4-9280-4329-98bc-7997314f8f78",
       "filePath": "src/domains/shared-kernel/exceptions/not-found-exception.ts",
       "hashValue": "294c8491031905f230faae10feea0b7f3f99dc398af41e34d6a5e1b9faeda613",
       "committedAt": null,
@@ -1104,7 +821,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/repository/repository.interface.ts": {
-      "id": "a8c4d9d8-952d-4af2-93a4-0b6a60c73bce",
+      "id": "03bb76fe-0266-423e-b8de-63f5dbb3b451",
       "filePath": "src/domains/shared-kernel/repository/repository.interface.ts",
       "hashValue": "f039c35705e4cd68ad81f18cd2629163abbba352259c1147535d711e097f9ac6",
       "committedAt": null,
@@ -1112,7 +829,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/aggregate-root.ts": {
-      "id": "dbef6626-3f98-401f-b079-358b9f06b61f",
+      "id": "5b1a70fc-f3d0-4871-bb66-e0634e93cdb4",
       "filePath": "src/domains/shared-kernel/types/aggregate-root.ts",
       "hashValue": "0e51caf45aab87847133878084b81d6ca20a82ce61a271f5f3221ce5f6653a32",
       "committedAt": null,
@@ -1120,7 +837,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/date-time.ts": {
-      "id": "1de9595e-e25e-45fd-8656-71fef3428f5b",
+      "id": "8b2dc223-1b82-4459-aff3-6aba3ccc871b",
       "filePath": "src/domains/shared-kernel/types/date-time.ts",
       "hashValue": "733e18e6a71f29b8c626675e29abbc18cf30f2bcf51aa3ee797a79e1d93947ca",
       "committedAt": null,
@@ -1128,7 +845,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/identifier.ts": {
-      "id": "cc70266e-1905-494d-86a4-ff32fa34d6dc",
+      "id": "92565de8-4be1-4b5b-9904-6b0ac97d9ec4",
       "filePath": "src/domains/shared-kernel/types/identifier.ts",
       "hashValue": "637f386f1e8ee380445e744f684ff159a370fbd62cc0a8d6c980bef5e3a3c925",
       "committedAt": null,
@@ -1136,7 +853,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/maybe.ts": {
-      "id": "a6e6eb31-4dab-48a0-8d8f-4a8c833eca0e",
+      "id": "2a578fb5-cf37-42bc-99bb-45d56f1cc248",
       "filePath": "src/domains/shared-kernel/types/maybe.ts",
       "hashValue": "ab6e8a13346c08e991d72fce12e4df034f9336eff5af8ae1405e2923720f07d8",
       "committedAt": null,
@@ -1144,7 +861,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/result.ts": {
-      "id": "bf8a36ab-8e8a-4b60-8065-23af743e6341",
+      "id": "0f039392-59de-4896-a1f2-0ed527ddf192",
       "filePath": "src/domains/shared-kernel/types/result.ts",
       "hashValue": "f58b15ec39094294796791a82038904583a6242a4bea904568f34b8d06b9e76c",
       "committedAt": null,
@@ -1152,7 +869,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/value-object.ts": {
-      "id": "c32efdfb-90a8-4bda-8285-abe1c479227a",
+      "id": "58a11f7a-ae80-4e3d-a6ef-663594976e6d",
       "filePath": "src/domains/shared-kernel/types/value-object.ts",
       "hashValue": "895c3e83794a0ae072b12750143d9f6c577116d9327372d526b26c38a3a36214",
       "committedAt": null,
@@ -1160,7 +877,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/hash-utils.ts": {
-      "id": "298c7b5d-f0f7-4f3e-95d5-1ec8cd7bff43",
+      "id": "dcd19536-103b-46d1-8896-4e812c983a47",
       "filePath": "src/domains/shared-kernel/utils/hash-utils.ts",
       "hashValue": "8671ad1f5bda49bb624820921fbe07a2f405d2952a6fe05ffd89b9cc20604744",
       "committedAt": null,
@@ -1168,7 +885,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/path-utils.ts": {
-      "id": "872c2851-fc50-44d4-b4fd-288931f80f5c",
+      "id": "a28c9af5-367c-477c-b470-7192c2b35fac",
       "filePath": "src/domains/shared-kernel/utils/path-utils.ts",
       "hashValue": "b6b51a9c3cb61f0191adc583417b6c6727a449c490a1d373fd87f18030ce6d75",
       "committedAt": null,
@@ -1176,7 +893,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/uuid-generator.ts": {
-      "id": "cb484fe1-e42f-4eb1-aab5-907297561392",
+      "id": "10a0c905-484d-4ac5-9248-411382b92820",
       "filePath": "src/domains/shared-kernel/utils/uuid-generator.ts",
       "hashValue": "59ace5017a2663b8fa241bc6e8fe61456bd81b68a13cffb25755779f9c2b3cc0",
       "committedAt": null,
@@ -1184,7 +901,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/migration/schema-migrator.ts": {
-      "id": "e755fc94-8072-450c-acaa-baf312b7adcf",
+      "id": "3a4c7ef0-ac6c-434b-860d-0f572bcbd80a",
       "filePath": "src/infrastructure/persistence/migration/schema-migrator.ts",
       "hashValue": "cb71cdc59180aaeb1319ea75e188a7c043ece119b037bff774deeaa5a4e17d79",
       "committedAt": null,
@@ -1192,7 +909,7 @@
       "diff": null
     },
     "src/presentation/components/common/SearchBar.tsx": {
-      "id": "17eee83d-27ae-48b9-b23a-a58702e1e5bf",
+      "id": "584fb3a9-7d30-4b1a-aeee-0b5be497042c",
       "filePath": "src/presentation/components/common/SearchBar.tsx",
       "hashValue": "3b9eb1889a2280cbd4edc137c8ee3c0ec66e1dc740497e853ccb2299983d5ed1",
       "committedAt": null,
@@ -1200,7 +917,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentationHeader.tsx": {
-      "id": "bccd0a45-e1de-4b21-b9ac-9f47b7f64d4f",
+      "id": "16370c61-0348-427f-ad84-b48e2112af8d",
       "filePath": "src/presentation/components/documentation/DocumentationHeader.tsx",
       "hashValue": "9aaedefa100c6719d95d00cb043b6171f81445124d4cc348d53d118d2673f1bd",
       "committedAt": null,
@@ -1208,7 +925,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentCard.tsx": {
-      "id": "e7272fdb-66d9-407a-a8a7-bf682f95a059",
+      "id": "0ade19df-9f67-48aa-ab54-99e3ec546749",
       "filePath": "src/presentation/components/documentation/DocumentCard.tsx",
       "hashValue": "506b0d3e057d9351678f678cff5dac6561d625213b67f269898af4748fbca8bb",
       "committedAt": null,
@@ -1216,7 +933,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentList.tsx": {
-      "id": "6e8009d2-4157-4214-b53b-a131f3ba09bb",
+      "id": "a4a51620-809d-4374-b052-e2b03a2dde14",
       "filePath": "src/presentation/components/documentation/DocumentList.tsx",
       "hashValue": "33598d18f1e42153166273c349040050b117eb227d8735db249142381f34e771",
       "committedAt": null,
@@ -1224,7 +941,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/FolderRegistrationPrompt.tsx": {
-      "id": "7eda56cd-3573-41f9-a09e-0f9c7dbd907f",
+      "id": "2ce12389-32a3-4c9d-9f20-97e50fa7caf2",
       "filePath": "src/presentation/components/documentation/FolderRegistrationPrompt.tsx",
       "hashValue": "07ff24ca0c541f8968944b3af9df0bb7cc61aca7593039daa9f048f073e7782f",
       "committedAt": null,
@@ -1232,7 +949,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/OrphanBadge.tsx": {
-      "id": "03900388-ffe8-4bf4-93f0-c3971d924cef",
+      "id": "e364101e-259b-484c-91fa-c1d6fee93480",
       "filePath": "src/presentation/components/documentation/OrphanBadge.tsx",
       "hashValue": "35204dd48b034d36ac91ef2f9dc183a31f5ffe961034b737c52bbe892ec80134",
       "committedAt": null,
@@ -1240,7 +957,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/OrphanSection.tsx": {
-      "id": "41b8ca0d-d9b5-495f-9442-807e0de1824c",
+      "id": "d3c95941-0f6b-4b73-946b-19cfa26cac61",
       "filePath": "src/presentation/components/documentation/OrphanSection.tsx",
       "hashValue": "8b517e11525fb4e6f8c3cec4dca37e014d0ba79c0137b0e81adb4774c84f0f7a",
       "committedAt": null,
@@ -1248,7 +965,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileIcon.tsx": {
-      "id": "eaeb1f4d-3278-4fd3-8033-b3d9ceffc390",
+      "id": "7284f536-7dd3-4544-a6fb-26413f04aea4",
       "filePath": "src/presentation/components/file-tree/FileIcon.tsx",
       "hashValue": "8a4a1cfa466299c436046eea3d6d8a30513fe831fb6814e3aed0a4e2c793982d",
       "committedAt": null,
@@ -1256,7 +973,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileNode.tsx": {
-      "id": "de99e954-acdd-45cd-aeff-5a361cf7a3f1",
+      "id": "33a58f0a-16cf-4b9f-a0b1-4e8959b6faab",
       "filePath": "src/presentation/components/file-tree/FileNode.tsx",
       "hashValue": "9a68a950e72c550fecf02138cc6e751980b32f5d317906dabee9fb2226b8373e",
       "committedAt": null,
@@ -1264,7 +981,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileTree.tsx": {
-      "id": "859a648b-7cd9-4f62-8d80-b89dc9320ea9",
+      "id": "f66d3734-6296-4243-af32-52817793db8a",
       "filePath": "src/presentation/components/file-tree/FileTree.tsx",
       "hashValue": "921eca1f165e7c58181677a330e84534e45312f3164f9393d0aaab2bce240951",
       "committedAt": null,
@@ -1272,7 +989,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/IgnorePatternEditor.tsx": {
-      "id": "361484a7-131f-4f61-8be7-e395de6f0509",
+      "id": "5adb8c6e-fa4e-4c5c-88e1-b2ee1724cbcc",
       "filePath": "src/presentation/components/file-tree/IgnorePatternEditor.tsx",
       "hashValue": "d2c96e4c30741ec806031e4adefcfc11875a2d30300eea95ff7fb88af03ad1bf",
       "committedAt": null,
@@ -1280,7 +997,7 @@
       "diff": null
     },
     "src/presentation/components/layout/Header.tsx": {
-      "id": "57ca000a-53cc-4f51-9f6b-0ed9418c958f",
+      "id": "7ec97a59-d2f3-4d7c-bf4a-19c0fbf5c5b0",
       "filePath": "src/presentation/components/layout/Header.tsx",
       "hashValue": "6175cfdf4ff8d3b13745773c77835d8bd5aa9f976c3b160c66bb8284cf63520f",
       "committedAt": null,
@@ -1288,7 +1005,7 @@
       "diff": null
     },
     "src/presentation/components/linking/DocumentHierarchy.tsx": {
-      "id": "3163361f-a292-4514-9627-41e67e32e8ad",
+      "id": "69034016-cd37-49d8-8c36-1fcc224a44cc",
       "filePath": "src/presentation/components/linking/DocumentHierarchy.tsx",
       "hashValue": "1c24f13fd10b6aa59fe24ff9997e34d466aba43a7ee44bcb271f326f3c345bf0",
       "committedAt": null,
@@ -1296,7 +1013,7 @@
       "diff": null
     },
     "src/presentation/components/linking/DocumentSourceList.tsx": {
-      "id": "6760fe2b-d152-484d-a8df-d52dc2b36480",
+      "id": "e7cea22f-7524-419d-b308-98c7b064bc0e",
       "filePath": "src/presentation/components/linking/DocumentSourceList.tsx",
       "hashValue": "621a12fb6bddf6ed7c3070679c56d1c0158165bc81fe91eef285a0016235a4ac",
       "committedAt": null,
@@ -1304,7 +1021,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreeNode.tsx": {
-      "id": "573845dd-d0c6-4fce-84ea-43a34eec5663",
+      "id": "84f6173c-0be2-463b-8f04-8035a3579e53",
       "filePath": "src/presentation/components/linking/FileTreeNode.tsx",
       "hashValue": "142f2d024eef9266db2580839a4e90420c8278bc4f7892c2922eb24fa748d77e",
       "committedAt": null,
@@ -1312,7 +1029,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreePickerModal.css": {
-      "id": "d5f38a0c-c01f-48b3-b564-c12d077e8d48",
+      "id": "09b400cf-d561-457c-bee1-3e7e15b2b668",
       "filePath": "src/presentation/components/linking/FileTreePickerModal.css",
       "hashValue": "e458776ff2388005c1de919b7b50236805fd09b56625c4ad9badf0bb79aca6c4",
       "committedAt": null,
@@ -1320,7 +1037,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreePickerModal.tsx": {
-      "id": "79a996d2-6be6-4577-8b72-b9691efdb99a",
+      "id": "9fc40ce0-157c-4f04-a9b7-3e9f1599a7c0",
       "filePath": "src/presentation/components/linking/FileTreePickerModal.tsx",
       "hashValue": "45eea299670170b31ae26faebfcc152a124d2fc08e4e69d13ea3d10280d119d5",
       "committedAt": null,
@@ -1328,7 +1045,7 @@
       "diff": null
     },
     "src/presentation/components/linking/InteractiveGraph.tsx": {
-      "id": "d0d6d6c1-dabe-4d4c-bad1-62aa48b9dd1b",
+      "id": "22cc3fb8-84a4-43cd-ba6f-fef71584557e",
       "filePath": "src/presentation/components/linking/InteractiveGraph.tsx",
       "hashValue": "5af66fdd6916aacbe3da95c7b74c7018590805c4cb185595a5a45285cc4d7e5c",
       "committedAt": null,
@@ -1336,7 +1053,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkBadge.tsx": {
-      "id": "95602a7d-8b41-4ab9-b8e1-4f0acb793000",
+      "id": "845b8602-26a1-4887-be82-9df8d4ac2fec",
       "filePath": "src/presentation/components/linking/LinkBadge.tsx",
       "hashValue": "27b4a3b0fc2116d1a823577e62f51bdc19aca1ee42483de1663232cec857fcd6",
       "committedAt": null,
@@ -1344,7 +1061,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkingPageHeader.tsx": {
-      "id": "a7e49d95-4839-40ab-9120-3cb1102f22a6",
+      "id": "e31234eb-d68f-4fa6-9595-e549a3239f85",
       "filePath": "src/presentation/components/linking/LinkingPageHeader.tsx",
       "hashValue": "68de58fa7d68b3e2ec1bf7896f7d537846cce548a783f73df8e6a530ba1ebcd8",
       "committedAt": null,
@@ -1352,7 +1069,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkingTabs.tsx": {
-      "id": "2243af33-6f19-4ec5-9623-d18a930971f4",
+      "id": "ff3ae59a-421b-469e-9f67-7721fc7d0b24",
       "filePath": "src/presentation/components/linking/LinkingTabs.tsx",
       "hashValue": "3432a4b9d5e1d4467f1cfb9763219bd545498b2c98982342c4e500df9c507bde",
       "committedAt": null,
@@ -1360,7 +1077,7 @@
       "diff": null
     },
     "src/presentation/components/linking/PersistentDocumentSelector.tsx": {
-      "id": "1284b803-cd77-441d-9058-52d37a956331",
+      "id": "32fe4a18-9dc1-493f-855a-ce2934051189",
       "filePath": "src/presentation/components/linking/PersistentDocumentSelector.tsx",
       "hashValue": "fb7cb9097b483235e2be35653eabe315c2a3967a7643256537ff3c23a4dc4aa3",
       "committedAt": null,
@@ -1368,7 +1085,7 @@
       "diff": null
     },
     "src/presentation/components/linking/UnlinkedFilesList.css": {
-      "id": "fe0d3f6a-0aad-4094-9414-c21d89d6079b",
+      "id": "da7bb867-f0fa-4e5d-a448-ad1e289261b1",
       "filePath": "src/presentation/components/linking/UnlinkedFilesList.css",
       "hashValue": "4656e2140b93940b8303ea0119933fa4c3029e10b8f1ff1c0653604eb2c1c715",
       "committedAt": null,
@@ -1376,7 +1093,7 @@
       "diff": null
     },
     "src/presentation/components/linking/UnlinkedFilesList.tsx": {
-      "id": "7c0451a1-a638-45e7-b22e-40e130e917bf",
+      "id": "6512aaa8-cc93-4759-8820-9eccc42a2326",
       "filePath": "src/presentation/components/linking/UnlinkedFilesList.tsx",
       "hashValue": "8ef7985c84df1b7de0d04d9b649ccd238aac1a8220f572922ccacb0f9a82f5cf",
       "committedAt": null,
@@ -1384,7 +1101,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/CommitButton.tsx": {
-      "id": "b95c4e6b-3a5a-4434-9895-cc5564bafcc1",
+      "id": "d81bbdb6-c649-4de5-9eae-e8b6a87f3a52",
       "filePath": "src/presentation/components/tracking/CommitButton.tsx",
       "hashValue": "4d384e5eb6984c28d57b9338fe87c05cd40ab3a806bfff7dd8878524fc8c0545",
       "committedAt": null,
@@ -1392,7 +1109,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/CommitHistory.tsx": {
-      "id": "0e886218-0659-4ade-83cd-ca64c3e6f904",
+      "id": "c5db66d7-9338-4e75-b3a2-33929fee90b8",
       "filePath": "src/presentation/components/tracking/CommitHistory.tsx",
       "hashValue": "56b9b57eb016af5349b4e5aed1b230070bcb61b3f5862e6b0cd6a69c0af07ae9",
       "committedAt": null,
@@ -1400,7 +1117,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/DiffViewer.tsx": {
-      "id": "ff190b59-8d45-4e3a-81c1-0c67ce80fada",
+      "id": "b61ea885-2fe3-402e-810d-159f2f79dce1",
       "filePath": "src/presentation/components/tracking/DiffViewer.tsx",
       "hashValue": "34da511cb19f3d1b2c8375264a8525d265c6b6d184ce9dc7ed1f9ead787e6b94",
       "committedAt": null,
@@ -1408,7 +1125,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/DocumentCommitPanel.tsx": {
-      "id": "9624f3c9-ab43-4af0-902f-eb19927e7093",
+      "id": "f4271745-c630-4c98-8f38-4c552f3d7062",
       "filePath": "src/presentation/components/tracking/DocumentCommitPanel.tsx",
       "hashValue": "d60a85dcac3f1b8ba84ae6d96f2140fbbf9e7cf9c05dd97181fcd7916a9589c0",
       "committedAt": null,
@@ -1416,7 +1133,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/DocumentList.tsx": {
-      "id": "4923b38e-f428-4cb0-a6f1-9dd700ef0826",
+      "id": "2605e16a-d180-4c1d-af36-f41a53293833",
       "filePath": "src/presentation/components/tracking/DocumentList.tsx",
       "hashValue": "dd5c7b29ca928e84761fb992f832a0a95b9748b021ec28fdece648adf9dcc520",
       "committedAt": null,
@@ -1424,7 +1141,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/PendingChangesList.tsx": {
-      "id": "31c8dafe-7b82-4c20-8767-e9bda9a12a47",
+      "id": "8d1865b1-b368-4baa-9e2f-da6af6d3d5de",
       "filePath": "src/presentation/components/tracking/PendingChangesList.tsx",
       "hashValue": "9e22d48aa068584787de311ff4d0c7f62f0bcda662216767d812225facbc5253",
       "committedAt": null,
@@ -1432,7 +1149,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/TrackingPageHeader.tsx": {
-      "id": "646f10b6-d2f7-4ef0-9f89-851ce73d6526",
+      "id": "5b1db533-bf65-4ce5-a735-cdc14e2045cc",
       "filePath": "src/presentation/components/tracking/TrackingPageHeader.tsx",
       "hashValue": "4579c5cb2a7beab770e0c21562185f37b7cd6609a228a426028554e6d20fc389",
       "committedAt": null,
@@ -1440,7 +1157,7 @@
       "diff": null
     },
     "src/presentation/components/welcome/RecentWorkspacesList.tsx": {
-      "id": "b2e3ac60-6013-47bb-9716-3e7ad6b1bfc6",
+      "id": "98d5db17-f8a6-43a7-a997-d5837a4b869a",
       "filePath": "src/presentation/components/welcome/RecentWorkspacesList.tsx",
       "hashValue": "ecef75ea33cd4e8886db8b8ce8ed727ea0ff7abfb26d547cc9d56eb28f47b0f4",
       "committedAt": null,
@@ -1448,7 +1165,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useFileTreePicker.ts": {
-      "id": "0a7a23c7-2a28-42e2-85f1-c494c1251189",
+      "id": "bcf0a148-99c9-4486-9b09-2536556737ae",
       "filePath": "src/presentation/hooks/linking/useFileTreePicker.ts",
       "hashValue": "938381cf11bd813596bce4251c2df71699cf86c1edef0d2d46d973e2b9177fbf",
       "committedAt": null,
@@ -1456,7 +1173,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useFilteredFileTree.ts": {
-      "id": "db12c07c-dbba-4472-abe0-529fbedbbbd3",
+      "id": "1aec7ca2-a3a9-45c2-ab54-039cb009f3c1",
       "filePath": "src/presentation/hooks/linking/useFilteredFileTree.ts",
       "hashValue": "67462281d68f8b2c18a4505f810a3f70995fbb5eb0599e064861fca3c23fd2f8",
       "committedAt": null,
@@ -1464,7 +1181,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useGraphData.ts": {
-      "id": "f6c17a51-3b0f-4c2b-aa3c-f56105525d3d",
+      "id": "7ad76a4f-201d-4314-ab48-bb798df756be",
       "filePath": "src/presentation/hooks/linking/useGraphData.ts",
       "hashValue": "2e16c8379bfb40674d4cd8a6a1482e92b44fdc07e9de6a51304f44d9f6306c95",
       "committedAt": null,
@@ -1472,7 +1189,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinkCreation.ts": {
-      "id": "34411d69-6807-4b59-ba92-78fbaa528e8a",
+      "id": "bdf30e0a-da36-450b-b30c-0b67e30f2606",
       "filePath": "src/presentation/hooks/linking/useLinkCreation.ts",
       "hashValue": "b02508958064b6990e23845980257fd289fbc6f2fbf8400771f020ada2bbe99f",
       "committedAt": null,
@@ -1480,7 +1197,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinkingPageOrchestrator.ts": {
-      "id": "4493571f-8c54-4565-b43a-cf79721096d1",
+      "id": "df24ef86-3ea0-4a73-83ae-419f4765563d",
       "filePath": "src/presentation/hooks/linking/useLinkingPageOrchestrator.ts",
       "hashValue": "8ceda725edebc1f83754db6184b196831183ec69136efe5054f0bd24108023af",
       "committedAt": null,
@@ -1488,7 +1205,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinks.ts": {
-      "id": "6197e61f-edbb-449e-b846-d5afb5ceb5e4",
+      "id": "431be4cd-7d7c-4bc0-9220-515234980184",
       "filePath": "src/presentation/hooks/linking/useLinks.ts",
       "hashValue": "59c25c8960610dc3d0c2e04ef2215b6722f444b5f3c3a10eae28192653d820be",
       "committedAt": null,
@@ -1496,7 +1213,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useSearchableList.ts": {
-      "id": "e97c60aa-de6f-41ef-904b-4de036719aca",
+      "id": "23b80473-c74a-4ec5-bf17-e69feb446ab8",
       "filePath": "src/presentation/hooks/linking/useSearchableList.ts",
       "hashValue": "25bf24a29e0e67702095046da234fef311964b02d3d3a813888dfba02c3b0d68",
       "committedAt": null,
@@ -1504,7 +1221,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useUnlinkedFiles.ts": {
-      "id": "8d480070-bfc2-4cdb-9478-1e8bfeed982e",
+      "id": "e05cb02e-3196-4f55-af3a-d536e4fb4fab",
       "filePath": "src/presentation/hooks/linking/useUnlinkedFiles.ts",
       "hashValue": "d95505c80d8f38eb9534cdaa667135b5bcf7ec76dcc4782139280a7c11e57780",
       "committedAt": null,
@@ -1512,7 +1229,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/delete-document.command.ts": {
-      "id": "6d20add2-b9ea-4c0a-8bd1-d248eae70d5d",
+      "id": "88d05eca-aa33-4650-ad1c-fcb9cbfe31bd",
       "filePath": "src/domains/documentation/application/commands/delete-document.command.ts",
       "hashValue": "f5f1dc33fb9baeb03df59b5a6346ad6b35ff490b88bdb97343b95289d5a78661",
       "committedAt": null,
@@ -1520,7 +1237,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/detect-docs-folder-relocation.command.ts": {
-      "id": "70215a68-5dcc-41b4-9874-aa07d4b82c17",
+      "id": "e027cc80-e2b3-43a8-b19f-cef8c4feb2b3",
       "filePath": "src/domains/documentation/application/commands/detect-docs-folder-relocation.command.ts",
       "hashValue": "b2944997daf418758a1ead6c1eeac8a2b0a5c221591cb6a21a7b0c2a030dc051",
       "committedAt": null,
@@ -1528,7 +1245,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/register-docs-folder.command.ts": {
-      "id": "b84aed8e-665a-4c01-9289-23a1586a141d",
+      "id": "5c73bcc3-4e9e-40ee-99e4-8327270762f3",
       "filePath": "src/domains/documentation/application/commands/register-docs-folder.command.ts",
       "hashValue": "11aaf01f55ab624193010df9b561d151ac851916b4d1029d745e0e161fc9c639",
       "committedAt": null,
@@ -1536,7 +1253,7 @@
       "diff": null
     },
     "src/domains/documentation/application/dto/doc-folder.dto.ts": {
-      "id": "25f0755a-c118-4993-baf5-32c8fa3cf347",
+      "id": "bb0831e2-3adf-4b10-bf3b-c34439639ab8",
       "filePath": "src/domains/documentation/application/dto/doc-folder.dto.ts",
       "hashValue": "34ce39438059d0747849c74ce2eef755c625efe33a2e3b9dba6d7eee11af3529",
       "committedAt": null,
@@ -1544,7 +1261,7 @@
       "diff": null
     },
     "src/domains/documentation/application/dto/document.dto.ts": {
-      "id": "85d55bec-19cb-495f-bd9d-3c12cebf4725",
+      "id": "dfc868c0-af66-49b4-9133-ea34b84d03e1",
       "filePath": "src/domains/documentation/application/dto/document.dto.ts",
       "hashValue": "7af5f290775d992229c261523b56b352e1dd1a9614a6f1e1bc4fa40b13708830",
       "committedAt": null,
@@ -1552,7 +1269,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/delete-document.handler.ts": {
-      "id": "a592678a-0866-410a-b57d-873e71ccb3b1",
+      "id": "2dc0a9a6-36f9-4440-882f-ab84d1340a31",
       "filePath": "src/domains/documentation/application/handlers/delete-document.handler.ts",
       "hashValue": "0a532d51c9d960e6607461bcfa51f69847793753df91465752e103be3f90ed51",
       "committedAt": null,
@@ -1560,7 +1277,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/detect-docs-folder-relocation.handler.ts": {
-      "id": "c58c8d33-9e5e-4d44-b9e2-7ceec33c6f37",
+      "id": "53bc56d9-b05a-4650-9ebf-6eab6844bf9d",
       "filePath": "src/domains/documentation/application/handlers/detect-docs-folder-relocation.handler.ts",
       "hashValue": "38c8122096ad83d71283039a1d679902afe3c41b8f0826d3afba5df75810bddf",
       "committedAt": null,
@@ -1568,7 +1285,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/document-cleanup-on-file-delete.handler.ts": {
-      "id": "fcfb64f6-a5a9-4404-ad9f-921f532cb0ce",
+      "id": "b01f2d42-1d16-4459-a67d-005057eee67e",
       "filePath": "src/domains/documentation/application/handlers/document-cleanup-on-file-delete.handler.ts",
       "hashValue": "83913bb0283367a18af94cbaee89a10f5f9b2b38c9d2be6f51b196cfd4eaa115",
       "committedAt": null,
@@ -1576,7 +1293,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/get-all-documents.handler.ts": {
-      "id": "06e21b8e-b0ec-439a-b693-6cbef3b6f229",
+      "id": "cf67c548-dc2b-4b1e-99df-f78b5be20706",
       "filePath": "src/domains/documentation/application/handlers/get-all-documents.handler.ts",
       "hashValue": "c119c7bb72e563cbd24680bebb54c0101455649aedd46c25ca8197a0e39a355c",
       "committedAt": null,
@@ -1584,7 +1301,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/get-orphaned-documents.handler.ts": {
-      "id": "7b1a1033-99bb-4d22-a9c7-53c6d3b5a244",
+      "id": "5754213a-6150-41c4-9650-966ad0a4f9ae",
       "filePath": "src/domains/documentation/application/handlers/get-orphaned-documents.handler.ts",
       "hashValue": "babf0ff5554acc6343acf043a1ee0134ed25f09cbe06a4d565a6309b62074129",
       "committedAt": null,
@@ -1592,7 +1309,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/register-docs-folder.handler.ts": {
-      "id": "e0e07a26-b435-4a9e-a946-bdd7c9ecf9e0",
+      "id": "96b6ea60-c9c1-4974-8751-58fa34583485",
       "filePath": "src/domains/documentation/application/handlers/register-docs-folder.handler.ts",
       "hashValue": "c03966ba3e33d3b22ee28376a61513705f0a004863362674e6983b58f0e4c2fd",
       "committedAt": null,
@@ -1600,7 +1317,7 @@
       "diff": null
     },
     "src/domains/documentation/application/ports/document-folder-scanner-port.interface.ts": {
-      "id": "d2457232-ba38-45b7-b9c1-388d2dc8c4b1",
+      "id": "9201a4c5-cde4-44fa-991b-7f493384cc1a",
       "filePath": "src/domains/documentation/application/ports/document-folder-scanner-port.interface.ts",
       "hashValue": "717653edad16c3d7b12b6a30441cf7208306a188a0abe02b9601ece28f26bef0",
       "committedAt": null,
@@ -1608,7 +1325,7 @@
       "diff": null
     },
     "src/domains/documentation/application/ports/file-deletion-port.interface.ts": {
-      "id": "8a2d774b-ab46-4af0-a730-8e8c86ca5599",
+      "id": "dece2d6c-1bfc-471c-a0ea-5ff2eae29cd4",
       "filePath": "src/domains/documentation/application/ports/file-deletion-port.interface.ts",
       "hashValue": "3c7d081dca8e909fb331b0f20fb4fae25c7ec01d9d6b29fc8952ee4cf80324ee",
       "committedAt": null,
@@ -1616,7 +1333,7 @@
       "diff": null
     },
     "src/domains/documentation/application/queries/get-all-documents.query.ts": {
-      "id": "0e510b2b-4454-462f-b792-b5ad9fc668f6",
+      "id": "9d4bb1f3-f7eb-4e95-9682-7eadd8407620",
       "filePath": "src/domains/documentation/application/queries/get-all-documents.query.ts",
       "hashValue": "6ba9f3500e16652cce151e87d56cda82994054a98c9eb87ac2e14f6254bac6fe",
       "committedAt": null,
@@ -1624,7 +1341,7 @@
       "diff": null
     },
     "src/domains/documentation/application/queries/get-orphaned-documents.query.ts": {
-      "id": "e29acc87-6575-4136-861b-706ce8c1d90f",
+      "id": "1bc2924f-dc2e-4b5e-bced-6fb4c6c21403",
       "filePath": "src/domains/documentation/application/queries/get-orphaned-documents.query.ts",
       "hashValue": "cdc87d320838d0888c6efd031c35b8e3b1928c412a892d0c7dc773275b1c58c5",
       "committedAt": null,
@@ -1632,7 +1349,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/entities/doc-folder.ts": {
-      "id": "ad4fd171-a5e3-4d3f-a75c-42ae3cad15be",
+      "id": "9dbbda68-bea3-4b1c-bbe8-821b60402666",
       "filePath": "src/domains/documentation/domain/entities/doc-folder.ts",
       "hashValue": "4f58183aa4c9dd00613f2872adbcdac2ad0ad066b75b547070157f046ba5b5ac",
       "committedAt": null,
@@ -1640,7 +1357,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/entities/document.ts": {
-      "id": "b18a5b5f-41fd-44db-8042-60bc11a552c5",
+      "id": "3d6b66f6-87ff-4f5b-9aa9-12ba486d1e14",
       "filePath": "src/domains/documentation/domain/entities/document.ts",
       "hashValue": "face130f9280b0ad735b9f8cf918af4e4b62357191eece9f05f3883b9dbdf8f9",
       "committedAt": null,
@@ -1648,7 +1365,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/docs-folder-relocated.ts": {
-      "id": "2dd63ea8-99ec-4aff-bb72-f952a4ed2b72",
+      "id": "f43cc1dc-8c8f-49e2-97bd-ef0d742a5439",
       "filePath": "src/domains/documentation/domain/events/docs-folder-relocated.ts",
       "hashValue": "504eae23052353349a1e2e84dae4e58f3a676a7189d7338f44cacff5eedc7ab2",
       "committedAt": null,
@@ -1656,7 +1373,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/document-deleted.ts": {
-      "id": "3453d12f-fdff-49c3-9140-419a709da46c",
+      "id": "334787b7-d8e0-41da-82ad-10df843a8960",
       "filePath": "src/domains/documentation/domain/events/document-deleted.ts",
       "hashValue": "65ed7a03b11203d5580e0321a4901c775b4afc2e03eb432227594c381f37e04d",
       "committedAt": null,
@@ -1664,7 +1381,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/document-discovered.ts": {
-      "id": "ae674e06-d987-42c2-b879-78516cb2dde5",
+      "id": "5474f4bc-6163-40b0-a581-f0822000766f",
       "filePath": "src/domains/documentation/domain/events/document-discovered.ts",
       "hashValue": "d1ddda26362de324e4c963ff21c5ac6aaaa4416de75c253211dfc4c2da6292d1",
       "committedAt": null,
@@ -1672,7 +1389,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/orphan-detected.ts": {
-      "id": "98a79cde-c63d-4760-a43d-109a43435330",
+      "id": "5373ff72-a355-467c-ab0b-b488799a5485",
       "filePath": "src/domains/documentation/domain/events/orphan-detected.ts",
       "hashValue": "2a00bd9ca682cdec017668ea00490f18d579a5ac6b9f7b7742fe3346c724fecf",
       "committedAt": null,
@@ -1680,7 +1397,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/repository/doc-folder-repository.interface.ts": {
-      "id": "da03e5e6-28d6-4dde-b2a3-09cff10ddcc1",
+      "id": "6a208fce-c4d4-4079-a433-6c1bbdfe0a30",
       "filePath": "src/domains/documentation/domain/repository/doc-folder-repository.interface.ts",
       "hashValue": "623ff3e09bae8ece63a8a0137f87ac96874e0c942c4a72033d7feafee9f8a6cc",
       "committedAt": null,
@@ -1688,7 +1405,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/repository/document-repository.interface.ts": {
-      "id": "a39b1ee0-d033-4449-8c7a-7a0f6ab65664",
+      "id": "b2facc1b-3c6d-46d6-97ae-e47299c43ecc",
       "filePath": "src/domains/documentation/domain/repository/document-repository.interface.ts",
       "hashValue": "8d8077e0d79e2369ed80690dd798385194a9aae8c701d318eb7c1a8713565c7a",
       "committedAt": null,
@@ -1696,7 +1413,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/services/docs-folder-detector.service.ts": {
-      "id": "23b11ae3-bc31-438b-bb3f-6ca366848e3a",
+      "id": "0c15b30c-d53c-44d2-8b6d-16666a4482f6",
       "filePath": "src/domains/documentation/domain/services/docs-folder-detector.service.ts",
       "hashValue": "beec97cff6a5c14a1478ed3f661f0ff46301c53121e9bccb3b665e779224ae42",
       "committedAt": null,
@@ -1704,7 +1421,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/doc-folder-id.ts": {
-      "id": "235e27f2-610d-4577-9d6e-2fd582c2d516",
+      "id": "d01af185-b238-4079-93c5-db772e7aaa43",
       "filePath": "src/domains/documentation/domain/value-objects/doc-folder-id.ts",
       "hashValue": "1b8cbdf0ddb8273fdb451db42188baf5cddc9485f4fd4cd4b972bdc8e3788757",
       "committedAt": null,
@@ -1712,7 +1429,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/doc-folder-signature.ts": {
-      "id": "3ee2818d-f4aa-4f6b-a07e-1afefe51dcf7",
+      "id": "8c54d9e7-1ef5-4a75-9b31-68007914e9b7",
       "filePath": "src/domains/documentation/domain/value-objects/doc-folder-signature.ts",
       "hashValue": "f9c922e9db606eaf27b08a6bb272052f437eba8acac543fdedf0daf1b9630eec",
       "committedAt": null,
@@ -1720,7 +1437,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/document-id.ts": {
-      "id": "ab9069f3-b258-4215-88c6-3bee1678e92e",
+      "id": "0eacc07f-1874-4a39-b5a7-ce88f2985453",
       "filePath": "src/domains/documentation/domain/value-objects/document-id.ts",
       "hashValue": "e943a643bab1268b146e31141e3ece1c8f7a08ace87396ee20cd2334183e6f64",
       "committedAt": null,
@@ -1728,7 +1445,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/document-path.ts": {
-      "id": "54f6b3a3-5a38-4bea-a7dd-fdd0d857d336",
+      "id": "9e1c28d0-f4af-47f3-8367-56192a37f76b",
       "filePath": "src/domains/documentation/domain/value-objects/document-path.ts",
       "hashValue": "7a4c6461dda1060fec73f810224d06db8e968d5041b63602977aea065aa44900",
       "committedAt": null,
@@ -1736,7 +1453,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts": {
-      "id": "833984d7-d850-4804-b3ea-4a857b46ebb0",
+      "id": "4a4109a0-015c-4806-87c3-9919989a8bc4",
       "filePath": "src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts",
       "hashValue": "8b3b4247f8c1363fc793e647e7478051fc43cc222a6563d30305584fcf6d78fb",
       "committedAt": null,
@@ -1744,7 +1461,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/node-fs-deletion.adapter.ts": {
-      "id": "65d32be3-0b27-41e3-861f-22c8ac25f004",
+      "id": "591d119d-3d2a-4b89-98fe-fda2afc85f02",
       "filePath": "src/domains/documentation/infrastructure/adapters/node-fs-deletion.adapter.ts",
       "hashValue": "537296afe94fc38d7610699dfaf4567f106bf6f9d487ba40f46252ada16a6110",
       "committedAt": null,
@@ -1752,7 +1469,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/node-fs-document-scanner.adapter.ts": {
-      "id": "e9f880a1-4ae4-42f6-b936-8a14071d597b",
+      "id": "92c2d97f-b1f3-42f8-a211-fd66261eff64",
       "filePath": "src/domains/documentation/infrastructure/adapters/node-fs-document-scanner.adapter.ts",
       "hashValue": "f7aadb3e170f58495bbb904c072c7ab6b54710cf468abd639782c7b6da712d3b",
       "committedAt": null,
@@ -1760,7 +1477,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/repository/doc-folder-json.repository.ts": {
-      "id": "c434c7ea-1339-4256-aff0-d10b1d287870",
+      "id": "339fd2c1-d9cd-4006-9328-86f13d7d40be",
       "filePath": "src/domains/documentation/infrastructure/repository/doc-folder-json.repository.ts",
       "hashValue": "3f8faa904245e4449f0d869e50fa74311c22c46d2fdb0848e1ed05d7bd6ef832",
       "committedAt": null,
@@ -1768,7 +1485,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/repository/document-json.repository.ts": {
-      "id": "e5812b89-9b30-475d-9fe9-784e8c28f62f",
+      "id": "f9fe33e8-7dd8-4cd4-ab51-3486e1f4ebe7",
       "filePath": "src/domains/documentation/infrastructure/repository/document-json.repository.ts",
       "hashValue": "7b18df48a113da804441ddaec7e36a8607fea0fc560c02f913be34910575832d",
       "committedAt": null,
@@ -1776,7 +1493,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/add-ignore-pattern.command.ts": {
-      "id": "7601ff3c-4a2e-4d4d-a8bf-1f2f010063ee",
+      "id": "93c65c9d-f893-460d-8760-cddf5142dce8",
       "filePath": "src/domains/filesystem/application/commands/add-ignore-pattern.command.ts",
       "hashValue": "afa4acb4673ad8ecf70487d64a53a278cd4b6aeacc4283e6d8a9eaf4ed155bdf",
       "committedAt": null,
@@ -1784,7 +1501,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/remove-ignore-pattern.command.ts": {
-      "id": "0a365620-d74f-4bdd-bfdf-93ad9ca837cc",
+      "id": "d2b63423-090f-486c-91b0-db7c0412f5bf",
       "filePath": "src/domains/filesystem/application/commands/remove-ignore-pattern.command.ts",
       "hashValue": "ec20de22b604da7f11bb2b89c626ffa5539a29ec383540a923f5309cce0c00ca",
       "committedAt": null,
@@ -1792,7 +1509,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/scan-project.command.ts": {
-      "id": "31db80c4-faf2-412c-814d-f856c581ab30",
+      "id": "ca37175b-cb91-45d3-a970-8f4780ad131f",
       "filePath": "src/domains/filesystem/application/commands/scan-project.command.ts",
       "hashValue": "3618281e36ddf0b441ec534399340d68ceef4b0eb30fcf12791ef61e5417d3af",
       "committedAt": null,
@@ -1800,7 +1517,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/file-node.dto.ts": {
-      "id": "47f0908c-a509-46e8-8757-d316d288d98c",
+      "id": "98cd48e6-ea2c-411d-bed5-b15725bd2dd4",
       "filePath": "src/domains/filesystem/application/dto/file-node.dto.ts",
       "hashValue": "92b8759ae4528147d0018cf5b786e482fc5b25e8909a1be2ea7b03144518dcd1",
       "committedAt": null,
@@ -1808,7 +1525,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/file-tree.dto.ts": {
-      "id": "861f2deb-a85f-4337-92c4-78834f0918a1",
+      "id": "7f82b6b1-6dcc-4b0c-957e-ef2db22ef865",
       "filePath": "src/domains/filesystem/application/dto/file-tree.dto.ts",
       "hashValue": "af958848a35b4030a6bde0ab6cf6c54f4390135e6143aa03954ced45c6bd3702",
       "committedAt": null,
@@ -1816,7 +1533,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/folder-node.dto.ts": {
-      "id": "0fe4cbb3-d447-4e4f-abd0-f4b21a51f078",
+      "id": "74ed29ca-e35d-4907-8a66-98c1b1d4de63",
       "filePath": "src/domains/filesystem/application/dto/folder-node.dto.ts",
       "hashValue": "e21f895f53cacc1a6947d08edac88ac767cc90b93cfb7cd9c4e2e7e618372d6f",
       "committedAt": null,
@@ -1824,7 +1541,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/add-ignore-pattern.handler.ts": {
-      "id": "1dc4c06a-c1f1-4b9d-968b-222faa254bd7",
+      "id": "6cb7b272-0d6b-4cfb-8186-a7b12d6407e5",
       "filePath": "src/domains/filesystem/application/handlers/add-ignore-pattern.handler.ts",
       "hashValue": "7df2bd2e0d40c11c357e3faa1812b368a0b8ca35a4549614d7482ae7b9e4b6c8",
       "committedAt": null,
@@ -1832,7 +1549,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/get-file-tree.handler.ts": {
-      "id": "58eb50cc-6a90-4853-95b5-c80dab6d45e8",
+      "id": "036570b3-1ed1-449e-9bb5-3b65b12e602f",
       "filePath": "src/domains/filesystem/application/handlers/get-file-tree.handler.ts",
       "hashValue": "c5d3c3c49c1f4f119a8934a54d2ee9cda6dcf410e65c51a84bd671cb66fe2c1a",
       "committedAt": null,
@@ -1840,7 +1557,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/get-ignored-files.handler.ts": {
-      "id": "d0ecf5c9-6b8e-44e3-8f75-8cca030c92d4",
+      "id": "b05694ee-2bf2-4ba6-9309-d2ee7f92a0ee",
       "filePath": "src/domains/filesystem/application/handlers/get-ignored-files.handler.ts",
       "hashValue": "3b1825dac0726fc5ba8ae476ff9aeec86388811b6abe6eb06eb9ab59af6d2f7c",
       "committedAt": null,
@@ -1848,7 +1565,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/remove-ignore-pattern.handler.ts": {
-      "id": "544d9b94-55a4-4e79-8a67-8a976538aba5",
+      "id": "bc4694cd-2c2a-4a17-ab0b-33c373ce614f",
       "filePath": "src/domains/filesystem/application/handlers/remove-ignore-pattern.handler.ts",
       "hashValue": "a08563cbfb6b6870e47adc7b9983c8764fb0b35228a0085dd62501f2f2399829",
       "committedAt": null,
@@ -1856,7 +1573,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/scan-project.handler.ts": {
-      "id": "a0e8ad08-9b04-4fc8-80cd-73e07eb5836d",
+      "id": "e17e7ad6-7d13-4737-986b-556244ec8bf3",
       "filePath": "src/domains/filesystem/application/handlers/scan-project.handler.ts",
       "hashValue": "8903b5a62dc50a3104fa7110d9a3676364f2c997f7060d8a861c3d0510d8be24",
       "committedAt": null,
@@ -1864,7 +1581,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/ports/file-system-adapter.interface.ts": {
-      "id": "396cdcda-45be-4d84-a31b-d257e2f9c012",
+      "id": "992cf708-0636-4389-bc0a-3471f00b17b6",
       "filePath": "src/domains/filesystem/application/ports/file-system-adapter.interface.ts",
       "hashValue": "4e442f04d3a34a16b99c1a37811e749bfc92e4734b680006985ceb09023a2bd9",
       "committedAt": null,
@@ -1872,7 +1589,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/queries/get-file-tree.query.ts": {
-      "id": "ffa053b8-f071-44c5-a47e-361c7890d025",
+      "id": "db282ce1-fc1c-40a8-be57-e9874e38efcd",
       "filePath": "src/domains/filesystem/application/queries/get-file-tree.query.ts",
       "hashValue": "00de6888d0f9bc404fa2abd73107f199779143abb177ccec110d8a22368c0eec",
       "committedAt": null,
@@ -1880,7 +1597,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/queries/get-ignored-files.query.ts": {
-      "id": "f7fe6a93-e896-447c-b4ed-4442c88e9fad",
+      "id": "486daee0-9c88-4e4d-954f-d77b649d0749",
       "filePath": "src/domains/filesystem/application/queries/get-ignored-files.query.ts",
       "hashValue": "816e3ba027a389e72116f27b90fbc4d223002eb607863e58d0a2e29884c11613",
       "committedAt": null,
@@ -1888,7 +1605,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/entities/file-node.ts": {
-      "id": "449455a0-2e75-4bbd-bd3c-d077b5c20378",
+      "id": "6323d96c-657b-4dd6-a064-00c24abeef20",
       "filePath": "src/domains/filesystem/domain/entities/file-node.ts",
       "hashValue": "0ba8b59216da8d6576bfa6533eab560e185e40c4a7cafcb84abf6bbff0842b1e",
       "committedAt": null,
@@ -1896,7 +1613,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/entities/folder-node.ts": {
-      "id": "ea5b8d66-a5cb-440b-a4e6-a6cc11a6533f",
+      "id": "aebb87c6-d38a-405d-b090-77b3f186409a",
       "filePath": "src/domains/filesystem/domain/entities/folder-node.ts",
       "hashValue": "843032bee43f82a14a3a71b06c5d3e080536cbac21d85275511941f56d34be01",
       "committedAt": null,
@@ -1904,7 +1621,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-deleted.ts": {
-      "id": "06b715f2-84de-4ff0-8ba0-20483eb6316a",
+      "id": "7e193abc-b84b-4aca-a219-51c47034dc96",
       "filePath": "src/domains/filesystem/domain/events/file-deleted.ts",
       "hashValue": "f5dd93877a9e666f17eaaa5ab0382e18a8be98da0cc9b408be65e14ac61e841f",
       "committedAt": null,
@@ -1912,7 +1629,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-discovered.ts": {
-      "id": "ad8ec3a2-2f13-46b8-8909-107be29e0c6b",
+      "id": "6a646997-d983-403f-8730-cc63885b68dd",
       "filePath": "src/domains/filesystem/domain/events/file-discovered.ts",
       "hashValue": "487b20176afa60837f59cc93a1e2729705f9af7494091c1d8331281d6405974e",
       "committedAt": null,
@@ -1920,7 +1637,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-excluded.ts": {
-      "id": "5c8f75da-6c22-4b25-8f0c-85fbc9916997",
+      "id": "75d673a7-42e7-4df6-aa63-4e6ebb3d40d3",
       "filePath": "src/domains/filesystem/domain/events/file-excluded.ts",
       "hashValue": "072abd9ddb428474c699a4c192b268b55f0fa12c52e8cafab1b28b3b9b7718c9",
       "committedAt": null,
@@ -1928,7 +1645,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-modified.ts": {
-      "id": "e7c45157-7fc9-4b71-88fe-9905c1911f9c",
+      "id": "5990801a-a81e-4e42-8dae-ec1482c2264b",
       "filePath": "src/domains/filesystem/domain/events/file-modified.ts",
       "hashValue": "589562ad1af2faa899b517a57f5549972d6ea60aa5ce608cd15231faa0cd17a1",
       "committedAt": null,
@@ -1936,7 +1653,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-moved.ts": {
-      "id": "0d58551f-3d0e-4768-95e1-26cfc14cb729",
+      "id": "4ae6fbdc-38fb-4289-bfd9-b96ef4c33423",
       "filePath": "src/domains/filesystem/domain/events/file-moved.ts",
       "hashValue": "ac4a472acae446295bf9b9804864dda267385734828fdff38a7f18cf46bafe21",
       "committedAt": null,
@@ -1944,7 +1661,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/ignore-patterns-changed.ts": {
-      "id": "de92a0ab-e30e-4b34-9c1d-a5c24176036a",
+      "id": "34e03a07-4cf4-4999-a699-3120fb6fc2f5",
       "filePath": "src/domains/filesystem/domain/events/ignore-patterns-changed.ts",
       "hashValue": "63a372522db7f99bb17f6f4f34daae541bddde5c4d4317c011bf0e26a38cbe1c",
       "committedAt": null,
@@ -1952,7 +1669,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/scan-completed.ts": {
-      "id": "dda518fc-2fb7-48e9-b571-0c9b7a0360c1",
+      "id": "78aa1cc5-3264-421b-b9ca-73cfe983e746",
       "filePath": "src/domains/filesystem/domain/events/scan-completed.ts",
       "hashValue": "a746ae0f603d2a62efeb9321ec1eecc08f003d07e1d82af08a0947026a61c3f6",
       "committedAt": null,
@@ -1960,7 +1677,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/repository/filesystem-repository.interface.ts": {
-      "id": "b0f3e960-4d82-46e2-8341-1f8aa444f77c",
+      "id": "b795b012-67e1-41bf-907d-e957a0f6f86c",
       "filePath": "src/domains/filesystem/domain/repository/filesystem-repository.interface.ts",
       "hashValue": "ff53a2cddcea2439aed71ea6b3fbef094bb6e9bc66f43388080a8d262ff2e775",
       "committedAt": null,
@@ -1968,7 +1685,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/services/scan-project.service.ts": {
-      "id": "840ddb5b-286e-4e53-ad3d-80cf87f34be5",
+      "id": "b7aab7a5-ba02-4ca6-aa36-f694485412cc",
       "filePath": "src/domains/filesystem/domain/services/scan-project.service.ts",
       "hashValue": "5358a11c3b69dae33bcfd97a2012134793f4932411ffe379b33f3039ef8862ad",
       "committedAt": null,
@@ -1976,7 +1693,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-hash.ts": {
-      "id": "1d220c9e-260a-4574-814f-4ab84ded77d8",
+      "id": "e27728ba-f384-4eba-9b00-95dc46ce5c3a",
       "filePath": "src/domains/filesystem/domain/value-objects/file-hash.ts",
       "hashValue": "4c7d567c5c303957d0fb2243b4198cd0a27a2f939b2d3b3848e05903c7af04c9",
       "committedAt": null,
@@ -1984,7 +1701,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-node-id.ts": {
-      "id": "cb5dd190-af39-45d1-a616-c5c0338b08af",
+      "id": "1d227e6e-15db-420e-b915-7d98b0bd335c",
       "filePath": "src/domains/filesystem/domain/value-objects/file-node-id.ts",
       "hashValue": "3d2fc1c78dc4cb2d117a3bf31229515632166c1cd7d4ec45285b38086388720b",
       "committedAt": null,
@@ -1992,7 +1709,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-path.ts": {
-      "id": "68901345-68aa-4568-b56f-e6f358c6ecc7",
+      "id": "1cccf1cb-33bd-4423-b36d-c4d250ded2ee",
       "filePath": "src/domains/filesystem/domain/value-objects/file-path.ts",
       "hashValue": "f5657eec66de175dd8d04528ecc1eed2f8e61eaafbcdd3f8a2d789eb7ab94204",
       "committedAt": null,
@@ -2000,7 +1717,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-size.ts": {
-      "id": "4141317a-1a87-4fa9-9403-c296b379a091",
+      "id": "9a29cde8-321b-407d-91b8-b56185d01f99",
       "filePath": "src/domains/filesystem/domain/value-objects/file-size.ts",
       "hashValue": "16b6fa88fff91d36397b7787a4b99d41ac02eb1c51cdc8c81096dfef77d021c3",
       "committedAt": null,
@@ -2008,7 +1725,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/folder-node-id.ts": {
-      "id": "362d665b-e321-4ca8-838b-14ccb937aaf0",
+      "id": "2233bd85-2c6b-4a73-93d8-dcf9286dcad8",
       "filePath": "src/domains/filesystem/domain/value-objects/folder-node-id.ts",
       "hashValue": "0ca79c64c458435c5e50dee8cd3ab342978552ba66bc0012da632e0df6ce1e94",
       "committedAt": null,
@@ -2016,7 +1733,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/ignore-pattern.ts": {
-      "id": "d5be9158-453b-4408-9bfd-f1b4f27b2ac5",
+      "id": "eddc8102-e38b-4e33-8b05-23ff70fb2411",
       "filePath": "src/domains/filesystem/domain/value-objects/ignore-pattern.ts",
       "hashValue": "7334a9ec53230ada1bae459e5993fb97a261dd2d3560f6f9481847facdf24680",
       "committedAt": null,
@@ -2024,7 +1741,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/chokidar.adapter.ts": {
-      "id": "50ee12fb-5a92-4635-a8d3-368eca348292",
+      "id": "bc2434d3-4d0b-4154-b756-0f17f783d077",
       "filePath": "src/domains/filesystem/infrastructure/adapters/chokidar.adapter.ts",
       "hashValue": "1896362e5f1f648ce22d6aa33af203ab698a2cb66e7ccde8b6c3a7d56d9be0e1",
       "committedAt": null,
@@ -2032,7 +1749,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/ignore-parser.adapter.ts": {
-      "id": "031d08a3-1104-40dd-9bba-32532faee951",
+      "id": "6896dc21-891f-4328-a1bc-04c2099a7a07",
       "filePath": "src/domains/filesystem/infrastructure/adapters/ignore-parser.adapter.ts",
       "hashValue": "f49e6a1e8b3e8890b7a8ff77241c78e4f40974a11d07657f9f5099aec47312db",
       "committedAt": null,
@@ -2040,7 +1757,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/node-fs.adapter.ts": {
-      "id": "d1bee69b-183f-444b-9bc6-e6bfe9316f08",
+      "id": "f8c9c80f-61d7-4234-9b8e-7d33c0346ed7",
       "filePath": "src/domains/filesystem/infrastructure/adapters/node-fs.adapter.ts",
       "hashValue": "143da56028e055b5ed64c60534a53ed53d2dbe530b60317f48900b0a6b64160b",
       "committedAt": null,
@@ -2048,7 +1765,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts": {
-      "id": "c486c11f-e346-47e4-b0a6-c17b43008e20",
+      "id": "b8ded895-6688-4342-8384-13d26da21622",
       "filePath": "src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts",
       "hashValue": "cb65ed8a8c7cc5bdb0b993f97c7bfe11f6afb476dd7664296db62445002c182d",
       "committedAt": null,
@@ -2056,7 +1773,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-bulk-code-links.command.ts": {
-      "id": "bf6d4025-cff0-429b-aa08-e4c48fd085fc",
+      "id": "aa00b235-5f23-4461-bb33-e452160f4cd6",
       "filePath": "src/domains/linking/application/commands/create-bulk-code-links.command.ts",
       "hashValue": "68ad1992474cd89c571ac863ff93f096904fba086e15aa5c880e16872d7aee7d",
       "committedAt": null,
@@ -2064,7 +1781,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-document-link.command.ts": {
-      "id": "d1e98b45-3fe2-4456-9b79-e472130838e8",
+      "id": "39a89202-1889-4c76-9b50-39bc7cdd62e2",
       "filePath": "src/domains/linking/application/commands/create-document-link.command.ts",
       "hashValue": "29f90f75aba0b150437b860ef1ebb1a70e2ddf52b5b8698f713b67a3359da735",
       "committedAt": null,
@@ -2072,7 +1789,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-link.command.ts": {
-      "id": "37544080-498b-457f-a01e-e4fe057e4389",
+      "id": "8cbb6673-629c-4235-876b-81ce70c7c457",
       "filePath": "src/domains/linking/application/commands/create-link.command.ts",
       "hashValue": "8448e1b76b06e7a11b7cd6b78750e321fdfd9db05c6796b07c492eb0b8144877",
       "committedAt": null,
@@ -2080,7 +1797,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/migrate-links.command.ts": {
-      "id": "746cefaa-4518-4e6c-85f2-f931ad02c66a",
+      "id": "6a580e9f-e23d-43b0-a4e7-d194583e5555",
       "filePath": "src/domains/linking/application/commands/migrate-links.command.ts",
       "hashValue": "dd155434987a9c2eb29faef363892dfc87cf1606ce7e7a9f018cc33a3620030a",
       "committedAt": null,
@@ -2088,7 +1805,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/remove-document-link.command.ts": {
-      "id": "1f5bdbac-52ae-49dc-bdb8-a693689110f3",
+      "id": "a200b587-eeb0-4bff-8db9-8f8b35943613",
       "filePath": "src/domains/linking/application/commands/remove-document-link.command.ts",
       "hashValue": "ceaa408e9aa47f994313436467df1d3b14af8aebf6bd4cbae06741b464e2421e",
       "committedAt": null,
@@ -2096,7 +1813,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/remove-link.command.ts": {
-      "id": "fb51089e-cdba-4ea7-aadf-a2bf0e25b1e9",
+      "id": "d56e48dc-ffb2-4574-9315-0fb0a45a90d1",
       "filePath": "src/domains/linking/application/commands/remove-link.command.ts",
       "hashValue": "f0c2cf1a925c9852bd9c9dbd20a75a3c13762e96b4a8ea9dfd053df2297d88de",
       "committedAt": null,
@@ -2104,7 +1821,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/code-to-doc-link.dto.ts": {
-      "id": "7a1d5383-ad57-4213-bda1-ad5feaba2c8c",
+      "id": "3d60a81e-c642-4923-91cf-c3acbfbaa246",
       "filePath": "src/domains/linking/application/dto/code-to-doc-link.dto.ts",
       "hashValue": "d35917105a66bddc97e5657b826310cf64a268901288a5ed5b7f4d5af374f063",
       "committedAt": null,
@@ -2112,7 +1829,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/document-link.dto.ts": {
-      "id": "99c3851f-9fe7-488a-824d-72b5fe684a28",
+      "id": "7019536c-7035-4329-b4f1-2cfed39a13d5",
       "filePath": "src/domains/linking/application/dto/document-link.dto.ts",
       "hashValue": "190dec4c7ac82ab8ae9e0d2f8e6f147f5960864a5d9e61f1243bb0812c61e297",
       "committedAt": null,
@@ -2120,7 +1837,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/link-graph.dto.ts": {
-      "id": "3f3f161e-110d-4f92-b57f-6fe14d034db5",
+      "id": "b670b596-8a71-422a-a80a-cc2bd0e0c606",
       "filePath": "src/domains/linking/application/dto/link-graph.dto.ts",
       "hashValue": "274db5567ce7e3dd3dd70b111f0335b23048c79d91701929df364d956692b6d0",
       "committedAt": null,
@@ -2128,7 +1845,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/link.dto.ts": {
-      "id": "6225c935-1080-453d-8036-76b4a20f5e85",
+      "id": "3e3fae85-9ae5-451e-ad9b-8a8c4cf6b72a",
       "filePath": "src/domains/linking/application/dto/link.dto.ts",
       "hashValue": "0b45d3a3b2256980c21e4f469176cb8bd794faee36c1e6b5ce359bdb6728f940",
       "committedAt": null,
@@ -2136,7 +1853,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-bulk-code-links.handler.ts": {
-      "id": "a4c80442-fe28-402c-80db-5414649c906a",
+      "id": "f5f006a2-8856-4ef7-9dc5-9df62ac01da0",
       "filePath": "src/domains/linking/application/handlers/create-bulk-code-links.handler.ts",
       "hashValue": "1f443831b54804c7a3cbf6241b72b033b49bd0aa410e02a8b7c5f2866e934a61",
       "committedAt": null,
@@ -2144,7 +1861,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-document-link.handler.ts": {
-      "id": "55d5bf2d-e1fb-4197-bba7-d461ea357dd4",
+      "id": "26980a3d-26b6-4810-ac48-200821a66017",
       "filePath": "src/domains/linking/application/handlers/create-document-link.handler.ts",
       "hashValue": "21524b1d239d1b371bac6a8150ada09bf6d5eb5b719798871a6659b7a6924ea7",
       "committedAt": null,
@@ -2152,7 +1869,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-link.handler.ts": {
-      "id": "d4de3cce-2041-4fc0-97eb-36871f835af3",
+      "id": "7817d68c-88ba-4c09-8f0c-1814397e998f",
       "filePath": "src/domains/linking/application/handlers/create-link.handler.ts",
       "hashValue": "723cdbdeec6f3a5a9c92a826a54ff99e735c9c4c468af1f33f97615afb854c5a",
       "committedAt": null,
@@ -2160,7 +1877,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-document-children.handler.ts": {
-      "id": "b2a70e7e-165d-4ea7-8b45-7e08be36e5b5",
+      "id": "fd9fdfd5-d20a-43db-bd22-60bfd9c00de7",
       "filePath": "src/domains/linking/application/handlers/get-document-children.handler.ts",
       "hashValue": "5f99fde8ab5e77cb3b70b562e5dca6f5e90d5b54a7394689dbd634df33df4ff0",
       "committedAt": null,
@@ -2168,7 +1885,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-document-parents.handler.ts": {
-      "id": "fd877924-200b-4894-bb62-3340f236cc2e",
+      "id": "17eeeace-bfdc-404a-9dc8-de61216c48e3",
       "filePath": "src/domains/linking/application/handlers/get-document-parents.handler.ts",
       "hashValue": "dc050663cdc28024b3bb2024b33994f095b676a59815eb953cd9bfb8edea041d",
       "committedAt": null,
@@ -2176,7 +1893,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-links-for-codefile.handler.ts": {
-      "id": "6a0e6048-f14b-46b4-8b65-3ce092fd66b4",
+      "id": "89818310-9253-48c0-8f79-fab37df6e098",
       "filePath": "src/domains/linking/application/handlers/get-links-for-codefile.handler.ts",
       "hashValue": "8eb2eb12cceccc54b3fccd6dae5e462a9cd56d9a0fec361e1830febe7f89093b",
       "committedAt": null,
@@ -2184,7 +1901,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-links-for-document.handler.ts": {
-      "id": "da6314e6-5c20-4288-9fc2-a05fd7e57f26",
+      "id": "67fea42f-2672-4f96-b128-10600b7b9560",
       "filePath": "src/domains/linking/application/handlers/get-links-for-document.handler.ts",
       "hashValue": "0dd3908041be4a336e9e6217af31737d1ec86029fe5441dbe6543eec0783cbb2",
       "committedAt": null,
@@ -2192,7 +1909,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts": {
-      "id": "8142c846-e81e-4523-9d8e-e71c4dfe7d6c",
+      "id": "fd1607d8-b20a-463e-aafe-dc6590bcf199",
       "filePath": "src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts",
       "hashValue": "5ecf41d0a6c4be764691fe3d18ae960ae2c5520ffa6ec73f87c4d4aaad673c61",
       "committedAt": null,
@@ -2200,7 +1917,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/migrate-links.handler.ts": {
-      "id": "57e502d4-21ad-4eb2-a8b3-0f9859a645f3",
+      "id": "b7191ce4-1c21-4c52-a416-896a4f4cb56f",
       "filePath": "src/domains/linking/application/handlers/migrate-links.handler.ts",
       "hashValue": "9b01a1191722ca429885eb6b83da6e2764dead1ef85d2c252ec8505f0d8f2481",
       "committedAt": null,
@@ -2208,7 +1925,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/remove-document-link.handler.ts": {
-      "id": "fb2fd101-3408-4228-9758-05a1cb279b74",
+      "id": "b5ba1fa2-1a79-4314-9736-865cb5ae32ac",
       "filePath": "src/domains/linking/application/handlers/remove-document-link.handler.ts",
       "hashValue": "befe387781ffd8dfd57b828f0f4eafb9efcaef853bb6ec241186a30b8881028e",
       "committedAt": null,
@@ -2216,7 +1933,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/remove-link.handler.ts": {
-      "id": "f6669a1a-219f-45a1-b751-a8e6381f86c9",
+      "id": "892f1b4d-fbc4-458c-810a-98b90bba5be7",
       "filePath": "src/domains/linking/application/handlers/remove-link.handler.ts",
       "hashValue": "28464154cb6918d51c6893d02788cd5d8caba99ef8e6f6034ea158f0e538552b",
       "committedAt": null,
@@ -2224,7 +1941,7 @@
       "diff": null
     },
     "src/domains/linking/application/ports/code-file-query.port.ts": {
-      "id": "59865489-6a1a-450f-a802-f1fbfb5acaa3",
+      "id": "5650d958-5554-4fbf-a7cb-315829ab7983",
       "filePath": "src/domains/linking/application/ports/code-file-query.port.ts",
       "hashValue": "525e392caca7d10d7f4f84986364582a012b794fc3daff782dbd40a8e1c2785b",
       "committedAt": null,
@@ -2232,7 +1949,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-document-children.query.ts": {
-      "id": "65d3f45a-05bb-4ae7-a4a4-c417da738502",
+      "id": "08e00556-3ae2-4509-9327-2f7a162b6863",
       "filePath": "src/domains/linking/application/queries/get-document-children.query.ts",
       "hashValue": "9d8ef3e1cfe8e7d740305485dcea2d560b8d886688a249775d17eecf6964cb19",
       "committedAt": null,
@@ -2240,7 +1957,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-document-parents.query.ts": {
-      "id": "26e57c08-5614-43c4-ab58-8cb43a0e12da",
+      "id": "0e084677-be71-469e-a81e-2ef793ce609e",
       "filePath": "src/domains/linking/application/queries/get-document-parents.query.ts",
       "hashValue": "ab3a93d43244657bcff79cf153c3948b197684580d6fc16dfa10b79171b18370",
       "committedAt": null,
@@ -2248,7 +1965,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-links-for-codefile.query.ts": {
-      "id": "27ad1fbb-8474-4e68-a1fb-c85802824be4",
+      "id": "3643f188-4551-4b64-b68d-27226b63b3b1",
       "filePath": "src/domains/linking/application/queries/get-links-for-codefile.query.ts",
       "hashValue": "7115dcd85045aaf89dd2d2e0230b218cd6a1f75cd6fbf9d74b34c306f48f1300",
       "committedAt": null,
@@ -2256,7 +1973,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-links-for-document.query.ts": {
-      "id": "c43a6055-5704-4650-a944-73d27bdbc5f6",
+      "id": "a6d909d9-5b20-4543-b22b-cb9c9769ce42",
       "filePath": "src/domains/linking/application/queries/get-links-for-document.query.ts",
       "hashValue": "19dc899d5fc64e6d63aa9b549256da5ff79635abc6c9092a6c97eadff2c21bbd",
       "committedAt": null,
@@ -2264,7 +1981,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-unlinked-codefiles.query.ts": {
-      "id": "251242ad-85d1-4fec-95e5-938f4b3778b1",
+      "id": "8bbc8b76-c75f-44f2-8dc6-8b560974afe1",
       "filePath": "src/domains/linking/application/queries/get-unlinked-codefiles.query.ts",
       "hashValue": "efde6e07e28b6eb833c5f334afc85fe3be83a0f0ff955a1031d8fc60ff9a182c",
       "committedAt": null,
@@ -2272,7 +1989,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/code-to-doc-link.ts": {
-      "id": "68f30b90-3a99-4b10-b060-6ee8d4909368",
+      "id": "d6e7d686-c45a-41bc-bf88-154ffceaf5f0",
       "filePath": "src/domains/linking/domain/entities/code-to-doc-link.ts",
       "hashValue": "1e4671a7085dff66e8f13e16f691b296f4976fd5cf3cdb71cd2c8e159a4e6794",
       "committedAt": null,
@@ -2280,7 +1997,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/document-to-document-link.ts": {
-      "id": "4dad88d5-7fd5-4c92-bf1e-845077a53087",
+      "id": "b97ace48-4430-4364-9de9-5baa23f7c577",
       "filePath": "src/domains/linking/domain/entities/document-to-document-link.ts",
       "hashValue": "ab39bb1264b1b2b7a1d2ff04883cfacf6e5264e2dee264cbdfaa51e8a090c634",
       "committedAt": null,
@@ -2288,7 +2005,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/link-graph.ts": {
-      "id": "a4bea444-6545-42c6-aa64-ad4e7b28d19c",
+      "id": "e15e2e55-b891-421b-891a-5e97a95f52ee",
       "filePath": "src/domains/linking/domain/entities/link-graph.ts",
       "hashValue": "8665810b7d97dce1d013e70275cc961e0d751fc9f8f9db89dbd1eded71803536",
       "committedAt": null,
@@ -2296,7 +2013,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/document-link-broken.ts": {
-      "id": "ad8d6545-4a4a-4273-807a-05f0618614c2",
+      "id": "31a4c0d9-938c-4692-b12c-4b141cca7b8d",
       "filePath": "src/domains/linking/domain/events/document-link-broken.ts",
       "hashValue": "4a9dc62c4f26d5d35ce64af47576aa8c8af2e4b9fa2eb14eb52b9243308db25b",
       "committedAt": null,
@@ -2304,7 +2021,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/document-link-created.ts": {
-      "id": "deddaf92-5213-48ca-b578-7b55ee6dda97",
+      "id": "aff64011-6fc4-48fc-baab-2d0864740177",
       "filePath": "src/domains/linking/domain/events/document-link-created.ts",
       "hashValue": "742627b82362a69184c72cda9c25e1e83b68a7e2107381c6f43308f343e36b08",
       "committedAt": null,
@@ -2312,7 +2029,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/link-broken.ts": {
-      "id": "0965de1b-1871-448f-b336-860dc2fa8caa",
+      "id": "d3503f8b-f506-4222-b344-9017e749049c",
       "filePath": "src/domains/linking/domain/events/link-broken.ts",
       "hashValue": "633cb35489eead05911457f8e54d19b17ec7ffd5124cb3d275525c9d8a1788d3",
       "committedAt": null,
@@ -2320,7 +2037,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/link-created.ts": {
-      "id": "5c903000-b4fe-4377-990c-dc2c3a500782",
+      "id": "f7f02901-6662-4725-a801-4552bd293c14",
       "filePath": "src/domains/linking/domain/events/link-created.ts",
       "hashValue": "33bf55e3554b15ac24929760dede4cc5884cc4c557078a8b374c03e9d6e56598",
       "committedAt": null,
@@ -2328,7 +2045,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/links-migrated.ts": {
-      "id": "8b5f2041-2b5f-44bd-a052-94c449a85170",
+      "id": "bf810638-d540-4c4b-811a-35c0ccd23ea8",
       "filePath": "src/domains/linking/domain/events/links-migrated.ts",
       "hashValue": "b9a03c74198dc6bab643c01520e0ab39c9971d455fa4656e667f559891db897d",
       "committedAt": null,
@@ -2336,7 +2053,7 @@
       "diff": null
     },
     "src/domains/linking/domain/repository/document-link-repository.interface.ts": {
-      "id": "fc5cc67a-38d2-4630-a7a4-f5dda53680f6",
+      "id": "08f6979d-491b-40ff-b3b0-0ec0e068dae2",
       "filePath": "src/domains/linking/domain/repository/document-link-repository.interface.ts",
       "hashValue": "4fa872b8be51a918eb94f830a80fb08ad2da993cead746a8e33fd5dd59054a3c",
       "committedAt": null,
@@ -2344,7 +2061,7 @@
       "diff": null
     },
     "src/domains/linking/domain/repository/link-repository.interface.ts": {
-      "id": "6bc46330-4f65-4634-94d5-35483229b6fa",
+      "id": "f74c7577-81a4-4e8a-a294-637d1c31bbc6",
       "filePath": "src/domains/linking/domain/repository/link-repository.interface.ts",
       "hashValue": "75264b7f0368d01729e7a8758d0d07495fe5b2c29820e8b6884947185038c461",
       "committedAt": null,
@@ -2352,7 +2069,7 @@
       "diff": null
     },
     "src/domains/linking/domain/services/document-link-validator.service.ts": {
-      "id": "867202f4-2550-473b-ab94-990211de914c",
+      "id": "e5e791eb-006e-4a8d-adb8-d782df847afb",
       "filePath": "src/domains/linking/domain/services/document-link-validator.service.ts",
       "hashValue": "50b651c250ec001c6eee401c5b50f4fd18e02945934f85193bac256ca815e054",
       "committedAt": null,
@@ -2360,7 +2077,7 @@
       "diff": null
     },
     "src/domains/linking/domain/services/link-migration.service.ts": {
-      "id": "3954b460-b535-48c9-95db-7def147107fa",
+      "id": "3c92bb70-4c40-4da0-8d23-94e10e39260e",
       "filePath": "src/domains/linking/domain/services/link-migration.service.ts",
       "hashValue": "c52c5ebf98e04a68bf6fc56484440502f73e0928e06de36966283cd91e564a78",
       "committedAt": null,
@@ -2368,7 +2085,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/document-link-id.ts": {
-      "id": "8b92b148-1f9e-4664-abf4-9ae128c9cfef",
+      "id": "fdd77fca-e569-4750-99fb-f31adee1254e",
       "filePath": "src/domains/linking/domain/value-objects/document-link-id.ts",
       "hashValue": "5c49abc70d8307fdeb0499338e11d65b4199906a8c3847d84a68848128c7a7db",
       "committedAt": null,
@@ -2376,7 +2093,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-graph-id.ts": {
-      "id": "8aebeeb1-e481-44f8-9207-c6574f903d4c",
+      "id": "be45d4e0-dbe7-4fd2-82f2-24c7a3313038",
       "filePath": "src/domains/linking/domain/value-objects/link-graph-id.ts",
       "hashValue": "ec88c6799ca2e3a66a77499e0053a0d560685902af75414c41e58b06c7db2541",
       "committedAt": null,
@@ -2384,7 +2101,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-id.ts": {
-      "id": "9abc00f7-5f14-4fc7-b6a0-6c89c1869376",
+      "id": "440e631c-c46d-4d6b-a0f7-599c6aca7cb9",
       "filePath": "src/domains/linking/domain/value-objects/link-id.ts",
       "hashValue": "a1d1925abcb4cafedaed706b3413967a54f9dd4be24204c6eba2f9b90fa4573b",
       "committedAt": null,
@@ -2392,7 +2109,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-type.ts": {
-      "id": "d50b9c13-93b7-4b1b-8f16-051f9aeee871",
+      "id": "d427615e-03cb-490d-8d05-ab09db2f083d",
       "filePath": "src/domains/linking/domain/value-objects/link-type.ts",
       "hashValue": "37096a78239d8704d9a03eeb449d82bbbd3396c9ce2591bdb7d9f36c86c7f3d2",
       "committedAt": null,
@@ -2400,7 +2117,7 @@
       "diff": null
     },
     "src/domains/linking/infrastructure/repository/document-link-json.repository.ts": {
-      "id": "f6a628ed-f9b5-42b8-8c52-d1329980439d",
+      "id": "932344db-697b-4686-ab53-f4c6efd09d72",
       "filePath": "src/domains/linking/infrastructure/repository/document-link-json.repository.ts",
       "hashValue": "9cde1ba2f0e0aeafa6cb82050152045b552b3e9f51ae66048db2b1a0f2c52fd6",
       "committedAt": null,
@@ -2408,7 +2125,7 @@
       "diff": null
     },
     "src/domains/linking/infrastructure/repository/link-json.repository.ts": {
-      "id": "4adeaf5d-abf7-414e-b9cc-81806ed6b503",
+      "id": "d29b6018-9896-4268-bae6-18be53caea68",
       "filePath": "src/domains/linking/infrastructure/repository/link-json.repository.ts",
       "hashValue": "bd29987b49a19fc507f062dd92af3c1d2cbc068a3a2fd5bc8c743313769760e3",
       "committedAt": null,
@@ -2416,7 +2133,7 @@
       "diff": null
     },
     "src/domains/project/application/commands/change-workspace-scope.command.ts": {
-      "id": "85723f9f-bb23-4d93-91f9-640e51feb9c7",
+      "id": "967cc5d7-39ad-47f0-b8ed-94beb9e960dd",
       "filePath": "src/domains/project/application/commands/change-workspace-scope.command.ts",
       "hashValue": "28405f1f52debdcbc34b109af4c1acb719e8fa6efb5224615cd124d3c5abbd27",
       "committedAt": null,
@@ -2424,7 +2141,7 @@
       "diff": null
     },
     "src/domains/project/application/commands/initialize-workspace.command.ts": {
-      "id": "8f2854ca-7c67-460c-9277-2270581f33a0",
+      "id": "79cdfe98-bba0-42d9-9e78-d81b32a216e1",
       "filePath": "src/domains/project/application/commands/initialize-workspace.command.ts",
       "hashValue": "f4eb7f2d86fcb346826a28fed86148fd9a2b24cdc4bc57b130caf43451522df3",
       "committedAt": null,
@@ -2432,7 +2149,7 @@
       "diff": null
     },
     "src/domains/project/application/dto/project-config.dto.ts": {
-      "id": "20115096-ce9b-48b2-86ae-5f110e27bc91",
+      "id": "404e3db6-55c8-42dd-9f5f-2951204a064f",
       "filePath": "src/domains/project/application/dto/project-config.dto.ts",
       "hashValue": "331bc709b62ae9a6ed90c92a17f19e0428f84454d82eeb0591d0b5206a258d0b",
       "committedAt": null,
@@ -2440,7 +2157,7 @@
       "diff": null
     },
     "src/domains/project/application/dto/workspace.dto.ts": {
-      "id": "1b9a5ff0-5da5-4e29-ad8c-afb75a48f7e5",
+      "id": "bcf0045d-99fd-48dd-bc37-eaf02100d2d9",
       "filePath": "src/domains/project/application/dto/workspace.dto.ts",
       "hashValue": "375e9284ce5058eac020f2c7135180d57b9551f2815b0fee8e0c0c9f507faa3f",
       "committedAt": null,
@@ -2448,7 +2165,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/change-workspace-scope.handler.ts": {
-      "id": "80c38005-3821-4b16-85d6-f2f094d12a68",
+      "id": "231197ca-687a-4c39-ac5d-9931a73ff09f",
       "filePath": "src/domains/project/application/handlers/change-workspace-scope.handler.ts",
       "hashValue": "a7accf020ac78379f8334a6cc31072d2a8ba0041d985c4b3be80a1832a56c5c1",
       "committedAt": null,
@@ -2456,7 +2173,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/get-workspace.handler.ts": {
-      "id": "df7ba01b-bae2-4016-aafe-e2c7e3dbb134",
+      "id": "2e725d37-bf94-4b88-a8eb-d4303822d74e",
       "filePath": "src/domains/project/application/handlers/get-workspace.handler.ts",
       "hashValue": "78e41ceb2d9d8e4132495c7673807ec82412b84bbd3dcd0f578eed1562bba152",
       "committedAt": null,
@@ -2464,7 +2181,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/initialize-workspace.handler.ts": {
-      "id": "12a7ebb9-303d-48b2-998d-381e59d5a5d6",
+      "id": "65710add-719f-4dac-b813-a213f92591b9",
       "filePath": "src/domains/project/application/handlers/initialize-workspace.handler.ts",
       "hashValue": "cb1bcf2658d8f3b5e721609fb22870f5f35288c9e5a4383abd7c969539717be5",
       "committedAt": null,
@@ -2472,7 +2189,7 @@
       "diff": null
     },
     "src/domains/project/application/queries/get-workspace.query.ts": {
-      "id": "bd047f26-8c6d-4f84-a9b4-1480d6fe4312",
+      "id": "76e41875-55e2-4df3-a65c-233984b4908c",
       "filePath": "src/domains/project/application/queries/get-workspace.query.ts",
       "hashValue": "fa200bb12d9652f92071b9931b02a02d4a40e00524b30fe5e40c1fa558efd39a",
       "committedAt": null,
@@ -2480,7 +2197,7 @@
       "diff": null
     },
     "src/domains/project/domain/entities/project-config.ts": {
-      "id": "2b790a04-bd53-4ffc-9ef2-d6dd0bd0f4a1",
+      "id": "8a58db3b-52b3-4161-ae00-1e3c2507d1c6",
       "filePath": "src/domains/project/domain/entities/project-config.ts",
       "hashValue": "eeeef0ba5e09d57ed3bfb2704e770a16d8fc7d0f2f35a7a8ad148853272cffe1",
       "committedAt": null,
@@ -2488,7 +2205,7 @@
       "diff": null
     },
     "src/domains/project/domain/entities/workspace.ts": {
-      "id": "393b979b-9127-4f6e-a373-7bc096d3a32d",
+      "id": "6e375e28-a28a-4dde-b8eb-d0dc5e9343c4",
       "filePath": "src/domains/project/domain/entities/workspace.ts",
       "hashValue": "ad613d0c127adac5aeca495362cfef209d17580c8df3c044a58d43f8c9c1b932",
       "committedAt": null,
@@ -2496,7 +2213,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-closed.ts": {
-      "id": "5c23e308-ad43-4470-b045-3d1cc9f0040a",
+      "id": "afad4de0-c68e-419f-9e83-b79137bf189a",
       "filePath": "src/domains/project/domain/events/workspace-closed.ts",
       "hashValue": "062d2e3731ff3b6f35dbebb87425e87d2bb140a54a6465cdc2c004ec7e0621c3",
       "committedAt": null,
@@ -2504,7 +2221,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-initialized.ts": {
-      "id": "3e1e24bf-c3a7-417b-8f99-ffda192041be",
+      "id": "5cd1df27-bc5d-4418-a617-1f8723112716",
       "filePath": "src/domains/project/domain/events/workspace-initialized.ts",
       "hashValue": "5ccf29986568a60392bad8665b7bfd772fbb169dd28047e31abf9b1248ef8440",
       "committedAt": null,
@@ -2512,7 +2229,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-scope-changed.ts": {
-      "id": "0a2350f1-bacd-4dd7-a7de-3e2720e67e1b",
+      "id": "29115a6c-a4b0-4b98-8964-f9f1eca396b9",
       "filePath": "src/domains/project/domain/events/workspace-scope-changed.ts",
       "hashValue": "b1fe64587811989752464bfa548dfc88f6f5b411c4c126cf51141076ffb3ea2c",
       "committedAt": null,
@@ -2520,7 +2237,7 @@
       "diff": null
     },
     "src/domains/project/domain/repository/project-config-repository.interface.ts": {
-      "id": "ba1d997b-a77f-43b1-b0b9-cb37a30654ec",
+      "id": "1731f620-a544-4995-a87c-7814356fc1ba",
       "filePath": "src/domains/project/domain/repository/project-config-repository.interface.ts",
       "hashValue": "973d02c3d870daca4dce5178e71217288f95e4948d2e06348119678033dd3a01",
       "committedAt": null,
@@ -2528,7 +2245,7 @@
       "diff": null
     },
     "src/domains/project/domain/repository/workspace-repository.interface.ts": {
-      "id": "fd4637d5-e16a-49b9-8eaa-140dd74a00a3",
+      "id": "71dc91d0-1fba-4df7-a687-3b9d59dd16c5",
       "filePath": "src/domains/project/domain/repository/workspace-repository.interface.ts",
       "hashValue": "4845b3f77532a981fdc076ae0c69951a0414bd26e1c5d59bebc5125422bb570a",
       "committedAt": null,
@@ -2536,7 +2253,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/metadata-folder-name.ts": {
-      "id": "d77dfc57-146d-4417-98a7-33114b1aae98",
+      "id": "eac6f857-f581-48fa-bba3-79b9122c9ec9",
       "filePath": "src/domains/project/domain/value-objects/metadata-folder-name.ts",
       "hashValue": "902afe3f60aedb9c3f1fabb420b88e4c04111344f7f4074987dfaabfa4f29740",
       "committedAt": null,
@@ -2544,7 +2261,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/workspace-id.ts": {
-      "id": "eebba4c0-5a7d-4edf-98d4-5188dee62c96",
+      "id": "4bec7199-2680-4b83-941f-ff2e09a76a43",
       "filePath": "src/domains/project/domain/value-objects/workspace-id.ts",
       "hashValue": "280fed0688b59fbca6caf1cb2fa0cca1f4978fb422f41f72022770545177a7c2",
       "committedAt": null,
@@ -2552,7 +2269,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/workspace-path.ts": {
-      "id": "efde8d25-20c5-4562-b45a-4436cc1bca2d",
+      "id": "663e199e-43ee-4173-9529-53fab7c04c5f",
       "filePath": "src/domains/project/domain/value-objects/workspace-path.ts",
       "hashValue": "5bc5e1c7cc55de3a31419a5e1e6fdf87bfa6ec6e437897cf959ca3aa1553be85",
       "committedAt": null,
@@ -2560,7 +2277,7 @@
       "diff": null
     },
     "src/domains/project/infrastructure/repository/project-config-json.repository.ts": {
-      "id": "15a3600b-31e4-4bbd-bc8d-1043cc4556ad",
+      "id": "cced4619-768c-4814-95b2-9f7d8de332ec",
       "filePath": "src/domains/project/infrastructure/repository/project-config-json.repository.ts",
       "hashValue": "30f7c831f5ebad3ce4bd70fcee9d23c33b05a4fc2fa844bf289c105001e68a59",
       "committedAt": null,
@@ -2568,7 +2285,7 @@
       "diff": null
     },
     "src/domains/project/infrastructure/repository/workspace-json.repository.ts": {
-      "id": "4fbef0ae-0aab-4e8c-a5e3-356ee3ca98e4",
+      "id": "dd8c460d-b7fa-4af6-ba85-59d81abaf837",
       "filePath": "src/domains/project/infrastructure/repository/workspace-json.repository.ts",
       "hashValue": "5bdd75de12078eb2527d076e0f05c473d89d65d57ac818d4f58879c0dd657a76",
       "committedAt": null,
@@ -2576,7 +2293,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/approve-commit.command.ts": {
-      "id": "7d0297c1-8363-4f0a-9954-422fac1c81be",
+      "id": "d1cadb9b-3b81-4891-adef-a1b0c7da473b",
       "filePath": "src/domains/tracking/application/commands/approve-commit.command.ts",
       "hashValue": "4ae64e0167454ca6124d5bd1fe336b6831df3d72ac682117514ca6517e6ee923",
       "committedAt": null,
@@ -2584,7 +2301,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/detect-changes.command.ts": {
-      "id": "d3d514e4-3820-4f08-b3f5-f482f29a0c62",
+      "id": "3c953f59-12eb-4128-a910-97eaa575fbdb",
       "filePath": "src/domains/tracking/application/commands/detect-changes.command.ts",
       "hashValue": "1c38b41d86d5f67e68e958e62177269c17a27534460753ca4d3b527333d765b6",
       "committedAt": null,
@@ -2592,7 +2309,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/record-hash.command.ts": {
-      "id": "d18c7b1c-40cc-4bff-97f5-749e32648fe8",
+      "id": "d8f49b7b-e22f-4fc3-ae9b-56151c0ba80a",
       "filePath": "src/domains/tracking/application/commands/record-hash.command.ts",
       "hashValue": "2e094d2589ef1fcfffee11c09963414b4b5f295aaa6fcb3dc09946a449c3d382",
       "committedAt": null,
@@ -2600,7 +2317,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/content-diff.dto.ts": {
-      "id": "a3652082-44ca-4090-9521-f6d77849c0df",
+      "id": "54096205-d602-4be1-b777-5eee337dd1c7",
       "filePath": "src/domains/tracking/application/dto/content-diff.dto.ts",
       "hashValue": "4d9e61803a29ccefd7569a26d1a75e9e31e1ad827135834ca0e05ed05e388a1e",
       "committedAt": null,
@@ -2608,7 +2325,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/file-hash.dto.ts": {
-      "id": "144c5e3c-45be-4b84-a93f-ab77ab795235",
+      "id": "375589a8-6a51-4d5d-9c4b-8c51393027d1",
       "filePath": "src/domains/tracking/application/dto/file-hash.dto.ts",
       "hashValue": "22c6bc59236c1d049033c592bdb4389c0630d0f0f4ebc4ec45543ac9dd5f2353",
       "committedAt": null,
@@ -2616,7 +2333,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/granular-commit.dto.ts": {
-      "id": "c90314c8-670b-4b2d-a2a0-cb89d1151348",
+      "id": "dc289f84-129f-4ae5-94b1-23f2fa52ab09",
       "filePath": "src/domains/tracking/application/dto/granular-commit.dto.ts",
       "hashValue": "911492f8138ab163bd09e8c5cd486b9a724370dfecf186eb2f67df85028c24aa",
       "committedAt": null,
@@ -2624,7 +2341,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/approve-commit.handler.ts": {
-      "id": "51dbb66d-38a8-43a9-b054-29c9925e4ced",
+      "id": "110d6a3f-641b-458f-a5b7-15795b4bb78e",
       "filePath": "src/domains/tracking/application/handlers/approve-commit.handler.ts",
       "hashValue": "f6bacf0b7adb5ffa6ed0c59add1bf810c499543f301b251511368878ce3455d6",
       "committedAt": null,
@@ -2632,7 +2349,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/detect-changes.handler.ts": {
-      "id": "43e1e042-77ed-4e22-b49b-6309b07123b5",
+      "id": "4cb12240-ed41-4d89-9bf3-ecc46f86aa27",
       "filePath": "src/domains/tracking/application/handlers/detect-changes.handler.ts",
       "hashValue": "b2f1c5770ca25512dd680876a6d9883d0d8692112a23eafdbb7cf4432445afee",
       "committedAt": null,
@@ -2640,7 +2357,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/get-commit-history.handler.ts": {
-      "id": "77885892-3f6d-4a70-bfce-43cc44fb5fa6",
+      "id": "66b0d2c9-09a6-4543-9ef0-35a45e8793ac",
       "filePath": "src/domains/tracking/application/handlers/get-commit-history.handler.ts",
       "hashValue": "9597963e20f69fcbd9d08da0113b89a7512ee3dead9d826397b770c6e03d4c5d",
       "committedAt": null,
@@ -2648,7 +2365,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/get-file-diff.handler.ts": {
-      "id": "f63ff214-25f7-41f1-978f-8ed222bd20b1",
+      "id": "e7cbbb84-cc6a-4471-94d0-51fd45e7ff91",
       "filePath": "src/domains/tracking/application/handlers/get-file-diff.handler.ts",
       "hashValue": "18aaebc986c938356fe10a67a43c3cd230b90213a179964f518e6cb7c835cc41",
       "committedAt": null,
@@ -2656,7 +2373,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/get-pending-changes.handler.ts": {
-      "id": "c25e913c-ace6-4738-bf34-441fd78471c6",
+      "id": "aa7e83b7-dcb1-476c-a0ff-c66a953d2bb7",
       "filePath": "src/domains/tracking/application/handlers/get-pending-changes.handler.ts",
       "hashValue": "a0c49f5c5f4be8c54cafa2101c61f73230bc7a6e6ff61f32654f4d86e62aac9d",
       "committedAt": null,
@@ -2664,7 +2381,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/record-hash.handler.ts": {
-      "id": "97bcd4a8-7e9e-45fc-8d4c-676114d44acf",
+      "id": "c4cbbc87-4515-4158-9c51-dc062f06afc7",
       "filePath": "src/domains/tracking/application/handlers/record-hash.handler.ts",
       "hashValue": "18476243aa019dd164254863ef15b6e3e00053b957c49d32e94e663d27f4b2bb",
       "committedAt": null,
@@ -2672,7 +2389,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/diff-calculator.interface.ts": {
-      "id": "734bafd2-cea8-40fc-987d-38fe5da7d018",
+      "id": "ef07aa87-6d1c-432d-8995-1a71eddc42f4",
       "filePath": "src/domains/tracking/application/ports/diff-calculator.interface.ts",
       "hashValue": "9424b88d06f1cc410068af3125189363de53120f7663f5045cee80ecf22e185b",
       "committedAt": null,
@@ -2680,7 +2397,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/file-content-reader.interface.ts": {
-      "id": "5d6d6244-0948-43f8-846f-f11f7d579cc5",
+      "id": "d646b16d-62c4-4d91-b7f6-c93d40e0bf9b",
       "filePath": "src/domains/tracking/application/ports/file-content-reader.interface.ts",
       "hashValue": "d78acc6f4bf0c26263f61829a72e351bf1768731a2a0794cd72b874ffb8bd09d",
       "committedAt": null,
@@ -2688,7 +2405,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/linked-document-query.port.ts": {
-      "id": "ff30c862-1601-43d0-b907-6cf63500ab70",
+      "id": "09491e81-91e2-447a-8f19-9e45a4b53c67",
       "filePath": "src/domains/tracking/application/ports/linked-document-query.port.ts",
       "hashValue": "7535e3cd962e40223a3710b6670aef1c507649e5441d2e438c515f282d901a3a",
       "committedAt": null,
@@ -2696,7 +2413,7 @@
       "diff": null
     },
     "src/domains/tracking/application/queries/get-commit-history.query.ts": {
-      "id": "48492fcc-68f6-4348-b53a-8ffe98290bea",
+      "id": "f9e93c30-19fc-4b07-97e6-bafce33d6c3f",
       "filePath": "src/domains/tracking/application/queries/get-commit-history.query.ts",
       "hashValue": "935957688f646a3dfb4a38e6a357840fd1dcfee91177755ea1f8819ee4f172da",
       "committedAt": null,
@@ -2704,7 +2421,7 @@
       "diff": null
     },
     "src/domains/tracking/application/queries/get-file-diff.query.ts": {
-      "id": "5e9dddb5-20e0-4f1c-a7eb-e234838f11d7",
+      "id": "d8b09c4a-7fac-4312-8ff3-f337addc802d",
       "filePath": "src/domains/tracking/application/queries/get-file-diff.query.ts",
       "hashValue": "9107e169e95b173413b28f25389e53417dfa234e4d7d46a7988d25f6d9a1760f",
       "committedAt": null,
@@ -2712,7 +2429,7 @@
       "diff": null
     },
     "src/domains/tracking/application/queries/get-pending-changes.query.ts": {
-      "id": "d0f232b7-57d2-4067-ad58-3e5ec47fe9ed",
+      "id": "981bc597-5284-4757-a8dd-74b201b63941",
       "filePath": "src/domains/tracking/application/queries/get-pending-changes.query.ts",
       "hashValue": "8923b62ca716f0976d6f7df2efe90d97343e08aadd9c2eb50b37c7196229aba1",
       "committedAt": null,
@@ -2720,7 +2437,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/content-diff.ts": {
-      "id": "c2d9b835-1005-455c-a401-6ac8f50b0f88",
+      "id": "072fb635-ed63-4429-b8d2-043dfd5567f2",
       "filePath": "src/domains/tracking/domain/entities/content-diff.ts",
       "hashValue": "56922ab6b70dc506aca49ef556777f8a6529bf2f75638cfe10920860edc71138",
       "committedAt": null,
@@ -2728,7 +2445,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/file-hash.ts": {
-      "id": "ee00be62-5807-40d7-82b9-8f10b4fdb401",
+      "id": "fc3fc94f-b4bb-4210-b8c8-cbf8cef87847",
       "filePath": "src/domains/tracking/domain/entities/file-hash.ts",
       "hashValue": "746c4c2b7c95059da404412cef49860c5b89a6f2f391a1244153ece03f33a604",
       "committedAt": null,
@@ -2736,7 +2453,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/granular-commit.ts": {
-      "id": "bac0741e-ac76-44f1-818b-3916b91de141",
+      "id": "e8f22e33-783d-4156-8bef-9b3f719830b3",
       "filePath": "src/domains/tracking/domain/entities/granular-commit.ts",
       "hashValue": "7d458715c2045b8f3e02a872712bb0c26a61346934ad5980cb733aacfcc7e365",
       "committedAt": null,
@@ -2744,7 +2461,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/changes-detected.ts": {
-      "id": "e4b0a3f8-5962-4034-aab6-6fba2117d81b",
+      "id": "5ce774d2-dd04-41a3-98df-f9dd116de867",
       "filePath": "src/domains/tracking/domain/events/changes-detected.ts",
       "hashValue": "2935adf9673874244fc1198fe2b7dfec0aa3577e4c06deab1ade30574f53f53c",
       "committedAt": null,
@@ -2752,7 +2469,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/commit-approved.ts": {
-      "id": "d355200b-a366-44aa-a451-d905a2fccf80",
+      "id": "7773a5d7-94cf-4032-b219-c55183252118",
       "filePath": "src/domains/tracking/domain/events/commit-approved.ts",
       "hashValue": "d86c6fc132893234ec8d7cfd04010b7fb352fb5ad879b71d6120159196d30af4",
       "committedAt": null,
@@ -2760,7 +2477,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/review-required.ts": {
-      "id": "9ba451da-7dce-4072-93b4-42128cc3e905",
+      "id": "24721a59-c1b7-4ff8-8890-0215ca4a75c5",
       "filePath": "src/domains/tracking/domain/events/review-required.ts",
       "hashValue": "c666faaa7927be1bf70662bc315126a1c64270bf3a8f8bd9b7b82bb9e2d7a161",
       "committedAt": null,
@@ -2768,7 +2485,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/commit-repository.interface.ts": {
-      "id": "aa2c7112-fa3e-4b85-be05-185f41014a46",
+      "id": "4a7ffa61-7f6d-4756-8522-c805a5c87cbd",
       "filePath": "src/domains/tracking/domain/repository/commit-repository.interface.ts",
       "hashValue": "32785953f2d0adebdc8bd81a671837e0fb1d4cc8f525c88dae08eaf9cb2036d1",
       "committedAt": null,
@@ -2776,7 +2493,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/hash-repository.interface.ts": {
-      "id": "5914ad94-8008-4fb9-8ca9-3039b5e25886",
+      "id": "9ae86876-44dd-4039-bae4-cba96f522053",
       "filePath": "src/domains/tracking/domain/repository/hash-repository.interface.ts",
       "hashValue": "9d9b00a73f1f83459639c24a1e8abae80f4a3d22f51a782408494db6947544d8",
       "committedAt": null,
@@ -2784,7 +2501,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/tracking-repository.interface.ts": {
-      "id": "8442f38b-54ae-42ca-aa65-8a946f790392",
+      "id": "9b7f76e1-dc24-4562-996d-ddb1305ed276",
       "filePath": "src/domains/tracking/domain/repository/tracking-repository.interface.ts",
       "hashValue": "fe087627cfc27abe0a75452bd9d881b31d87a6dd5de328147344f05bbdd48b6c",
       "committedAt": null,
@@ -2792,7 +2509,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/services/diff-calculator.service.ts": {
-      "id": "aa2dd09a-96b0-42e8-a3c4-cd66445c70e4",
+      "id": "8be878a9-a0cf-4151-83f6-7b5c170f83e3",
       "filePath": "src/domains/tracking/domain/services/diff-calculator.service.ts",
       "hashValue": "dae0cd47d1df8d72405de3e7ee374dbea1e599b8ab2e91d165d5d5494c041f93",
       "committedAt": null,
@@ -2800,7 +2517,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/services/hash-comparison.service.ts": {
-      "id": "0087e895-432e-4acb-a739-6a11632c1529",
+      "id": "ab53c02c-1493-47a4-abbd-349dc93871d4",
       "filePath": "src/domains/tracking/domain/services/hash-comparison.service.ts",
       "hashValue": "028fd23d17a11388363d682df37559486581d41115e4befed206fcc43ca1d2c6",
       "committedAt": null,
@@ -2808,7 +2525,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/commit-id.ts": {
-      "id": "7947638f-fdd4-485d-bf35-c1ce069e63b1",
+      "id": "f735d378-fcaf-4ea2-8d18-0be1466c42d4",
       "filePath": "src/domains/tracking/domain/value-objects/commit-id.ts",
       "hashValue": "623601133b1151beee6888e64f7913f0419fa0184c3ac8cf2992292844fc6971",
       "committedAt": null,
@@ -2816,7 +2533,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/commit-status.ts": {
-      "id": "e48de9e5-77d2-4d0b-886d-4ab0421459c5",
+      "id": "9e848186-9e1a-4024-94ff-a53dfc2834da",
       "filePath": "src/domains/tracking/domain/value-objects/commit-status.ts",
       "hashValue": "6cc603ea3edf72dc2cd3748a2290f4b6f78c6438a23a79a6d9b7e1346a6e95be",
       "committedAt": null,
@@ -2824,7 +2541,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/diff-id.ts": {
-      "id": "6b58af07-2878-43d0-a321-6e587227ca1e",
+      "id": "c3b2c310-b7ab-410d-8cda-630286351304",
       "filePath": "src/domains/tracking/domain/value-objects/diff-id.ts",
       "hashValue": "440c815e77f5581f33e2a395eb39405c13fdbdb6a4f7ec0fe9e4958a3d3d9899",
       "committedAt": null,
@@ -2832,7 +2549,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/diff-line.ts": {
-      "id": "ffa830dc-deca-4e1c-9d91-c7bae41875dd",
+      "id": "4aed4b6e-244a-4ef4-9350-d9b6729e5749",
       "filePath": "src/domains/tracking/domain/value-objects/diff-line.ts",
       "hashValue": "318f471e4512991667a850ae623def01aece415cc105c420612c1077c0bcf138",
       "committedAt": null,
@@ -2840,7 +2557,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/file-hash-id.ts": {
-      "id": "a4db2fca-aca2-40b6-ab18-c619b494896b",
+      "id": "407ba5ac-6f85-4c2f-b0a5-c9226d52570c",
       "filePath": "src/domains/tracking/domain/value-objects/file-hash-id.ts",
       "hashValue": "b58db7774d50dc7d6792cb061b59f4d04f4ff226ce4199b9f3be1e6985359516",
       "committedAt": null,
@@ -2848,7 +2565,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/hash-value.ts": {
-      "id": "c25cfd1e-ff60-47bf-ae06-5b7ee9fd5109",
+      "id": "df403b50-4a7b-40d8-a99a-b740e3569993",
       "filePath": "src/domains/tracking/domain/value-objects/hash-value.ts",
       "hashValue": "bfa877826a80c1da6cd274302b1633bcf29d87d77de65ecb1dceac6f8272d44e",
       "committedAt": null,
@@ -2856,7 +2573,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/diff-calculator.adapter.ts": {
-      "id": "3fd0911a-f638-4b00-a129-0375b33ae9ac",
+      "id": "0beec987-7791-4211-a089-c028775e29f3",
       "filePath": "src/domains/tracking/infrastructure/adapters/diff-calculator.adapter.ts",
       "hashValue": "90c20dafa9bc50ecccbbecc5918c5b74419d1d6d7b65c3b8f9d0b5061d814e19",
       "committedAt": null,
@@ -2864,7 +2581,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts": {
-      "id": "786f1350-a080-49cd-90fd-c51a9a50aeb1",
+      "id": "6716f9a8-4639-4c76-ae77-290a12edf595",
       "filePath": "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts",
       "hashValue": "83dba74b74f55507781836ca84af073ae7871aa8be3b3a4aa47e051c19d9371f",
       "committedAt": null,
@@ -2872,7 +2589,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts": {
-      "id": "4d46b066-ddfd-4d42-9586-6bb5c76b44af",
+      "id": "a7239392-f96d-4e74-b812-7d941cdd0770",
       "filePath": "src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts",
       "hashValue": "53d45933f896859cb6e458f782256457548eac48cdc3db882de33eec751d3629",
       "committedAt": null,
@@ -2880,17 +2597,25 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/repository/commits-json.repository.ts": {
-      "id": "42c7fc80-ebd2-4dd9-bf9f-60c59f46f71a",
+      "id": "e1956681-6f33-4ac4-a183-50efc8e38800",
       "filePath": "src/domains/tracking/infrastructure/repository/commits-json.repository.ts",
-      "hashValue": "de469f18e7ba0624fdb318db679b4d226fc094419943c071c44fa86291ca264e",
+      "hashValue": "978b567a19ab9f5dd6a02bc5f55b05bff6c51c295a85b991f116ba2ebbbf0acf",
       "committedAt": null,
       "commitId": null,
       "diff": null
     },
     "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts": {
-      "id": "263be2c6-5026-418a-b18b-b43a4a0dce2a",
+      "id": "cafeca6b-c237-4b59-bc9b-4c22ff4f8ff7",
       "filePath": "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts",
       "hashValue": "764b0473a086e478306f68cfb9b2e6d02494784532535b31e8a45d24364e6626",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/index": {
+      "id": "56367fad-b705-442b-99de-21cd02bd52f6",
+      "filePath": ".git/index",
+      "hashValue": "50781f4b4765381a6176ea3d131a7e205f3c878abf4e6f32b9326b7798e6438c",
       "committedAt": null,
       "commitId": null,
       "diff": null
