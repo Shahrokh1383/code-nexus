@@ -34,6 +34,10 @@ import { GetDocumentChildrenQuery } from '../../../src/domains/linking/applicati
 import { GetDocumentChildrenHandler } from '../../../src/domains/linking/application/handlers/get-document-children.handler';
 import { GetDocumentParentsQuery } from '../../../src/domains/linking/application/queries/get-document-parents.query';
 import { GetDocumentParentsHandler } from '../../../src/domains/linking/application/handlers/get-document-parents.handler';
+import { IDomainEventHandler } from '../../../src/domains/shared-kernel/events/domain-event-handler.interface';
+// Event‑driven cross‑context migration
+import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
+import { DocumentDeletedEvent } from '../../../src/domains/documentation/domain/events/document-deleted';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -42,7 +46,7 @@ interface IpcResponse<T> {
 }
 
 /**
- * Anti-Corruption Layer (ACL) Adapter.
+ * Anti‑Corruption Layer (ACL) Adapter.
  * Allows the Linking context to query FileSystem data without importing FileSystem domain classes directly.
  */
 class FilesystemCodeFileQueryAdapter implements ICodeFileQueryPort {
@@ -88,7 +92,7 @@ function createLinkingDependencies(rootPath: string) {
   const linkRepo = new LinkJsonRepository(rootPath);
   const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
   const documentRepo = new DocumentJsonRepository(db);
-  
+
   const validator = new DocumentLinkValidatorService(docLinkRepo);
   const migrationService = new LinkMigrationService();
   const codeFilePort = new FilesystemCodeFileQueryAdapter(db);
@@ -101,11 +105,49 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
   return workspaceId.trim();
 }
 
+// Global workspace root for event‑driven operations (single‑window app)
+let currentWorkspaceRoot: string | null = null;
+
+/**
+ * Listens to DocumentDeletedEvent from the Documentation context.
+ * If the deleted document has children (other documents linked as children),
+ * migrates all code‑to‑document links to those children automatically.
+ */
+class DocumentDeletedEventHandler implements IDomainEventHandler<DocumentDeletedEvent> {
+  async handle(event: DocumentDeletedEvent): Promise<void> {
+    const rootPath = currentWorkspaceRoot;
+    if (!rootPath) return;
+
+    try {
+      const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
+      const childrenHandler = new GetDocumentChildrenHandler(docLinkRepo);
+      const childrenResult = await childrenHandler.execute(
+        new GetDocumentChildrenQuery(event.documentId.value)
+      );
+
+      if (childrenResult.isFailure) return;
+      const childrenIds = childrenResult.getValue();
+      if (!childrenIds || childrenIds.length === 0) return;
+
+      const linkRepo = new LinkJsonRepository(rootPath);
+      const migrationService = new LinkMigrationService();
+      const migrateHandler = new MigrateLinksHandler(linkRepo, migrationService);
+
+      await migrateHandler.execute(
+        new MigrateLinksCommand(event.documentId.value, childrenIds)
+      );
+    } catch (error) {
+      console.error('Failed to migrate links after document deletion', error);
+    }
+  }
+}
+
 export function registerLinkingHandlers(): void {
   // 1. Create Code Link
   ipcMain.handle(IpcChannels.LINKING_CREATE_LINK, async (_event, workspaceId: unknown, codeFileId: string, documentId: string): Promise<IpcResponse<void>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo } = createLinkingDependencies(rootPath);
       const handler = new CreateLinkHandler(linkRepo);
@@ -120,6 +162,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_REMOVE_LINK, async (_event, workspaceId: unknown, linkId: string): Promise<IpcResponse<void>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo } = createLinkingDependencies(rootPath);
       const handler = new RemoveLinkHandler(linkRepo);
@@ -134,6 +177,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_CREATE_DOCUMENT_LINK, async (_event, workspaceId: unknown, parentDocumentId: string, childDocumentId: string): Promise<IpcResponse<void>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { docLinkRepo, documentRepo, validator } = createLinkingDependencies(rootPath);
       const handler = new CreateDocumentLinkHandler(docLinkRepo, documentRepo, validator);
@@ -148,6 +192,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_REMOVE_DOCUMENT_LINK, async (_event, workspaceId: unknown, linkId: string): Promise<IpcResponse<void>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { docLinkRepo } = createLinkingDependencies(rootPath);
       const handler = new RemoveDocumentLinkHandler(docLinkRepo);
@@ -158,10 +203,11 @@ export function registerLinkingHandlers(): void {
     }
   });
 
-  // 5. Migrate Links
+  // 5. Migrate Links (manual trigger via IPC if needed)
   ipcMain.handle(IpcChannels.LINKING_MIGRATE_LINKS, async (_event, workspaceId: unknown, oldDocumentId: string, newDocumentIds: string[]): Promise<IpcResponse<void>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo, migrationService } = createLinkingDependencies(rootPath);
       const handler = new MigrateLinksHandler(linkRepo, migrationService);
@@ -176,6 +222,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_GET_LINKS_FOR_DOCUMENT, async (_event, workspaceId: unknown, documentId: string): Promise<IpcResponse<unknown>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);
       const handler = new GetLinksForDocumentHandler(linkRepo, codeFilePort);
@@ -190,6 +237,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_GET_LINKS_FOR_CODEFILE, async (_event, workspaceId: unknown, codeFileId: string): Promise<IpcResponse<unknown>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);
       const handler = new GetLinksForCodeFileHandler(linkRepo, codeFilePort);
@@ -204,6 +252,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_GET_UNLINKED_CODEFILES, async (_event, workspaceId: unknown): Promise<IpcResponse<unknown>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { linkRepo, codeFilePort } = createLinkingDependencies(rootPath);
       const handler = new GetUnlinkedCodefilesHandler(linkRepo, codeFilePort);
@@ -218,6 +267,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_GET_DOCUMENT_CHILDREN, async (_event, workspaceId: unknown, parentDocumentId: string): Promise<IpcResponse<unknown>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { docLinkRepo } = createLinkingDependencies(rootPath);
       const handler = new GetDocumentChildrenHandler(docLinkRepo);
@@ -232,6 +282,7 @@ export function registerLinkingHandlers(): void {
   ipcMain.handle(IpcChannels.LINKING_GET_DOCUMENT_PARENTS, async (_event, workspaceId: unknown, childDocumentId: string): Promise<IpcResponse<unknown>> => {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+    currentWorkspaceRoot = rootPath;
     try {
       const { docLinkRepo } = createLinkingDependencies(rootPath);
       const handler = new GetDocumentParentsHandler(docLinkRepo);
@@ -248,6 +299,7 @@ export function registerLinkingHandlers(): void {
     async (_event, workspaceId: unknown, codeFileIds: string[], documentId: string): Promise<IpcResponse<BulkCreateResult>> => {
       const rootPath = validateWorkspaceId(workspaceId);
       if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
+      currentWorkspaceRoot = rootPath;
       try {
         const { linkRepo } = createLinkingDependencies(rootPath);
         const handler = new CreateBulkCodeLinksHandler(linkRepo);
@@ -261,4 +313,8 @@ export function registerLinkingHandlers(): void {
       }
     }
   );
+
+  // Register cross‑context event listener for automatic link migration on document deletion
+  const eventBus = EventBus.getInstance();
+  eventBus.register('DocumentDeletedEvent', new DocumentDeletedEventHandler());
 }

@@ -26,6 +26,7 @@ import { DocumentPath } from '../../../src/domains/documentation/domain/value-ob
 import { Document } from '../../../src/domains/documentation/domain/entities/document';
 import { DateTime } from '../../../src/domains/shared-kernel/types/date-time';
 import { PathUtils } from '../../../src/domains/shared-kernel/utils/path-utils';
+import { DocumentDeletedEvent } from '../../../src/domains/documentation/domain/events/document-deleted';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -248,17 +249,15 @@ export function registerDocumentationHandlers(): void {
         const docsFolderPath = config?.docsFolderPath.getOrNull();
 
         if (!docsFolderPath) {
-          return { success: true }; // nothing to sync
+          return { success: true };
         }
 
         const scanner = new NodeFsDocumentScannerAdapter(rootPath);
-        // Scan the entire docs folder recursively to get all files
         const allFiles = await scanner.scanFolder(docsFolderPath);
         const documentFiles = allFiles.filter(
           (f) => !f.isDirectory && DOCUMENT_EXTENSIONS.test(f.name)
         );
 
-        // Build full relative paths (docsFolderPath + file.name)
         const currentFilePaths = documentFiles.map((f) =>
           PathUtils.join(docsFolderPath, f.name)
         );
@@ -270,6 +269,8 @@ export function registerDocumentationHandlers(): void {
         for (const doc of existingDocs) {
           if (!currentFilePaths.includes(doc.path.value)) {
             await documentRepo.delete(doc.id);
+            const eventBus = EventBus.getInstance();
+            await eventBus.emit(new DocumentDeletedEvent(doc.id, doc.path));
           }
         }
 

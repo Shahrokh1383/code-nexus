@@ -3,14 +3,6 @@
   "docsFolderPath": null,
   "documents": [
     {
-      "id": "b21e2b98-b2c5-4ade-aa86-d7a62bcc04c2",
-      "path": "docs/CodeNexus_Constitution.md",
-      "title": "CodeNexus_Constitution",
-      "lastModified": "2026-07-13T15:36:28.490Z",
-      "linkCount": 0,
-      "isOrphaned": true
-    },
-    {
       "id": "9e9b8708-64c1-4303-8aea-8476a368fb36",
       "path": "docs/howtotest.md",
       "title": "Howtotest",
@@ -39,6 +31,14 @@
       "path": "docs/Summary.md",
       "title": "Summary",
       "lastModified": "2026-07-13T15:36:28.529Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "646ff418-7027-45db-8050-db5720653a48",
+      "path": "docs/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-14T10:03:08.894Z",
       "linkCount": 0,
       "isOrphaned": true
     }

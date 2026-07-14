@@ -48,7 +48,9 @@ export const useLinkingStore = create<LinkingState>((set, get) => ({
     try {
       const codeLinks = await invokeIpc<CodeToDocLinkDto[]>(IpcChannels.LINKING_GET_LINKS_FOR_DOCUMENT, workspace.id, documentId);
       const docParents = await invokeIpc<DocumentLinkDto[]>(IpcChannels.LINKING_GET_DOCUMENT_PARENTS, workspace.id, documentId);
-      set({ codeLinks: codeLinks || [], documentLinks: docParents || [] });
+      const docChildren = await invokeIpc<DocumentLinkDto[]>(IpcChannels.LINKING_GET_DOCUMENT_CHILDREN, workspace.id, documentId);
+      const allDocLinks = [...(docParents || []), ...(docChildren || [])];
+      set({ codeLinks: codeLinks || [], documentLinks: allDocLinks });
     } catch (error) {
       console.error('Failed to fetch document links', error);
     }

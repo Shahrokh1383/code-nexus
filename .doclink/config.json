@@ -10,7 +10,8 @@
     "**/*.log",
     "coverage",
     "dist-electron",
-    "public"
+    "public",
+    "__tests__"
   ],
   "schemaVersion": "1.0",
   "docFolder": {
