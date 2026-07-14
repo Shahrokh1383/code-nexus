@@ -16,6 +16,13 @@ export function useLinkingPageOrchestrator() {
     }
   }, [documents, selectedDocId]);
 
+  // If the selected document was deleted, pick a new one
+  useEffect(() => {
+    if (selectedDocId && documents.length > 0 && !documents.find(d => d.id === selectedDocId)) {
+      setSelectedDocId(documents[0].id);
+    }
+  }, [documents, selectedDocId]);
+
   useEffect(() => {
     if (selectedDocId) fetchLinksForDocument(selectedDocId);
   }, [selectedDocId, fetchLinksForDocument]);

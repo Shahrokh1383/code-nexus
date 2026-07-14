@@ -34,12 +34,11 @@
     "src\\domains\\documentation",
     "src\\infrastructure",
     "src\\application",
-    "src\\presentation",
-    "src\\domains\\linking"
+    "src\\domains\\filesystem"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-13T22:41:14.025Z",
+  "lastModified": "2026-07-14T09:43:43.579Z",
   "version": 1
 }

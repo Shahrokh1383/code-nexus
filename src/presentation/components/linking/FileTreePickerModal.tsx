@@ -1,4 +1,4 @@
-import { JSX, useState } from 'react';
+import { JSX, useState, useMemo } from 'react';
 import { useFileTreePicker } from '../../hooks/linking/useFileTreePicker';
 import { FileTreeNode } from './FileTreeNode';
 import { DocumentSourceList } from './DocumentSourceList';
@@ -26,9 +26,13 @@ export function FileTreePickerModal({
   const [codeSearchTerm, setCodeSearchTerm] = useState('');
 
   const filteredTree = useFilteredFileTree(picker.tree, codeSearchTerm);
+  const isSearchActive = codeSearchTerm.trim().length > 0;
+  const expandedFolderIds = isSearchActive && filteredTree ? new Set(getAllFolderIds(filteredTree)) : undefined;
 
-  // Derive expanded folder IDs: when searching, expand all matching folders to show matches
-  const expandedFolderIds = codeSearchTerm.trim() ? new Set(filteredTree ? getAllFolderIds(filteredTree) : []) : new Set<string>();
+  const targetDocTitle = useMemo(
+    () => documents.find(d => d.id === initialDocumentId)?.title ?? 'Unknown document',
+    [documents, initialDocumentId]
+  );
 
   const handleLink = () => {
     if (!initialDocumentId) return;
@@ -65,6 +69,22 @@ export function FileTreePickerModal({
             <i className="fa-solid fa-times"></i>
           </button>
         </div>
+
+        {/* Target document indicator */}
+        {initialDocumentId && (
+          <div 
+            className="px-3 py-2 d-flex align-items-center gap-2" 
+            style={{ 
+              backgroundColor: 'var(--cn-bg-secondary)', 
+              borderBottom: '1px solid var(--cn-border-light)',
+              fontSize: '0.9rem'
+            }}
+          >
+            <i className="fa-solid fa-link text-primary" />
+            <span className="text-secondary">Linking to:</span>
+            <strong className="text-primary">{targetDocTitle}</strong>
+          </div>
+        )}
 
         <div className="file-picker-body">
           <LinkingTabs 

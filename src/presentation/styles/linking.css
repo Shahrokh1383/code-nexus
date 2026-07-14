@@ -241,36 +241,6 @@
   color: var(--cn-primary);
 }
 
-/* ---------- Hierarchy ---------- */
-.hierarchy-tree {
-  list-style: none;
-  padding: var(--cn-space-4);
-  margin: 0;
-  background-color: var(--cn-bg-primary);
-}
-
-.hierarchy-item {
-  display: flex;
-  align-items: center;
-  gap: var(--cn-space-3);
-  padding: var(--cn-space-3) var(--cn-space-4);
-  border-radius: var(--cn-radius-md);
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-  margin-bottom: var(--cn-space-2);
-}
-
-.hierarchy-item:hover {
-  background-color: var(--cn-bg-hover);
-}
-
-.hierarchy-children {
-  margin-left: var(--cn-space-6);
-  border-left: 2px dashed var(--cn-border-default);
-  padding-left: var(--cn-space-4);
-  margin-top: var(--cn-space-2);
-}
-
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .linking-body {

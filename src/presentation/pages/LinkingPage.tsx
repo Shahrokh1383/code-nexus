@@ -1,9 +1,10 @@
-import { JSX, useState } from 'react';
+import { JSX, useState, useCallback, useEffect } from 'react';
 import { useLinks } from '../hooks/linking/useLinks';
 import { useLinkingPageOrchestrator } from '../hooks/linking/useLinkingPageOrchestrator';
 import { useLinkCreation } from '../hooks/linking/useLinkCreation';
 import { useUnlinkedFiles } from '../hooks/linking/useUnlinkedFiles';
 import { useGraphData } from '../hooks/linking/useGraphData';
+import { useDocuments } from '../hooks/useDocuments';
 import { LinkingPageHeader } from '../components/linking/LinkingPageHeader';
 import { InteractiveGraph } from '../components/linking/InteractiveGraph';
 import { DocumentHierarchy } from '../components/linking/DocumentHierarchy';
@@ -17,12 +18,33 @@ import '../components/linking/UnlinkedFilesList.css';
 
 export function LinkingPage(): JSX.Element {
   const { documents, selectedDocId, setSelectedDocId, selectedDoc, currentDocTitle } = useLinkingPageOrchestrator();
-  const { codeLinks, documentLinks, unlinkedFiles, isLoading, error, clearError } = useLinks();
+  const { codeLinks, documentLinks, unlinkedFiles, isLoading, error, clearError, fetchLinksForDocument, fetchGraphData, removeDocumentLink } = useLinks();
   const [activeTab, setActiveTab] = useState<'graph' | 'hierarchy' | 'unlinked'>('graph');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleModalLink } = useLinkCreation(() => setIsModalOpen(false));
   const { selectedIds, isAllSelected, isIndeterminate, toggleFile, toggleAll, handleQuickLink, handleBulkLink } = useUnlinkedFiles(selectedDocId);
   const { codeLinks: graphLinks, removeLink } = useGraphData(selectedDocId);
+
+  // After a document deletion (parent with children), links might have been migrated.
+  // The documents array length will change, so we refresh everything.
+  const { documents: allDocs } = useDocuments();
+  useEffect(() => {
+    if (allDocs.length > 0) {
+      fetchGraphData();
+      if (selectedDocId && allDocs.find(d => d.id === selectedDocId)) {
+        fetchLinksForDocument(selectedDocId);
+      }
+    }
+  }, [allDocs.length]); // intentionally only on count change, not on every render
+
+  const handleRemoveDocumentLink = useCallback(async (linkId: string) => {
+    await removeDocumentLink(linkId);
+    // Refresh the hierarchy and graph
+    await fetchGraphData();
+    if (selectedDocId) {
+      await fetchLinksForDocument(selectedDocId);
+    }
+  }, [removeDocumentLink, fetchGraphData, fetchLinksForDocument, selectedDocId]);
 
   const pageTabs = [
     { id: 'graph', label: 'Graph View', icon: 'fa-project-diagram' },
@@ -83,7 +105,13 @@ export function LinkingPage(): JSX.Element {
               )
             )}
             {activeTab === 'hierarchy' && (
-              <DocumentHierarchy documents={documents} documentLinks={documentLinks} />
+              <DocumentHierarchy
+                documents={documents}
+                documentLinks={documentLinks}
+                selectedDocumentId={selectedDocId}
+                onRemoveDocumentLink={handleRemoveDocumentLink}
+                onSelectDocument={setSelectedDocId}
+              />
             )}
             {activeTab === 'unlinked' && (
               <div className="p-3">
