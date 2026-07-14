@@ -1,6 +1,6 @@
 {
   "workspaceId": "c:/Users/--------------------/Desktop/CodeNexus",
-  "docsFolderPath": null,
+  "docsFolderPath": "docs",
   "ignorePatterns": [
     "**/node_modules/**",
     "**/.git/**",
@@ -10,5 +10,14 @@
     "**/*.log"
   ],
   "schemaVersion": "1.0",
-  "docFolder": null
+  "docFolder": {
+    "id": "c64e354d-a815-4ab4-bbd0-23da1cdfa12a",
+    "path": "docs",
+    "signature": {
+      "fileCount": 10,
+      "topLevelFileNames": [],
+      "directoryDepth": 2
+    },
+    "documentCount": 8
+  }
 }

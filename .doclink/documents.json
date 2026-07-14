@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "docsFolderPath": null,
+  "documents": [
+    {
+      "id": "e265d27a-0a86-4c45-b657-751001177eef",
+      "path": "docs/CodeNexus_Constitution.md",
+      "title": "CodeNexus_Constitution",
+      "lastModified": "2026-07-14T19:07:06.801Z",
+      "linkCount": 2,
+      "isOrphaned": false
+    },
+    {
+      "id": "981e132b-1e15-4ff8-a345-3963376104cf",
+      "path": "docs/howtotest.md",
+      "title": "Howtotest",
+      "lastModified": "2026-07-14T19:07:06.805Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "7ccad218-d25c-455e-ac2d-dd476854942b",
+      "path": "docs/CodeNexus_Implementation_Roadmap.md",
+      "title": "CodeNexus_Implementation_Roadmap",
+      "lastModified": "2026-07-14T19:07:06.814Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "d2001d93-9277-45f8-89bd-128b4e22cb1a",
+      "path": "docs/idea.md",
+      "title": "Idea",
+      "lastModified": "2026-07-14T19:07:06.823Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    },
+    {
+      "id": "a8e7203a-2592-4ea5-b0c5-5192c686199e",
+      "path": "docs/Summary.md",
+      "title": "Summary",
+      "lastModified": "2026-07-14T19:07:06.832Z",
+      "linkCount": 0,
+      "isOrphaned": true
+    }
+  ]
+}

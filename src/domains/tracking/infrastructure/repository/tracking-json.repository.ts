@@ -14,8 +14,9 @@ interface HashEntrySchema {
   filePath: string;
   hashValue: string;
   committedHashValue: string | null;
+  committedCommitId: string | null;   // NEW
   committedAt: string | null;
-  commitId: string | null;
+  commitId: string | null;            // current commit ID (null = pending)
   diff: ContentDiffDto | null;
 }
 
@@ -91,6 +92,7 @@ export class TrackingJsonRepository implements IHashRepository {
       new FilePath(entry.filePath),
       new HashValue(entry.hashValue),
       entry.committedHashValue ? new HashValue(entry.committedHashValue) : undefined,
+      entry.committedCommitId ? new CommitId(entry.committedCommitId) : undefined,
       entry.committedAt ? DateTime.fromISO(entry.committedAt) : undefined,
       entry.commitId ? new CommitId(entry.commitId) : undefined
     );
@@ -109,7 +111,12 @@ export class TrackingJsonRepository implements IHashRepository {
       committedHashValue: fileHash.committedHashValue.isSome
         ? fileHash.committedHashValue.getOrNull()!.value
         : null,
-      committedAt: fileHash.committedAt.isSome ? fileHash.committedAt.getOrNull()!.toISO() : null,
+      committedCommitId: fileHash.committedCommitId.isSome
+        ? fileHash.committedCommitId.getOrNull()!.value
+        : null,
+      committedAt: fileHash.committedAt.isSome
+        ? fileHash.committedAt.getOrNull()!.toISO()
+        : null,
       commitId: fileHash.commitId.isSome ? fileHash.commitId.getOrNull()!.value : null,
       diff: diffToSave,
     };

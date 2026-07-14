@@ -94,7 +94,8 @@ export class CommitsJsonRepository implements ICommitRepository {
         new FileHashId(hashId),
         new FilePath(path),
         new HashValue(hashValue),
-        undefined,            // committedHashValue not available in commit history
+        undefined,                 // committedHashValue not available in commit history
+        undefined,                 // committedCommitId not available in commit history
         DateTime.now(),
         new CommitId(entry.id)
       );
