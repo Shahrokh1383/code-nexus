@@ -22,12 +22,9 @@
     "src\\presentation\\components\\file-tree",
     "src\\presentation\\components\\welcome",
     "src\\domains\\project",
-    "src\\presentation\\components\\tracking",
     "src\\presentation\\components\\layout",
-    "src\\presentation\\pages\\TrackingPage.tsx",
     "src\\presentation\\styles\\tracking.css",
     "src\\presentation\\styles\\app.css",
-    "src\\domains\\tracking",
     "src\\domains\\shared-kernel",
     "src\\infrastructure",
     "src\\application",
@@ -36,12 +33,13 @@
     "src\\presentation\\hooks\\linking",
     "src\\presentation\\styles",
     "src\\presentation\\utils",
-    "src\\domains",
-    "src\\presentation\\pages\\LinkingPage.tsx"
+    "src\\presentation\\pages\\LinkingPage.tsx",
+    "src\\domains\\documentation",
+    "src\\presentation\\components\\documentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-14T11:10:35.152Z",
+  "lastModified": "2026-07-14T17:20:58.285Z",
   "version": 1
 }

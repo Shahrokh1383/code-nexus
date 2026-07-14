@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "commits": [
+    {
+      "id": "bca4d805-6b80-4078-aa7a-ea87b8116af4",
+      "documentId": "f02e89be-a677-409d-9bf9-7025fe4f1fd7",
+      "fileHashIds": [
+        "f78ad2b4-fe92-41da-8bbe-14069607ab9f",
+        "f8324e24-2803-498e-b4df-54e7acf21244"
+      ],
+      "filePaths": [
+        "src/presentation/styles/app.css",
+        "src/presentation/styles/linking.css"
+      ],
+      "committedAt": "2026-07-14T17:58:52.971Z",
+      "status": "APPROVED"
+    }
+  ]
+}

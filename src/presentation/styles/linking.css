@@ -253,3 +253,9 @@
     min-height: 300px;
   }
 }
+
+.btn-primary {
+  flex-direction: column;
+  color: #000;
+  display: block;
+}

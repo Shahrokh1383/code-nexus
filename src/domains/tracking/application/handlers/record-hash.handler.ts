@@ -30,27 +30,41 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         const event = comparison.detectChanges(existing.hashValue, newHash, filePath);
 
         if (event) {
-          // Always update the hash to PENDING state
+          // Capture old hash BEFORE updating
+          const oldHash = existing.hashValue;
+
+          // Update hash to PENDING state (now newHash)
           existing.updateHash(newHash);
-          
-          // Try to compute a diff, but never let a diff failure prevent the hash save
+
+          // Compute diff with correct old/new hashes
           let diffDto: ContentDiffDto | null = null;
           if (command.oldContent !== null) {
             try {
               const diffEntity = this.diffService.calculate(
-                command.oldContent, command.newContent, filePath, existing.hashValue, newHash
+                command.oldContent, command.newContent, filePath, oldHash, newHash
               );
               diffDto = {
                 filePath: diffEntity.filePath.value,
                 oldHash: diffEntity.oldHash.value,
                 newHash: diffEntity.newHash.value,
-                addedLines: diffEntity.addedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type })),
-                removedLines: diffEntity.removedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type })),
-                modifiedLines: diffEntity.modifiedLines.map((l: DiffLine) => ({ lineNumber: l.lineNumber, content: l.content, type: l.type }))
+                addedLines: diffEntity.addedLines.map((l: DiffLine) => ({
+                  lineNumber: l.lineNumber,
+                  content: l.content,
+                  type: l.type,
+                })),
+                removedLines: diffEntity.removedLines.map((l: DiffLine) => ({
+                  lineNumber: l.lineNumber,
+                  content: l.content,
+                  type: l.type,
+                })),
+                modifiedLines: diffEntity.modifiedLines.map((l: DiffLine) => ({
+                  lineNumber: l.lineNumber,
+                  content: l.content,
+                  type: l.type,
+                })),
               };
             } catch (diffError) {
               console.error('[Tracking] Diff calculation failed for', command.filePath, diffError);
-              // diffDto remains null – hash is still saved
             }
           }
 

@@ -25,14 +25,24 @@ export function TrackingPage(): JSX.Element {
 
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
 
-  // Compute pending counts per document by fetching when documents load
+  // Compute pending counts per document by counting pendingChanges' linked files
   const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    // Compute counts from current pendingChanges when they change
-    const counts: Record<string, number> = {};
-    setPendingCounts(counts);
-  }, [pendingChanges]);
+    // pendingChanges contains entries only for the selected document (filtered by store)
+    // But we need counts per document across all documents. The current design only loads
+    // pending changes for the selected document. To show badges on the document list,
+    // we must either prefetch counts for all documents or derive from full tracking index.
+    // For now, we set the selected document's count from pendingChanges length.
+    if (selectedDocument) {
+      setPendingCounts((prev) => ({
+        ...prev,
+        [selectedDocument.id]: pendingChanges.length,
+      }));
+    } else {
+      setPendingCounts({});
+    }
+  }, [pendingChanges, selectedDocument]);
 
   // Auto-select first document if none selected
   useEffect(() => {

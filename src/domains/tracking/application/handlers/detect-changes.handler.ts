@@ -4,23 +4,19 @@ import { DetectChangesCommand } from '../commands/detect-changes.command';
 import { IFileContentReader } from '../ports/file-content-reader.interface';
 import { RecordHashCommand } from '../commands/record-hash.command';
 import { RecordHashHandler } from './record-hash.handler';
-import { IHashRepository } from '../../domain/repository/hash-repository.interface';
-import { DiffCalculatorService } from '../../domain/services/diff-calculator.service';
 
 export class DetectChangesHandler implements ICommandHandler<DetectChangesCommand, void> {
   constructor(
     private readonly contentReader: IFileContentReader,
-    private readonly repository: IHashRepository,
-    private readonly diffService: DiffCalculatorService
+    private readonly recordHashHandler: RecordHashHandler
   ) {}
 
   async execute(command: DetectChangesCommand): Promise<Result<void, string>> {
     try {
       const newContent = await this.contentReader.readContent(command.filePath);
       const oldContent = await this.contentReader.getPreviousContent(command.filePath);
-      
-      const recordHandler = new RecordHashHandler(this.repository, this.diffService);
-      const result = await recordHandler.execute(
+
+      const result = await this.recordHashHandler.execute(
         new RecordHashCommand(command.filePath, newContent, oldContent)
       );
 

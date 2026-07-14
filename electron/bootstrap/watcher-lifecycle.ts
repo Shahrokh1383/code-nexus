@@ -5,17 +5,11 @@ import { JsonDatabase } from '../../src/infrastructure/persistence/json-database
 import { SchemaMigrator } from '../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/database-schema';
 import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects/ignore-pattern';
-import { ILinkedDocumentQueryPort } from '../../src/domains/tracking/application/ports/linked-document-query.port';
-import { DocumentId } from '../../src/domains/documentation/domain/value-objects/document-id';
+import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking-handlers';
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
 import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
 import { IDomainEventHandler } from '../../src/domains/shared-kernel/events/domain-event-handler.interface';
-
-class StubLinkedDocumentQueryPort implements ILinkedDocumentQueryPort {
-  async findLinkedDocuments(_filePath: string): Promise<DocumentId[]> { return []; }
-  async findLinkedFiles(_documentId: string): Promise<string[]> { return []; }
-}
 
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
@@ -49,7 +43,8 @@ export async function startWatcher(rootPath: string): Promise<void> {
   currentWatcher = new ChokidarAdapter();
   currentWatcher.startWatching(rootPath, ignorePatterns);
 
-  const linkedDocQuery = new StubLinkedDocumentQueryPort();
+  // Use real adapter instead of stub
+  const linkedDocQuery = new LinkedDocumentQueryAdapter(rootPath);
   currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery);
   currentSaga.register();
 
@@ -57,7 +52,6 @@ export async function startWatcher(rootPath: string): Promise<void> {
   const eventBus = EventBus.getInstance();
   ignorePatternChangedHandler = {
     handle: async (event: IgnorePatternsChangedEvent): Promise<void> => {
-      // Restart the watcher for the affected workspace
       await startWatcher(event.workspaceId.value);
     },
   };

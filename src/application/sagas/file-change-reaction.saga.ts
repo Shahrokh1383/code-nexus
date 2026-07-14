@@ -7,6 +7,7 @@ import { ChangesDetectedEvent } from '../../domains/tracking/domain/events/chang
 import { ReviewRequiredEvent } from '../../domains/tracking/domain/events/review-required';
 import { DetectChangesCommand } from '../../domains/tracking/application/commands/detect-changes.command';
 import { DetectChangesHandler } from '../../domains/tracking/application/handlers/detect-changes.handler';
+import { RecordHashHandler } from '../../domains/tracking/application/handlers/record-hash.handler';
 import { TrackingJsonRepository } from '../../domains/tracking/infrastructure/repository/tracking-json.repository';
 import { FileContentReaderAdapter } from '../../domains/tracking/infrastructure/adapters/file-content-reader.adapter';
 import { ILinkedDocumentQueryPort } from '../../domains/tracking/application/ports/linked-document-query.port';
@@ -18,7 +19,6 @@ export class FileChangeReactionSaga {
   private readonly workspaceRoot: string;
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
 
-  // Store handler references for later unregistration
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
   private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
@@ -29,7 +29,6 @@ export class FileChangeReactionSaga {
     this.workspaceRoot = workspaceRoot;
     this.linkedDocQuery = linkedDocQuery;
 
-    // Create handlers bound to this instance
     this.fileModifiedHandler = {
       handle: async (event: FileModifiedEvent): Promise<void> => {
         await this.onFileChanged(event.path.value);
@@ -81,8 +80,9 @@ export class FileChangeReactionSaga {
     const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
     const diffAdapter = new DiffCalculatorAdapter();
     const diffService = new DiffCalculatorService(diffAdapter);
+    const recordHandler = new RecordHashHandler(repository, diffService);
+    const handler = new DetectChangesHandler(contentReader, recordHandler);
 
-    const handler = new DetectChangesHandler(contentReader, repository, diffService);
     await handler.execute(new DetectChangesCommand(filePath));
   }
 
