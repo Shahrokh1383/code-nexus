@@ -9,6 +9,7 @@ export class FileHash {
   private readonly _id: FileHashId;
   private readonly _filePath: FilePath;
   private _hashValue: HashValue;
+  private _committedHashValue: Maybe<HashValue>;
   private _committedAt: Maybe<DateTime>;
   private _commitId: Maybe<CommitId>;
 
@@ -16,12 +17,14 @@ export class FileHash {
     id: FileHashId,
     filePath: FilePath,
     hashValue: HashValue,
+    committedHashValue?: HashValue,
     committedAt?: DateTime,
     commitId?: CommitId
   ) {
     this._id = id;
     this._filePath = filePath;
     this._hashValue = hashValue;
+    this._committedHashValue = committedHashValue ? Maybe.some(committedHashValue) : Maybe.none();
     this._committedAt = committedAt ? Maybe.some(committedAt) : Maybe.none();
     this._commitId = commitId ? Maybe.some(commitId) : Maybe.none();
   }
@@ -29,6 +32,7 @@ export class FileHash {
   get id(): FileHashId { return this._id; }
   get filePath(): FilePath { return this._filePath; }
   get hashValue(): HashValue { return this._hashValue; }
+  get committedHashValue(): Maybe<HashValue> { return this._committedHashValue; }
   get committedAt(): Maybe<DateTime> { return this._committedAt; }
   get commitId(): Maybe<CommitId> { return this._commitId; }
 
@@ -41,5 +45,12 @@ export class FileHash {
   commit(commitId: CommitId): void {
     this._commitId = Maybe.some(commitId);
     this._committedAt = Maybe.some(DateTime.now());
+    this._committedHashValue = Maybe.some(this._hashValue);
+  }
+
+  revertToCommitted(): void {
+    if (this._committedHashValue.isSome && this._commitId.isSome) {
+      this._hashValue = this._committedHashValue.getOrNull()!;
+    }
   }
 }

@@ -39,10 +39,6 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
   return workspaceId.trim();
 }
 
-/**
- * Real adapter that queries the Linking context for linked files/documents
- * and resolves file-node UUIDs to actual file paths using the FileSystem context.
- */
 export class LinkedDocumentQueryAdapter implements ILinkedDocumentQueryPort {
   private readonly linkRepo: LinkJsonRepository;
   private readonly fileSystemRepo: FileSystemJsonRepository;
@@ -57,7 +53,6 @@ export class LinkedDocumentQueryAdapter implements ILinkedDocumentQueryPort {
     const path = new FilePath(filePath);
     const fileNode = await this.fileSystemRepo.findByPath(path);
     if (!fileNode) return [];
-
     const codeFileId = fileNode.id;
     const links = await this.linkRepo.findByCodeFile(codeFileId);
     return links.map((l) => l.documentId);
@@ -88,6 +83,10 @@ function createLinkedDocQuery(workspaceRoot: string): ILinkedDocumentQueryPort {
   return new LinkedDocumentQueryAdapter(workspaceRoot);
 }
 
+function createContentReader(workspaceRoot: string): FileContentReaderAdapter {
+  return new FileContentReaderAdapter(workspaceRoot);
+}
+
 function createDiffService(): DiffCalculatorService {
   return new DiffCalculatorService(new DiffCalculatorAdapter());
 }
@@ -98,7 +97,7 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
-      const handler = new RecordHashHandler(createHashRepository(rootPath), createDiffService());
+      const handler = new RecordHashHandler(createHashRepository(rootPath), createDiffService(), createContentReader(rootPath));
       const result = await handler.execute(new RecordHashCommand(filePath, content));
       return result.fold<IpcResponse<unknown>>(
         () => ({ success: true }),
@@ -114,12 +113,10 @@ export function registerTrackingHandlers(): void {
     const rootPath = validateWorkspaceId(workspaceId);
     if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
     try {
+      const contentReader = createContentReader(rootPath);
       const diffService = createDiffService();
-      const recordHandler = new RecordHashHandler(createHashRepository(rootPath), diffService);
-      const handler = new DetectChangesHandler(
-        new FileContentReaderAdapter(rootPath),
-        recordHandler
-      );
+      const recordHandler = new RecordHashHandler(createHashRepository(rootPath), diffService, contentReader);
+      const handler = new DetectChangesHandler(contentReader, recordHandler);
       const result = await handler.execute(new DetectChangesCommand(filePath));
       return result.fold<IpcResponse<unknown>>(
         () => ({ success: true }),
@@ -138,7 +135,8 @@ export function registerTrackingHandlers(): void {
       const handler = new ApproveCommitHandler(
         createHashRepository(rootPath),
         createCommitRepository(rootPath),
-        createLinkedDocQuery(rootPath)
+        createLinkedDocQuery(rootPath),
+        createContentReader(rootPath)
       );
       const result = await handler.execute(new ApproveCommitCommand(documentId));
       return result.fold<IpcResponse<unknown>>(

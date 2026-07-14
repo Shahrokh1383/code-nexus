@@ -13,6 +13,7 @@ interface HashEntrySchema {
   id: string;
   filePath: string;
   hashValue: string;
+  committedHashValue: string | null;
   committedAt: string | null;
   commitId: string | null;
   diff: ContentDiffDto | null;
@@ -89,6 +90,7 @@ export class TrackingJsonRepository implements IHashRepository {
       new FileHashId(entry.id),
       new FilePath(entry.filePath),
       new HashValue(entry.hashValue),
+      entry.committedHashValue ? new HashValue(entry.committedHashValue) : undefined,
       entry.committedAt ? DateTime.fromISO(entry.committedAt) : undefined,
       entry.commitId ? new CommitId(entry.commitId) : undefined
     );
@@ -104,6 +106,9 @@ export class TrackingJsonRepository implements IHashRepository {
       id: fileHash.id.value,
       filePath: fileHash.filePath.value,
       hashValue: fileHash.hashValue.value,
+      committedHashValue: fileHash.committedHashValue.isSome
+        ? fileHash.committedHashValue.getOrNull()!.value
+        : null,
       committedAt: fileHash.committedAt.isSome ? fileHash.committedAt.getOrNull()!.toISO() : null,
       commitId: fileHash.commitId.isSome ? fileHash.commitId.getOrNull()!.value : null,
       diff: diffToSave,

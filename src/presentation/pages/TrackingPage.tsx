@@ -24,16 +24,11 @@ export function TrackingPage(): JSX.Element {
   } = useTracking();
 
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
+  const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
 
-  // Compute pending counts per document by counting pendingChanges' linked files
   const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    // pendingChanges contains entries only for the selected document (filtered by store)
-    // But we need counts per document across all documents. The current design only loads
-    // pending changes for the selected document. To show badges on the document list,
-    // we must either prefetch counts for all documents or derive from full tracking index.
-    // For now, we set the selected document's count from pendingChanges length.
     if (selectedDocument) {
       setPendingCounts((prev) => ({
         ...prev,
@@ -44,19 +39,22 @@ export function TrackingPage(): JSX.Element {
     }
   }, [pendingChanges, selectedDocument]);
 
-  // Auto-select first document if none selected
   useEffect(() => {
     if (!selectedDocument && documents.length > 0) {
       selectDocument(documents[0]);
     }
   }, [documents, selectedDocument, selectDocument]);
 
-  // Load diff when file selected
-  useEffect(() => {
-    if (selectedFilePath) {
-      fetchFileDiff(selectedFilePath);
-    }
-  }, [selectedFilePath, fetchFileDiff]);
+  // When a file is selected in the list, fetch its diff and open modal
+  const handleSelectFile = (filePath: string) => {
+    setSelectedFilePath(filePath);
+    fetchFileDiff(filePath);
+    setIsDiffModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsDiffModalOpen(false);
+  };
 
   return (
     <div className="tracking-page">
@@ -82,19 +80,11 @@ export function TrackingPage(): JSX.Element {
           />
 
           {selectedDocument && (
-            <>
-              <PendingChangesList
-                changes={pendingChanges}
-                selectedFilePath={selectedFilePath}
-                onSelectFile={setSelectedFilePath}
-              />
-
-              {selectedFilePath && (
-                <div className="tracking-diff-section mt-3">
-                  <DiffViewer diff={selectedDiff} />
-                </div>
-              )}
-            </>
+            <PendingChangesList
+              changes={pendingChanges}
+              selectedFilePath={selectedFilePath}
+              onSelectFile={handleSelectFile}
+            />
           )}
         </div>
 
@@ -110,6 +100,13 @@ export function TrackingPage(): JSX.Element {
           )}
         </div>
       </div>
+
+      {/* Full-screen diff modal */}
+      <DiffViewer
+        diff={selectedDiff}
+        show={isDiffModalOpen}
+        onClose={handleCloseModal}
+      />
 
       {isLoading && (
         <div className="tracking-loading">

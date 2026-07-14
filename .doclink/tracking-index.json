@@ -12,10 +12,23 @@
     ".road_analyzer_exclude.json": {
       "id": "9c8e1684-392d-49ed-91c7-8f5c86029eeb",
       "filePath": ".road_analyzer_exclude.json",
-      "hashValue": "fc31f78cecd3fb91f84623edb4aebf58c4a97290bd6281b15970df87322eb407",
+      "hashValue": "0be7a53478aa3a7d0f36e754dbaa0bb234c3984486c0d669fb6a37c3c3bdaa17",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": ".road_analyzer_exclude.json",
+        "oldHash": "03068fda9b2bdaeba1adb19a5c965d95b5151c8607c5b931f64ba30d49f986c2",
+        "newHash": "0be7a53478aa3a7d0f36e754dbaa0bb234c3984486c0d669fb6a37c3c3bdaa17",
+        "addedLines": [],
+        "removedLines": [],
+        "modifiedLines": [
+          {
+            "lineNumber": 45,
+            "content": "  \"lastModified\": \"2026-07-14T18:22:48.213Z\",",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "content.txt": {
       "id": "e503fd9a-5af1-4701-97aa-79ee2ef87eb3",
@@ -23,7 +36,235 @@
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "content.txt",
+        "oldHash": "5ac2d4662e5437a633fcc89e25e5b4812fba1cbdc0f272a5e3ee07287081647b",
+        "newHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "addedLines": [],
+        "removedLines": [
+          {
+            "lineNumber": 1,
+            "content": "src\\domains\\shared-kernel\\types\\maybe.ts :",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 2,
+            "content": "export class Maybe<T> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 3,
+            "content": "  private readonly _value: T | undefined;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 4,
+            "content": "  private readonly _hasValue: boolean;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 5,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 6,
+            "content": "  private constructor(value?: T) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 7,
+            "content": "    this._value = value;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 8,
+            "content": "    this._hasValue = value !== undefined && value !== null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 9,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 10,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 11,
+            "content": "  static some<T>(value: T): Maybe<T> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 12,
+            "content": "    return new Maybe<T>(value);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 13,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 14,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 15,
+            "content": "  static none<T>(): Maybe<T> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 16,
+            "content": "    return new Maybe<T>();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 17,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 18,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 19,
+            "content": "  get isSome(): boolean {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 20,
+            "content": "    return this._hasValue;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 21,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 22,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 23,
+            "content": "  get isNone(): boolean {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 24,
+            "content": "    return !this._hasValue;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 25,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 26,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 27,
+            "content": "  map<R>(fn: (value: T) => R): Maybe<R> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 28,
+            "content": "    return this._hasValue ? Maybe.some(fn(this._value as T)) : Maybe.none<R>();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 29,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 30,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 31,
+            "content": "  flatMap<R>(fn: (value: T) => Maybe<R>): Maybe<R> {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 32,
+            "content": "    return this._hasValue ? fn(this._value as T) : Maybe.none<R>();",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 33,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 35,
+            "content": "  getOrElse(defaultValue: T): T {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "    return this._hasValue ? (this._value as T) : defaultValue;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 37,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 38,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 39,
+            "content": "  getOrNull(): T | null {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 40,
+            "content": "    return this._hasValue ? (this._value as T) : null;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 41,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 42,
+            "content": "}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 43,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 44,
+            "content": "",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "electron-builder.json": {
       "id": "289c423c-8fc2-4ba1-9802-c99c73b78a90",
@@ -100,10 +341,414 @@
     "roadmap.txt": {
       "id": "1ec8ba75-9f0a-4a0f-b6fc-ffa2695c9d47",
       "filePath": "roadmap.txt",
-      "hashValue": "dce967c0b2eb9a43ffe52ff24f6799d237a6782b21aef465b82f8204483add52",
+      "hashValue": "728f57ada383cd44c7860bfc63f3336c28ec57d7e82a86f09cd0e6eadb232bd3",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "roadmap.txt",
+        "oldHash": "dce967c0b2eb9a43ffe52ff24f6799d237a6782b21aef465b82f8204483add52",
+        "newHash": "728f57ada383cd44c7860bfc63f3336c28ec57d7e82a86f09cd0e6eadb232bd3",
+        "addedLines": [
+          {
+            "lineNumber": 5,
+            "content": "Generated: 2026-07-14T18:22:48.216Z",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 6,
+            "content": "Total Entries: 132",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 122,
+            "content": "│   ├── 📁 stores/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 123,
+            "content": "│   │   ├── 📄 documentation.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 124,
+            "content": "│   │   ├── 📄 filesystem.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 125,
+            "content": "│   │   ├── 📄 linking.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 126,
+            "content": "│   │   ├── 📄 tracking.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 127,
+            "content": "│   │   └── 📄 workspace.store.ts",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 128,
+            "content": "│   └── 📁 styles/",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 129,
+            "content": "│       └── 📄 tracking.css",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 5,
+            "content": "Generated: 2026-07-14T17:20:58.292Z",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 6,
+            "content": "Total Entries: 191",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 42,
+            "content": "│   ├── 📁 linking/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 43,
+            "content": "│   │   ├── 📁 application/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 44,
+            "content": "│   │   │   ├── 📁 commands/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "│   │   │   │   ├── 📄 create-bulk-code-links.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "│   │   │   │   ├── 📄 create-document-link.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "│   │   │   │   ├── 📄 create-link.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "│   │   │   │   ├── 📄 migrate-links.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "│   │   │   │   ├── 📄 remove-document-link.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "│   │   │   │   └── 📄 remove-link.command.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "│   │   │   ├── 📁 dto/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "│   │   │   │   ├── 📄 code-to-doc-link.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "│   │   │   │   ├── 📄 document-link.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "│   │   │   │   ├── 📄 link-graph.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "│   │   │   │   └── 📄 link.dto.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "│   │   │   ├── 📁 handlers/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "│   │   │   │   ├── 📄 create-bulk-code-links.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "│   │   │   │   ├── 📄 create-document-link.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "│   │   │   │   ├── 📄 create-link.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "│   │   │   │   ├── 📄 get-document-children.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 61,
+            "content": "│   │   │   │   ├── 📄 get-document-parents.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 62,
+            "content": "│   │   │   │   ├── 📄 get-links-for-codefile.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 63,
+            "content": "│   │   │   │   ├── 📄 get-links-for-document.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "│   │   │   │   ├── 📄 get-unlinked-codefiles.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 65,
+            "content": "│   │   │   │   ├── 📄 migrate-links.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 66,
+            "content": "│   │   │   │   ├── 📄 remove-document-link.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 67,
+            "content": "│   │   │   │   └── 📄 remove-link.handler.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 68,
+            "content": "│   │   │   ├── 📁 ports/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 69,
+            "content": "│   │   │   │   └── 📄 code-file-query.port.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 70,
+            "content": "│   │   │   └── 📁 queries/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 71,
+            "content": "│   │   │       ├── 📄 get-document-children.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 72,
+            "content": "│   │   │       ├── 📄 get-document-parents.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 73,
+            "content": "│   │   │       ├── 📄 get-links-for-codefile.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 74,
+            "content": "│   │   │       ├── 📄 get-links-for-document.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 75,
+            "content": "│   │   │       └── 📄 get-unlinked-codefiles.query.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 76,
+            "content": "│   │   ├── 📁 domain/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 77,
+            "content": "│   │   │   ├── 📁 entities/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 78,
+            "content": "│   │   │   │   ├── 📄 code-to-doc-link.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 79,
+            "content": "│   │   │   │   ├── 📄 document-to-document-link.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 80,
+            "content": "│   │   │   │   └── 📄 link-graph.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 81,
+            "content": "│   │   │   ├── 📁 events/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 82,
+            "content": "│   │   │   │   ├── 📄 document-link-broken.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 83,
+            "content": "│   │   │   │   ├── 📄 document-link-created.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 84,
+            "content": "│   │   │   │   ├── 📄 link-broken.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 85,
+            "content": "│   │   │   │   ├── 📄 link-created.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 86,
+            "content": "│   │   │   │   └── 📄 links-migrated.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "│   │   │   ├── 📁 repository/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 88,
+            "content": "│   │   │   │   ├── 📄 document-link-repository.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 89,
+            "content": "│   │   │   │   └── 📄 link-repository.interface.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 90,
+            "content": "│   │   │   ├── 📁 services/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 91,
+            "content": "│   │   │   │   ├── 📄 document-link-validator.service.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 92,
+            "content": "│   │   │   │   └── 📄 link-migration.service.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 93,
+            "content": "│   │   │   └── 📁 value-objects/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 94,
+            "content": "│   │   │       ├── 📄 document-link-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 95,
+            "content": "│   │   │       ├── 📄 link-graph-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 96,
+            "content": "│   │   │       ├── 📄 link-id.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 97,
+            "content": "│   │   │       └── 📄 link-type.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 98,
+            "content": "│   │   └── 📁 infrastructure/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 99,
+            "content": "│   │       └── 📁 repository/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 100,
+            "content": "│   │           ├── 📄 document-link-json.repository.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 101,
+            "content": "│   │           └── 📄 link-json.repository.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 181,
+            "content": "│   │   ├── 📄 DocumentManagerPage.tsx",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 183,
+            "content": "│   └── 📁 stores/",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 184,
+            "content": "│       ├── 📄 documentation.store.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 185,
+            "content": "│       ├── 📄 filesystem.store.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 186,
+            "content": "│       ├── 📄 linking.store.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 187,
+            "content": "│       ├── 📄 tracking.store.ts",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 188,
+            "content": "│       └── 📄 workspace.store.ts",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "todo.md": {
       "id": "70a9dda2-5672-424d-b2c6-961343d14c66",
@@ -156,10 +801,34 @@
     "electron/main.ts": {
       "id": "ab330c95-3741-467e-9e9d-6998b69519b6",
       "filePath": "electron/main.ts",
-      "hashValue": "0be4e4e0dc198fe6a13bb9f558471aaadb312efcde32abe0ce4c529ab1f55bea",
+      "hashValue": "8d7a711b9fd3c602eaa0ddb38e71f498782721c33621f66f9abd7e34978843d2",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "electron/main.ts",
+        "oldHash": "2d991cfbfae77e9e7540a0f37152f1d982092dd4c0fecfeba92fe249874eb4cb",
+        "newHash": "8d7a711b9fd3c602eaa0ddb38e71f498782721c33621f66f9abd7e34978843d2",
+        "addedLines": [
+          {
+            "lineNumber": 9,
+            "content": "  FileContentReaderAdapter.setUserDataPath(app.getPath('userData'));",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 10,
+            "content": "",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 11,
+            "content": "  FileContentReaderAdapter.setUserDataPath(app.getPath('userData'));",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "electron/preload.ts": {
       "id": "bc76dcb7-e1ef-4819-85d6-873c5c74e508",
@@ -356,10 +1025,125 @@
     "electron/ipc/handlers/tracking-handlers.ts": {
       "id": "cc9f6d0b-88db-4d72-91ab-28813345c50d",
       "filePath": "electron/ipc/handlers/tracking-handlers.ts",
-      "hashValue": "b838a13cb677d2c57ee117361c1c36b49254c6a20f81c99406ae535aebc6fffe",
+      "hashValue": "edfc10b6cb9d21805a8361e57589e07439350f75f51e45cde660bb7416bad04d",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "electron/ipc/handlers/tracking-handlers.ts",
+        "oldHash": "b838a13cb677d2c57ee117361c1c36b49254c6a20f81c99406ae535aebc6fffe",
+        "newHash": "edfc10b6cb9d21805a8361e57589e07439350f75f51e45cde660bb7416bad04d",
+        "addedLines": [
+          {
+            "lineNumber": 86,
+            "content": "function createContentReader(workspaceRoot: string): FileContentReaderAdapter {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "  return new FileContentReaderAdapter(workspaceRoot);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 88,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 89,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 116,
+            "content": "      const contentReader = createContentReader(rootPath);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 118,
+            "content": "      const recordHandler = new RecordHashHandler(createHashRepository(rootPath), diffService, contentReader);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 119,
+            "content": "      const handler = new DetectChangesHandler(contentReader, recordHandler);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 138,
+            "content": "        createLinkedDocQuery(rootPath),",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 139,
+            "content": "        createContentReader(rootPath)",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 42,
+            "content": "/**",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 43,
+            "content": " * Real adapter that queries the Linking context for linked files/documents",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 44,
+            "content": " * and resolves file-node UUIDs to actual file paths using the FileSystem context.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 45,
+            "content": " */",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 118,
+            "content": "      const recordHandler = new RecordHashHandler(createHashRepository(rootPath), diffService);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 119,
+            "content": "      const handler = new DetectChangesHandler(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 120,
+            "content": "        new FileContentReaderAdapter(rootPath),",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 121,
+            "content": "        recordHandler",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 122,
+            "content": "      );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 141,
+            "content": "        createLinkedDocQuery(rootPath)",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 100,
+            "content": "      const handler = new RecordHashHandler(createHashRepository(rootPath), createDiffService(), createContentReader(rootPath));",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "src/application/sagas/document-split.saga.ts": {
       "id": "cf0af5e8-4988-4753-98cf-25f46a0ab117",
@@ -500,10 +1284,264 @@
     "src/presentation/pages/TrackingPage.tsx": {
       "id": "37710ce0-7330-4c2a-8d3b-5b223122d348",
       "filePath": "src/presentation/pages/TrackingPage.tsx",
-      "hashValue": "d31d6e020479267ada537840e58335d871cca8f35dca724a8f1100fe34f546ba",
+      "hashValue": "1514f992c41617440af7bc8415e44cb59d91a8eee0d8105cca897d90a3b45dc1",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/presentation/pages/TrackingPage.tsx",
+        "oldHash": "d31d6e020479267ada537840e58335d871cca8f35dca724a8f1100fe34f546ba",
+        "newHash": "1514f992c41617440af7bc8415e44cb59d91a8eee0d8105cca897d90a3b45dc1",
+        "addedLines": [
+          {
+            "lineNumber": 27,
+            "content": "  const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "  // When a file is selected in the list, fetch its diff and open modal",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "  const handleSelectFile = (filePath: string) => {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "    setSelectedFilePath(filePath);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "    fetchFileDiff(filePath);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "    setIsDiffModalOpen(true);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "  };",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "  const handleCloseModal = () => {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "    setIsDiffModalOpen(false);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "  };",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 83,
+            "content": "            <PendingChangesList",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 84,
+            "content": "              changes={pendingChanges}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 85,
+            "content": "              selectedFilePath={selectedFilePath}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 86,
+            "content": "              onSelectFile={handleSelectFile}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "            />",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 104,
+            "content": "      {/* Full-screen diff modal */}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 105,
+            "content": "      <DiffViewer",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 106,
+            "content": "        diff={selectedDiff}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 107,
+            "content": "        show={isDiffModalOpen}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 108,
+            "content": "        onClose={handleCloseModal}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 109,
+            "content": "      />",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 110,
+            "content": "",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 28,
+            "content": "  // Compute pending counts per document by counting pendingChanges' linked files",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 32,
+            "content": "    // pendingChanges contains entries only for the selected document (filtered by store)",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 33,
+            "content": "    // But we need counts per document across all documents. The current design only loads",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "    // pending changes for the selected document. To show badges on the document list,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 35,
+            "content": "    // we must either prefetch counts for all documents or derive from full tracking index.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "    // For now, we set the selected document's count from pendingChanges length.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "  // Auto-select first document if none selected",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "  // Load diff when file selected",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "  useEffect(() => {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "    if (selectedFilePath) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "      fetchFileDiff(selectedFilePath);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "    }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "  }, [selectedFilePath, fetchFileDiff]);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 85,
+            "content": "            <>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 86,
+            "content": "              <PendingChangesList",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 87,
+            "content": "                changes={pendingChanges}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 88,
+            "content": "                selectedFilePath={selectedFilePath}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 89,
+            "content": "                onSelectFile={setSelectedFilePath}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 90,
+            "content": "              />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 91,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 92,
+            "content": "              {selectedFilePath && (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 93,
+            "content": "                <div className=\"tracking-diff-section mt-3\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 94,
+            "content": "                  <DiffViewer diff={selectedDiff} />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 95,
+            "content": "                </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 96,
+            "content": "              )}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 97,
+            "content": "            </>",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "src/presentation/pages/WelcomePage.tsx": {
       "id": "3e25a3e1-0373-41e7-a11d-4feeeb058687",
@@ -655,10 +1693,418 @@
     "src/presentation/styles/tracking.css": {
       "id": "62fa2aa6-1858-4f99-921e-05651511bed6",
       "filePath": "src/presentation/styles/tracking.css",
-      "hashValue": "0a5cc899fed6c2ada76407e84ecc2f70138dd4481a01c6bc9af8d341f9e17d3d",
+      "hashValue": "352af32ad8a8adeed99df964e75c5fee4027f091de3cabdb7cf4ae14cebb45e0",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/presentation/styles/tracking.css",
+        "oldHash": "0a5cc899fed6c2ada76407e84ecc2f70138dd4481a01c6bc9af8d341f9e17d3d",
+        "newHash": "352af32ad8a8adeed99df964e75c5fee4027f091de3cabdb7cf4ae14cebb45e0",
+        "addedLines": [
+          {
+            "lineNumber": 610,
+            "content": "/* ── Full‑screen Diff Modal ──────────────────────── */",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 611,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 612,
+            "content": ".diff-modal-backdrop {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 613,
+            "content": "  position: fixed;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 614,
+            "content": "  top: 0;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 615,
+            "content": "  left: 0;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 616,
+            "content": "  width: 100vw;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 617,
+            "content": "  height: 100vh;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 618,
+            "content": "  background: rgba(0, 0, 0, 0.7);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 619,
+            "content": "  z-index: 1050;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 620,
+            "content": "  display: flex;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 621,
+            "content": "  align-items: center;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 622,
+            "content": "  justify-content: center;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 623,
+            "content": "  padding: 2rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 624,
+            "content": "  box-sizing: border-box;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 625,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 626,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 627,
+            "content": ".diff-modal {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 628,
+            "content": "  background: #0d1117;  /* GitHub dark background */",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 629,
+            "content": "  border: 1px solid #30363d;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 630,
+            "content": "  border-radius: 12px;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 631,
+            "content": "  width: 100%;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 632,
+            "content": "  max-width: 1200px;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 633,
+            "content": "  max-height: 90vh;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 634,
+            "content": "  display: flex;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 635,
+            "content": "  flex-direction: column;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 636,
+            "content": "  overflow: hidden;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 637,
+            "content": "  box-shadow: 0 0 40px rgba(0,0,0,0.5);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 638,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 639,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 640,
+            "content": ".diff-modal__header {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 641,
+            "content": "  display: flex;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 642,
+            "content": "  justify-content: space-between;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 643,
+            "content": "  align-items: center;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 644,
+            "content": "  padding: 1rem 1.5rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 645,
+            "content": "  background: #161b22;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 646,
+            "content": "  border-bottom: 1px solid #30363d;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 647,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 648,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 649,
+            "content": ".diff-modal__file-path {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 650,
+            "content": "  font-family: 'Fira Code', monospace;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 651,
+            "content": "  font-size: 0.95rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 652,
+            "content": "  color: #c9d1d9;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 653,
+            "content": "  word-break: break-all;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 654,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 655,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 656,
+            "content": ".diff-modal__close {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 657,
+            "content": "  background: none;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 658,
+            "content": "  border: none;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 659,
+            "content": "  color: #8b949e;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 660,
+            "content": "  font-size: 1.5rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 661,
+            "content": "  cursor: pointer;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 662,
+            "content": "  padding: 0.25rem 0.5rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 663,
+            "content": "  border-radius: 6px;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 664,
+            "content": "  transition: color 0.2s, background 0.2s;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 665,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 666,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 667,
+            "content": ".diff-modal__close:hover {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 668,
+            "content": "  color: #f85149;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 669,
+            "content": "  background: rgba(248, 81, 73, 0.1);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 670,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 671,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 672,
+            "content": ".diff-modal__body {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 673,
+            "content": "  flex: 1;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 674,
+            "content": "  overflow-y: auto;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 675,
+            "content": "  padding: 0;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 676,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 677,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 678,
+            "content": ".diff-modal__body .diff-viewer {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 679,
+            "content": "  border: none;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 680,
+            "content": "  border-radius: 0;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 681,
+            "content": "  background: transparent;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 682,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 683,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 684,
+            "content": ".diff-modal__body .diff-viewer__content {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 685,
+            "content": "  max-height: none;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 686,
+            "content": "  font-size: 0.9rem;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 687,
+            "content": "  line-height: 1.5;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 688,
+            "content": "}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 689,
+            "content": "",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [],
+        "modifiedLines": []
+      }
     },
     "src/presentation/styles/welcome-page.css": {
       "id": "fca88cc2-a5e4-4b4d-bc49-5ff69da4aa21",
@@ -1119,10 +2565,609 @@
     "src/presentation/components/tracking/DiffViewer.tsx": {
       "id": "b61ea885-2fe3-402e-810d-159f2f79dce1",
       "filePath": "src/presentation/components/tracking/DiffViewer.tsx",
-      "hashValue": "34da511cb19f3d1b2c8375264a8525d265c6b6d184ce9dc7ed1f9ead787e6b94",
+      "hashValue": "005d6220298618bef72be98d80bb6f24d38a3518b21deb99da53378ef643a19a",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/presentation/components/tracking/DiffViewer.tsx",
+        "oldHash": "34da511cb19f3d1b2c8375264a8525d265c6b6d184ce9dc7ed1f9ead787e6b94",
+        "newHash": "005d6220298618bef72be98d80bb6f24d38a3518b21deb99da53378ef643a19a",
+        "addedLines": [
+          {
+            "lineNumber": 6,
+            "content": "  show: boolean;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 7,
+            "content": "  onClose: () => void;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 10,
+            "content": "export function DiffViewer({ diff, show, onClose }: DiffViewerProps): JSX.Element {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 11,
+            "content": "  if (!show) return <></>;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 13,
+            "content": "  const hasChanges = diff",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 14,
+            "content": "    ? diff.addedLines.length > 0 || diff.removedLines.length > 0 || diff.modifiedLines.length > 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 15,
+            "content": "    : false;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 17,
+            "content": "  const backdropClick = (e: React.MouseEvent<HTMLDivElement>) => {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 18,
+            "content": "    if (e.target === e.currentTarget) onClose();",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 19,
+            "content": "  };",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 22,
+            "content": "    <div className=\"diff-modal-backdrop\" onClick={backdropClick}>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 23,
+            "content": "      <div className=\"diff-modal\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 24,
+            "content": "        <div className=\"diff-modal__header\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 25,
+            "content": "          <span className=\"diff-modal__file-path\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 26,
+            "content": "            {diff ? diff.filePath : 'File Diff'}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 27,
+            "content": "          </span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 28,
+            "content": "          <button className=\"diff-modal__close\" onClick={onClose} aria-label=\"Close\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 29,
+            "content": "            <i className=\"fa-solid fa-times\" />",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 30,
+            "content": "          </button>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 31,
+            "content": "        </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 32,
+            "content": "        <div className=\"diff-modal__body\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 33,
+            "content": "          {!diff && (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "            <div className=\"diff-viewer--empty\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 35,
+            "content": "              <i className=\"fa-solid fa-code-compare diff-viewer__icon\" />",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "              <p>Select a file to view changes</p>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 37,
+            "content": "            </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 39,
+            "content": "          {diff && !hasChanges && (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 40,
+            "content": "            <div className=\"diff-viewer--empty\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 41,
+            "content": "              <i className=\"fa-solid fa-check-circle diff-viewer__icon text-success\" />",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 42,
+            "content": "              <p>No changes detected</p>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 43,
+            "content": "            </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "          {diff && hasChanges && (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "            <div className=\"diff-viewer\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "              <div className=\"diff-viewer__content\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "                {diff.removedLines.map((line, idx) => (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "                  <div key={`removed-${idx}`} className=\"diff-line diff-line--removed\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "                    <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "                    <span className=\"diff-line__marker\">-</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "                    <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "                  </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "                ))}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "                {diff.addedLines.map((line, idx) => (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "                  <div key={`added-${idx}`} className=\"diff-line diff-line--added\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "                    <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "                    <span className=\"diff-line__marker\">+</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "                    <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "                  </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 61,
+            "content": "                ))}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 62,
+            "content": "                {diff.modifiedLines.map((line, idx) => (",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 63,
+            "content": "                  <div key={`modified-${idx}`} className=\"diff-line diff-line--modified\">",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "                    <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 65,
+            "content": "                    <span className=\"diff-line__marker\">~</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 66,
+            "content": "                    <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 67,
+            "content": "                  </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 68,
+            "content": "                ))}",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 69,
+            "content": "              </div>",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 70,
+            "content": "            </div>",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 8,
+            "content": "export function DiffViewer({ diff }: DiffViewerProps): JSX.Element {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 9,
+            "content": "  if (!diff) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 10,
+            "content": "    return (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 11,
+            "content": "      <div className=\"diff-viewer diff-viewer--empty\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 12,
+            "content": "        <i className=\"fa-solid fa-code-compare diff-viewer__icon\" />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 13,
+            "content": "        <p>Select a file to view changes</p>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 14,
+            "content": "      </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 15,
+            "content": "    );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 16,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 18,
+            "content": "  const hasChanges =",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 19,
+            "content": "    diff.addedLines.length > 0 ||",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 20,
+            "content": "    diff.removedLines.length > 0 ||",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 21,
+            "content": "    diff.modifiedLines.length > 0;",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 23,
+            "content": "  if (!hasChanges) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 24,
+            "content": "    return (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 25,
+            "content": "      <div className=\"diff-viewer diff-viewer--empty\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 26,
+            "content": "        <i className=\"fa-solid fa-check-circle diff-viewer__icon text-success\" />",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 27,
+            "content": "        <p>No changes detected</p>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 28,
+            "content": "      </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 29,
+            "content": "    );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 30,
+            "content": "  }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 33,
+            "content": "    <div className=\"diff-viewer\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "      <div className=\"diff-viewer__header\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 35,
+            "content": "        <span className=\"diff-viewer__file-path\">{diff.filePath}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "        <div className=\"diff-viewer__stats\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 37,
+            "content": "          {diff.addedLines.length > 0 && (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 38,
+            "content": "            <span className=\"diff-stat diff-stat--added\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 39,
+            "content": "              <i className=\"fa-solid fa-plus\" /> {diff.addedLines.length}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 40,
+            "content": "            </span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 42,
+            "content": "          {diff.removedLines.length > 0 && (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 43,
+            "content": "            <span className=\"diff-stat diff-stat--removed\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 44,
+            "content": "              <i className=\"fa-solid fa-minus\" /> {diff.removedLines.length}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "            </span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "          {diff.modifiedLines.length > 0 && (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "            <span className=\"diff-stat diff-stat--modified\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "              <i className=\"fa-solid fa-pen\" /> {diff.modifiedLines.length}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "            </span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 55,
+            "content": "      <div className=\"diff-viewer__content\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 56,
+            "content": "        {diff.removedLines.map((line, idx) => (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "          <div key={`removed-${idx}`} className=\"diff-line diff-line--removed\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "            <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 59,
+            "content": "            <span className=\"diff-line__marker\">-</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 60,
+            "content": "            <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 61,
+            "content": "          </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 62,
+            "content": "        ))}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 63,
+            "content": "        {diff.addedLines.map((line, idx) => (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "          <div key={`added-${idx}`} className=\"diff-line diff-line--added\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 65,
+            "content": "            <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 66,
+            "content": "            <span className=\"diff-line__marker\">+</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 67,
+            "content": "            <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 68,
+            "content": "          </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 69,
+            "content": "        ))}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 70,
+            "content": "        {diff.modifiedLines.map((line, idx) => (",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 71,
+            "content": "          <div key={`modified-${idx}`} className=\"diff-line diff-line--modified\">",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 72,
+            "content": "            <span className=\"diff-line__number\">{line.lineNumber}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 73,
+            "content": "            <span className=\"diff-line__marker\">~</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 74,
+            "content": "            <span className=\"diff-line__content\">{line.content}</span>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 75,
+            "content": "          </div>",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 76,
+            "content": "        ))}",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 77,
+            "content": "      </div>",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
     },
     "src/presentation/components/tracking/DocumentCommitPanel.tsx": {
       "id": "f4271745-c630-4c98-8f38-4c552f3d7062",
@@ -2343,10 +4388,95 @@
     "src/domains/tracking/application/handlers/approve-commit.handler.ts": {
       "id": "110d6a3f-641b-458f-a5b7-15795b4bb78e",
       "filePath": "src/domains/tracking/application/handlers/approve-commit.handler.ts",
-      "hashValue": "f6bacf0b7adb5ffa6ed0c59add1bf810c499543f301b251511368878ce3455d6",
+      "hashValue": "3b3c380b12fe04ecc028b3fc10d660390290f4d2d41a9ac6c884e64e5fa5a967",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/domains/tracking/application/handlers/approve-commit.handler.ts",
+        "oldHash": "b73df718fb669f63ce08e29462dd5476400a3aae07066158dae8c2a5fe1096f7",
+        "newHash": "3b3c380b12fe04ecc028b3fc10d660390290f4d2d41a9ac6c884e64e5fa5a967",
+        "addedLines": [
+          {
+            "lineNumber": 37,
+            "content": "      if (pendingLinkedHashes.length === 0) return Result.ok(undefined);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "        const adapter = this.contentReader as FileContentReaderAdapter;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "        await FileContentReaderAdapter.saveBaseline(adapter.workspaceRoot, hash.filePath.value, content);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 58,
+            "content": "      await EventBus.getInstance().emit(new CommitApprovedEvent(commitId, documentId, commit.getLinkedFiles()));",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 37,
+            "content": "      if (pendingLinkedHashes.length === 0) {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 38,
+            "content": "        return Result.ok(undefined);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 39,
+            "content": "      }",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 46,
+            "content": "        // Save baseline for future cumulative diffs",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "        const workspaceRoot = (this.contentReader as FileContentReaderAdapter).workspaceRoot ?? '';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "        await FileContentReaderAdapter.saveBaseline(workspaceRoot, hash.filePath.value, content);",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 62,
+            "content": "      await EventBus.getInstance().emit(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 63,
+            "content": "        new CommitApprovedEvent(commitId, documentId, commit.getLinkedFiles())",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 64,
+            "content": "      );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 65,
+            "content": "",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 23,
+            "content": "    private readonly contentReader: IFileContentReader",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "src/domains/tracking/application/handlers/detect-changes.handler.ts": {
       "id": "4cb12240-ed41-4d89-9bf3-ecc46f86aa27",
@@ -2383,10 +4513,105 @@
     "src/domains/tracking/application/handlers/record-hash.handler.ts": {
       "id": "c4cbbc87-4515-4158-9c51-dc062f06afc7",
       "filePath": "src/domains/tracking/application/handlers/record-hash.handler.ts",
-      "hashValue": "18476243aa019dd164254863ef15b6e3e00053b957c49d32e94e663d27f4b2bb",
+      "hashValue": "7ae15343d4ca15f74b238e270fde27612be9da86f0d2e4e426a8b1c86dbc7a1a",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/domains/tracking/application/handlers/record-hash.handler.ts",
+        "oldHash": "4f86c7f0726752c67fbf675e2a0bdc10c0e960e3cbcf92b55bbd6619e71631a2",
+        "newHash": "7ae15343d4ca15f74b238e270fde27612be9da86f0d2e4e426a8b1c86dbc7a1a",
+        "addedLines": [
+          {
+            "lineNumber": 46,
+            "content": "        const adapter = this.contentReader as FileContentReaderAdapter;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 47,
+            "content": "        const workspaceRoot = adapter.workspaceRoot;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "        const baselineContent = await FileContentReaderAdapter.loadBaseline(workspaceRoot, command.filePath);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "          const oldHashForDiff = baselineContent ? HashValue.fromContent(baselineContent) : existing.hashValue;",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 32,
+            "content": "        // Check for reversion",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 35,
+            "content": "          // File reverted to committed state – restore committed status, clear diff",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 45,
+            "content": "        // Update hash to PENDING state",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "        // Compute cumulative diff from baseline",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "        const workspaceRoot = (this.contentReader as FileContentReaderAdapter).workspaceRoot ?? '';",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 51,
+            "content": "        const baselineContent = await FileContentReaderAdapter.loadBaseline(",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "          workspaceRoot,",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "          command.filePath",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "        );",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 92,
+            "content": "        // New file, just record hash",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 22,
+            "content": "    private readonly contentReader: IFileContentReader",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 36,
+            "content": "          return Result.ok(undefined);",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 57,
+            "content": "            oldHashForDiff,",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "src/domains/tracking/application/ports/diff-calculator.interface.ts": {
       "id": "ef07aa87-6d1c-432d-8995-1a71eddc42f4",
@@ -2447,10 +4672,59 @@
     "src/domains/tracking/domain/entities/file-hash.ts": {
       "id": "fc3fc94f-b4bb-4210-b8c8-cbf8cef87847",
       "filePath": "src/domains/tracking/domain/entities/file-hash.ts",
-      "hashValue": "746c4c2b7c95059da404412cef49860c5b89a6f2f391a1244153ece03f33a604",
+      "hashValue": "c8e80fdd9418acae022bfd4d26b78b5a896db6144849a33acb1afb6301b9f0e4",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/domains/tracking/domain/entities/file-hash.ts",
+        "oldHash": "d337a62f3b8baaffbddf83d5d2de2bdb1fd3e44e61f13be31bef58acb0a46745",
+        "newHash": "c8e80fdd9418acae022bfd4d26b78b5a896db6144849a33acb1afb6301b9f0e4",
+        "addedLines": [],
+        "removedLines": [
+          {
+            "lineNumber": 41,
+            "content": "    // Do NOT clear committed values here; they stay until a new commit",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 52,
+            "content": "  /**",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "   * Reverts to the previously committed state.",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 54,
+            "content": "   */",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 12,
+            "content": "  private _committedHashValue: Maybe<HashValue>;",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 20,
+            "content": "    committedHashValue?: HashValue,",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "    this._committedHashValue = Maybe.some(this._hashValue);",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 53,
+            "content": "      this._hashValue = this._committedHashValue.getOrNull()!;",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "src/domains/tracking/domain/entities/granular-commit.ts": {
       "id": "e8f22e33-783d-4156-8bef-9b3f719830b3",
@@ -2583,10 +4857,80 @@
     "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts": {
       "id": "6716f9a8-4639-4c76-ae77-290a12edf595",
       "filePath": "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts",
-      "hashValue": "83dba74b74f55507781836ca84af073ae7871aa8be3b3a4aa47e051c19d9371f",
+      "hashValue": "d2d79fe58b75a296ec4e58caa63652cfff3caa95cd8d27c604bbeb0b99ddad2a",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts",
+        "oldHash": "95675b19e86ebce441592b18dc268e11e846c3723f03df6094f54270aefe262e",
+        "newHash": "d2d79fe58b75a296ec4e58caa63652cfff3caa95cd8d27c604bbeb0b99ddad2a",
+        "addedLines": [
+          {
+            "lineNumber": 15,
+            "content": "  get workspaceRoot(): string {",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 16,
+            "content": "    return this._workspaceRoot;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 17,
+            "content": "  }",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 18,
+            "content": "",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "    } catch {}",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 33,
+            "content": "  // ── Baseline persistence ──────────────────────────────────",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 34,
+            "content": "",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 48,
+            "content": "    } catch {",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 49,
+            "content": "      // file doesn't exist yet",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 50,
+            "content": "    }",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": [
+          {
+            "lineNumber": 9,
+            "content": "  constructor(private readonly _workspaceRoot: string) {}",
+            "type": "MODIFIED"
+          },
+          {
+            "lineNumber": 20,
+            "content": "    const absolutePath = path.join(this._workspaceRoot, filePath);",
+            "type": "MODIFIED"
+          }
+        ]
+      }
     },
     "src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts": {
       "id": "a7239392-f96d-4e74-b812-7d941cdd0770",
@@ -2607,15 +4951,439 @@
     "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts": {
       "id": "cafeca6b-c237-4b59-bc9b-4c22ff4f8ff7",
       "filePath": "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts",
-      "hashValue": "764b0473a086e478306f68cfb9b2e6d02494784532535b31e8a45d24364e6626",
+      "hashValue": "296e7cfe483054749cb78793aa421fe2a3bc48231146783435b3ad38377ab4a2",
       "committedAt": null,
       "commitId": null,
-      "diff": null
+      "diff": {
+        "filePath": "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts",
+        "oldHash": "764b0473a086e478306f68cfb9b2e6d02494784532535b31e8a45d24364e6626",
+        "newHash": "296e7cfe483054749cb78793aa421fe2a3bc48231146783435b3ad38377ab4a2",
+        "addedLines": [
+          {
+            "lineNumber": 16,
+            "content": "  committedHashValue: string | null;",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 93,
+            "content": "      entry.committedHashValue ? new HashValue(entry.committedHashValue) : undefined,",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 109,
+            "content": "      committedHashValue: fileHash.committedHashValue.isSome",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 110,
+            "content": "        ? fileHash.committedHashValue.getOrNull()!.value",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 111,
+            "content": "        : null,",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [],
+        "modifiedLines": []
+      }
     },
     ".git/index": {
       "id": "56367fad-b705-442b-99de-21cd02bd52f6",
       "filePath": ".git/index",
-      "hashValue": "50781f4b4765381a6176ea3d131a7e205f3c878abf4e6f32b9326b7798e6438c",
+      "hashValue": "ee50a31d9e3314c3865be6d5bbf98e3e0cb9430a94970ce88446a0510f61bf9a",
+      "committedAt": null,
+      "commitId": null,
+      "diff": {
+        "filePath": ".git/index",
+        "oldHash": "a6e79b6d4cde9ca1f2255692d96926b8b434aeccd67d6b4eed1978c3563d9ddd",
+        "newHash": "ee50a31d9e3314c3865be6d5bbf98e3e0cb9430a94970ce88446a0510f61bf9a",
+        "addedLines": [
+          {
+            "lineNumber": 138,
+            "content": "�$�\u001c�\u0013�k�lo��\u00075�\u0000\u000evite.config.js\u0000\u0000\u0000\u0000jN�[!7G\u0010jN� \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001�(R\u0003BJO�f��lf)4j^__��\u0000\u0011webpack.config.js\u0000TREE\u0000\u0000\u00197\u0000488 5",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 139,
+            "content": "��z�8�Gᛉ�\u001dk�IO5�q�src\u0000395 5",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 140,
+            "content": "��Q\bබi);",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 141,
+            "content": "���s=\u0005���types\u00001 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 143,
+            "content": "� \u001f�\u0003~b�(domains\u0000312 6",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 144,
+            "content": "Y\u0011r��VCp��\u0005<�H��\f�",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 145,
+            "content": "�linking\u000063 4",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 200,
+            "content": "�2Rq�����\u000e\u0019\u000b\u001fn\u000b(o�w3tracking\u000063 4",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 201,
+            "content": "�\u000e\t���[�\u0006��\u001f��\u0000>x�}�domain\u000017 5",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 226,
+            "content": "6\u0015e(]fG+\u0019�g\u0006N� (��}\u0013infrastructure\u00005 2",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 227,
+            "content": " �UB�rK��ɰ�\u000f:\u0015�P\u0019�Wadapters\u00003 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 228,
+            "content": "�]?�\u00181���/;�$V�iaC)repository\u00002 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 229,
+            "content": ":e�Q�nf|�Ц�u� \u0017�x\f�filesystem\u000063 4",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 320,
+            "content": "�'O4�,�/W�\u001f\u0001�ة,\u0004�Fpresentation\u000068 6",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 321,
+            "content": "�[��vW4�4s������\u0014�Ahooks\u000017 1",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 328,
+            "content": "�iۏ����6R\u0003\u0012�ʛ�\u0018��\u0012styles\u00008 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 329,
+            "content": "�w>�\u0004\u001a,1.���AR��Qcomponents\u000032 7",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 355,
+            "content": "�ZKq��Y�\u0007\u001e\u0013�\u001e��c*b:�.doclink\u00008 0",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 356,
+            "content": "��\u001b�\u001f��S�|l��\u0014��2��electron\u000021 4",
+            "type": "ADDED"
+          },
+          {
+            "lineNumber": 365,
+            "content": "y�\u001b8������\"�n�Z8���K�-���\u001dl�w",
+            "type": "ADDED"
+          }
+        ],
+        "removedLines": [
+          {
+            "lineNumber": 138,
+            "content": "�$�\u001c�\u0013�k�lo��\u00075�\u0000\u000evite.config.js\u0000\u0000\u0000\u0000jN�[!7G\u0010jN� \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001�(R\u0003BJO�f��lf)4j^__��\u0000\u0011webpack.config.js\u0000TREE\u0000\u0000\u0018�\u0000-1 5",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 139,
+            "content": "src\u0000-1 5",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 140,
+            "content": "types\u00001 0",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 142,
+            "content": "� \u001f�\u0003~b�(domains\u0000-1 6",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 143,
+            "content": "linking\u000063 4",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 198,
+            "content": "�2Rq�����\u000e\u0019\u000b\u001fn\u000b(o�w3tracking\u0000-1 4",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 199,
+            "content": "domain\u000017 5",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 224,
+            "content": "6\u0015e(]fG+\u0019�g\u0006N� (��}\u0013infrastructure\u0000-1 2",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 225,
+            "content": "adapters\u00003 0",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 226,
+            "content": "�]?�\u00181���/;�$V�iaC)repository\u0000-1 0",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 227,
+            "content": "filesystem\u000063 4",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 318,
+            "content": "�'O4�,�/W�\u001f\u0001�ة,\u0004�Fpresentation\u0000-1 6",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 319,
+            "content": "hooks\u000017 1",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 326,
+            "content": "�iۏ����6R\u0003\u0012�ʛ�\u0018��\u0012styles\u0000-1 0",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 327,
+            "content": "components\u000032 7",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 353,
+            "content": "�ZKq��Y�\u0007\u001e\u0013�\u001e��c*b:�.doclink\u0000-1 0",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 354,
+            "content": "electron\u000021 4",
+            "type": "REMOVED"
+          },
+          {
+            "lineNumber": 363,
+            "content": "y�\u001b8�����l\tO�\u0003��?�\\�E\u000f�.0J�\u0018�",
+            "type": "REMOVED"
+          }
+        ],
+        "modifiedLines": []
+      }
+    },
+    ".git/objects/88/9acc61da20d1f0d383bcda81639e3c6dfd05e1": {
+      "id": "d07cfd93-dc40-4679-bef8-49675f256cb0",
+      "filePath": ".git/objects/88/9acc61da20d1f0d383bcda81639e3c6dfd05e1",
+      "hashValue": "f7a090d060e833d958134239d9c6b084c8de434f3df532cc2929d1f1dc58b309",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/68/1a7027acb4c91748abd0f1f50eed6ffdeaae0c": {
+      "id": "be182411-d945-44d9-ae5e-fcdb3049359d",
+      "filePath": ".git/objects/68/1a7027acb4c91748abd0f1f50eed6ffdeaae0c",
+      "hashValue": "cd1ea75a2024a7e457469e4bf64952a43fc6b9207098f097b4449feb8be1c0d8",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/49/9f9a1d45d7b5937b64a2ebfb801d02078c714f": {
+      "id": "e5160f59-96eb-435d-99b5-2dcd0134e6db",
+      "filePath": ".git/objects/49/9f9a1d45d7b5937b64a2ebfb801d02078c714f",
+      "hashValue": "2f0ec4f826ca6199741c2aff49f459870dc59dbebb541092e000638417eaa12e",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/c3/eb2981ebac7058d4f52ce420170428cab20047": {
+      "id": "1ba228c3-f316-49e7-a8a0-100931a006f7",
+      "filePath": ".git/objects/c3/eb2981ebac7058d4f52ce420170428cab20047",
+      "hashValue": "b24c144021b3e605d34ccf86f82627039914590a53672195138751d640c72b86",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/24/4705e2f89c42ff24d29eeb9c8fe88de4e1d266": {
+      "id": "f629624a-5221-4974-94b0-fdd05c18c4f4",
+      "filePath": ".git/objects/24/4705e2f89c42ff24d29eeb9c8fe88de4e1d266",
+      "hashValue": "a22214fa680a05abd3234ba186fd4c8cb3f9a5e29e226942d0c9e08e5e2001f2",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/45/9c8dd99198a64a7861ff391437f4b6ed69d6b3": {
+      "id": "cdfa818f-a8a0-4b11-9f98-0967d9321b11",
+      "filePath": ".git/objects/45/9c8dd99198a64a7861ff391437f4b6ed69d6b3",
+      "hashValue": "8a1e7b6b4bda32d6eaf0bd1bbc2b3d643b4ffb7dc71c25cfc457dc8116fa831a",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/d6/68579aff2e8696e225c54be20057686aaa78cc": {
+      "id": "20917936-33c9-4387-ba88-1f1b7d5ad4b8",
+      "filePath": ".git/objects/d6/68579aff2e8696e225c54be20057686aaa78cc",
+      "hashValue": "4fd1ebd3a65a677f58d2640b2de167140d85e2e7892a40d1dfb99a6bb3adc5ca",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/09/4e9d58fb661ab1793ccddb329935962cfbb0f6": {
+      "id": "ed999f22-93fe-4339-9f29-70c3c2e4f38d",
+      "filePath": ".git/objects/09/4e9d58fb661ab1793ccddb329935962cfbb0f6",
+      "hashValue": "154a9ba4c9b8e94e50a5de12b39cb8f1b87b5ac7cf17baa5f60c2a7b231b78b0",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/4c/727b0bdf216474220591b46f63e8d3010859e9": {
+      "id": "109e18e1-5933-4549-b064-8d03e8d29e07",
+      "filePath": ".git/objects/4c/727b0bdf216474220591b46f63e8d3010859e9",
+      "hashValue": "8e6668abd31636043169eb820683a342c783cc129ead98f643af0e957064e360",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/20/ed5542d3724bd4f8c9b0b10f3a159150198757": {
+      "id": "f902d58a-60f7-444e-a6d0-56d803ac9471",
+      "filePath": ".git/objects/20/ed5542d3724bd4f8c9b0b10f3a159150198757",
+      "hashValue": "5d779766d33a3dbb25661872c8f765cece4d28b393721412e586ae2521a521d7",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/3a/65dd51a46e667cecd0a6dc75e72017c3780ca8": {
+      "id": "292efce9-e3ee-49b4-84f8-1ba03b5ca5da",
+      "filePath": ".git/objects/3a/65dd51a46e667cecd0a6dc75e72017c3780ca8",
+      "hashValue": "d8cd152ce2b8d92022bb67de9f55b030899ae9c625b9f90a7c3d337c691c2b57",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/9d/0e09aa96bb5bfb069ea21fa6f0003e78b87d82": {
+      "id": "f37736bf-d722-4d12-8b84-80d1ac7f9fde",
+      "filePath": ".git/objects/9d/0e09aa96bb5bfb069ea21fa6f0003e78b87d82",
+      "hashValue": "feb196d6bb098930f1e653e0d2a513bb047bbdcee7fa3af1acd4af47103f3ba0",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/96/773e99041a2c31eeb68c2e9fb09c4152b6d951": {
+      "id": "0a309865-ab37-4b16-bb59-154936ccc62c",
+      "filePath": ".git/objects/96/773e99041a2c31eeb68c2e9fb09c4152b6d951",
+      "hashValue": "596692ba95583eb04820efe888fad2aebd8b6df6059ebab5a82adfe39f3e76ae",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/59/1172acec564370a1b8053ce648b5ea0cac0ae0": {
+      "id": "4eb4e45f-fd0f-4165-91f3-1a3a0e7db223",
+      "filePath": ".git/objects/59/1172acec564370a1b8053ce648b5ea0cac0ae0",
+      "hashValue": "2dfbc0b3ecfd66d1ec5c937b4247d2a57b82cd1ec8db7936a6c7a64fdfdda7a7",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/ac/5bbfb3765734fa347389f2f285c6fcd1148341": {
+      "id": "ae4a3698-44e6-4316-98f2-626fdd8862a1",
+      "filePath": ".git/objects/ac/5bbfb3765734fa347389f2f285c6fcd1148341",
+      "hashValue": "e8f26e3402ac3e1c69568dc0659384a916c1a30156d22096d4bc263601ef16fe",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/COMMIT_EDITMSG": {
+      "id": "5354e71e-991c-4242-9320-3a1c05ac3492",
+      "filePath": ".git/COMMIT_EDITMSG",
+      "hashValue": "4685af8352a8eac4e4c37148f43d4d86058812dc881e9612e410fe2324194786",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/logs/HEAD": {
+      "id": "d066a1a8-8c5a-4af9-a4c2-f542c7b3a251",
+      "filePath": ".git/logs/HEAD",
+      "hashValue": "71916e10fd0d705a43f1b86d5e143743c47eece72bc582511f86f609c4361222",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/logs/refs/heads/dev": {
+      "id": "2e8d9bd2-1c53-4ea9-9b0f-87237e74f02c",
+      "filePath": ".git/logs/refs/heads/dev",
+      "hashValue": "ca08c8ba75400ded22bfa82fb43dfee08af9bf34eddbc4b4bbd02970e83556c1",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/f8/c67a9938b747e19b89d61d6be2494f35e871a7": {
+      "id": "efab5826-d12f-48b7-bc5f-1db892030d6f",
+      "filePath": ".git/objects/f8/c67a9938b747e19b89d61d6be2494f35e871a7",
+      "hashValue": "75e23439eb972aa5a5d233b7596d4b7cd5ee2237231b33aec412393ae7e69908",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/2b/07ef9b8b7dd727c290dc4c392ead3c8212efc3": {
+      "id": "d7bd8f21-ca0e-4abf-936d-16d0c10acb1e",
+      "filePath": ".git/objects/2b/07ef9b8b7dd727c290dc4c392ead3c8212efc3",
+      "hashValue": "3e4573c75e65a4616beb9b0f2f29ebeb10bcd976a864410a2d7fb54ebb4186ff",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/refs/heads/dev": {
+      "id": "d8b9f53a-165f-4b41-be2e-3bb11e277aae",
+      "filePath": ".git/refs/heads/dev",
+      "hashValue": "ebeeb677a5abbb3d43a6b3769970844909c16fccd3c0dddf43e48db65e83ab50",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/9f/c61be71facbe53917c6cf6e28514b3b93288fb": {
+      "id": "d4206b3f-555b-4a24-b032-1f530ee2f973",
+      "filePath": ".git/objects/9f/c61be71facbe53917c6cf6e28514b3b93288fb",
+      "hashValue": "9e5f49b4fdd49d2ba5d7a24b416782518786358982942e77407f02f3c32a4395",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/objects/81/f15108e0b6b669293b0ac2d4d6733d0591e7c8": {
+      "id": "d5677a3f-057f-4a15-bd2e-3d5adf2e79dc",
+      "filePath": ".git/objects/81/f15108e0b6b669293b0ac2d4d6733d0591e7c8",
+      "hashValue": "6239a02d0d265f57cecfd46e5dba07416f113d493612e4555a2b9c1b9e7393cf",
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    ".git/gk/config": {
+      "id": "bd394aa7-2db4-4ca2-bbd0-613eb13974ce",
+      "filePath": ".git/gk/config",
+      "hashValue": "bdaefacdb60f6583cdd651b696d640d93cdd2978f067414853b5b8d80bf4d9f5",
       "committedAt": null,
       "commitId": null,
       "diff": null
