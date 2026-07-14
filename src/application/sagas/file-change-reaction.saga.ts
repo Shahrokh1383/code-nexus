@@ -80,7 +80,7 @@ export class FileChangeReactionSaga {
     const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
     const diffAdapter = new DiffCalculatorAdapter();
     const diffService = new DiffCalculatorService(diffAdapter);
-    const recordHandler = new RecordHashHandler(repository, diffService);
+    const recordHandler = new RecordHashHandler(repository, diffService, contentReader);
     const handler = new DetectChangesHandler(contentReader, recordHandler);
 
     await handler.execute(new DetectChangesCommand(filePath));
