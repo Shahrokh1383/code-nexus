@@ -16,14 +16,19 @@ export class FileContentReaderAdapter implements IFileContentReader {
     return this._workspaceRoot;
   }
 
+  getWorkspaceRoot(): string {
+    return this._workspaceRoot;
+  }
+
   async readContent(filePath: string): Promise<string> {
     const absolutePath = path.join(this._workspaceRoot, filePath);
     const raw = await fs.readFile(absolutePath, 'utf-8');
     return raw.replace(/\r\n|\r/g, '\n');
   }
 
-  async getPreviousContent(filePath: string): Promise<string | null> {
-    return FileContentReaderAdapter.cache.get(filePath) || null;
+  async getPreviousContent(filePath: string): Promise<string | undefined> {
+    const cached = FileContentReaderAdapter.cache.get(filePath);
+    return cached !== undefined ? cached : undefined;
   }
 
   updateCache(filePath: string, content: string): void {

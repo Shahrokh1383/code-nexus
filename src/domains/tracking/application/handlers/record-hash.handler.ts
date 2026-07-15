@@ -43,8 +43,7 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         existing.updateHash(newHash);
 
         let diffDto: ContentDiffDto | null = null;
-        const adapter = this.contentReader as FileContentReaderAdapter;
-        const workspaceRoot = adapter.workspaceRoot;
+        const workspaceRoot = this.contentReader.getWorkspaceRoot();
         const baselineContent = await FileContentReaderAdapter.loadBaseline(workspaceRoot, command.filePath);
         const oldContent = baselineContent ?? command.oldContent ?? '';
 

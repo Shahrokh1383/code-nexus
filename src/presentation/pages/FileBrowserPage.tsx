@@ -1,7 +1,6 @@
 import { useEffect, useRef, type JSX } from 'react';
 import { useFileTree } from '../hooks/useFileTree';
 import { useIgnorePatterns } from '../hooks/useIgnorePatterns';
-import { useBackgroundWatcher } from '../hooks/useBackgroundWatcher';
 import { useWorkspaceStore } from '../stores/workspace.store';
 import { FileTree } from '../components/file-tree/FileTree';
 import { IgnorePatternEditor } from '../components/file-tree/IgnorePatternEditor';
@@ -9,11 +8,10 @@ import '../styles/file-browser.css';
 
 export function FileBrowserPage(): JSX.Element {
   const { scanProject, tree, isScanning, totalFiles, totalFolders, error } = useFileTree();
-  const { fetchPatterns } = useIgnorePatterns();
   const workspace = useWorkspaceStore((s) => s.workspace);
   const hasScanned = useRef(false);
 
-  useBackgroundWatcher();
+  const { fetchPatterns } = useIgnorePatterns({ onPatternChange: scanProject });
 
   useEffect(() => {
     fetchPatterns();

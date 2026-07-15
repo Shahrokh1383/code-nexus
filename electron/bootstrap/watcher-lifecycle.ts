@@ -10,6 +10,7 @@ import { WorkspaceId } from '../../src/domains/project/domain/value-objects/work
 import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
 import { IDomainEventHandler } from '../../src/domains/shared-kernel/events/domain-event-handler.interface';
+import { FileSystemJsonRepository } from '../../src/domains/filesystem/infrastructure/repository/filesystem-json.repository';
 
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
@@ -43,12 +44,13 @@ export async function startWatcher(rootPath: string): Promise<void> {
   currentWatcher = new ChokidarAdapter();
   currentWatcher.startWatching(rootPath, ignorePatterns);
 
-  // Use real adapter instead of stub
   const linkedDocQuery = new LinkedDocumentQueryAdapter(rootPath);
-  currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery);
+  const fileSystemRepo = new FileSystemJsonRepository(db);
+
+  currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery, fileSystemRepo);
   currentSaga.register();
 
-  // Register listener for ignore pattern changes
+  // Register listener for ignore pattern changes to restart the watcher
   const eventBus = EventBus.getInstance();
   ignorePatternChangedHandler = {
     handle: async (event: IgnorePatternsChangedEvent): Promise<void> => {

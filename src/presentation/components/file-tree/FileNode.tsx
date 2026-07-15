@@ -24,15 +24,13 @@ const formatRelativeTime = (dateString: string): string => {
 export const FileNode = memo(function FileNode({ node, depth }: FileNodeProps): JSX.Element {
   const toggleFolder = useFileSystemStore((s) => s.toggleFolder);
   const expandedPaths = useFileSystemStore((s) => s.expandedPaths);
-  const changedPaths = useFileSystemStore((s) => s.changedPaths);
 
   const isFolder = isFolderNode(node);
   const isExpanded = isFolder && expandedPaths.has(node.path);
-  const isChanged = changedPaths.has(node.path);
 
   return (
     <div 
-      className={`file-node ${isChanged ? 'file-node--changed' : ''}`}
+      className={`file-node`}
       style={{ paddingLeft: `${depth * 16 + 8}px` }}
       onClick={() => isFolder && toggleFolder(node.path)}
       role="treeitem"

@@ -8,4 +8,5 @@ export interface IHashRepository {
   saveHash(fileHash: FileHash, diff?: ContentDiffDto | null): Promise<void>;
   findDiffByPath(filePath: FilePath): Promise<ContentDiffDto | null>;
   deleteHashByPath(filePath: FilePath): Promise<void>;
+  deleteAllExcept(filePaths: Set<string>): Promise<void>;
 }

@@ -115,7 +115,43 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
   }
 
   async clear(): Promise<void> {
-    await this.writeIndex( { version: '1.0', lastScan: null, files: {} });
+    await this.writeIndex({ version: '1.0', lastScan: null, files: {} });
+  }
+
+  async clearAndSaveAll(root: FolderNode): Promise<void> {
+    const files: FileIndexSchema['files'] = {};
+    const stack: Array<FileNode | FolderNode> = [root];
+    
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      const hash = node instanceof FileNode ? node.hash.getOrNull()?.value ?? null : null;
+      const size = node instanceof FileNode ? node.size.bytes : 0;
+      const lastModified = node instanceof FileNode
+        ? node.lastModified.toISO()
+        : DateTime.now().toISO();
+
+      files[node.path.value] = {
+        id: node.id.value,
+        hash,
+        lastModified,
+        size,
+        isDirectory: node instanceof FolderNode,
+      };
+
+      if (node instanceof FolderNode) {
+        for (const child of node.children) {
+          stack.push(child);
+        }
+      }
+    }
+
+    const index: FileIndexSchema = {
+      version: '1.0',
+      lastScan: new Date().toISOString(),
+      files,
+    };
+
+    await this.writeIndex(index);
   }
 
   private async readIndex(): Promise<FileIndexSchema> {

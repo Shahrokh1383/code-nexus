@@ -135,7 +135,7 @@ export function registerFilesystemHandlers(): void {
 
       try {
         const { configRepo } = createRepositories(rootPath);
-        const handler = new RemoveIgnorePatternHandler(configRepo);
+        const handler = new RemoveIgnorePatternHandler(configRepo, EventBus.getInstance());
 
         const result = await handler.execute(new RemoveIgnorePatternCommand(workspaceId as string, pattern));
 

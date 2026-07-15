@@ -14,9 +14,9 @@ interface HashEntrySchema {
   filePath: string;
   hashValue: string;
   committedHashValue: string | null;
-  committedCommitId: string | null;   // NEW
+  committedCommitId: string | null;
   committedAt: string | null;
-  commitId: string | null;            // current commit ID (null = pending)
+  commitId: string | null;
   diff: ContentDiffDto | null;
 }
 
@@ -66,6 +66,16 @@ export class TrackingJsonRepository implements IHashRepository {
   async deleteHashByPath(filePath: FilePath): Promise<void> {
     const index = await this.readIndex();
     delete index.hashes[filePath.value];
+    await this.writeIndex(index);
+  }
+
+  async deleteAllExcept(filePaths: Set<string>): Promise<void> {
+    const index = await this.readIndex();
+    const keysToRemove = Object.keys(index.hashes).filter((path) => !filePaths.has(path));
+    if (keysToRemove.length === 0) return;
+    for (const key of keysToRemove) {
+      delete index.hashes[key];
+    }
     await this.writeIndex(index);
   }
 

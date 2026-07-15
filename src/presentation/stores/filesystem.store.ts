@@ -12,7 +12,6 @@ interface FileSystemState {
   totalFolders: number;
   isScanning: boolean;
   ignoredPatterns: string[];
-  changedPaths: Set<string>;
   expandedPaths: Set<string>;
   error: string | null;
 
@@ -24,7 +23,6 @@ interface FileSystemState {
   addIgnoredPattern: (pattern: string) => void;
   removeIgnoredPattern: (pattern: string) => void;
   toggleFolder: (path: string) => void;
-  markChanged: (path: string) => void;
 }
 
 export const useFileSystemStore = create<FileSystemState>((set) => ({
@@ -33,7 +31,6 @@ export const useFileSystemStore = create<FileSystemState>((set) => ({
   totalFolders: 0,
   isScanning: false,
   ignoredPatterns: [],
-  changedPaths: new Set(),
   expandedPaths: new Set(),
   error: null,
 
@@ -51,6 +48,4 @@ export const useFileSystemStore = create<FileSystemState>((set) => ({
     nextExpanded.has(path) ? nextExpanded.delete(path) : nextExpanded.add(path);
     return { expandedPaths: nextExpanded };
   }),
-  
-  markChanged: (path) => set((state) => ({ changedPaths: new Set(state.changedPaths).add(path) })),
 }));

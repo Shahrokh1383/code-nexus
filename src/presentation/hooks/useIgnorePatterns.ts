@@ -6,7 +6,11 @@ import { IpcChannels } from '../../../electron/ipc/channels';
 
 interface IpcResponse<T> { success: boolean; data?: T; error?: string; }
 
-export function useIgnorePatterns() {
+interface UseIgnorePatternsOptions {
+  onPatternChange?: () => void | Promise<void>;
+}
+
+export function useIgnorePatterns({ onPatternChange }: UseIgnorePatternsOptions = {}) {
   const ipc = useIpc();
   const workspace = useWorkspaceStore((s) => s.workspace);
   const { ignoredPatterns, setIgnoredPatterns, addIgnoredPattern, removeIgnoredPattern, setError } = useFileSystemStore();
@@ -20,16 +24,24 @@ export function useIgnorePatterns() {
   const addPattern = useCallback(async (pattern: string) => {
     if (!workspace) return;
     const res = await ipc.invoke(IpcChannels.FILESYSTEM_ADD_IGNORE_PATTERN, workspace.id, pattern) as IpcResponse<void>;
-    if (res.success) addIgnoredPattern(pattern);
-    else setError(res.error || 'Failed to add pattern');
-  }, [workspace, ipc, addIgnoredPattern, setError]);
+    if (res.success) {
+      addIgnoredPattern(pattern);
+      await onPatternChange?.();
+    } else {
+      setError(res.error || 'Failed to add pattern');
+    }
+  }, [workspace, ipc, addIgnoredPattern, setError, onPatternChange]);
 
   const removePattern = useCallback(async (pattern: string) => {
     if (!workspace) return;
     const res = await ipc.invoke(IpcChannels.FILESYSTEM_REMOVE_IGNORE_PATTERN, workspace.id, pattern) as IpcResponse<void>;
-    if (res.success) removeIgnoredPattern(pattern);
-    else setError(res.error || 'Failed to remove pattern');
-  }, [workspace, ipc, removeIgnoredPattern, setError]);
+    if (res.success) {
+      removeIgnoredPattern(pattern);
+      await onPatternChange?.();
+    } else {
+      setError(res.error || 'Failed to remove pattern');
+    }
+  }, [workspace, ipc, removeIgnoredPattern, setError, onPatternChange]);
 
   return { ignoredPatterns, fetchPatterns, addPattern, removePattern };
 }

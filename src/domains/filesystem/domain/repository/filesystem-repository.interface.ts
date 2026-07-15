@@ -9,4 +9,5 @@ export interface IFileSystemRepository extends IRepository<FileNode | FolderNode
   findChildrenOf(parentPath: FilePath): Promise<Array<FileNode | FolderNode>>;
   findByPattern(pattern: string): Promise<FileNode[]>;
   clear(): Promise<void>;
+  clearAndSaveAll(root: FolderNode): Promise<void>;
 }
