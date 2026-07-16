@@ -36,11 +36,13 @@
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\presentation\\components\\common",
     "src\\presentation\\styles",
-    "src\\presentation"
+    "src\\domains\\filesystem",
+    "src\\presentation\\components\\file-tree",
+    "src\\presentation\\pages\\FileBrowserPage.tsx"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-16T10:47:20.919Z",
+  "lastModified": "2026-07-16T12:07:51.477Z",
   "version": 1
 }

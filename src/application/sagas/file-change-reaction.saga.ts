@@ -17,6 +17,13 @@ import { IFileSystemRepository } from '../../domains/filesystem/domain/repositor
 import { DiffCalculatorAdapter } from '../../domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../domains/tracking/domain/services/diff-calculator.service';
 import { FileNode } from '../../domains/filesystem/domain/entities/file-node';
+import { FileNodeId } from '../../domains/filesystem/domain/value-objects/file-node-id';
+import { FilePath } from '../../domains/filesystem/domain/value-objects/file-path';
+import { FileSize } from '../../domains/filesystem/domain/value-objects/file-size';
+import { FileHash } from '../../domains/filesystem/domain/value-objects/file-hash';
+import { DateTime } from '../../domains/shared-kernel/types/date-time';
+import { Maybe } from '../../domains/shared-kernel/types/maybe';
+import { UuidGenerator } from '../../domains/shared-kernel/utils/uuid-generator';
 
 export class FileChangeReactionSaga {
   private readonly eventBus: EventBus;
@@ -43,15 +50,13 @@ export class FileChangeReactionSaga {
 
     this.fileModifiedHandler = {
       handle: async (event: FileModifiedEvent): Promise<void> => {
-        await this.onFileChanged(event.path.value);
+        await this.onFileModified(event);
       },
     };
 
     this.fileDiscoveredHandler = {
       handle: async (event: FileDiscoveredEvent): Promise<void> => {
-        if (!event.isDirectory) {
-          await this.onFileChanged(event.path.value);
-        }
+        await this.onFileDiscovered(event);
       },
     };
 
@@ -98,20 +103,41 @@ export class FileChangeReactionSaga {
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
-  private async onFileChanged(filePath: string): Promise<void> {
-    const normalized = filePath.replace(/\\/g, '/');
-    if (normalized.startsWith('.doclink/') || normalized === '.doclink') {
-      return;
-    }
+  /** Handle FileModifiedEvent: tracking + keep file index in sync. */
+  private async onFileModified(event: FileModifiedEvent): Promise<void> {
+    const normalized = event.path.value.replace(/\\/g, '/');
+    if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
+    // Tracking: detect changes and record hash
     const repository = new TrackingJsonRepository(this.workspaceRoot);
     const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
     const diffAdapter = new DiffCalculatorAdapter();
     const diffService = new DiffCalculatorService(diffAdapter);
     const recordHandler = new RecordHashHandler(repository, diffService, contentReader);
     const handler = new DetectChangesHandler(contentReader, recordHandler);
+    await handler.execute(new DetectChangesCommand(normalized));
 
-    await handler.execute(new DetectChangesCommand(filePath));
+    // File index: ensure the file node exists (idempotent upsert)
+    await this.upsertFileNode(normalized);
+  }
+
+  /** Handle FileDiscoveredEvent: only for new files, ensure index entry. */
+  private async onFileDiscovered(event: FileDiscoveredEvent): Promise<void> {
+    if (event.isDirectory) return;
+    const normalized = event.path.value.replace(/\\/g, '/');
+    if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+
+    // Tracking: record initial hash (creates tracking entry)
+    const repository = new TrackingJsonRepository(this.workspaceRoot);
+    const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
+    const diffAdapter = new DiffCalculatorAdapter();
+    const diffService = new DiffCalculatorService(diffAdapter);
+    const recordHandler = new RecordHashHandler(repository, diffService, contentReader);
+    const handler = new DetectChangesHandler(contentReader, recordHandler);
+    await handler.execute(new DetectChangesCommand(normalized));
+
+    // File index: ensure the new file is added
+    await this.upsertFileNode(normalized);
   }
 
   private async onFileExcluded(event: FileExcludedEvent): Promise<void> {
@@ -120,7 +146,6 @@ export class FileChangeReactionSaga {
   }
 
   private async onIgnorePatternsChanged(): Promise<void> {
-    // Still do immediate cleanup, but the rescan's FileIndexRebuilt will be the final authority.
     const allNodes = await this.fileSystemRepo.findAll();
     const currentFilePaths = new Set<string>();
     for (const node of allNodes) {
@@ -133,7 +158,6 @@ export class FileChangeReactionSaga {
   }
 
   private async onFileIndexRebuilt(event: FileIndexRebuiltEvent): Promise<void> {
-    // Bulk synchronization: tracking index must exactly mirror the rebuilt file index.
     const trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
     await trackingRepo.deleteAllExcept(event.filePaths);
   }
@@ -142,6 +166,38 @@ export class FileChangeReactionSaga {
     const linkedDocs = await this.linkedDocQuery.findLinkedDocuments(event.filePath.value);
     for (const docId of linkedDocs) {
       await this.eventBus.emit(new ReviewRequiredEvent(docId, event.filePath, 'OUTDATED'));
+    }
+  }
+
+  /**
+   * Idempotent upsert: if a FileNode for the given path exists, do nothing;
+   * otherwise create one with minimal metadata.
+   */
+  private async upsertFileNode(normalizedPath: string): Promise<void> {
+    try {
+      const filePath = new FilePath(normalizedPath);
+      const existing = await this.fileSystemRepo.findByPath(filePath);
+      if (existing && existing instanceof FileNode) {
+        // Already exists – no need to update
+        return;
+      }
+      // Create a minimal node; size and hash are optional.
+      const id = new FileNodeId(UuidGenerator.generate());
+      const name = filePath.getName();
+      const parent = filePath.getParentPath();
+      const node = new FileNode(
+        id,
+        filePath,
+        name,
+        parent,
+        new FileSize(0),
+        DateTime.now(),
+        Maybe.none<FileHash>(),
+        false
+      );
+      await this.fileSystemRepo.save(node);
+    } catch (error) {
+      console.error('[Saga] Failed to upsert file node:', normalizedPath, error);
     }
   }
 }
