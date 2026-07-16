@@ -15,6 +15,7 @@ import { FilePath } from '../../domain/value-objects/file-path';
 import { FileNode } from '../../domain/entities/file-node';
 import { FolderNode } from '../../domain/entities/folder-node';
 import { FileExcludedEvent } from '../../domain/events/file-excluded';
+import { FileIndexRebuiltEvent } from '../../domain/events/file-index-rebuilt';
 import { IFileSystemAdapter } from '../ports/file-system-adapter.interface';
 
 export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, FileTreeDto> {
@@ -58,20 +59,22 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
       const rootPath = new FilePath('.');
       const scanResult = this.scanService.scan(rootPath, ignorePatterns, fileMetadata);
 
-      // Collect new file paths
+      // Collect new file paths for the rebuilt index
       const newFilePaths = new Set<string>();
       this.collectFilePaths(scanResult.rootFolder, newFilePaths);
 
       // Emit FileExcluded for files that disappeared (due to ignore rules or actual deletion)
       for (const oldPath of oldFilePaths) {
         if (!newFilePaths.has(oldPath)) {
-          // FileExcludedEvent no longer requires a node ID
           this.eventBus.emit(new FileExcludedEvent(undefined as any, new FilePath(oldPath)));
         }
       }
 
       // Rebuild the index in a single operation
       await this.fileSystemRepo.clearAndSaveAll(scanResult.rootFolder);
+
+      // Emit bulk sync event for Tracking to exactly mirror the new file index
+      this.eventBus.emit(new FileIndexRebuiltEvent(newFilePaths));
 
       for (const event of scanResult.events) {
         await this.eventBus.emit(event);

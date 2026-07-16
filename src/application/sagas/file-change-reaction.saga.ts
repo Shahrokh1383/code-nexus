@@ -4,6 +4,7 @@ import { FileModifiedEvent } from '../../domains/filesystem/domain/events/file-m
 import { FileDiscoveredEvent } from '../../domains/filesystem/domain/events/file-discovered';
 import { FileExcludedEvent } from '../../domains/filesystem/domain/events/file-excluded';
 import { IgnorePatternsChangedEvent } from '../../domains/filesystem/domain/events/ignore-patterns-changed';
+import { FileIndexRebuiltEvent } from '../../domains/filesystem/domain/events/file-index-rebuilt';
 import { ChangesDetectedEvent } from '../../domains/tracking/domain/events/changes-detected';
 import { ReviewRequiredEvent } from '../../domains/tracking/domain/events/review-required';
 import { DetectChangesCommand } from '../../domains/tracking/application/commands/detect-changes.command';
@@ -27,6 +28,7 @@ export class FileChangeReactionSaga {
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
   private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
   private readonly ignorePatternsChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent>;
+  private readonly fileIndexRebuiltHandler: IDomainEventHandler<FileIndexRebuiltEvent>;
   private readonly changesDetectedHandler: IDomainEventHandler<ChangesDetectedEvent>;
 
   constructor(
@@ -65,6 +67,12 @@ export class FileChangeReactionSaga {
       },
     };
 
+    this.fileIndexRebuiltHandler = {
+      handle: async (event: FileIndexRebuiltEvent): Promise<void> => {
+        await this.onFileIndexRebuilt(event);
+      },
+    };
+
     this.changesDetectedHandler = {
       handle: async (event: ChangesDetectedEvent): Promise<void> => {
         await this.onChangesDetected(event);
@@ -77,6 +85,7 @@ export class FileChangeReactionSaga {
     this.eventBus.register('FileDiscovered', this.fileDiscoveredHandler);
     this.eventBus.register('FileExcluded', this.fileExcludedHandler);
     this.eventBus.register('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
+    this.eventBus.register('FileIndexRebuilt', this.fileIndexRebuiltHandler);
     this.eventBus.register('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
@@ -85,6 +94,7 @@ export class FileChangeReactionSaga {
     this.eventBus.unregister('FileDiscovered', this.fileDiscoveredHandler);
     this.eventBus.unregister('FileExcluded', this.fileExcludedHandler);
     this.eventBus.unregister('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
+    this.eventBus.unregister('FileIndexRebuilt', this.fileIndexRebuiltHandler);
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
@@ -110,7 +120,7 @@ export class FileChangeReactionSaga {
   }
 
   private async onIgnorePatternsChanged(): Promise<void> {
-    // Synchronize tracking index with current file index after ignore patterns change
+    // Still do immediate cleanup, but the rescan's FileIndexRebuilt will be the final authority.
     const allNodes = await this.fileSystemRepo.findAll();
     const currentFilePaths = new Set<string>();
     for (const node of allNodes) {
@@ -118,9 +128,14 @@ export class FileChangeReactionSaga {
         currentFilePaths.add(node.path.value);
       }
     }
-
     const trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
     await trackingRepo.deleteAllExcept(currentFilePaths);
+  }
+
+  private async onFileIndexRebuilt(event: FileIndexRebuiltEvent): Promise<void> {
+    // Bulk synchronization: tracking index must exactly mirror the rebuilt file index.
+    const trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
+    await trackingRepo.deleteAllExcept(event.filePaths);
   }
 
   private async onChangesDetected(event: ChangesDetectedEvent): Promise<void> {

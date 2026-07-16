@@ -34,14 +34,13 @@
     "src\\presentation\\styles\\linking.css",
     "src\\presentation\\styles\\search-bar.css",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
-    "src\\application",
-    "src\\domains",
     "src\\presentation\\components\\common",
-    "src\\presentation\\styles"
+    "src\\presentation\\styles",
+    "src\\presentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-15T13:07:03.503Z",
+  "lastModified": "2026-07-16T10:47:20.919Z",
   "version": 1
 }
