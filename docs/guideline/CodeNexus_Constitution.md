@@ -13,7 +13,7 @@ The CodeNexus codebase is built upon a strict Domain-Driven Design (DDD) foundat
 2. **KISS (Keep It Simple Stupid):** Favor simple, readable solutions over clever abstractions. If a plain function solves the problem, do not create a class hierarchy. If a JSON file works, do not add a database.
 3. **DRY (Don't Repeat Yourself):** Shared logic must be extracted into the `shared-kernel`, base classes, or specialized utilities. Never copy-paste domain logic across contexts.
 4. **SOLID:** Strict adherence to Dependency Inversion (Constructor Injection) and Open/Closed principles. Domain layers depend on abstractions, never on concrete implementations.
-5. **Bounded Context Isolation:** The system is divided into distinct domains (**Project, FileSystem, Documentation, Linking, Tracking, Notification**). Domains MUST NOT leak logic into one another. Cross-domain communication occurs ONLY via the EventBus (asynchronous) or injected Domain Services (synchronous, within Application Layer only).
+5. **Bounded Context Isolation:** The system is divided into distinct domains (**Project, FileSystem, Documentation, Linking, Tracking**). Domains MUST NOT leak logic into one another. Cross-domain communication occurs ONLY via the EventBus (asynchronous) or injected Domain Services (synchronous, within Application Layer only).
 6. **No Over-Engineering:** Every abstraction must earn its existence. If removing a class simplifies the code without losing functionality, remove it. The `.doclink` folder must remain under 50KB for a 1000-file project.
 
 ---
@@ -46,7 +46,7 @@ Every user action, IPC call, or background event MUST follow this exact, unalter
 4. **Application Layer (Command/Query Handler):** The Handler receives the DTO, validates it (if needed), and orchestrates domain operations. It calls Domain Services, Repositories, or emits Commands. It contains NO UI logic and NO direct file system calls.
 5. **Domain Layer (Entities, Value Objects, Domain Services):** The core business logic executes here. This layer is PURE — it knows nothing about Electron, React, file system APIs, or IPC. It operates on Entities and Value Objects only. It emits Domain Events.
 6. **Infrastructure Layer (Repositories, Adapters):** If the domain operation requires persistence, the Domain layer calls a Repository Interface. The Infrastructure layer implements this interface using JSON files, file system APIs, or hash calculators. The Domain layer never knows which implementation is used.
-7. **EventBus (Cross-Domain Communication):** If the operation affects another Bounded Context (e.g., a file change triggers a warning in the Notification context), the originating context emits a Domain Event. The EventBus delivers it to the subscribing context's handler. Contexts NEVER import each other's classes directly.
+7. **EventBus (Cross-Domain Communication):** If the operation affects another Bounded Context (e.g., a file change must cause a UI refresh in Tracking), the originating context emits a Domain Event. The EventBus delivers it to the subscribing context's handler. Contexts NEVER import each other's classes directly.
 8. **Response Path:** The result flows back through the Repository → Domain Service → Application Handler → IPC Response → React Hook → React Component → UI Update.
 
 ---
@@ -55,7 +55,7 @@ Every user action, IPC call, or background event MUST follow this exact, unalter
 
 When tasked with adding a new feature, follow this exact sequence to maintain architectural integrity:
 
-1. **Identify the Bounded Context:** Does this belong to Project, FileSystem, Documentation, Linking, Tracking, or Notification? If it spans multiple contexts, identify the primary owner and use the EventBus for secondary effects.
+1. **Identify the Bounded Context:** Does this belong to Project, FileSystem, Documentation, Linking, or Tracking? If it spans multiple contexts, identify the primary owner and use the EventBus for secondary effects.
 2. **Define Domain Events:** Before writing any code, define the Domain Events that will be emitted. Events are the API between contexts. Name them in past tense (e.g., `FileModifiedEvent`, `LinkCreatedEvent`).
 3. **Create or Extend Domain Entities/Value Objects:** If the feature introduces a new business concept, create it in `src/domains/{context}/domain/entities/` or `value-objects/`. If it extends an existing concept, ensure the modification does not violate SRP.
 4. **Create the Application Layer:**
@@ -69,7 +69,7 @@ When tasked with adding a new feature, follow this exact sequence to maintain ar
 7. **Create the React Hook (Renderer Process):** In `src/presentation/hooks/`, create a custom hook that calls the IPC Client and manages React state.
 8. **Create the UI Component:** In `src/presentation/components/` or `pages/`, create the React component. It must use the custom Hook and contain ZERO business logic.
 9. **Register the Route:** If this is a new page, add it to the React Router configuration in `App.tsx`.
-10. **Wire up Cross-Domain Side Effects:** If this feature triggers actions in another context (e.g., creating a link triggers a warning check), register an EventBus subscriber in the affected context's Application layer.
+10. **Wire up Cross-Domain Side Effects:** If this feature triggers actions in another context (e.g., creating a link must update pending status), register an EventBus subscriber in the affected context's Application layer.
 
 ---
 
@@ -118,20 +118,22 @@ When tracking down a bug or planning a refactor, use this top-down trace methodo
 
 ### 5. Tracking & Granular Commits
 * The `Tracking` context is the **only** context allowed to calculate content hashes, detect diffs, and manage commit state.
-* Commits are **granular and per-document**. There is NO global "commit all" button. Approving a commit for Document A ONLY updates the stored hashes for files linked to Document A and ONLY clears warnings for Document A.
-* Other documents with pending changes MUST remain in their warning state until individually reviewed and committed.
+* Commits are **granular and per-document**. There is NO global "commit all" button. Approving a commit for Document A ONLY updates the stored state for that document and clears its pending status.
+* Other documents with pending changes MUST remain in their pending state until individually reviewed and committed.
 * Hash algorithm: **SHA-256** of normalized file content. Metadata (timestamps, permissions) must NOT affect the hash.
 * The system must detect line-level changes (added, removed, modified lines) and surface this information in the review UI.
 
-### 6. Notification & Review Queue
-* The `Notification` context is the **only** context allowed to issue warnings and manage the review queue.
-* **NEVER** use modal popups, toast notifications, or browser alerts for warnings. All warnings MUST be displayed in the dedicated `ReviewQueuePage` (a full-page view, not a popup).
-* Warnings have a **type**: `OUTDATED` (linked code changed), `ORPHAN` (document has no links), `UNLINKED` (code file has no links).
-* Warnings MUST be cleared automatically when their root cause is resolved (e.g., a commit is approved, a link is created, an orphaned document is deleted).
+### 6. Warnings & UI Display
+* Warnings (outdated files, orphaned documents, unlinked files) are **not** managed by a separate Notification bounded context. Instead, each concern is displayed inline within its owning context’s dedicated full-page view:
+  * **Outdated files** (code changed after commit) → **Tracking page** (pending changes list, aggregated counts).
+  * **Orphaned documents** (docs with zero links) → **Documentation page** (dedicated orphaned section).
+  * **Unlinked code files** (code files without any document link) → **Linking page** (unlinked files list).
+* All warnings must be shown in **full-page views**, never as modal popups, toast notifications, or browser alerts.
+* Warnings must clear automatically when the root cause is resolved (e.g., commit approved, link created, orphan deleted).
 
 ### 7. Orphaned Documents
 * The system MUST detect documents that exist in the docs folder but have ZERO links to code files.
-* Orphaned documents MUST be displayed in a dedicated section of the UI with a distinct visual warning badge.
+* Orphaned documents MUST be displayed in a dedicated section of the UI (Documentation page) with a distinct visual warning badge.
 * Users MUST be able to delete orphaned documents directly from the application. This deletion MUST remove both the physical file AND its metadata record in `.doclink`.
 * Before deletion, the user MUST be presented with the document's content (or a summary) to confirm it is truly obsolete.
 
@@ -156,7 +158,7 @@ When tracking down a bug or planning a refactor, use this top-down trace methodo
 9. Thou shalt never store file contents in `.doclink`; only metadata, paths, and hashes.
 10. Thou shalt never use absolute paths in `.doclink`; only relative paths from workspace root.
 11. Thou shalt enforce granular per-document commits; global commits are forbidden.
-12. Thou shalt never show warnings as popups; use the dedicated ReviewQueuePage only.
+12. Thou shalt show all warnings in full‑page views only — never as popups, toasts, or modals. Warnings appear within the relevant context page (Tracking, Documentation, Linking).
 13. Thou shalt respect the Onion Architecture dependency rule: Domain -> Application -> Infrastructure -> Presentation. Dependencies point inward only.
 14. Thou shalt test Domain logic with 95%+ coverage; this is your business logic and must never break.
 15. Thou shalt normalize line endings to LF before hashing to prevent cross-OS hash mismatches.
@@ -190,7 +192,7 @@ Before every commit, every developer must verify:
 - [ ] `.doclink` folder size is under 50KB for test projects.
 - [ ] Domain Events are emitted for all cross-context state changes.
 - [ ] Unit tests exist for all new Domain logic.
-- [ ] No modal popups or toast notifications for warnings. ReviewQueuePage only.
+- [ ] No modal popups or toast notifications for warnings. Warnings are displayed inline in full‑page context views.
 - [ ] Granular commit logic is preserved; no global commit functionality was added.
 
 ---
