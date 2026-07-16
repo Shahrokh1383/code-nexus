@@ -16,9 +16,13 @@ export class GetCommitHistoryHandler implements IQueryHandler<GetCommitHistoryQu
     try {
       const documentId = new DocumentId(query.documentId);
       const approvals = await this.approvalRepo.findByDocument(documentId);
+      const seenCommitIds = new Set<string>();
       const dtos: GranularCommitDto[] = [];
 
       for (const approval of approvals) {
+        if (seenCommitIds.has(approval.commitId.value)) continue;
+        seenCommitIds.add(approval.commitId.value);
+
         const commit = await this.commitRepo.findById(approval.commitId);
         if (commit) {
           dtos.push({
