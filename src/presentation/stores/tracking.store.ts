@@ -138,7 +138,14 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
 
   startRealtimeListener: () => {
     const handleUpdate = (_payload: unknown) => {
+      // Refresh aggregated counts (left panel)
       get().fetchAllPendingStatus();
+
+      // Also refresh pending file list for the currently selected document (right panel)
+      const currentDoc = get().selectedDocument;
+      if (currentDoc) {
+        get().fetchPendingChanges(currentDoc.id);
+      }
     };
     const unsubscribe = window.electronAPI.on(IpcChannels.TRACKING_PENDING_UPDATED, handleUpdate);
     return unsubscribe;
