@@ -57,6 +57,7 @@ export function PendingDocumentList({
         onChange={onSearchChange}
         placeholder="Search documents..."
         aria-label="Search pending documents"
+        onClear={() => onSearchChange('')}
       />
       {pendingDocs.length === 0 && searchQuery ? (
         <div className="document-list--empty" style={{ padding: '1.5rem' }}>

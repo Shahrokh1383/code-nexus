@@ -14,6 +14,7 @@ import { DiffCalculatorService } from '../../domain/services/diff-calculator.ser
 import { ContentDiffDto } from '../dto/content-diff.dto';
 import { DiffLine } from '../../domain/value-objects/diff-line';
 import { FileContentReaderAdapter } from '../../infrastructure/adapters/file-content-reader.adapter';
+import { HashRevertedEvent } from '../../domain/events/hash-reverted';
 
 export class RecordHashHandler implements ICommandHandler<RecordHashCommand, void> {
   constructor(
@@ -31,8 +32,11 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
       if (existing) {
         const committedHash = existing.committedHashValue.getOrNull();
         if (committedHash && newHash.equals(committedHash)) {
+          // Content reverted to committed version → reset pending status
           existing.revertToCommitted();
           await this.repository.saveHash(existing, null);
+          // Notify the renderer so it can refresh pending counts
+          await EventBus.getInstance().emit(new HashRevertedEvent(filePath));
           return Result.ok(undefined);
         }
 

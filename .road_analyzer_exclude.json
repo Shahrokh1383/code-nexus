@@ -29,16 +29,16 @@
     "src\\presentation\\pages\\LinkingPage.tsx",
     "src\\domains\\documentation",
     "src\\presentation\\components\\documentation",
-    "src\\domains\\linking",
     "src\\presentation\\styles\\linking.css",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\domains\\filesystem",
     "src\\presentation\\components\\file-tree",
-    "src\\presentation\\pages\\FileBrowserPage.tsx"
+    "src\\presentation\\pages\\FileBrowserPage.tsx",
+    "src\\presentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-16T12:44:03.383Z",
+  "lastModified": "2026-07-16T16:13:24.764Z",
   "version": 1
 }
