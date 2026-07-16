@@ -42,10 +42,19 @@ describe('DocumentSplitSaga', () => {
     
     const event = new DocumentDeletedEvent(parentDocId, new DocumentPath('docs/parent.md'));
 
-    mockGetChildrenHandler.execute.mockResolvedValue(Result.ok([childDocId.value]));
+    mockGetChildrenHandler.execute.mockResolvedValue(Result.ok([
+      { 
+        id: 'link-1', 
+        parentDocumentId: parentDocId.value, 
+        childDocumentId: childDocId.value, 
+        type: 'INHERITED', 
+        createdAt: new Date().toISOString() 
+      }
+    ]));
+    
     mockMigrateLinksHandler.execute.mockResolvedValue(Result.ok(undefined));
     mockDocRepo.findById.mockResolvedValue({ id: childDocId, path: childDocPath } as any);
-    mockLinkRepo.findByDocument.mockResolvedValue([]); // Zero code links
+    mockLinkRepo.findByDocument.mockResolvedValue([]);
 
     let orphanEventEmitted = false;
     eventBus.register('OrphanDetectedEvent', {
@@ -68,10 +77,19 @@ describe('DocumentSplitSaga', () => {
     
     const event = new DocumentDeletedEvent(parentDocId, new DocumentPath('docs/parent.md'));
 
-    mockGetChildrenHandler.execute.mockResolvedValue(Result.ok([childDocId.value]));
+    mockGetChildrenHandler.execute.mockResolvedValue(Result.ok([
+      { 
+        id: 'link-1', 
+        parentDocumentId: parentDocId.value, 
+        childDocumentId: childDocId.value, 
+        type: 'INHERITED', 
+        createdAt: new Date().toISOString() 
+      }
+    ]));
+    
     mockMigrateLinksHandler.execute.mockResolvedValue(Result.ok(undefined));
     mockDocRepo.findById.mockResolvedValue({ id: childDocId } as any);
-    mockLinkRepo.findByDocument.mockResolvedValue([{}] as any); // Has 1 code link
+    mockLinkRepo.findByDocument.mockResolvedValue([{}] as any);
 
     let orphanEventEmitted = false;
     eventBus.register('OrphanDetectedEvent', {

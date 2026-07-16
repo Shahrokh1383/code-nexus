@@ -6,18 +6,28 @@ import { CodeToDocLink } from '../../../domain/entities/code-to-doc-link';
 import { GetLinksForCodeFileQuery } from '../../../application/queries/get-links-for-codefile.query';
 import { GetLinksForCodeFileHandler } from '../../../application/handlers/get-links-for-codefile.handler';
 import { ILinkRepository } from '../../../domain/repository/link-repository.interface';
+import { ICodeFileQueryPort } from '../../../application/ports/code-file-query.port';
 import { LinkId } from '../../../domain/value-objects/link-id';
 import { LinkType } from '../../../domain/value-objects/link-type';
 
 describe('GetLinksForCodeFileHandler', () => {
   let handler: GetLinksForCodeFileHandler;
   let mockRepo: jest.Mocked<ILinkRepository>;
+  let mockCodeFilePort: jest.Mocked<ICodeFileQueryPort>;
 
   beforeEach(() => {
     mockRepo = {
       findByCodeFile: jest.fn(),
     } as any;
-    handler = new GetLinksForCodeFileHandler(mockRepo);
+    
+    // Mock the secondary port required for DTO enrichment
+    mockCodeFilePort = {
+      getCodeFileById: jest.fn().mockResolvedValue({ id: 'f1', name: 'app.ts', path: 'src/app.ts' }),
+      getAllCodeFiles: jest.fn(),
+    } as any;
+
+    // Inject BOTH required dependencies
+    handler = new GetLinksForCodeFileHandler(mockRepo, mockCodeFilePort);
   });
 
   it('should return mapped DTOs for a code file', async () => {
@@ -40,5 +50,9 @@ describe('GetLinksForCodeFileHandler', () => {
     expect(dtos![0].codeFileId).toBe('f1');
     expect(dtos![0].type).toBe('INHERITED');
     expect(dtos![0].migratedAt).toBe(migratedDate.toISO());
+    
+    // Verify DTO enrichment from the port
+    expect(dtos![0].codeFileName).toBe('app.ts');
+    expect(dtos![0].codeFilePath).toBe('src/app.ts');
   });
 });

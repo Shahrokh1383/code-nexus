@@ -2,20 +2,25 @@ import { ApproveCommitHandler } from '../../../application/handlers/approve-comm
 import { ApproveCommitCommand } from '../../../application/commands/approve-commit.command';
 import { IHashRepository } from '../../../domain/repository/hash-repository.interface';
 import { ICommitRepository } from '../../../domain/repository/commit-repository.interface';
+import { IDocumentCommitApprovalRepository } from '../../../domain/repository/document-commit-approval-repository.interface';
 import { ILinkedDocumentQueryPort } from '../../../application/ports/linked-document-query.port';
+import { IFileContentReader } from '../../../application/ports/file-content-reader.interface';
+import { CommitMatcherService } from '../../../domain/services/commit-matcher.service';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
 import { FileHash } from '../../../domain/entities/file-hash';
 import { FileHashId } from '../../../domain/value-objects/file-hash-id';
 import { FilePath } from '../../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../../domain/value-objects/hash-value';
-import { DocumentId } from '../../../../documentation/domain/value-objects/document-id';
-import { CommitId } from '../../../domain/value-objects/commit-id';
+import { FileContentReaderAdapter } from '../../../infrastructure/adapters/file-content-reader.adapter';
 
 describe('ApproveCommitHandler', () => {
   let handler: ApproveCommitHandler;
   let mockHashRepo: jest.Mocked<IHashRepository>;
   let mockCommitRepo: jest.Mocked<ICommitRepository>;
+  let mockApprovalRepo: jest.Mocked<IDocumentCommitApprovalRepository>;
   let mockLinkedDocQuery: jest.Mocked<ILinkedDocumentQueryPort>;
+  let mockContentReader: jest.Mocked<IFileContentReader>;
+  let mockCommitMatcher: jest.Mocked<CommitMatcherService>;
 
   beforeEach(() => {
     mockHashRepo = {
@@ -24,37 +29,68 @@ describe('ApproveCommitHandler', () => {
       saveHash: jest.fn().mockResolvedValue(undefined),
       findDiffByPath: jest.fn(),
       deleteHashByPath: jest.fn(),
-    };
+      deleteAllExcept: jest.fn(),
+    } as any;
 
     mockCommitRepo = {
       findById: jest.fn(),
-      findByDocument: jest.fn(),
       save: jest.fn().mockResolvedValue(undefined),
       findAll: jest.fn(),
-    };
+    } as any;
+
+    mockApprovalRepo = {
+      findByDocument: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+    } as any;
 
     mockLinkedDocQuery = {
       findLinkedDocuments: jest.fn().mockResolvedValue([]),
       findLinkedFiles: jest.fn().mockResolvedValue([]),
-    };
+    } as any;
 
-    handler = new ApproveCommitHandler(mockHashRepo, mockCommitRepo, mockLinkedDocQuery);
+    mockContentReader = {
+      readContent: jest.fn().mockResolvedValue('file content'),
+      getPreviousContent: jest.fn(),
+      updateCache: jest.fn(),
+      getWorkspaceRoot: jest.fn().mockReturnValue('/test/workspace'),
+    } as any;
+    
+    // The handler casts the reader to access the workspaceRoot property directly
+    (mockContentReader as any).workspaceRoot = '/test/workspace';
+
+    mockCommitMatcher = {
+      findMatchingCommit: jest.fn(),
+    } as any;
+
+    // Inject ALL 6 required dependencies
+    handler = new ApproveCommitHandler(
+      mockHashRepo, 
+      mockCommitRepo, 
+      mockApprovalRepo, 
+      mockLinkedDocQuery, 
+      mockContentReader, 
+      mockCommitMatcher
+    );
+    
     EventBus.getInstance().clear();
+    jest.spyOn(FileContentReaderAdapter, 'saveBaseline').mockResolvedValue(undefined as any);
   });
 
   afterEach(() => {
     EventBus.getInstance().clear();
+    jest.restoreAllMocks();
   });
 
-  it('should approve commit for pending hashes', async () => {
-    const pendingHash = new FileHash(
+  it('should approve commit for linked hashes', async () => {
+    const existingHash = new FileHash(
       new FileHashId('fh-1'),
       new FilePath('src/app.ts'),
       new HashValue('a'.repeat(64))
     );
-    // The handler will call findAllHashes (returns pendingHash) and findLinkedFiles
-    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash]);
+    
     mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts']);
+    mockHashRepo.findHashByPath.mockResolvedValue(existingHash);
+    mockCommitMatcher.findMatchingCommit.mockResolvedValue(null); // Force creation of new commit
 
     const emittedEvents: string[] = [];
     EventBus.getInstance().register('CommitApprovedEvent', {
@@ -63,58 +99,68 @@ describe('ApproveCommitHandler', () => {
       },
     });
 
-    const result = await handler.execute(
-      new ApproveCommitCommand('doc-1')
-    );
+    const result = await handler.execute(new ApproveCommitCommand('doc-1'));
 
     expect(result.isSuccess).toBe(true);
-    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
+    
+    // A new commit should be created and saved
     expect(mockCommitRepo.save).toHaveBeenCalledTimes(1);
+    
+    // An approval record must be saved
+    expect(mockApprovalRepo.save).toHaveBeenCalledTimes(1);
+    
+    // Baselines must be saved via the static adapter method
+    expect(FileContentReaderAdapter.saveBaseline).toHaveBeenCalledWith('/test/workspace', 'src/app.ts', 'file content');
+    
     expect(emittedEvents).toContain('CommitApprovedEvent');
   });
 
-  it('should do nothing when no pending hashes exist', async () => {
-    // findAllHashes returns empty, so no linked files needed
-    mockHashRepo.findAllHashes.mockResolvedValue([]);
-
-    const result = await handler.execute(
-      new ApproveCommitCommand('doc-1')
-    );
-
-    expect(result.isSuccess).toBe(true);
-    expect(mockHashRepo.saveHash).not.toHaveBeenCalled();
-    expect(mockCommitRepo.save).not.toHaveBeenCalled();
-  });
-
-  it('should only affect hashes without commitId', async () => {
-    const pendingHash = new FileHash(
+  it('should use existing matching commit if found', async () => {
+    const existingHash = new FileHash(
       new FileHashId('fh-1'),
       new FilePath('src/app.ts'),
       new HashValue('a'.repeat(64))
     );
-    const approvedHash = new FileHash(
-      new FileHashId('fh-2'),
-      new FilePath('src/other.ts'),
-      new HashValue('b'.repeat(64))
+    
+    const { GranularCommit } = require('../../../domain/entities/granular-commit');
+    const { CommitId } = require('../../../domain/value-objects/commit-id');
+    const { DateTime } = require('../../../../shared-kernel/types/date-time');
+    
+    const existingCommit = new GranularCommit(
+      new CommitId('existing-commit'),
+      [existingHash],
+      DateTime.now()
     );
-    // simulate approved by calling commit
-    approvedHash.commit(new CommitId('commit-old'));
 
-    mockHashRepo.findAllHashes.mockResolvedValue([pendingHash, approvedHash]);
-    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts', 'src/other.ts']); // both linked, but only pending will be processed
+    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/app.ts']);
+    mockHashRepo.findHashByPath.mockResolvedValue(existingHash);
+    mockCommitMatcher.findMatchingCommit.mockResolvedValue(existingCommit);
 
-    await handler.execute(new ApproveCommitCommand('doc-1'));
+    const result = await handler.execute(new ApproveCommitCommand('doc-1'));
 
-    // Only the pending hash should be saved
-    expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
-    const saved = mockHashRepo.saveHash.mock.calls[0][0] as FileHash;
-    expect(saved.id.value).toBe('fh-1');
+    expect(result.isSuccess).toBe(true);
+    
+    // No new commit should be created
+    expect(mockCommitRepo.save).not.toHaveBeenCalled();
+    
+    // But approval must still be saved
+    expect(mockApprovalRepo.save).toHaveBeenCalledTimes(1);
+  });
+
+  it('should return failure if hash record is missing for a linked file', async () => {
+    mockLinkedDocQuery.findLinkedFiles.mockResolvedValue(['src/missing.ts']);
+    mockHashRepo.findHashByPath.mockResolvedValue(null);
+
+    const result = await handler.execute(new ApproveCommitCommand('doc-1'));
+
+    expect(result.isFailure).toBe(true);
+    expect(result.getError()).toContain('No hash record found for file: src/missing.ts');
+    expect(mockCommitRepo.save).not.toHaveBeenCalled();
+    expect(mockApprovalRepo.save).not.toHaveBeenCalled();
   });
 
   it('should return failure on invalid documentId', async () => {
-    const result = await handler.execute(
-      new ApproveCommitCommand('')
-    );
+    const result = await handler.execute(new ApproveCommitCommand(''));
     expect(result.isFailure).toBe(true);
   });
 });

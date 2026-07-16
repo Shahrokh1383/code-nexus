@@ -4,6 +4,7 @@ import { IProjectConfigRepository } from '../../../../project/domain/repository/
 import { ProjectConfig } from '../../../../project/domain/entities/project-config';
 import { WorkspaceId } from '../../../../project/domain/value-objects/workspace-id';
 import { Maybe } from '../../../../shared-kernel/types/maybe';
+import { EventBus } from '../../../../shared-kernel/events/event-bus';
 
 class MockProjectConfigRepository implements IProjectConfigRepository {
   private configs: ProjectConfig[] = [];
@@ -22,6 +23,7 @@ class MockProjectConfigRepository implements IProjectConfigRepository {
 describe('RemoveIgnorePatternHandler', () => {
   let handler: RemoveIgnorePatternHandler;
   let configRepo: MockProjectConfigRepository;
+  let mockEventBus: jest.Mocked<EventBus>;
 
   const createConfig = (workspaceId: string, patterns: string[]): ProjectConfig => {
     return new ProjectConfig(
@@ -34,7 +36,17 @@ describe('RemoveIgnorePatternHandler', () => {
 
   beforeEach(() => {
     configRepo = new MockProjectConfigRepository();
-    handler = new RemoveIgnorePatternHandler(configRepo);
+    
+    // Mock the EventBus dependency
+    mockEventBus = {
+      emit: jest.fn().mockResolvedValue(undefined),
+      register: jest.fn(),
+      unregister: jest.fn(),
+      clear: jest.fn(),
+    } as any;
+
+    // Inject BOTH required dependencies
+    handler = new RemoveIgnorePatternHandler(configRepo, mockEventBus);
   });
 
   it('should remove an existing ignore pattern', async () => {
@@ -50,6 +62,8 @@ describe('RemoveIgnorePatternHandler', () => {
     expect(updated!.ignorePatterns).not.toContain('*.tmp');
     expect(updated!.ignorePatterns).toContain('*.log');
     expect(updated!.ignorePatterns).toContain('node_modules/');
+    
+    expect(mockEventBus.emit).toHaveBeenCalledTimes(1);
   });
 
   it('should succeed when pattern does not exist', async () => {
@@ -71,5 +85,6 @@ describe('RemoveIgnorePatternHandler', () => {
 
     expect(result.isFailure).toBe(true);
     expect(result.getError()).toContain('Project config not found');
+    expect(mockEventBus.emit).not.toHaveBeenCalled();
   });
 });

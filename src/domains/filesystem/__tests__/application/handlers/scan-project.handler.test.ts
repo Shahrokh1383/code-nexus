@@ -113,6 +113,22 @@ class MockFileSystemRepository implements IFileSystemRepository {
   async clear(): Promise<void> {
     this.nodes.clear();
   }
+
+  // CRITICAL FIX: Implement the missing atomic bulk-save method required by the handler
+  async clearAndSaveAll(rootNode: FolderNode): Promise<void> {
+    this.nodes.clear();
+    
+    const traverse = (node: FileNode | FolderNode) => {
+      this.nodes.set(node.id.value, node);
+      if (node instanceof FolderNode) {
+        for (const child of node.children) {
+          traverse(child);
+        }
+      }
+    };
+    
+    traverse(rootNode);
+  }
 }
 
 // ---------------------------------------------------------------------------

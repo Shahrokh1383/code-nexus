@@ -1,6 +1,8 @@
 import { RecordHashHandler } from '../../../application/handlers/record-hash.handler';
 import { RecordHashCommand } from '../../../application/commands/record-hash.command';
 import { IHashRepository } from '../../../domain/repository/hash-repository.interface';
+import { IFileContentReader } from '../../../application/ports/file-content-reader.interface';
+import { FileContentReaderAdapter } from '../../../infrastructure/adapters/file-content-reader.adapter';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
 import { FilePath } from '../../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../../domain/value-objects/hash-value';
@@ -9,8 +11,6 @@ import { FileHashId } from '../../../domain/value-objects/file-hash-id';
 import { DiffCalculatorService } from '../../../domain/services/diff-calculator.service';
 import { ContentDiff } from '../../../domain/entities/content-diff';
 import { DiffId } from '../../../domain/value-objects/diff-id';
-import { DiffLine } from '../../../domain/value-objects/diff-line';
-import { DiffLineType } from '../../../domain/value-objects/diff-line';
 
 // Helper to create an empty ContentDiff
 const createEmptyDiff = (filePath: FilePath, oldHash: HashValue, newHash: HashValue): ContentDiff =>
@@ -28,6 +28,7 @@ describe('RecordHashHandler', () => {
   let handler: RecordHashHandler;
   let mockHashRepo: jest.Mocked<IHashRepository>;
   let mockDiffService: jest.Mocked<DiffCalculatorService>;
+  let mockContentReader: jest.Mocked<IFileContentReader>;
 
   beforeEach(() => {
     mockHashRepo = {
@@ -36,21 +37,32 @@ describe('RecordHashHandler', () => {
       saveHash: jest.fn().mockResolvedValue(undefined),
       findDiffByPath: jest.fn(),
       deleteHashByPath: jest.fn(),
-    };
+      deleteAllExcept: jest.fn(),
+    } as any;
 
-    // Mock DiffCalculatorService: provide a calculate method returning empty diff
     mockDiffService = {
       calculate: jest.fn().mockImplementation((oldContent, newContent, fp, oh, nh) =>
         createEmptyDiff(fp, oh, nh)
       ),
     } as any;
 
-    handler = new RecordHashHandler(mockHashRepo, mockDiffService);
+    mockContentReader = {
+      readContent: jest.fn(),
+      getPreviousContent: jest.fn(),
+      updateCache: jest.fn(),
+      getWorkspaceRoot: jest.fn().mockReturnValue('/test/workspace'),
+    } as any;
+
+    handler = new RecordHashHandler(mockHashRepo, mockDiffService, mockContentReader);
+    
+    jest.spyOn(FileContentReaderAdapter, 'loadBaseline').mockResolvedValue(null);
+    
     EventBus.getInstance().clear();
   });
 
   afterEach(() => {
     EventBus.getInstance().clear();
+    jest.restoreAllMocks();
   });
 
   it('should create new FileHash when none exists', async () => {
@@ -64,8 +76,6 @@ describe('RecordHashHandler', () => {
     expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
     const saved = mockHashRepo.saveHash.mock.calls[0][0] as FileHash;
     expect(saved.filePath.value).toBe('src/app.ts');
-    // new hash without old content: commitId should be absent (isNone)
-    expect(saved.commitId.isNone).toBe(true);
   });
 
   it('should not save when hash is unchanged', async () => {
@@ -111,8 +121,6 @@ describe('RecordHashHandler', () => {
     expect(mockHashRepo.saveHash).toHaveBeenCalledTimes(1);
     expect(emittedEvents).toContain('ChangesDetectedEvent');
   });
-
-  // The test for ReviewRequiredEvent has been REMOVED because the handler does not emit it.
 
   it('should return failure on invalid file path', async () => {
     const result = await handler.execute(

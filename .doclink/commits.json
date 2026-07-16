@@ -2,58 +2,26 @@
   "version": "1.1",
   "commits": [
     {
-      "id": "59649b81-587b-419c-86cf-c376a3960bd4",
+      "id": "ea604df0-7d1b-40d6-b745-94ee3d0b0593",
       "fileHashes": [
         {
-          "id": "a579bbcb-d4bd-4bf4-922e-576af431b439",
+          "id": "e20230dd-8b8b-4517-81b9-ad8c0653da14",
           "filePath": "src/presentation/styles/linking.css",
           "hashValue": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2"
         }
       ],
-      "committedAt": "2026-07-16T17:57:59.507Z"
+      "committedAt": "2026-07-16T18:16:13.889Z"
     },
     {
-      "id": "ee8097db-e089-4cca-be43-57aff0d424ce",
+      "id": "50ad87d3-0b23-4abf-8ce1-1ab07aa37595",
       "fileHashes": [
         {
-          "id": "1a469cf2-806a-4703-b5d7-15b3724148e0",
-          "filePath": "src/presentation/styles/linking.css",
-          "hashValue": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2"
-        },
-        {
-          "id": "61de975c-9268-4d48-93ba-39058963097d",
-          "filePath": "src/presentation/styles/app.css",
-          "hashValue": "2e123446e56b8689b26a0d4bd0b6d4e6cbc0a234f43c6c34b56fd16dd823cb2a"
-        }
-      ],
-      "committedAt": "2026-07-16T17:58:10.653Z"
-    },
-    {
-      "id": "978c709f-2edc-4314-9a54-12a1b117e7b6",
-      "fileHashes": [
-        {
-          "id": "3ff3278d-dee9-439b-94a1-ca5d7a86e0da",
-          "filePath": "src/presentation/styles/linking.css",
-          "hashValue": "1576874e69678c297d4940c0a5bb1850fbbb28a0711f7d97570f822d6b7cb1ab"
-        },
-        {
-          "id": "5bbf0c31-cd86-43b0-87a8-4ceeeec9910c",
-          "filePath": "src/presentation/styles/app.css",
-          "hashValue": "2e123446e56b8689b26a0d4bd0b6d4e6cbc0a234f43c6c34b56fd16dd823cb2a"
-        }
-      ],
-      "committedAt": "2026-07-16T17:58:53.048Z"
-    },
-    {
-      "id": "70bd903f-c9aa-47c8-8c9b-55e7ef6b01a5",
-      "fileHashes": [
-        {
-          "id": "7ddfbdaf-3940-4ed3-a0b2-88f77e174324",
+          "id": "dca33770-b25f-40a6-b39d-1e5f84552cbc",
           "filePath": "src/presentation/styles/linking.css",
           "hashValue": "1576874e69678c297d4940c0a5bb1850fbbb28a0711f7d97570f822d6b7cb1ab"
         }
       ],
-      "committedAt": "2026-07-16T17:59:02.379Z"
+      "committedAt": "2026-07-16T18:16:34.398Z"
     }
   ]
 }

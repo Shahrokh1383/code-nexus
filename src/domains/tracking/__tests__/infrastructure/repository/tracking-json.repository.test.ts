@@ -34,8 +34,9 @@ const createFileHash = (opts: { id?: string; filePath?: string; hash?: string } 
   );
 };
 
+// Updated to match the actual schema (no committedAt/commitId)
 const defaultIndex = {
-  version: '1.0',
+  version: '1.1',
   hashes: {},
 };
 
@@ -49,7 +50,8 @@ describe('TrackingJsonRepository', () => {
   describe('constructor', () => {
     it('should create JsonDatabase and SchemaMigrator with correct arguments', () => {
       expect(JsonDatabase).toHaveBeenCalledWith('/fake/root');
-      expect(SchemaMigrator).toHaveBeenCalledWith('1.0');
+      // Updated to match the actual schema version
+      expect(SchemaMigrator).toHaveBeenCalledWith('1.1');
     });
   });
 
@@ -68,7 +70,7 @@ describe('TrackingJsonRepository', () => {
     });
 
     it('should apply schema migration when data is read', async () => {
-      const rawData = { version: '1.0', hashes: {} };
+      const rawData = { version: '1.1', hashes: {} };
       mockRead.mockResolvedValue(rawData);
       mockMigrate.mockReturnValue(rawData);
 
@@ -89,14 +91,14 @@ describe('TrackingJsonRepository', () => {
       const filePath = 'src/app.ts';
       const hashId = 'hash-app';
       const hashValue = hexHash('b');
+      // Removed committedAt and commitId from the schema mock
       const entry = {
         id: hashId,
         filePath,
         hashValue,
-        committedAt: null,
-        commitId: null,
+        diff: null,
       };
-      const index = { version: '1.0', hashes: { [filePath]: entry } };
+      const index = { version: '1.1', hashes: { [filePath]: entry } };
       mockRead.mockResolvedValue(index);
       mockMigrate.mockReturnValue(index);
 
@@ -106,8 +108,7 @@ describe('TrackingJsonRepository', () => {
       expect(result!.id.value).toBe(hashId);
       expect(result!.filePath.value).toBe(filePath);
       expect(result!.hashValue.value).toBe(hashValue.toLowerCase());
-      expect(result!.committedAt.isNone).toBe(true);
-      expect(result!.commitId.isNone).toBe(true);
+      // Removed assertions for non-existent properties
     });
   });
 
@@ -123,10 +124,10 @@ describe('TrackingJsonRepository', () => {
       const hashA = hexHash('a');
       const hashB = hexHash('b');
       const index = {
-        version: '1.0',
+        version: '1.1',
         hashes: {
-          'a.ts': { id: '1', filePath: 'a.ts', hashValue: hashA, committedAt: null, commitId: null },
-          'b.ts': { id: '2', filePath: 'b.ts', hashValue: hashB, committedAt: null, commitId: null },
+          'a.ts': { id: '1', filePath: 'a.ts', hashValue: hashA, diff: null },
+          'b.ts': { id: '2', filePath: 'b.ts', hashValue: hashB, diff: null },
         },
       };
       mockRead.mockResolvedValue(index);
@@ -156,14 +157,13 @@ describe('TrackingJsonRepository', () => {
       const existingPath = 'src/existing.ts';
       const oldHash = hexHash('0');
       const existingIndex = {
-        version: '1.0',
+        version: '1.1',
         hashes: {
           [existingPath]: {
             id: 'old-id',
             filePath: existingPath,
             hashValue: oldHash,
-            committedAt: '2024-01-01T00:00:00Z',
-            commitId: 'old-commit',
+            diff: null,
           },
         },
       };
@@ -185,11 +185,9 @@ describe('TrackingJsonRepository', () => {
         id: 'hash-1',
         filePath,
         hashValue: hexHash('a'),
-        committedAt: null,
-        commitId: null,
         diff: existingDiff,
       };
-      const index = { version: '1.0', hashes: { [filePath]: entry } };
+      const index = { version: '1.1', hashes: { [filePath]: entry } };
       mockRead.mockResolvedValue(index);
       mockMigrate.mockReturnValue(index);
 
@@ -213,9 +211,9 @@ describe('TrackingJsonRepository', () => {
       const filePath = 'src/with-diff.ts';
       const diff = { filePath, oldHash: hexHash('a'), newHash: hexHash('b'), addedLines: [], removedLines: [], modifiedLines: [] };
       const index = {
-        version: '1.0',
+        version: '1.1',
         hashes: {
-          [filePath]: { id: '1', filePath, hashValue: hexHash('a'), committedAt: null, commitId: null, diff },
+          [filePath]: { id: '1', filePath, hashValue: hexHash('a'), diff },
         },
       };
       mockRead.mockResolvedValue(index);
@@ -230,10 +228,10 @@ describe('TrackingJsonRepository', () => {
     it('should remove hash entry', async () => {
       const filePath = 'src/to-delete.ts';
       const index = {
-        version: '1.0',
+        version: '1.1',
         hashes: {
-          [filePath]: { id: '1', filePath, hashValue: hexHash('a'), committedAt: null, commitId: null },
-          'keep.ts': { id: '2', filePath: 'keep.ts', hashValue: hexHash('b'), committedAt: null, commitId: null },
+          [filePath]: { id: '1', filePath, hashValue: hexHash('a'), diff: null },
+          'keep.ts': { id: '2', filePath: 'keep.ts', hashValue: hexHash('b'), diff: null },
         },
       };
       mockRead.mockResolvedValue(index);
