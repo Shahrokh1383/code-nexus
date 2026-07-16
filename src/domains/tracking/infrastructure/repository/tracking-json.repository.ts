@@ -5,18 +5,12 @@ import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
 import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
-import { CommitId } from '../../domain/value-objects/commit-id';
-import { DateTime } from '../../../shared-kernel/types/date-time';
 import { ContentDiffDto } from '../../application/dto/content-diff.dto';
 
 interface HashEntrySchema {
   id: string;
   filePath: string;
   hashValue: string;
-  committedHashValue: string | null;
-  committedCommitId: string | null;
-  committedAt: string | null;
-  commitId: string | null;
   diff: ContentDiffDto | null;
 }
 
@@ -26,7 +20,7 @@ interface TrackingIndexSchema {
 }
 
 const TRACKING_INDEX_FILE = 'tracking-index.json';
-const SCHEMA_VERSION = '1.0';
+const SCHEMA_VERSION = '1.1';
 
 export class TrackingJsonRepository implements IHashRepository {
   private readonly db: JsonDatabase;
@@ -46,7 +40,7 @@ export class TrackingJsonRepository implements IHashRepository {
 
   async findAllHashes(): Promise<FileHash[]> {
     const index = await this.readIndex();
-    return Object.values(index.hashes).map((e) => this.mapHashEntryToEntity(e));
+    return Object.values(index.hashes).map(e => this.mapHashEntryToEntity(e));
   }
 
   async saveHash(fileHash: FileHash, diff?: ContentDiffDto | null): Promise<void> {
@@ -71,7 +65,7 @@ export class TrackingJsonRepository implements IHashRepository {
 
   async deleteAllExcept(filePaths: Set<string>): Promise<void> {
     const index = await this.readIndex();
-    const keysToRemove = Object.keys(index.hashes).filter((path) => !filePaths.has(path));
+    const keysToRemove = Object.keys(index.hashes).filter(path => !filePaths.has(path));
     if (keysToRemove.length === 0) return;
     for (const key of keysToRemove) {
       delete index.hashes[key];
@@ -100,11 +94,7 @@ export class TrackingJsonRepository implements IHashRepository {
     return new FileHash(
       new FileHashId(entry.id),
       new FilePath(entry.filePath),
-      new HashValue(entry.hashValue),
-      entry.committedHashValue ? new HashValue(entry.committedHashValue) : undefined,
-      entry.committedCommitId ? new CommitId(entry.committedCommitId) : undefined,
-      entry.committedAt ? DateTime.fromISO(entry.committedAt) : undefined,
-      entry.commitId ? new CommitId(entry.commitId) : undefined
+      new HashValue(entry.hashValue)
     );
   }
 
@@ -118,16 +108,6 @@ export class TrackingJsonRepository implements IHashRepository {
       id: fileHash.id.value,
       filePath: fileHash.filePath.value,
       hashValue: fileHash.hashValue.value,
-      committedHashValue: fileHash.committedHashValue.isSome
-        ? fileHash.committedHashValue.getOrNull()!.value
-        : null,
-      committedCommitId: fileHash.committedCommitId.isSome
-        ? fileHash.committedCommitId.getOrNull()!.value
-        : null,
-      committedAt: fileHash.committedAt.isSome
-        ? fileHash.committedAt.getOrNull()!.toISO()
-        : null,
-      commitId: fileHash.commitId.isSome ? fileHash.commitId.getOrNull()!.value : null,
       diff: diffToSave,
     };
   }

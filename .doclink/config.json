@@ -7,15 +7,11 @@
     "**/dist/**",
     "**/build/**",
     "**/.doclink/**",
-    "**/*.log",
-    "coverage",
-    "__tests__",
-    "public",
-    "dist-electron"
+    "**/*.log"
   ],
   "schemaVersion": "1.0",
   "docFolder": {
-    "id": "7cc26e48-68ef-4f01-b80f-a0af124cdda8",
+    "id": "71d496a4-6560-4dba-8e3f-23a539a6278b",
     "path": "docs",
     "signature": {
       "fileCount": 10,

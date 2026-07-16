@@ -10,8 +10,8 @@ export function registerCommitHistoryIpcHandler(): void {
     IpcChannels.TRACKING_GET_COMMIT_HISTORY,
     async (_event, workspaceId: unknown, documentId: string) =>
       handleIpcCall(workspaceId, async (rootPath) => {
-        const { commitRepo } = createTrackingDependencies(rootPath);
-        const handler = new GetCommitHistoryHandler(commitRepo);
+        const { commitRepo, approvalRepo } = createTrackingDependencies(rootPath);
+        const handler = new GetCommitHistoryHandler(commitRepo, approvalRepo);
         const result = await handler.execute(new GetCommitHistoryQuery(documentId));
         return result.fold<IpcResponse<GranularCommitDto[]>>(
           (dtos) => ({ success: true, data: dtos }),

@@ -3,9 +3,8 @@ import { EventBus } from '../../../../src/domains/shared-kernel/events/event-bus
 import { IDomainEventHandler } from '../../../../src/domains/shared-kernel/events/domain-event-handler.interface';
 import { ReviewRequiredEvent } from '../../../../src/domains/tracking/domain/events/review-required';
 import { CommitApprovedEvent } from '../../../../src/domains/tracking/domain/events/commit-approved';
-import { HashRevertedEvent } from '../../../../src/domains/tracking/domain/events/hash-reverted';
+import { ChangesDetectedEvent } from '../../../../src/domains/tracking/domain/events/changes-detected';
 import { IpcChannels } from '../../channels';
-import { getCurrentWorkspaceRoot } from './workspace-context';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -31,9 +30,10 @@ class CommitApprovedPushHandler implements IDomainEventHandler<CommitApprovedEve
   }
 }
 
-class HashRevertedPushHandler implements IDomainEventHandler<HashRevertedEvent> {
-  async handle(event: HashRevertedEvent): Promise<void> {
+class ChangesDetectedPushHandler implements IDomainEventHandler<ChangesDetectedEvent> {
+  async handle(_event: ChangesDetectedEvent): Promise<void> {
     if (!mainWindow || mainWindow.isDestroyed()) return;
+    // Tell renderer to refresh pending counts for all documents
     mainWindow.webContents.send(IpcChannels.TRACKING_PENDING_UPDATED, {});
   }
 }
@@ -42,5 +42,5 @@ export function registerTrackingEventSubscribers(): void {
   const eventBus = EventBus.getInstance();
   eventBus.register('ReviewRequiredEvent', new ReviewRequiredPushHandler());
   eventBus.register('CommitApprovedEvent', new CommitApprovedPushHandler());
-  eventBus.register('HashRevertedEvent', new HashRevertedPushHandler());
+  eventBus.register('ChangesDetectedEvent', new ChangesDetectedPushHandler());
 }

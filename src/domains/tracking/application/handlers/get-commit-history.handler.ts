@@ -3,28 +3,35 @@ import { Result } from '../../../shared-kernel/types/result';
 import { GetCommitHistoryQuery } from '../queries/get-commit-history.query';
 import { GranularCommitDto } from '../dto/granular-commit.dto';
 import { ICommitRepository } from '../../domain/repository/commit-repository.interface';
+import { IDocumentCommitApprovalRepository } from '../../domain/repository/document-commit-approval-repository.interface';
 import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 
 export class GetCommitHistoryHandler implements IQueryHandler<GetCommitHistoryQuery, GranularCommitDto[]> {
-  constructor(private readonly commitRepo: ICommitRepository) {}
+  constructor(
+    private readonly commitRepo: ICommitRepository,
+    private readonly approvalRepo: IDocumentCommitApprovalRepository
+  ) {}
 
   async execute(query: GetCommitHistoryQuery): Promise<Result<GranularCommitDto[], string>> {
     try {
       const documentId = new DocumentId(query.documentId);
-      const commits = await this.commitRepo.findByDocument(documentId);
+      const approvals = await this.approvalRepo.findByDocument(documentId);
+      const dtos: GranularCommitDto[] = [];
 
-      const approvedCommits = commits
-        .filter((c) => c.status.isApproved)
-        .sort((a, b) => b.committedAt.toISO().localeCompare(a.committedAt.toISO()));
+      for (const approval of approvals) {
+        const commit = await this.commitRepo.findById(approval.commitId);
+        if (commit) {
+          dtos.push({
+            id: commit.id.value,
+            documentId: documentId.value,
+            filePaths: commit.getLinkedFiles().map(p => p.value),
+            committedAt: commit.committedAt.toISO(),
+            status: 'APPROVED' // all approvals are approved
+          });
+        }
+      }
 
-      const dtos: GranularCommitDto[] = approvedCommits.map((c) => ({
-        id: c.id.value,
-        documentId: c.documentId.value,
-        filePaths: c.getLinkedFiles().map((p) => p.value),
-        committedAt: c.committedAt.toISO(),
-        status: c.status.toString(),
-      }));
-
+      dtos.sort((a, b) => b.committedAt.localeCompare(a.committedAt));
       return Result.ok(dtos);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to get commit history';

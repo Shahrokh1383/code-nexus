@@ -3,22 +3,20 @@ import { SchemaMigrator } from '../../../../infrastructure/persistence/migration
 import { ICommitRepository } from '../../domain/repository/commit-repository.interface';
 import { GranularCommit } from '../../domain/entities/granular-commit';
 import { CommitId } from '../../domain/value-objects/commit-id';
-import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
 import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { DateTime } from '../../../shared-kernel/types/date-time';
-import { CommitStatus } from '../../domain/value-objects/commit-status';
 
 interface CommitEntrySchema {
   id: string;
-  documentId: string;
-  fileHashIds: string[];
-  filePaths: string[];
-  hashValues: string[];
+  fileHashes: {
+    id: string;
+    filePath: string;
+    hashValue: string;
+  }[];
   committedAt: string;
-  status: 'PENDING' | 'APPROVED';
 }
 
 interface CommitsIndexSchema {
@@ -27,7 +25,7 @@ interface CommitsIndexSchema {
 }
 
 const COMMITS_INDEX_FILE = 'commits.json';
-const SCHEMA_VERSION = '1.0';
+const SCHEMA_VERSION = '1.1';
 
 export class CommitsJsonRepository implements ICommitRepository {
   private readonly db: JsonDatabase;
@@ -40,24 +38,17 @@ export class CommitsJsonRepository implements ICommitRepository {
 
   async findById(id: CommitId): Promise<GranularCommit | null> {
     const index = await this.readIndex();
-    const entry = index.commits.find((c) => c.id === id.value);
+    const entry = index.commits.find(c => c.id === id.value);
     if (!entry) return null;
     return this.mapToEntity(entry);
   }
 
-  async findByDocument(documentId: DocumentId): Promise<GranularCommit[]> {
-    const index = await this.readIndex();
-    return index.commits
-      .filter((c) => c.documentId === documentId.value)
-      .map((e) => this.mapToEntity(e));
-  }
-
   async save(commit: GranularCommit): Promise<void> {
     const index = await this.readIndex();
-    const entryIndex = index.commits.findIndex((c) => c.id === commit.id.value);
+    const existingIdx = index.commits.findIndex(c => c.id === commit.id.value);
     const entry = this.mapToEntry(commit);
-    if (entryIndex >= 0) {
-      index.commits[entryIndex] = entry;
+    if (existingIdx >= 0) {
+      index.commits[existingIdx] = entry;
     } else {
       index.commits.push(entry);
     }
@@ -66,7 +57,7 @@ export class CommitsJsonRepository implements ICommitRepository {
 
   async findAll(): Promise<GranularCommit[]> {
     const index = await this.readIndex();
-    return index.commits.map((e) => this.mapToEntity(e));
+    return index.commits.map(e => this.mapToEntity(e));
   }
 
   private async readIndex(): Promise<CommitsIndexSchema> {
@@ -87,37 +78,27 @@ export class CommitsJsonRepository implements ICommitRepository {
   }
 
   private mapToEntity(entry: CommitEntrySchema): GranularCommit {
-    const fileHashes = entry.filePaths.map((path, idx) => {
-      const hashId = entry.fileHashIds[idx] ?? '';
-      const hashValue = entry.hashValues[idx] ?? '';
-      return new FileHash(
-        new FileHashId(hashId),
-        new FilePath(path),
-        new HashValue(hashValue),
-        undefined,                 // committedHashValue not available in commit history
-        undefined,                 // committedCommitId not available in commit history
-        DateTime.now(),
-        new CommitId(entry.id)
-      );
-    });
+    const fileHashes = entry.fileHashes.map(fh => new FileHash(
+      new FileHashId(fh.id),
+      new FilePath(fh.filePath),
+      new HashValue(fh.hashValue)
+    ));
     return new GranularCommit(
       new CommitId(entry.id),
-      new DocumentId(entry.documentId),
       fileHashes,
-      DateTime.fromISO(entry.committedAt),
-      entry.status === 'APPROVED' ? CommitStatus.approved() : CommitStatus.pending()
+      DateTime.fromISO(entry.committedAt)
     );
   }
 
   private mapToEntry(commit: GranularCommit): CommitEntrySchema {
     return {
       id: commit.id.value,
-      documentId: commit.documentId.value,
-      fileHashIds: commit.fileHashes.map((h) => h.id.value),
-      filePaths: commit.fileHashes.map((h) => h.filePath.value),
-      hashValues: commit.fileHashes.map((h) => h.hashValue.value),
-      committedAt: commit.committedAt.toISO(),
-      status: commit.status.isApproved ? 'APPROVED' : 'PENDING',
+      fileHashes: commit.fileHashes.map(fh => ({
+        id: fh.id.value,
+        filePath: fh.filePath.value,
+        hashValue: fh.hashValue.value
+      })),
+      committedAt: commit.committedAt.toISO()
     };
   }
 }

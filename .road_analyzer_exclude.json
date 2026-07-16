@@ -34,11 +34,14 @@
     "src\\domains\\filesystem",
     "src\\presentation\\components\\file-tree",
     "src\\presentation\\pages\\FileBrowserPage.tsx",
-    "src\\presentation"
+    "electron\\ipc\\handlers\\linking",
+    "src\\domains",
+    "src\\application",
+    "src\\domains\\linking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-16T16:36:46.846Z",
+  "lastModified": "2026-07-16T17:36:24.966Z",
   "version": 1
 }
