@@ -24,7 +24,6 @@
     "src\\presentation\\styles\\app.css",
     "src\\domains\\shared-kernel",
     "src\\infrastructure",
-    "src\\presentation\\components\\linking",
     "src\\presentation\\hooks\\linking",
     "src\\presentation\\utils",
     "src\\presentation\\pages\\LinkingPage.tsx",
@@ -32,10 +31,7 @@
     "src\\presentation\\components\\documentation",
     "src\\domains\\linking",
     "src\\presentation\\styles\\linking.css",
-    "src\\presentation\\styles\\search-bar.css",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
-    "src\\presentation\\components\\common",
-    "src\\presentation\\styles",
     "src\\domains\\filesystem",
     "src\\presentation\\components\\file-tree",
     "src\\presentation\\pages\\FileBrowserPage.tsx"
@@ -43,6 +39,6 @@
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-16T12:07:51.477Z",
+  "lastModified": "2026-07-16T12:44:03.383Z",
   "version": 1
 }

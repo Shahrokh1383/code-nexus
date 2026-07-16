@@ -1,4 +1,3 @@
-// src/presentation/hooks/useTracking.ts
 import { useCallback } from 'react';
 import { useTrackingStore } from '../stores/tracking.store';
 import { DocumentDto } from '../../domains/documentation/application/dto/document.dto';
@@ -11,12 +10,15 @@ export function useTracking() {
     selectedDiff,
     isLoading,
     error,
+    pendingCountByDocId,
     setSelectedDocument,
     fetchPendingChanges,
     fetchCommitHistory,
     fetchFileDiff,
     approveCommit,
     clearError,
+    fetchAllPendingStatus,
+    startRealtimeListener,
   } = useTrackingStore();
 
   const handleSelectDocument = useCallback(
@@ -36,11 +38,14 @@ export function useTracking() {
     selectedDiff,
     isLoading,
     error,
+    pendingCountByDocId,
     selectDocument: handleSelectDocument,
     approveCommit: handleApproveCommit,
     fetchPendingChanges,
     fetchCommitHistory,
     fetchFileDiff,
     clearError,
+    fetchAllPendingStatus,
+    startRealtimeListener,
   };
 }

@@ -5,7 +5,7 @@ import { JsonDatabase } from '../../src/infrastructure/persistence/json-database
 import { SchemaMigrator } from '../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/database-schema';
 import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects/ignore-pattern';
-import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking-handlers';
+import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking/adapter'; 
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
 import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';

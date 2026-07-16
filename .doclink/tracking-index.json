@@ -2,7 +2,7 @@
   "version": "1.0",
   "hashes": {
     ".gitignore": {
-      "id": "b47083dc-df8e-49c1-9356-7a1b1c3883da",
+      "id": "2932c782-98c0-49cf-b35a-bfbd254f1957",
       "filePath": ".gitignore",
       "hashValue": "c7df2efb86cff9bd6db9f13710010e77110d7f96b7476b6e520c20f1223f8f85",
       "committedHashValue": null,
@@ -12,9 +12,9 @@
       "diff": null
     },
     ".road_analyzer_exclude.json": {
-      "id": "5e864005-57a0-40be-9113-d0e75911abba",
+      "id": "98cc9df1-a716-4ec9-8846-9bd2e157359a",
       "filePath": ".road_analyzer_exclude.json",
-      "hashValue": "47a9978139fe4c4aaa650db69fd8b76a8b19572e22da1d5ef7e5caf4d7153a71",
+      "hashValue": "0a06bf8ba1ae87ff6c8c8971d26d0d625ba1dbd05d34c8c49f19df57060ea495",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -22,7 +22,7 @@
       "diff": null
     },
     "content.txt": {
-      "id": "b039ca30-e7f6-498f-b846-957ca1b89baf",
+      "id": "6c86640d-b5e8-40a6-a985-980d56c5829c",
       "filePath": "content.txt",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedHashValue": null,
@@ -32,7 +32,7 @@
       "diff": null
     },
     "electron-builder.json": {
-      "id": "1eb3fb09-358c-4b89-823e-899f81e42346",
+      "id": "1e19aade-0e45-44c5-92ed-13ec51278d67",
       "filePath": "electron-builder.json",
       "hashValue": "7168ec2d263374cc6a4cc5afa912a22df60bc75cc91ca768f41417b793fd30bd",
       "committedHashValue": null,
@@ -42,7 +42,7 @@
       "diff": null
     },
     "eslint.config.js": {
-      "id": "3efb023d-1aa4-42d3-b924-ab42fceb599b",
+      "id": "9e974a5f-d27e-4127-8e00-3402baeafcae",
       "filePath": "eslint.config.js",
       "hashValue": "a0974b7c10bbd129ed5de056119390c6898f8a21bd35583b632ac89a30451a24",
       "committedHashValue": null,
@@ -52,9 +52,9 @@
       "diff": null
     },
     "fix.txt": {
-      "id": "033ccf3e-8cd4-44e5-9bbb-64185c6a400f",
+      "id": "507265fb-7716-45be-9b73-86fa0f030cb9",
       "filePath": "fix.txt",
-      "hashValue": "30b86316e1491af033d862d5fff6075bf03551bad4a60cbf4a24db595f6007a9",
+      "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -62,7 +62,7 @@
       "diff": null
     },
     "fix2.txt": {
-      "id": "74fc2765-d987-43f2-9279-22ac94c0590d",
+      "id": "6cc1807a-7a4e-4569-9f6e-73c9a9646767",
       "filePath": "fix2.txt",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedHashValue": null,
@@ -72,7 +72,7 @@
       "diff": null
     },
     "index.html": {
-      "id": "83ce0369-8629-45c1-b0c3-bb0732c4a764",
+      "id": "2afd3298-9812-43df-93c1-0dc5c1c3d880",
       "filePath": "index.html",
       "hashValue": "534b66b67abf7e06df1119f8d23580e51b4ffe0a8d36e39ab9609b3abfc57aa4",
       "committedHashValue": null,
@@ -82,7 +82,7 @@
       "diff": null
     },
     "package-lock.json": {
-      "id": "c0e25c7a-6622-4c78-a9ab-6e92ea1e5886",
+      "id": "044fd44d-12de-4c45-9ac9-46b807f7d867",
       "filePath": "package-lock.json",
       "hashValue": "069a81e4684a125fb04c143e78e088f90d2bf1e7eece9e7c17d97c9ebd29a1ed",
       "committedHashValue": null,
@@ -92,7 +92,7 @@
       "diff": null
     },
     "package.json": {
-      "id": "b48496c5-d8be-42f8-803c-9790b580b8d0",
+      "id": "4a1632d6-f837-4cba-bc04-48c7675b7d00",
       "filePath": "package.json",
       "hashValue": "d0e08a4114f9e12c275b54ff265e0ae9d86a7c5b4d99878991d278fb9ca04a22",
       "committedHashValue": null,
@@ -102,7 +102,7 @@
       "diff": null
     },
     "README.md": {
-      "id": "6fa4ade4-46c9-485a-bad9-cf4656c2a456",
+      "id": "9a28ad75-6846-456f-b90f-905735c67898",
       "filePath": "README.md",
       "hashValue": "090b7a14f433affa5e60c4b8ea5f4c81f155b7a8d65c57494e85a0103e5751e6",
       "committedHashValue": null,
@@ -112,7 +112,7 @@
       "diff": null
     },
     "reminder.md": {
-      "id": "2a26ccee-0dad-448b-aaaa-ca014e6ac665",
+      "id": "84dd1d07-7c01-4fe0-afdd-2e6347dcee4d",
       "filePath": "reminder.md",
       "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "committedHashValue": null,
@@ -122,9 +122,9 @@
       "diff": null
     },
     "roadmap.txt": {
-      "id": "ea4bdcfe-8eff-408c-84db-fdbed8881835",
+      "id": "b1ac5e29-1834-47bf-ab0b-65fae7295347",
       "filePath": "roadmap.txt",
-      "hashValue": "579c84c8c516331da4ad84409ef2d55afdf08854d3a901749dac23b8949ec9e2",
+      "hashValue": "10d3876db4ad6a680e85f7b7a2dfb3e24ec260045b8a183b202e624abb0069d6",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -132,7 +132,7 @@
       "diff": null
     },
     "todo.md": {
-      "id": "8a75f068-0002-48e9-ad27-0f604c6ce3f6",
+      "id": "50301e85-7db0-4a82-badf-9706a4b7fd1f",
       "filePath": "todo.md",
       "hashValue": "67a668c32257634b11223e25cc31fdda55a8c4c8e9a2d55e524f24bbe9fd4a9f",
       "committedHashValue": null,
@@ -142,7 +142,7 @@
       "diff": null
     },
     "tsconfig.electron.json": {
-      "id": "5b56e869-fea6-437d-b531-e9eace7e6a5d",
+      "id": "46a69863-7b63-4a7c-ad3c-8cfdf4a9ebad",
       "filePath": "tsconfig.electron.json",
       "hashValue": "ab76fd45e1f2770205db848c3fb95ad7f07849294f95d5d018bb5d9b67657c77",
       "committedHashValue": null,
@@ -152,7 +152,7 @@
       "diff": null
     },
     "tsconfig.json": {
-      "id": "9535097b-7679-4b8a-9e83-79fe2f8cc715",
+      "id": "9bb5f4bb-fac3-47b8-85ea-b7ddf13e48a9",
       "filePath": "tsconfig.json",
       "hashValue": "14bdbfb84ee90f5619c93c601278a30ca34b0e063ebbe95e26b0d2161ee2ba78",
       "committedHashValue": null,
@@ -162,7 +162,7 @@
       "diff": null
     },
     "tsconfig.test.json": {
-      "id": "6c7896b2-6d77-4c9e-ad53-aabd5c275b92",
+      "id": "f4dc0d09-a39b-4c02-8d74-4c916b8048ac",
       "filePath": "tsconfig.test.json",
       "hashValue": "851ae7786274da504f4aeaa5eff146f25a4a5527af4a11290303ceefc87987d1",
       "committedHashValue": null,
@@ -172,7 +172,7 @@
       "diff": null
     },
     "vite.config.js": {
-      "id": "f54aa9c4-7a22-40f6-8402-34a22c3fc16a",
+      "id": "0967a3d7-1813-4f76-8367-80663bbd0357",
       "filePath": "vite.config.js",
       "hashValue": "369b62429f0a6af8e9e9d387281dee620547b93b8282673cf93561ed774a2db1",
       "committedHashValue": null,
@@ -182,7 +182,7 @@
       "diff": null
     },
     "webpack.config.js": {
-      "id": "ab68a319-8602-4f3b-9f64-bd9124992b53",
+      "id": "b5073900-2f70-430f-a2a2-206f1345a6a3",
       "filePath": "webpack.config.js",
       "hashValue": "e53bd877b6b7460d401f409107279be512b028783a4f5ce5e42c60eab022b856",
       "committedHashValue": null,
@@ -192,9 +192,9 @@
       "diff": null
     },
     "electron/main.ts": {
-      "id": "4cbed5ac-0c9a-49fb-ad98-09b4f8214802",
+      "id": "1b0cada5-6a78-4a04-980f-5ae317778e64",
       "filePath": "electron/main.ts",
-      "hashValue": "8d7a711b9fd3c602eaa0ddb38e71f498782721c33621f66f9abd7e34978843d2",
+      "hashValue": "c9da61c8018055469409ab82805f99e5c5d518df41e0377537426ee3be482744",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -202,7 +202,7 @@
       "diff": null
     },
     "electron/preload.ts": {
-      "id": "fdcd0e41-0e54-4993-8991-b8a05339a00e",
+      "id": "e10300bc-14b6-4772-a2bc-cc4822bf4534",
       "filePath": "electron/preload.ts",
       "hashValue": "8014770a0bf3fc16d00793450a20e29d83e7b0969b9de87ec1010057d1428cd7",
       "committedHashValue": null,
@@ -212,7 +212,7 @@
       "diff": null
     },
     "src/App.tsx": {
-      "id": "6d0dbb64-4e0a-4d05-afde-96856d0ea93f",
+      "id": "8858ead9-752d-4106-affe-7bad6d1b9420",
       "filePath": "src/App.tsx",
       "hashValue": "6584dd7a1ec7736519230ab6af9235b1e78087ef51da90656d61964626400d91",
       "committedHashValue": null,
@@ -222,7 +222,7 @@
       "diff": null
     },
     "src/main.tsx": {
-      "id": "a7758d9b-a8dd-4ed6-b5e5-717c908d4fcc",
+      "id": "c701b4b2-b2cf-4efe-b245-acbef6303b99",
       "filePath": "src/main.tsx",
       "hashValue": "d174408b13c8fca862208847caa4876473039cff2a9b75a0fd69c94b948ebb0e",
       "committedHashValue": null,
@@ -232,7 +232,7 @@
       "diff": null
     },
     "src/setupTests.ts": {
-      "id": "5bdcd843-4185-4934-89e1-459cd3b6fc8b",
+      "id": "bab691dc-3a22-49fe-93c7-018484674b26",
       "filePath": "src/setupTests.ts",
       "hashValue": "9e8d4851d9914f348293992c3c1d910faa7b95f3f19dc92437eeaff37f774abb",
       "committedHashValue": null,
@@ -242,7 +242,7 @@
       "diff": null
     },
     "src/vite-env.d.ts": {
-      "id": "fef0d15d-cf20-407b-9926-fbaac3d085f9",
+      "id": "e51b2096-ce66-488e-acb7-06ce5adc44e3",
       "filePath": "src/vite-env.d.ts",
       "hashValue": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
       "committedHashValue": null,
@@ -252,7 +252,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Architecture_Diagram.png": {
-      "id": "c294faf4-8078-4294-b9b4-cf70bccc6c76",
+      "id": "8c65ab8a-abe7-4935-b834-62830f776e98",
       "filePath": "docs/guideline/CodeNexus_Architecture_Diagram.png",
       "hashValue": "224e12232c705926be4d064ff5d76676694d9cbb324dfeb4bad97c222e5e35ea",
       "committedHashValue": null,
@@ -262,7 +262,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Constitution.md": {
-      "id": "b681e726-b118-47a1-9cbc-aa45a8c41e3e",
+      "id": "b51d1ae5-c3cf-45f1-b64a-d88c308eaf1e",
       "filePath": "docs/guideline/CodeNexus_Constitution.md",
       "hashValue": "09ea99afc34193d9ec63dc3558e959878e583b3b9d525e2c29124f54be7506ee",
       "committedHashValue": null,
@@ -272,7 +272,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_DataFlows.png": {
-      "id": "07b4fd5e-f57b-4845-86f3-2e2ff3e060e6",
+      "id": "27c81aa0-b6df-440d-95b2-5f46050e6fd0",
       "filePath": "docs/guideline/CodeNexus_DataFlows.png",
       "hashValue": "be20e758002c83211af8ad4868d109c035fb6f22e649426ad9fa98c36bad10e4",
       "committedHashValue": null,
@@ -282,7 +282,7 @@
       "diff": null
     },
     "docs/guideline/CodeNexus_Phased_Roadmap.png": {
-      "id": "82d5c7c6-d64a-4133-9393-768033656296",
+      "id": "15876d7c-1e6b-4ede-8537-398f51616863",
       "filePath": "docs/guideline/CodeNexus_Phased_Roadmap.png",
       "hashValue": "7ccc7d3fe2a4f760cb63921d5c70f9a9bedaf7921f47966a36e26e5ad96abe31",
       "committedHashValue": null,
@@ -292,7 +292,7 @@
       "diff": null
     },
     "docs/guideline/howtotest.md": {
-      "id": "97ff3e84-5f2d-4c35-a4ea-775c65a6c111",
+      "id": "2cda42cf-cb77-482c-877f-0bff1abda0aa",
       "filePath": "docs/guideline/howtotest.md",
       "hashValue": "0e5e4889a3c0e9d8815ebeefb147e8d89ab5bb677a2a79df0de551fc97b85814",
       "committedHashValue": null,
@@ -302,7 +302,7 @@
       "diff": null
     },
     "docs/strategy/CodeNexus_Implementation_Roadmap.md": {
-      "id": "b256a905-a8ac-4001-93ec-cff24ffa7d9c",
+      "id": "bb1e95c2-6b67-4834-afe5-27b472a4cde9",
       "filePath": "docs/strategy/CodeNexus_Implementation_Roadmap.md",
       "hashValue": "afebd08731f7057073a50325529426e3d91aa98434cbf4dfd233dbf7a5c9c842",
       "committedHashValue": null,
@@ -312,7 +312,7 @@
       "diff": null
     },
     "docs/strategy/idea.md": {
-      "id": "66da952b-ccfc-46f5-9a5d-3af781e43177",
+      "id": "717e0232-432b-4792-a4b5-29a684a55130",
       "filePath": "docs/strategy/idea.md",
       "hashValue": "652a77f17058f95c90d97f5192b9b3d302692cbcdc463e559a8cf1050364416b",
       "committedHashValue": null,
@@ -322,7 +322,7 @@
       "diff": null
     },
     "docs/strategy/Summary.md": {
-      "id": "34c3ef13-3d07-4a76-acc0-1c6c75b121c4",
+      "id": "5db89cfe-8366-4493-8525-26c59758fe97",
       "filePath": "docs/strategy/Summary.md",
       "hashValue": "d573ef1107d7c01d787972707ca7c5272d358ce304a3c85248d083c93b6bdaa4",
       "committedHashValue": null,
@@ -332,9 +332,9 @@
       "diff": null
     },
     "electron/bootstrap/watcher-lifecycle.ts": {
-      "id": "1f0dae22-89c7-4cda-a5de-78598fb6ffe6",
+      "id": "3a473ceb-b848-49b9-8c1a-c6bf80ebf0c4",
       "filePath": "electron/bootstrap/watcher-lifecycle.ts",
-      "hashValue": "4277af242e100188a256efd593377b7ff4f1b3ff78be1bcc1a72c210e4e7aa83",
+      "hashValue": "10e27b7af997277155faeea7e3440f008f374575a74f133c396b657738d37859",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -342,7 +342,7 @@
       "diff": null
     },
     "electron/infrastructure/recent-workspaces.adapter.ts": {
-      "id": "401ef9b7-a167-4e7e-afb3-f04e06bce06e",
+      "id": "fdd8e4a6-d372-4d8b-8992-5831ff8c1afd",
       "filePath": "electron/infrastructure/recent-workspaces.adapter.ts",
       "hashValue": "9028277fdb5eb1ac77cd26dddb3e5c9699069ecdb2c08f6b3ab73909e236823f",
       "committedHashValue": null,
@@ -352,9 +352,9 @@
       "diff": null
     },
     "electron/ipc/channels.ts": {
-      "id": "a5e2d737-b3d4-44f0-83c2-a752ecdeb2f7",
+      "id": "afb6b4fc-c610-4a9f-9a0b-14a45d99c90f",
       "filePath": "electron/ipc/channels.ts",
-      "hashValue": "fc5ef7569860c954ad175a9f48d4bb49e241267871f8234863f4cfdca28fedf4",
+      "hashValue": "8b6d8b0bd1f28dd4a2464bc40b48ee41959272958ff3fbb59ce7c0d418b04474",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -362,9 +362,9 @@
       "diff": null
     },
     "electron/ipc/handlers.ts": {
-      "id": "7d1af647-4ba9-4a5d-a97a-4dca8c169ccc",
+      "id": "af524647-c530-4638-b355-aa21debea99b",
       "filePath": "electron/ipc/handlers.ts",
-      "hashValue": "931f5dd0b9ed20ad60e77eb686602276329d1849074fa1dcc7942af205b31081",
+      "hashValue": "dcf0d879a2b17e7f9eca3059e50286ccf8b498785d0e2a453fd9ac3194f5ab10",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -372,7 +372,7 @@
       "diff": null
     },
     "electron/ipc/types.ts": {
-      "id": "3d8a6815-d135-4e92-8343-a089ea56f86e",
+      "id": "6eb5ccd3-8454-46e3-90cb-6086286a7fe2",
       "filePath": "electron/ipc/types.ts",
       "hashValue": "da6413046cb6b009a673d77ff627a0c9d428f79b62415099e84480ff691354f3",
       "committedHashValue": null,
@@ -382,7 +382,7 @@
       "diff": null
     },
     "electron/windows/main-window.ts": {
-      "id": "f28333fa-7eeb-4a0d-b547-840313e12bfa",
+      "id": "dd444a2c-ccf6-471b-8f30-ebea2ef00810",
       "filePath": "electron/windows/main-window.ts",
       "hashValue": "344e05a6edb2111403971cc3b0e7ca135fff4533bc61fd06a7291b30651977c0",
       "committedHashValue": null,
@@ -392,7 +392,7 @@
       "diff": null
     },
     "src/types/electron-api.d.ts": {
-      "id": "9fe32ef6-0ee6-4a6a-8c6f-f14df06006a9",
+      "id": "f5709d50-cb73-4c12-b8b4-a83851f11c25",
       "filePath": "src/types/electron-api.d.ts",
       "hashValue": "770ed79de3e7ff343e2674d0112b6048110fb2c017d899f7c7f62ce62d402163",
       "committedHashValue": null,
@@ -402,7 +402,7 @@
       "diff": null
     },
     "electron/ipc/handlers/documentation-handlers.ts": {
-      "id": "d1bffb27-9d51-4b10-aae0-e514fbf8a4d9",
+      "id": "f57e9d07-d401-43e6-9b52-939101663e56",
       "filePath": "electron/ipc/handlers/documentation-handlers.ts",
       "hashValue": "d4fdf672e49c1a8d78d629c6a04cc8044ebca08424ea9c4f417ef452e3cf42bd",
       "committedHashValue": null,
@@ -412,7 +412,7 @@
       "diff": null
     },
     "electron/ipc/handlers/filesystem-handlers.ts": {
-      "id": "1030e569-ae09-4152-a04f-d706860ebfeb",
+      "id": "d6371d95-cd4b-4c96-9bac-f315df657a5f",
       "filePath": "electron/ipc/handlers/filesystem-handlers.ts",
       "hashValue": "e6757c7857cc3138a5cc7970ab0f287ce55b7830739b4862e3e762d3cf3f2aee",
       "committedHashValue": null,
@@ -422,7 +422,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking-handlers.ts": {
-      "id": "cb235d43-79b9-4567-befc-1c72ce7c7ef6",
+      "id": "31d46fc8-2fe6-4876-8c8b-00cb088a5efe",
       "filePath": "electron/ipc/handlers/linking-handlers.ts",
       "hashValue": "e907320708c14f4974fe3479d5cb14eadd6a6e0a639430766e1d2f98ec074e64",
       "committedHashValue": null,
@@ -432,7 +432,7 @@
       "diff": null
     },
     "electron/ipc/handlers/project-handlers.ts": {
-      "id": "6580f2cc-7861-4a5c-83bc-88d494574afa",
+      "id": "f34e2a2f-531b-405f-b647-b32991f88fff",
       "filePath": "electron/ipc/handlers/project-handlers.ts",
       "hashValue": "435823ddae212eaf7004389f027811a9f7674b2a223244e9aac558b7160fc0c5",
       "committedHashValue": null,
@@ -442,9 +442,9 @@
       "diff": null
     },
     "electron/ipc/handlers/tracking-handlers.ts": {
-      "id": "fccd5eaa-8424-43b5-a2b7-2faed906f21b",
+      "id": "621b2118-f2fd-45f1-9754-8fefae0750cb",
       "filePath": "electron/ipc/handlers/tracking-handlers.ts",
-      "hashValue": "edfc10b6cb9d21805a8361e57589e07439350f75f51e45cde660bb7416bad04d",
+      "hashValue": "b61132b305e716d0d378731cd424a228b6d60c2da730136fa0067d9fc085335f",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -452,7 +452,7 @@
       "diff": null
     },
     "src/application/sagas/document-split.saga.ts": {
-      "id": "7deeba84-16b1-44f4-9049-b6bd2201cbdd",
+      "id": "8d1d77f1-f697-4ebb-a4fb-8ab15f8d763f",
       "filePath": "src/application/sagas/document-split.saga.ts",
       "hashValue": "6cc53a0824a849db5967e3fe38b66670472664576b2acebd5cdd1c728518a25b",
       "committedHashValue": null,
@@ -462,7 +462,7 @@
       "diff": null
     },
     "src/application/sagas/file-change-reaction.saga.ts": {
-      "id": "55112178-0379-4c9f-87fd-3a5e76c471f5",
+      "id": "2a685dac-fe6f-44f9-acba-cb1f63de8a84",
       "filePath": "src/application/sagas/file-change-reaction.saga.ts",
       "hashValue": "9069dcbb0656cec5f39a788f1a24d64b379f6b789d11ffa8e5a0e386ed08aea7",
       "committedHashValue": null,
@@ -472,7 +472,7 @@
       "diff": null
     },
     "src/application/services/background-watcher.service.ts": {
-      "id": "15bb4c81-c83d-4794-bf4e-276c0057adf8",
+      "id": "ff26f8e7-3b79-44ff-83ce-07b2f19246e0",
       "filePath": "src/application/services/background-watcher.service.ts",
       "hashValue": "9f5876cbaa927fe0a6ea7798a92a4076556dd3822cfa501c15ae98d58df1c518",
       "committedHashValue": null,
@@ -482,7 +482,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/database-schema.ts": {
-      "id": "3661f3da-78fa-4627-a009-0e5166e88781",
+      "id": "da83e1fa-5493-4008-baba-19034f3eb238",
       "filePath": "src/infrastructure/persistence/database-schema.ts",
       "hashValue": "2fb9b5e56566e718703e991df83f4d11b86323c2b2456e45a9a2d78802b9dcf1",
       "committedHashValue": null,
@@ -492,7 +492,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/json-database.ts": {
-      "id": "b0757634-ce1b-4ea3-b203-0d6f642810fe",
+      "id": "f68adfe6-4176-4806-b254-269fabf0eb69",
       "filePath": "src/infrastructure/persistence/json-database.ts",
       "hashValue": "80e104887ef08fd09fb5ff42867e7cf67d37566d89a4dc0a3f3f311191fd7764",
       "committedHashValue": null,
@@ -502,7 +502,7 @@
       "diff": null
     },
     "src/presentation/hooks/useDocuments.ts": {
-      "id": "c6a9521d-c44c-4eb1-bfae-4bf2ad86a95c",
+      "id": "d0194a8e-6cbf-4b05-9aa4-fd108f3477b8",
       "filePath": "src/presentation/hooks/useDocuments.ts",
       "hashValue": "0b388eabc8060f7c2938a6f1918fc2b7b85e6b559e3c14575a2bf89d37ca8af6",
       "committedHashValue": null,
@@ -512,7 +512,7 @@
       "diff": null
     },
     "src/presentation/hooks/useFileTree.ts": {
-      "id": "22ec4283-c520-4816-b12a-0a218462a04b",
+      "id": "b97caf8f-2a7c-4cbc-ae22-fe9a69375533",
       "filePath": "src/presentation/hooks/useFileTree.ts",
       "hashValue": "0ee9b524703490f23fb3d390eedd7dfbf63899ade4fbac69a4f118a713e6e151",
       "committedHashValue": null,
@@ -522,7 +522,7 @@
       "diff": null
     },
     "src/presentation/hooks/useIgnorePatterns.ts": {
-      "id": "bb27255f-ec57-48c0-b66b-cc36b6613854",
+      "id": "ae03af60-9474-4b02-a2bf-644e4d1a2141",
       "filePath": "src/presentation/hooks/useIgnorePatterns.ts",
       "hashValue": "6cd9a57a73849b2184a613372924ba7e4e0a61bca84e6e50bee85fe7fe03257a",
       "committedHashValue": null,
@@ -532,7 +532,7 @@
       "diff": null
     },
     "src/presentation/hooks/useIpc.ts": {
-      "id": "984336ad-a584-4cc9-8979-be37067912a9",
+      "id": "3fcd4774-071c-47d3-ae13-fafb9ec38820",
       "filePath": "src/presentation/hooks/useIpc.ts",
       "hashValue": "d562d36f84eaf7edc2dd75c13609dd85688dbb1fad1a687e1973d38ac457254a",
       "committedHashValue": null,
@@ -542,7 +542,7 @@
       "diff": null
     },
     "src/presentation/hooks/useRecentWorkspaces.ts": {
-      "id": "f43994e5-d099-40e6-9231-bef9e78cc9d6",
+      "id": "7156fd43-914e-459e-936e-4b04e89b1ad2",
       "filePath": "src/presentation/hooks/useRecentWorkspaces.ts",
       "hashValue": "7aebbf7831f6ba6d031926e90f33d3026b35e40d026af8bcac72bfe8aaea2750",
       "committedHashValue": null,
@@ -552,7 +552,7 @@
       "diff": null
     },
     "src/presentation/hooks/useTheme.ts": {
-      "id": "6475d958-2cb4-4d38-b889-10361736fd2c",
+      "id": "db85267c-30c3-414a-8def-7d37d0d3ac6c",
       "filePath": "src/presentation/hooks/useTheme.ts",
       "hashValue": "9310e6d56724e0b893f1242cc4f2c3fed8e769f277b8a542ff010acaf703aa0b",
       "committedHashValue": null,
@@ -562,9 +562,9 @@
       "diff": null
     },
     "src/presentation/hooks/useTracking.ts": {
-      "id": "709cc889-f692-4bea-be7a-99307ca4dfd7",
+      "id": "1fc20fe4-02b0-45bc-b9fd-659458c1ba9b",
       "filePath": "src/presentation/hooks/useTracking.ts",
-      "hashValue": "60450a2b4f5765f336a833053e2d4d70174f77569731fe3f8fd421877b3f1a6c",
+      "hashValue": "b90ea1e8a446a5825d4515cb14b2d5635c53da32535cc167480f8a421eb01f9a",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -572,7 +572,7 @@
       "diff": null
     },
     "src/presentation/hooks/useWorkspace.ts": {
-      "id": "f6551f35-17d5-4ea8-abb3-0e46dbb5da80",
+      "id": "469159b0-8d2b-49b4-9724-2586fc653e42",
       "filePath": "src/presentation/hooks/useWorkspace.ts",
       "hashValue": "286d5259824d8ac92b04e169de446167ebb19ec63729b2e128f709127cf0fd9e",
       "committedHashValue": null,
@@ -582,7 +582,7 @@
       "diff": null
     },
     "src/presentation/pages/DocumentManagerPage.tsx": {
-      "id": "e51e8294-a20b-448f-bb53-6caadb85f00c",
+      "id": "4b02dbf7-900d-4469-b8b4-25ccca7309a7",
       "filePath": "src/presentation/pages/DocumentManagerPage.tsx",
       "hashValue": "71c17e01818577ba9684738e999ef913b73a04c13f4e989273cbff82056da062",
       "committedHashValue": null,
@@ -592,7 +592,7 @@
       "diff": null
     },
     "src/presentation/pages/FileBrowserPage.tsx": {
-      "id": "f0619719-a1ac-4b8c-9a1c-9ff2312dd1d1",
+      "id": "71ac4f69-2a11-4750-8ce6-1da7c3dca8ea",
       "filePath": "src/presentation/pages/FileBrowserPage.tsx",
       "hashValue": "219ef932632b1fd54c835b3cd44a9c969a836853abb19bdabf219ddae683b8c1",
       "committedHashValue": null,
@@ -602,7 +602,7 @@
       "diff": null
     },
     "src/presentation/pages/LinkingPage.tsx": {
-      "id": "6915a961-37b0-4c93-91b0-8439a1323a75",
+      "id": "573f8ad7-d83a-4b5e-a270-8dc888f9e3ef",
       "filePath": "src/presentation/pages/LinkingPage.tsx",
       "hashValue": "690bc16a5275d3271b3d97df9403bfe30c1e3aa8fd99fdb0a0c4af559124a585",
       "committedHashValue": null,
@@ -612,9 +612,9 @@
       "diff": null
     },
     "src/presentation/pages/TrackingPage.tsx": {
-      "id": "6c4cfd5c-7aa2-4fd0-9347-2fc386cbdb7c",
+      "id": "07d5a20f-ea98-4586-b267-60f4eb6c3832",
       "filePath": "src/presentation/pages/TrackingPage.tsx",
-      "hashValue": "1514f992c41617440af7bc8415e44cb59d91a8eee0d8105cca897d90a3b45dc1",
+      "hashValue": "9bca5b113be7fd56fbd53435632b8822380798b3ff48224a2fa48cba8af26a20",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -622,7 +622,7 @@
       "diff": null
     },
     "src/presentation/pages/WelcomePage.tsx": {
-      "id": "6f079ef9-3ef4-47a2-a8fd-7f8f406648b7",
+      "id": "7b9a00c7-390c-4d77-99c7-38004bfae4f2",
       "filePath": "src/presentation/pages/WelcomePage.tsx",
       "hashValue": "1827f68500da6d540bfe56d848ad1c8995e88984c305c4bed23aad034c430001",
       "committedHashValue": null,
@@ -632,7 +632,7 @@
       "diff": null
     },
     "src/presentation/stores/documentation.store.ts": {
-      "id": "226e8166-03ae-4ae2-aa96-c1884bc9564c",
+      "id": "5bd91e22-f06d-4de1-b24b-960e0e37ceee",
       "filePath": "src/presentation/stores/documentation.store.ts",
       "hashValue": "b80362a9d74a967059b8c62256d6454f5641bc412b407194811cb161de174a5d",
       "committedHashValue": null,
@@ -642,7 +642,7 @@
       "diff": null
     },
     "src/presentation/stores/filesystem.store.ts": {
-      "id": "0360310b-d16d-42c1-be83-035c180f0a9d",
+      "id": "e3738302-f040-48d7-8e1d-319ac649ec22",
       "filePath": "src/presentation/stores/filesystem.store.ts",
       "hashValue": "90ce4936fd4f3d7a7f36fbf36888d67b31a9acfff4a5d94ed183ba25ab7a10ea",
       "committedHashValue": null,
@@ -652,7 +652,7 @@
       "diff": null
     },
     "src/presentation/stores/linking.store.ts": {
-      "id": "446facfa-9900-48bb-8d7c-d48474fdfd90",
+      "id": "262c42c0-7d08-44f8-b8a2-6de27ca7884b",
       "filePath": "src/presentation/stores/linking.store.ts",
       "hashValue": "d23fc89f99f61ae6cb81344b2de460508a6ebaf7b9f876715259f2a8fbb3d23e",
       "committedHashValue": null,
@@ -662,9 +662,9 @@
       "diff": null
     },
     "src/presentation/stores/tracking.store.ts": {
-      "id": "8671aa74-1f03-439c-bdea-73950a1b921b",
+      "id": "b1e4bf6c-a1c4-495f-8287-9b952c85062b",
       "filePath": "src/presentation/stores/tracking.store.ts",
-      "hashValue": "fed74e20f60a0266e50e62d6c8b96806ff0453f1cf2f9925ec20a98a92e957b8",
+      "hashValue": "2de7299b11cbe94347ab1ecd4ffb8d930d6aaa60214fdf9910faa1d30ff0db96",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -672,7 +672,7 @@
       "diff": null
     },
     "src/presentation/stores/workspace.store.ts": {
-      "id": "567d5dcb-a361-4d23-b67c-4deec05072d2",
+      "id": "f95e27c5-acbd-483e-930d-ca6724e3e901",
       "filePath": "src/presentation/stores/workspace.store.ts",
       "hashValue": "e8085a78a6406b8eb746b30ee316b965d2a1147d26bd9019ab564308c50486cc",
       "committedHashValue": null,
@@ -682,7 +682,7 @@
       "diff": null
     },
     "src/presentation/styles/app.css": {
-      "id": "c7f62305-808d-4a68-9fbf-ef977d3bbd18",
+      "id": "c076d95f-1d77-4d61-a7af-241aa4a48b68",
       "filePath": "src/presentation/styles/app.css",
       "hashValue": "2e123446e56b8689b26a0d4bd0b6d4e6cbc0a234f43c6c34b56fd16dd823cb2a",
       "committedHashValue": null,
@@ -692,7 +692,7 @@
       "diff": null
     },
     "src/presentation/styles/documentation.css": {
-      "id": "eb0a2661-39a9-4863-a37e-339176509f07",
+      "id": "81c6c64c-33e4-453d-b4b6-d64c47c10cdd",
       "filePath": "src/presentation/styles/documentation.css",
       "hashValue": "a3b3bc0380d5acf3beba470c6a1e4cdd62cad022e9aa972699d203451a19aa15",
       "committedHashValue": null,
@@ -702,7 +702,7 @@
       "diff": null
     },
     "src/presentation/styles/file-browser.css": {
-      "id": "2ff6b5a5-4215-4e8f-b39e-697651022b63",
+      "id": "1657b3f4-2138-4a19-98a8-54e38258711d",
       "filePath": "src/presentation/styles/file-browser.css",
       "hashValue": "32392f0ea8657f04229c981f686e58558984337ddce4b6932c3facd9b5dfef76",
       "committedHashValue": null,
@@ -712,17 +712,17 @@
       "diff": null
     },
     "src/presentation/styles/linking.css": {
-      "id": "487bc66b-7917-47bf-9126-8f5bd174927c",
+      "id": "e24666f1-3f16-4553-94fe-d247c6da9ab9",
       "filePath": "src/presentation/styles/linking.css",
       "hashValue": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2",
       "committedHashValue": "01baef6bacf91a820f6ecc351af34a552ad5f5a8525a24f2107d7d1d7982bce2",
-      "committedCommitId": "5e4e920d-c915-47c9-b1f0-f469594219c1",
-      "committedAt": "2026-07-16T12:35:28.001Z",
-      "commitId": "5e4e920d-c915-47c9-b1f0-f469594219c1",
+      "committedCommitId": "159dc57d-7d7d-4cfd-8a06-56bf36bbbb84",
+      "committedAt": "2026-07-16T13:44:22.845Z",
+      "commitId": "159dc57d-7d7d-4cfd-8a06-56bf36bbbb84",
       "diff": null
     },
     "src/presentation/styles/recent-workspaces.css": {
-      "id": "4740b0bf-537d-48c2-b756-e3eadda569c1",
+      "id": "35655a1e-ad95-4d88-8a50-1aa048ab9f72",
       "filePath": "src/presentation/styles/recent-workspaces.css",
       "hashValue": "f288dd1b32d629a5bfdfd00182422a61e0681a5c175c00a3a27076ebc0ee4f0a",
       "committedHashValue": null,
@@ -732,7 +732,7 @@
       "diff": null
     },
     "src/presentation/styles/search-bar.css": {
-      "id": "32b77751-e814-4d30-a88a-ca89b6ec74cb",
+      "id": "ad3c494c-e20e-4a39-9066-50b243c7d7f5",
       "filePath": "src/presentation/styles/search-bar.css",
       "hashValue": "67a0156f6b9cb0b475641c8929de22fdda3f6ca47ff76c0460638ae429ab75f3",
       "committedHashValue": null,
@@ -742,7 +742,7 @@
       "diff": null
     },
     "src/presentation/styles/tracking.css": {
-      "id": "8b3896aa-646f-4ba7-9c5c-a038f94f2e59",
+      "id": "adfcda38-c43f-456a-9d93-ba17c2f4235b",
       "filePath": "src/presentation/styles/tracking.css",
       "hashValue": "352af32ad8a8adeed99df964e75c5fee4027f091de3cabdb7cf4ae14cebb45e0",
       "committedHashValue": null,
@@ -752,7 +752,7 @@
       "diff": null
     },
     "src/presentation/styles/welcome-page.css": {
-      "id": "17ead9c8-e450-49cb-a7ad-f904ceb45e91",
+      "id": "39bf4c2a-19a0-4f19-a1fd-6b2c54543a4b",
       "filePath": "src/presentation/styles/welcome-page.css",
       "hashValue": "7c377aa3b5f13e70092c2f64a1c5c57f67c7fbe09fcbdbf3e03c11a51a492eda",
       "committedHashValue": null,
@@ -762,7 +762,7 @@
       "diff": null
     },
     "src/presentation/utils/ipc-invoke.ts": {
-      "id": "738108dd-1111-4b5a-acae-ec72d7073693",
+      "id": "586e117f-1cfa-4215-a7e2-982c1a017ccf",
       "filePath": "src/presentation/utils/ipc-invoke.ts",
       "hashValue": "8b7a8b7442eebc8ecd578d4177e5b7273c09b7e7c3534a4346edba8265c37642",
       "committedHashValue": null,
@@ -772,7 +772,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/adapter.ts": {
-      "id": "82cec100-517a-457d-a012-5b3a2407f0d1",
+      "id": "a7e97f96-212b-4f50-b66b-71e889bfb6b5",
       "filePath": "electron/ipc/handlers/linking/adapter.ts",
       "hashValue": "8cca28d99e7346e0824d3a1fdb57a6635afeed5b040d2e382f4bfcb5828e7bd2",
       "committedHashValue": null,
@@ -782,7 +782,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/code-link-ipc.ts": {
-      "id": "73a71719-8834-4272-abec-3a92a27825c0",
+      "id": "9389fbe4-89f1-46e0-bad8-416e5fba8851",
       "filePath": "electron/ipc/handlers/linking/code-link-ipc.ts",
       "hashValue": "1c651c01f107355d03e4f76c76e6fe71da75e51ea128067c5db1e5252668fabd",
       "committedHashValue": null,
@@ -792,7 +792,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/dependencies.ts": {
-      "id": "38ae2903-032e-4692-b834-da734e1d6e99",
+      "id": "22d9afff-f7a7-4038-8ff9-d871a60434b8",
       "filePath": "electron/ipc/handlers/linking/dependencies.ts",
       "hashValue": "92ced1ed6136198a6b25efd0833f9546c2390a62dac3f6b1a503402c6d92face",
       "committedHashValue": null,
@@ -802,7 +802,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/document-link-ipc.ts": {
-      "id": "625be624-46a0-4a0e-a86d-d9885697a65c",
+      "id": "4fa52d45-1514-434c-b63a-c67259379b3d",
       "filePath": "electron/ipc/handlers/linking/document-link-ipc.ts",
       "hashValue": "d09ca403fdb5ae6df41f4461e8a67a743bea1c8640240ee48f769bfab0aac3eb",
       "committedHashValue": null,
@@ -812,7 +812,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/event-subscribers.ts": {
-      "id": "b0d37cb2-8bb0-455f-9cfc-0dd784926555",
+      "id": "17506ce6-c14f-4c6d-89b8-d6784928804b",
       "filePath": "electron/ipc/handlers/linking/event-subscribers.ts",
       "hashValue": "96ab1044b3d162598fbd47cad9f6c05d4878f9bdfb5e4e5658768d958c930401",
       "committedHashValue": null,
@@ -822,7 +822,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/index.ts": {
-      "id": "0a83fb7c-c714-4c20-b92c-f5b7808d3eb1",
+      "id": "ce92c8e6-24b7-43b7-a948-27e623e2227c",
       "filePath": "electron/ipc/handlers/linking/index.ts",
       "hashValue": "02edd7cbc7282be53694e311a9695ef317f141a47ea28365899e38e661f7bce8",
       "committedHashValue": null,
@@ -832,7 +832,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/migration-ipc.ts": {
-      "id": "a3fc1772-d0e2-4203-9c73-21bb333ff5c1",
+      "id": "1a1e1ca4-dce4-46e9-8876-b4f5809a24d6",
       "filePath": "electron/ipc/handlers/linking/migration-ipc.ts",
       "hashValue": "fe8fd19804a527e8f28491619aeda636263781aebd792f48cc2a786aee080df4",
       "committedHashValue": null,
@@ -842,7 +842,7 @@
       "diff": null
     },
     "electron/ipc/handlers/linking/workspace-context.ts": {
-      "id": "643204b7-bb7d-4647-9aad-8ba0e0f057b5",
+      "id": "d83be2e3-2b92-4638-bbba-003fbb59abb1",
       "filePath": "electron/ipc/handlers/linking/workspace-context.ts",
       "hashValue": "c7aea672eb02ec531cc9fa2c35f65d76356306c8e7fe9b3d4b3ae1d11610feef",
       "committedHashValue": null,
@@ -851,8 +851,108 @@
       "commitId": null,
       "diff": null
     },
+    "electron/ipc/handlers/tracking/adapter.ts": {
+      "id": "588387f5-1f4b-4910-b60f-e3a80ef17fd7",
+      "filePath": "electron/ipc/handlers/tracking/adapter.ts",
+      "hashValue": "8b1b5382ab7e39b87fc0155d7bd0fb060a9d4b8391fc03db37df6db69467fe0e",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/approve-commit.ipc.ts": {
+      "id": "896ca33e-e486-48ec-aca2-ecfc82fc8396",
+      "filePath": "electron/ipc/handlers/tracking/approve-commit.ipc.ts",
+      "hashValue": "e8f1f328fd9ba76b9d8a8137aba50a78ec102aaea922e78df1ebd1e450facecb",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/commit-history.ipc.ts": {
+      "id": "e6821a8b-8b0b-4c6c-89a2-26c0ac85c7b6",
+      "filePath": "electron/ipc/handlers/tracking/commit-history.ipc.ts",
+      "hashValue": "3ccd07c8b7b8e9554d9fa8541bbcee3d3507aceaa11c84447f528640a1744d5c",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/dependencies.ts": {
+      "id": "891837d0-6e81-4963-844a-39ce2e878634",
+      "filePath": "electron/ipc/handlers/tracking/dependencies.ts",
+      "hashValue": "7aaafab8cb2e137f8daa6dd936bd94e65eeda9619a3bce6a237245acc11ba9fc",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/detect-changes.ipc.ts": {
+      "id": "0f6c202a-57fe-41ce-8aa5-391c15f52d09",
+      "filePath": "electron/ipc/handlers/tracking/detect-changes.ipc.ts",
+      "hashValue": "72b7ec68305b380af1593810d45d2ac7bbd8b853d94efc4da352f7dd15fa2c7f",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/file-diff.ipc.ts": {
+      "id": "0c23deb0-2c24-4ccf-b7d2-383c06211646",
+      "filePath": "electron/ipc/handlers/tracking/file-diff.ipc.ts",
+      "hashValue": "e666fe0df90ff39eac4c2f7495865a0ac300cb950427db05192dec74ae1936e9",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/index.ts": {
+      "id": "b4d10766-bf0f-4b10-aede-f16d48b0571b",
+      "filePath": "electron/ipc/handlers/tracking/index.ts",
+      "hashValue": "d6e11d273d478c3136bd4b32af1bfa8a9b99bb7a332640e5ff2a0d540904bea8",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/pending-changes.ipc.ts": {
+      "id": "2f82e6d8-4888-4316-b3dc-86c97132b72d",
+      "filePath": "electron/ipc/handlers/tracking/pending-changes.ipc.ts",
+      "hashValue": "d69dbf4114fd4a0a76716c25a233622e5dabb39dc8aa02902aed6c6d20d6399d",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/tracking-event-subscribers.ts": {
+      "id": "8428f539-4292-4fdf-87f1-7b67c67124a6",
+      "filePath": "electron/ipc/handlers/tracking/tracking-event-subscribers.ts",
+      "hashValue": "9f57221ddfbe99c6aaf8716c308eff1b566457f30965fd7299f77b8bfb38085f",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
+    "electron/ipc/handlers/tracking/workspace-context.ts": {
+      "id": "60bd5177-3f58-4193-9537-969a8df6d9d7",
+      "filePath": "electron/ipc/handlers/tracking/workspace-context.ts",
+      "hashValue": "c7aea672eb02ec531cc9fa2c35f65d76356306c8e7fe9b3d4b3ae1d11610feef",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
     "src/domains/shared-kernel/application/command-handler.interface.ts": {
-      "id": "f2cb7d1c-527e-422c-bd72-ec2821161924",
+      "id": "7abdaba9-db23-4102-959a-c99bb8c88b01",
       "filePath": "src/domains/shared-kernel/application/command-handler.interface.ts",
       "hashValue": "fecf83826adfa2c9efe4a35f026603e7b44c2f7d1cb09420ce9a0f6531979979",
       "committedHashValue": null,
@@ -862,7 +962,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/command.interface.ts": {
-      "id": "aa0c0317-3a88-44a7-ab5e-cdc24e94cf14",
+      "id": "22576d2c-45ee-49b4-bfd4-22ba2612581d",
       "filePath": "src/domains/shared-kernel/application/command.interface.ts",
       "hashValue": "b8daccbdd5a3a8892348e3e5412e72ea868465f4c3aa8c3929e1a91f1c760fe5",
       "committedHashValue": null,
@@ -872,7 +972,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/query-handler.interface.ts": {
-      "id": "5f2088d7-0a71-4fc8-ae38-11e6e2ad5914",
+      "id": "661837de-17c1-460b-9326-dc6efcb64b2b",
       "filePath": "src/domains/shared-kernel/application/query-handler.interface.ts",
       "hashValue": "b2b069130c7dee6b13206b5e21e01a2b51ade1fb6fb116e24863e49efa20052d",
       "committedHashValue": null,
@@ -882,7 +982,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/application/query.interface.ts": {
-      "id": "6c9b6f10-4b54-488e-818f-a638487fbeec",
+      "id": "9b1138f5-13f6-40b5-a13d-c61f03fdbbf0",
       "filePath": "src/domains/shared-kernel/application/query.interface.ts",
       "hashValue": "d13c4dada321ba8e9df36a09d323d79d7c7948a4771f1ec0ed42ac1e0c731228",
       "committedHashValue": null,
@@ -892,7 +992,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/domain-event-handler.interface.ts": {
-      "id": "1aa96a38-948b-42af-8529-c6ddbe5c03e0",
+      "id": "974bb522-638d-4e9c-a226-5acda5010078",
       "filePath": "src/domains/shared-kernel/events/domain-event-handler.interface.ts",
       "hashValue": "02602b0e35f894a4ca8143077fa01f9655c078f0cb5b63d541c0a5fe0c813373",
       "committedHashValue": null,
@@ -902,7 +1002,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/domain-event.ts": {
-      "id": "cfdac2b1-bbe9-48fc-91cc-53d6c71fc4ff",
+      "id": "0f153993-3f52-40f1-b20d-b53f303a4315",
       "filePath": "src/domains/shared-kernel/events/domain-event.ts",
       "hashValue": "2fad3839a26ad2018fbbb12a1adfeb21b5b5e722b4d20f46605e94deaecb3e47",
       "committedHashValue": null,
@@ -912,7 +1012,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/events/event-bus.ts": {
-      "id": "8c7bb690-9d15-47e1-ab82-569cd14cd5ad",
+      "id": "c5e0e66f-5517-45ab-afaf-eac9c2f72f37",
       "filePath": "src/domains/shared-kernel/events/event-bus.ts",
       "hashValue": "7b97caccd51c12bd3cce8ccb4782d84c88b281b18e5352e8d09d4c62a29d49b4",
       "committedHashValue": null,
@@ -922,7 +1022,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/domain-exception.ts": {
-      "id": "031ab504-b9c9-42a4-a3fa-f0e915bebabc",
+      "id": "fd5e56ed-6d71-456a-94d9-4a78d64bdd2a",
       "filePath": "src/domains/shared-kernel/exceptions/domain-exception.ts",
       "hashValue": "ee7cd5534f3857075a303240915c53b8d27498b01da21bda7f33875d4d94ca86",
       "committedHashValue": null,
@@ -932,7 +1032,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/invalid-state-exception.ts": {
-      "id": "099f306d-e79a-40a6-8821-bc56529448af",
+      "id": "a313115a-beee-42ea-b24b-3a1dfbcf0eb0",
       "filePath": "src/domains/shared-kernel/exceptions/invalid-state-exception.ts",
       "hashValue": "f2d9b5a32f9465df9ee545abeac3fdf4b37d899be5e1a033809d36198b21a49c",
       "committedHashValue": null,
@@ -942,7 +1042,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/exceptions/not-found-exception.ts": {
-      "id": "fd639abc-a3a4-4510-b245-037252c2a384",
+      "id": "1237c565-8ca5-4a1d-82d8-8bd974617b35",
       "filePath": "src/domains/shared-kernel/exceptions/not-found-exception.ts",
       "hashValue": "294c8491031905f230faae10feea0b7f3f99dc398af41e34d6a5e1b9faeda613",
       "committedHashValue": null,
@@ -952,7 +1052,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/repository/repository.interface.ts": {
-      "id": "35c224c1-12fd-473a-a78f-07febbea3f4a",
+      "id": "2004015f-3f9e-4e82-940e-4da3dd93ad6c",
       "filePath": "src/domains/shared-kernel/repository/repository.interface.ts",
       "hashValue": "f039c35705e4cd68ad81f18cd2629163abbba352259c1147535d711e097f9ac6",
       "committedHashValue": null,
@@ -962,7 +1062,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/aggregate-root.ts": {
-      "id": "f5bc7e27-4643-4dab-8230-298192c1a58a",
+      "id": "99a3b59d-b805-4577-8665-76d8410b19c5",
       "filePath": "src/domains/shared-kernel/types/aggregate-root.ts",
       "hashValue": "0e51caf45aab87847133878084b81d6ca20a82ce61a271f5f3221ce5f6653a32",
       "committedHashValue": null,
@@ -972,7 +1072,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/date-time.ts": {
-      "id": "2f01bc93-6cfa-476a-86e7-dc7dfffa4c1e",
+      "id": "ad3fed12-834a-4d3f-8810-7e3fc73b0e56",
       "filePath": "src/domains/shared-kernel/types/date-time.ts",
       "hashValue": "733e18e6a71f29b8c626675e29abbc18cf30f2bcf51aa3ee797a79e1d93947ca",
       "committedHashValue": null,
@@ -982,7 +1082,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/identifier.ts": {
-      "id": "99d1938d-1c96-4df4-b1d7-2b6f01901077",
+      "id": "ffb1fe10-b585-45ad-86ce-b68ff3b78e12",
       "filePath": "src/domains/shared-kernel/types/identifier.ts",
       "hashValue": "637f386f1e8ee380445e744f684ff159a370fbd62cc0a8d6c980bef5e3a3c925",
       "committedHashValue": null,
@@ -992,7 +1092,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/maybe.ts": {
-      "id": "62b8d0c1-6d66-4816-97b9-1f01cbeb1cfb",
+      "id": "66560ac6-bfd6-412c-af95-9f5bda3c8abb",
       "filePath": "src/domains/shared-kernel/types/maybe.ts",
       "hashValue": "ab6e8a13346c08e991d72fce12e4df034f9336eff5af8ae1405e2923720f07d8",
       "committedHashValue": null,
@@ -1002,7 +1102,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/result.ts": {
-      "id": "da2b1b79-f0ed-4bba-890b-847a0b1cc6d9",
+      "id": "1cbcbb25-7f59-464e-8d18-966d36ea2e68",
       "filePath": "src/domains/shared-kernel/types/result.ts",
       "hashValue": "f58b15ec39094294796791a82038904583a6242a4bea904568f34b8d06b9e76c",
       "committedHashValue": null,
@@ -1012,7 +1112,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/types/value-object.ts": {
-      "id": "8a9cfc81-941f-4b8c-8d3e-ae4d9a9ee9f9",
+      "id": "081f4426-7ca4-4609-810f-cda12736238c",
       "filePath": "src/domains/shared-kernel/types/value-object.ts",
       "hashValue": "895c3e83794a0ae072b12750143d9f6c577116d9327372d526b26c38a3a36214",
       "committedHashValue": null,
@@ -1022,7 +1122,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/hash-utils.ts": {
-      "id": "756c6e85-004e-4403-9ba9-01464311e8a9",
+      "id": "229b001d-b1e4-40fe-946d-32fdf799c71b",
       "filePath": "src/domains/shared-kernel/utils/hash-utils.ts",
       "hashValue": "8671ad1f5bda49bb624820921fbe07a2f405d2952a6fe05ffd89b9cc20604744",
       "committedHashValue": null,
@@ -1032,7 +1132,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/path-utils.ts": {
-      "id": "0a3b7d5c-d5d7-4e9a-9f72-eb60c70d42e4",
+      "id": "005557ad-f4dd-4a0d-b297-116f044779d6",
       "filePath": "src/domains/shared-kernel/utils/path-utils.ts",
       "hashValue": "b6b51a9c3cb61f0191adc583417b6c6727a449c490a1d373fd87f18030ce6d75",
       "committedHashValue": null,
@@ -1042,7 +1142,7 @@
       "diff": null
     },
     "src/domains/shared-kernel/utils/uuid-generator.ts": {
-      "id": "19c26004-9896-4d7b-aa8d-b18ccb98ca7d",
+      "id": "9b3f7042-6b57-49d3-81e6-9d540af1ca53",
       "filePath": "src/domains/shared-kernel/utils/uuid-generator.ts",
       "hashValue": "59ace5017a2663b8fa241bc6e8fe61456bd81b68a13cffb25755779f9c2b3cc0",
       "committedHashValue": null,
@@ -1052,7 +1152,7 @@
       "diff": null
     },
     "src/infrastructure/persistence/migration/schema-migrator.ts": {
-      "id": "53cc38da-9e96-4b73-a871-6eb1c59e466b",
+      "id": "e9d1ecb9-8e15-4433-a26f-91f429145bf3",
       "filePath": "src/infrastructure/persistence/migration/schema-migrator.ts",
       "hashValue": "cb71cdc59180aaeb1319ea75e188a7c043ece119b037bff774deeaa5a4e17d79",
       "committedHashValue": null,
@@ -1062,7 +1162,7 @@
       "diff": null
     },
     "src/presentation/components/common/SearchBar.tsx": {
-      "id": "a239b366-1ffd-4b1f-af89-30ef8f9432f2",
+      "id": "20efad5d-43cf-4b3d-bbe2-fb8cdde5736a",
       "filePath": "src/presentation/components/common/SearchBar.tsx",
       "hashValue": "3b9eb1889a2280cbd4edc137c8ee3c0ec66e1dc740497e853ccb2299983d5ed1",
       "committedHashValue": null,
@@ -1072,7 +1172,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentationHeader.tsx": {
-      "id": "d0072052-32f1-405a-bce2-75adadccd03b",
+      "id": "b57d7cf2-d682-430a-9357-040e091de677",
       "filePath": "src/presentation/components/documentation/DocumentationHeader.tsx",
       "hashValue": "9aaedefa100c6719d95d00cb043b6171f81445124d4cc348d53d118d2673f1bd",
       "committedHashValue": null,
@@ -1082,7 +1182,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentCard.tsx": {
-      "id": "f7793fcb-309d-4a2f-825f-b674d5e42534",
+      "id": "bb4d4ce0-cd6c-4264-aeda-19a0307880b5",
       "filePath": "src/presentation/components/documentation/DocumentCard.tsx",
       "hashValue": "506b0d3e057d9351678f678cff5dac6561d625213b67f269898af4748fbca8bb",
       "committedHashValue": null,
@@ -1092,7 +1192,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/DocumentList.tsx": {
-      "id": "efcfa3a0-1be0-4eaa-a235-714832c2777e",
+      "id": "bcf281fe-9496-4d1b-8e08-ac25b5ddfa1a",
       "filePath": "src/presentation/components/documentation/DocumentList.tsx",
       "hashValue": "33598d18f1e42153166273c349040050b117eb227d8735db249142381f34e771",
       "committedHashValue": null,
@@ -1102,7 +1202,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/FolderRegistrationPrompt.tsx": {
-      "id": "67376e97-c299-4581-b0aa-41d13a1fa1b4",
+      "id": "28d4ec55-e311-48b2-91ab-b6e1c1e6e4f6",
       "filePath": "src/presentation/components/documentation/FolderRegistrationPrompt.tsx",
       "hashValue": "07ff24ca0c541f8968944b3af9df0bb7cc61aca7593039daa9f048f073e7782f",
       "committedHashValue": null,
@@ -1112,7 +1212,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/OrphanBadge.tsx": {
-      "id": "8b4f60cb-6e02-46fe-bcd4-9c622ccbd18b",
+      "id": "7896a288-cd1e-4f74-8920-68b822eca0fd",
       "filePath": "src/presentation/components/documentation/OrphanBadge.tsx",
       "hashValue": "35204dd48b034d36ac91ef2f9dc183a31f5ffe961034b737c52bbe892ec80134",
       "committedHashValue": null,
@@ -1122,7 +1222,7 @@
       "diff": null
     },
     "src/presentation/components/documentation/OrphanSection.tsx": {
-      "id": "9406d1c2-c2bc-4c41-bd36-2618abe28275",
+      "id": "f06cabee-957d-4884-8b2d-d05fc1684596",
       "filePath": "src/presentation/components/documentation/OrphanSection.tsx",
       "hashValue": "8b517e11525fb4e6f8c3cec4dca37e014d0ba79c0137b0e81adb4774c84f0f7a",
       "committedHashValue": null,
@@ -1132,7 +1232,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileIcon.tsx": {
-      "id": "8b61a02e-246e-4774-8284-30869851c96e",
+      "id": "c63e2a13-9991-4e50-b631-c088f2690e42",
       "filePath": "src/presentation/components/file-tree/FileIcon.tsx",
       "hashValue": "8a4a1cfa466299c436046eea3d6d8a30513fe831fb6814e3aed0a4e2c793982d",
       "committedHashValue": null,
@@ -1142,7 +1242,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileNode.tsx": {
-      "id": "9261bc17-75ca-4e1f-b564-d280256f29b7",
+      "id": "e7804c4f-d427-4ce5-9ad7-539b48ff000f",
       "filePath": "src/presentation/components/file-tree/FileNode.tsx",
       "hashValue": "5e355f0ec9d7828639cc2ae5b87f2634dd920214f3bf5c26f8dfe2390d53c282",
       "committedHashValue": null,
@@ -1152,7 +1252,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/FileTree.tsx": {
-      "id": "b1d317b2-949a-4d42-8e6a-863d5bb2699d",
+      "id": "c3c5fbd2-b9ff-42b8-80af-9d0811d6470c",
       "filePath": "src/presentation/components/file-tree/FileTree.tsx",
       "hashValue": "921eca1f165e7c58181677a330e84534e45312f3164f9393d0aaab2bce240951",
       "committedHashValue": null,
@@ -1162,7 +1262,7 @@
       "diff": null
     },
     "src/presentation/components/file-tree/IgnorePatternEditor.tsx": {
-      "id": "4017a09b-9980-4099-a843-a069e349568a",
+      "id": "525931cc-b0e1-4baf-8318-0a1fa436a911",
       "filePath": "src/presentation/components/file-tree/IgnorePatternEditor.tsx",
       "hashValue": "d2c96e4c30741ec806031e4adefcfc11875a2d30300eea95ff7fb88af03ad1bf",
       "committedHashValue": null,
@@ -1172,7 +1272,7 @@
       "diff": null
     },
     "src/presentation/components/layout/Header.tsx": {
-      "id": "d880a4da-2c6b-44fe-93ff-bdcb8b20ac53",
+      "id": "50e2b864-fde3-4563-b9dd-aee5d84d9dfa",
       "filePath": "src/presentation/components/layout/Header.tsx",
       "hashValue": "6175cfdf4ff8d3b13745773c77835d8bd5aa9f976c3b160c66bb8284cf63520f",
       "committedHashValue": null,
@@ -1182,7 +1282,7 @@
       "diff": null
     },
     "src/presentation/components/linking/DocumentHierarchy.tsx": {
-      "id": "e9046b95-2d79-4f95-a118-52d25364d64f",
+      "id": "4eb240c9-91f2-480a-b93f-c03a283a69e7",
       "filePath": "src/presentation/components/linking/DocumentHierarchy.tsx",
       "hashValue": "1c24f13fd10b6aa59fe24ff9997e34d466aba43a7ee44bcb271f326f3c345bf0",
       "committedHashValue": null,
@@ -1192,7 +1292,7 @@
       "diff": null
     },
     "src/presentation/components/linking/DocumentSourceList.tsx": {
-      "id": "e265c3ef-64be-416d-84f4-5f529f9ae277",
+      "id": "95bbc0db-b7c7-4fc0-8ec9-b2952254d808",
       "filePath": "src/presentation/components/linking/DocumentSourceList.tsx",
       "hashValue": "621a12fb6bddf6ed7c3070679c56d1c0158165bc81fe91eef285a0016235a4ac",
       "committedHashValue": null,
@@ -1202,7 +1302,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreeNode.tsx": {
-      "id": "3a81353a-7759-4a64-b611-ce1a275ead02",
+      "id": "eeec63fd-5bb2-49de-8947-86ea215c14fc",
       "filePath": "src/presentation/components/linking/FileTreeNode.tsx",
       "hashValue": "142f2d024eef9266db2580839a4e90420c8278bc4f7892c2922eb24fa748d77e",
       "committedHashValue": null,
@@ -1212,7 +1312,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreePickerModal.css": {
-      "id": "db0e8427-bd38-41b6-8b64-04a0c3c04a7d",
+      "id": "ecde672b-8489-4d4c-85e1-2509b1940454",
       "filePath": "src/presentation/components/linking/FileTreePickerModal.css",
       "hashValue": "e458776ff2388005c1de919b7b50236805fd09b56625c4ad9badf0bb79aca6c4",
       "committedHashValue": null,
@@ -1222,7 +1322,7 @@
       "diff": null
     },
     "src/presentation/components/linking/FileTreePickerModal.tsx": {
-      "id": "350383a3-4071-42e1-8b0a-b02cb48ea757",
+      "id": "aa91d3c3-1623-4176-a92e-b8a62dab9dca",
       "filePath": "src/presentation/components/linking/FileTreePickerModal.tsx",
       "hashValue": "45eea299670170b31ae26faebfcc152a124d2fc08e4e69d13ea3d10280d119d5",
       "committedHashValue": null,
@@ -1232,7 +1332,7 @@
       "diff": null
     },
     "src/presentation/components/linking/InteractiveGraph.tsx": {
-      "id": "4d9f539c-0b82-47ac-a557-046eb7c09c18",
+      "id": "a41d54f1-cf52-4210-a091-308ad41e7f1c",
       "filePath": "src/presentation/components/linking/InteractiveGraph.tsx",
       "hashValue": "5af66fdd6916aacbe3da95c7b74c7018590805c4cb185595a5a45285cc4d7e5c",
       "committedHashValue": null,
@@ -1242,7 +1342,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkBadge.tsx": {
-      "id": "0f06d4ec-e32b-4cc8-8b3e-573c22d54bc5",
+      "id": "afd6e003-867c-4c35-bfc7-00d216e353ec",
       "filePath": "src/presentation/components/linking/LinkBadge.tsx",
       "hashValue": "27b4a3b0fc2116d1a823577e62f51bdc19aca1ee42483de1663232cec857fcd6",
       "committedHashValue": null,
@@ -1252,7 +1352,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkingPageHeader.tsx": {
-      "id": "a2e80d65-d007-407f-84e3-85f77788e41f",
+      "id": "fc65bc90-459b-4712-b38d-fbc7d0618453",
       "filePath": "src/presentation/components/linking/LinkingPageHeader.tsx",
       "hashValue": "68de58fa7d68b3e2ec1bf7896f7d537846cce548a783f73df8e6a530ba1ebcd8",
       "committedHashValue": null,
@@ -1262,7 +1362,7 @@
       "diff": null
     },
     "src/presentation/components/linking/LinkingTabs.tsx": {
-      "id": "5b7a3a58-a7ba-4844-b5e6-4a4e37adb1b8",
+      "id": "d3752fcb-e1df-41a3-be58-740530551439",
       "filePath": "src/presentation/components/linking/LinkingTabs.tsx",
       "hashValue": "3432a4b9d5e1d4467f1cfb9763219bd545498b2c98982342c4e500df9c507bde",
       "committedHashValue": null,
@@ -1272,7 +1372,7 @@
       "diff": null
     },
     "src/presentation/components/linking/PersistentDocumentSelector.tsx": {
-      "id": "f438a67d-a57b-4516-8028-d50f87597447",
+      "id": "806b3285-fb04-4a26-8f60-92838e088235",
       "filePath": "src/presentation/components/linking/PersistentDocumentSelector.tsx",
       "hashValue": "fb7cb9097b483235e2be35653eabe315c2a3967a7643256537ff3c23a4dc4aa3",
       "committedHashValue": null,
@@ -1282,7 +1382,7 @@
       "diff": null
     },
     "src/presentation/components/linking/UnlinkedFilesList.css": {
-      "id": "959e3edb-ddf7-4c65-8e6f-3e436c07999b",
+      "id": "53244607-8da2-4258-b658-42dcf56667f5",
       "filePath": "src/presentation/components/linking/UnlinkedFilesList.css",
       "hashValue": "4656e2140b93940b8303ea0119933fa4c3029e10b8f1ff1c0653604eb2c1c715",
       "committedHashValue": null,
@@ -1292,7 +1392,7 @@
       "diff": null
     },
     "src/presentation/components/linking/UnlinkedFilesList.tsx": {
-      "id": "67321385-f704-44cf-940e-a1424ab15077",
+      "id": "990b1712-351a-4e6a-9fee-9ce4c36ebc40",
       "filePath": "src/presentation/components/linking/UnlinkedFilesList.tsx",
       "hashValue": "8ef7985c84df1b7de0d04d9b649ccd238aac1a8220f572922ccacb0f9a82f5cf",
       "committedHashValue": null,
@@ -1302,7 +1402,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/CommitButton.tsx": {
-      "id": "ec957243-1ead-4f51-8774-90354a27b379",
+      "id": "cb2baf01-8e03-4cd1-a858-2b199081fa6c",
       "filePath": "src/presentation/components/tracking/CommitButton.tsx",
       "hashValue": "4d384e5eb6984c28d57b9338fe87c05cd40ab3a806bfff7dd8878524fc8c0545",
       "committedHashValue": null,
@@ -1312,7 +1412,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/CommitHistory.tsx": {
-      "id": "26e8a7f9-4e39-4c88-a3be-60dbf0655a74",
+      "id": "2942aff0-7bb1-4369-a5f7-9bdebff9ecd2",
       "filePath": "src/presentation/components/tracking/CommitHistory.tsx",
       "hashValue": "56b9b57eb016af5349b4e5aed1b230070bcb61b3f5862e6b0cd6a69c0af07ae9",
       "committedHashValue": null,
@@ -1322,7 +1422,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/DiffViewer.tsx": {
-      "id": "5830e28e-dfd5-4ba8-a1d2-679ea61bb5ed",
+      "id": "7dc46379-d716-437a-9222-d2306862cdec",
       "filePath": "src/presentation/components/tracking/DiffViewer.tsx",
       "hashValue": "005d6220298618bef72be98d80bb6f24d38a3518b21deb99da53378ef643a19a",
       "committedHashValue": null,
@@ -1332,7 +1432,7 @@
       "diff": null
     },
     "src/presentation/components/tracking/DocumentCommitPanel.tsx": {
-      "id": "da4261f6-6e77-4d51-b939-d17eca98fd10",
+      "id": "911d5262-5255-45f8-9a34-c7a892205367",
       "filePath": "src/presentation/components/tracking/DocumentCommitPanel.tsx",
       "hashValue": "d60a85dcac3f1b8ba84ae6d96f2140fbbf9e7cf9c05dd97181fcd7916a9589c0",
       "committedHashValue": null,
@@ -1341,18 +1441,8 @@
       "commitId": null,
       "diff": null
     },
-    "src/presentation/components/tracking/DocumentList.tsx": {
-      "id": "b4622cba-20a5-40ce-9bd3-0eb544bcfd5b",
-      "filePath": "src/presentation/components/tracking/DocumentList.tsx",
-      "hashValue": "dd5c7b29ca928e84761fb992f832a0a95b9748b021ec28fdece648adf9dcc520",
-      "committedHashValue": null,
-      "committedCommitId": null,
-      "committedAt": null,
-      "commitId": null,
-      "diff": null
-    },
     "src/presentation/components/tracking/PendingChangesList.tsx": {
-      "id": "f249167f-a662-4c55-85a7-1186744ccfd8",
+      "id": "c9982a92-c881-4197-aa69-c8e028b80c7d",
       "filePath": "src/presentation/components/tracking/PendingChangesList.tsx",
       "hashValue": "9e22d48aa068584787de311ff4d0c7f62f0bcda662216767d812225facbc5253",
       "committedHashValue": null,
@@ -1361,10 +1451,20 @@
       "commitId": null,
       "diff": null
     },
+    "src/presentation/components/tracking/PendingDocumentList.tsx": {
+      "id": "84294c34-4240-45bb-b322-4806ea3d8087",
+      "filePath": "src/presentation/components/tracking/PendingDocumentList.tsx",
+      "hashValue": "7b6349c1604b2b7a412ae0a7b6db417c032f69dcfd9252e850500100f42730af",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
     "src/presentation/components/tracking/TrackingPageHeader.tsx": {
-      "id": "d8484f67-eb67-486b-b5fd-ba8cbc62dfaf",
+      "id": "f86c4dcc-6940-4260-981d-5be9253b03cd",
       "filePath": "src/presentation/components/tracking/TrackingPageHeader.tsx",
-      "hashValue": "4579c5cb2a7beab770e0c21562185f37b7cd6609a228a426028554e6d20fc389",
+      "hashValue": "323a2866ca0b2d36271bc1b656ef0fc5c03cb5d9244889a28311a1312aff276a",
       "committedHashValue": null,
       "committedCommitId": null,
       "committedAt": null,
@@ -1372,7 +1472,7 @@
       "diff": null
     },
     "src/presentation/components/welcome/RecentWorkspacesList.tsx": {
-      "id": "f36c4bbc-fe00-41dd-9c42-530d356fa89a",
+      "id": "98ff6157-d461-4c5d-b876-e3e08fd73d7f",
       "filePath": "src/presentation/components/welcome/RecentWorkspacesList.tsx",
       "hashValue": "ecef75ea33cd4e8886db8b8ce8ed727ea0ff7abfb26d547cc9d56eb28f47b0f4",
       "committedHashValue": null,
@@ -1382,7 +1482,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useFileTreePicker.ts": {
-      "id": "9a23f041-c061-47f8-b25d-0e4889e260dc",
+      "id": "c6cc096d-b09f-4c2a-bec7-973f25ef40f3",
       "filePath": "src/presentation/hooks/linking/useFileTreePicker.ts",
       "hashValue": "938381cf11bd813596bce4251c2df71699cf86c1edef0d2d46d973e2b9177fbf",
       "committedHashValue": null,
@@ -1392,7 +1492,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useFilteredFileTree.ts": {
-      "id": "f06a3a56-c8fb-4ab3-9851-8456dfc115d8",
+      "id": "00faffa7-8ebd-4e91-8c91-0f4e91eac320",
       "filePath": "src/presentation/hooks/linking/useFilteredFileTree.ts",
       "hashValue": "67462281d68f8b2c18a4505f810a3f70995fbb5eb0599e064861fca3c23fd2f8",
       "committedHashValue": null,
@@ -1402,7 +1502,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useGraphData.ts": {
-      "id": "72b8eedc-8567-479b-906b-127e88345a10",
+      "id": "de9be2a0-062d-4e62-8864-611005f34c62",
       "filePath": "src/presentation/hooks/linking/useGraphData.ts",
       "hashValue": "2e16c8379bfb40674d4cd8a6a1482e92b44fdc07e9de6a51304f44d9f6306c95",
       "committedHashValue": null,
@@ -1412,7 +1512,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinkCreation.ts": {
-      "id": "593da35f-a97b-439e-9864-58e8c8bf8e42",
+      "id": "cce28de2-f01e-4f93-a65d-b6fcbf70498b",
       "filePath": "src/presentation/hooks/linking/useLinkCreation.ts",
       "hashValue": "b02508958064b6990e23845980257fd289fbc6f2fbf8400771f020ada2bbe99f",
       "committedHashValue": null,
@@ -1422,7 +1522,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinkingPageOrchestrator.ts": {
-      "id": "ea5408d4-bede-4bee-ae28-665a75f85ef5",
+      "id": "413e0889-1ced-4d9b-89f4-36fe49e3de0d",
       "filePath": "src/presentation/hooks/linking/useLinkingPageOrchestrator.ts",
       "hashValue": "8ceda725edebc1f83754db6184b196831183ec69136efe5054f0bd24108023af",
       "committedHashValue": null,
@@ -1432,7 +1532,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useLinks.ts": {
-      "id": "f79e6606-d584-4062-94e0-3d5aa3f304ef",
+      "id": "7b8710f1-a1e5-4626-9134-90b5c2ce855d",
       "filePath": "src/presentation/hooks/linking/useLinks.ts",
       "hashValue": "59c25c8960610dc3d0c2e04ef2215b6722f444b5f3c3a10eae28192653d820be",
       "committedHashValue": null,
@@ -1442,7 +1542,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useSearchableList.ts": {
-      "id": "dbd2b1bf-ed79-4c71-bf7e-1e1ad5a9e8cf",
+      "id": "9a289677-93d8-4e2a-8b86-1de527129587",
       "filePath": "src/presentation/hooks/linking/useSearchableList.ts",
       "hashValue": "25bf24a29e0e67702095046da234fef311964b02d3d3a813888dfba02c3b0d68",
       "committedHashValue": null,
@@ -1452,7 +1552,7 @@
       "diff": null
     },
     "src/presentation/hooks/linking/useUnlinkedFiles.ts": {
-      "id": "4b8ffc51-7881-4983-96b2-73528a6560a7",
+      "id": "7e00bf9f-9ae8-4c94-afbb-f7b5c6273397",
       "filePath": "src/presentation/hooks/linking/useUnlinkedFiles.ts",
       "hashValue": "d95505c80d8f38eb9534cdaa667135b5bcf7ec76dcc4782139280a7c11e57780",
       "committedHashValue": null,
@@ -1462,7 +1562,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/delete-document.command.ts": {
-      "id": "45f23a29-9c00-4b5b-9926-050f248f824f",
+      "id": "9d6d77be-aa18-4f9b-a22e-4648c0b8b17c",
       "filePath": "src/domains/documentation/application/commands/delete-document.command.ts",
       "hashValue": "f5f1dc33fb9baeb03df59b5a6346ad6b35ff490b88bdb97343b95289d5a78661",
       "committedHashValue": null,
@@ -1472,7 +1572,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/detect-docs-folder-relocation.command.ts": {
-      "id": "615e62fb-ec90-489e-a8cd-a4208c14b478",
+      "id": "2d41eeea-49a7-4de5-80ac-6906b4d5a825",
       "filePath": "src/domains/documentation/application/commands/detect-docs-folder-relocation.command.ts",
       "hashValue": "b2944997daf418758a1ead6c1eeac8a2b0a5c221591cb6a21a7b0c2a030dc051",
       "committedHashValue": null,
@@ -1482,7 +1582,7 @@
       "diff": null
     },
     "src/domains/documentation/application/commands/register-docs-folder.command.ts": {
-      "id": "6c1c4130-e542-4e4a-bc2e-6c4b058c8341",
+      "id": "56850162-8663-4a65-be13-678b0395b015",
       "filePath": "src/domains/documentation/application/commands/register-docs-folder.command.ts",
       "hashValue": "11aaf01f55ab624193010df9b561d151ac851916b4d1029d745e0e161fc9c639",
       "committedHashValue": null,
@@ -1492,7 +1592,7 @@
       "diff": null
     },
     "src/domains/documentation/application/dto/doc-folder.dto.ts": {
-      "id": "0bce089e-c70e-4769-87c2-27cfeac328b9",
+      "id": "ec15b1f2-f05e-4904-b277-5b91c110ec6a",
       "filePath": "src/domains/documentation/application/dto/doc-folder.dto.ts",
       "hashValue": "34ce39438059d0747849c74ce2eef755c625efe33a2e3b9dba6d7eee11af3529",
       "committedHashValue": null,
@@ -1502,7 +1602,7 @@
       "diff": null
     },
     "src/domains/documentation/application/dto/document.dto.ts": {
-      "id": "7cbea1b7-bb16-4dfe-a715-dae2fb2b34dd",
+      "id": "b7340717-2241-4ec3-ab2a-dc2d4670198a",
       "filePath": "src/domains/documentation/application/dto/document.dto.ts",
       "hashValue": "7af5f290775d992229c261523b56b352e1dd1a9614a6f1e1bc4fa40b13708830",
       "committedHashValue": null,
@@ -1512,7 +1612,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/delete-document.handler.ts": {
-      "id": "cb594c9a-ee42-404f-99d7-a0017ed99cfe",
+      "id": "5982c77c-a5ac-4864-a24c-a712a5fd05eb",
       "filePath": "src/domains/documentation/application/handlers/delete-document.handler.ts",
       "hashValue": "0a532d51c9d960e6607461bcfa51f69847793753df91465752e103be3f90ed51",
       "committedHashValue": null,
@@ -1522,7 +1622,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/detect-docs-folder-relocation.handler.ts": {
-      "id": "03c89c94-24c3-4bff-a3bf-5f222492c96b",
+      "id": "406563cb-47d0-40e7-aa82-38c9eb22a1f0",
       "filePath": "src/domains/documentation/application/handlers/detect-docs-folder-relocation.handler.ts",
       "hashValue": "38c8122096ad83d71283039a1d679902afe3c41b8f0826d3afba5df75810bddf",
       "committedHashValue": null,
@@ -1532,7 +1632,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/document-cleanup-on-file-delete.handler.ts": {
-      "id": "5ee2d821-3ed8-4546-a645-924690f01f24",
+      "id": "e91e70a6-e8a9-450b-b2e7-347b3c60ea92",
       "filePath": "src/domains/documentation/application/handlers/document-cleanup-on-file-delete.handler.ts",
       "hashValue": "83913bb0283367a18af94cbaee89a10f5f9b2b38c9d2be6f51b196cfd4eaa115",
       "committedHashValue": null,
@@ -1542,7 +1642,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/get-all-documents.handler.ts": {
-      "id": "250e87a0-a434-4fca-a452-5d5033d35146",
+      "id": "9937f5f0-0195-484d-95f1-c4f569cebc7c",
       "filePath": "src/domains/documentation/application/handlers/get-all-documents.handler.ts",
       "hashValue": "c119c7bb72e563cbd24680bebb54c0101455649aedd46c25ca8197a0e39a355c",
       "committedHashValue": null,
@@ -1552,7 +1652,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/get-orphaned-documents.handler.ts": {
-      "id": "4e649e91-74cf-4579-afab-328567af3d77",
+      "id": "32ae1203-3457-4abb-9091-9b491f4cf0d3",
       "filePath": "src/domains/documentation/application/handlers/get-orphaned-documents.handler.ts",
       "hashValue": "babf0ff5554acc6343acf043a1ee0134ed25f09cbe06a4d565a6309b62074129",
       "committedHashValue": null,
@@ -1562,7 +1662,7 @@
       "diff": null
     },
     "src/domains/documentation/application/handlers/register-docs-folder.handler.ts": {
-      "id": "e40b1e98-f060-407b-9608-7d48bf0d429d",
+      "id": "89b5d3eb-941a-467c-bdd8-16bf729b0eb8",
       "filePath": "src/domains/documentation/application/handlers/register-docs-folder.handler.ts",
       "hashValue": "c03966ba3e33d3b22ee28376a61513705f0a004863362674e6983b58f0e4c2fd",
       "committedHashValue": null,
@@ -1572,7 +1672,7 @@
       "diff": null
     },
     "src/domains/documentation/application/ports/document-folder-scanner-port.interface.ts": {
-      "id": "36947ded-0b69-4e23-b4b6-7454759ca37a",
+      "id": "e9380246-febc-44c2-9961-e5336e9c66f8",
       "filePath": "src/domains/documentation/application/ports/document-folder-scanner-port.interface.ts",
       "hashValue": "717653edad16c3d7b12b6a30441cf7208306a188a0abe02b9601ece28f26bef0",
       "committedHashValue": null,
@@ -1582,7 +1682,7 @@
       "diff": null
     },
     "src/domains/documentation/application/ports/file-deletion-port.interface.ts": {
-      "id": "4bff3aa1-a8dc-47fc-8258-9045468d9bf9",
+      "id": "84af0801-1ad8-4a02-9d51-128e61dc17f3",
       "filePath": "src/domains/documentation/application/ports/file-deletion-port.interface.ts",
       "hashValue": "3c7d081dca8e909fb331b0f20fb4fae25c7ec01d9d6b29fc8952ee4cf80324ee",
       "committedHashValue": null,
@@ -1592,7 +1692,7 @@
       "diff": null
     },
     "src/domains/documentation/application/queries/get-all-documents.query.ts": {
-      "id": "df85f0b3-01c0-4974-9001-e638ec267e4f",
+      "id": "44ccf03e-85b0-4d9e-b7bd-e58e89d3609a",
       "filePath": "src/domains/documentation/application/queries/get-all-documents.query.ts",
       "hashValue": "6ba9f3500e16652cce151e87d56cda82994054a98c9eb87ac2e14f6254bac6fe",
       "committedHashValue": null,
@@ -1602,7 +1702,7 @@
       "diff": null
     },
     "src/domains/documentation/application/queries/get-orphaned-documents.query.ts": {
-      "id": "d0929305-f504-41eb-9edc-30b7d5a74c69",
+      "id": "1abc2be6-e04e-477b-adb2-b34b4c1dfbf8",
       "filePath": "src/domains/documentation/application/queries/get-orphaned-documents.query.ts",
       "hashValue": "cdc87d320838d0888c6efd031c35b8e3b1928c412a892d0c7dc773275b1c58c5",
       "committedHashValue": null,
@@ -1612,7 +1712,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/entities/doc-folder.ts": {
-      "id": "6b12a134-ca1a-4237-8297-ab750c16e71d",
+      "id": "6f1dc34d-ee36-4ad5-ac7e-1a8f1368d3c2",
       "filePath": "src/domains/documentation/domain/entities/doc-folder.ts",
       "hashValue": "4f58183aa4c9dd00613f2872adbcdac2ad0ad066b75b547070157f046ba5b5ac",
       "committedHashValue": null,
@@ -1622,7 +1722,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/entities/document.ts": {
-      "id": "332669b0-5b41-4e81-bc9f-b0c29fb5988b",
+      "id": "0564a267-00a9-4e6f-a79e-8464383deb53",
       "filePath": "src/domains/documentation/domain/entities/document.ts",
       "hashValue": "face130f9280b0ad735b9f8cf918af4e4b62357191eece9f05f3883b9dbdf8f9",
       "committedHashValue": null,
@@ -1632,7 +1732,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/docs-folder-relocated.ts": {
-      "id": "c035c64e-3841-4aad-ae8f-fb644decb57a",
+      "id": "d7fcd476-8c75-473d-a70d-f14a4ad09f12",
       "filePath": "src/domains/documentation/domain/events/docs-folder-relocated.ts",
       "hashValue": "504eae23052353349a1e2e84dae4e58f3a676a7189d7338f44cacff5eedc7ab2",
       "committedHashValue": null,
@@ -1642,7 +1742,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/document-deleted.ts": {
-      "id": "1a9dc9d4-21e9-4adf-84a9-91c0f42e4d09",
+      "id": "acc7e8b9-d492-4d06-a528-2a7d1cb9b7d8",
       "filePath": "src/domains/documentation/domain/events/document-deleted.ts",
       "hashValue": "65ed7a03b11203d5580e0321a4901c775b4afc2e03eb432227594c381f37e04d",
       "committedHashValue": null,
@@ -1652,7 +1752,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/document-discovered.ts": {
-      "id": "6f5876f6-586a-4713-af9c-f830e35bbcbe",
+      "id": "20b4169d-9f7b-421f-85d8-f2570a416349",
       "filePath": "src/domains/documentation/domain/events/document-discovered.ts",
       "hashValue": "d1ddda26362de324e4c963ff21c5ac6aaaa4416de75c253211dfc4c2da6292d1",
       "committedHashValue": null,
@@ -1662,7 +1762,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/events/orphan-detected.ts": {
-      "id": "58a5be86-c1df-4c08-adc3-02618218809e",
+      "id": "a1c67ec0-f6e0-4e73-a6c1-a6b7153b2217",
       "filePath": "src/domains/documentation/domain/events/orphan-detected.ts",
       "hashValue": "2a00bd9ca682cdec017668ea00490f18d579a5ac6b9f7b7742fe3346c724fecf",
       "committedHashValue": null,
@@ -1672,7 +1772,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/repository/doc-folder-repository.interface.ts": {
-      "id": "3b96fd44-d52a-48d9-bcff-476a15a07f3d",
+      "id": "af76dcd7-79e4-4a89-9a47-8c5d4d35e86d",
       "filePath": "src/domains/documentation/domain/repository/doc-folder-repository.interface.ts",
       "hashValue": "623ff3e09bae8ece63a8a0137f87ac96874e0c942c4a72033d7feafee9f8a6cc",
       "committedHashValue": null,
@@ -1682,7 +1782,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/repository/document-repository.interface.ts": {
-      "id": "aa1ed69b-04db-4e47-9a98-b42134af1450",
+      "id": "816e2d35-d5c0-415d-967b-a660725286bb",
       "filePath": "src/domains/documentation/domain/repository/document-repository.interface.ts",
       "hashValue": "8d8077e0d79e2369ed80690dd798385194a9aae8c701d318eb7c1a8713565c7a",
       "committedHashValue": null,
@@ -1692,7 +1792,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/services/docs-folder-detector.service.ts": {
-      "id": "dbe0a631-2026-4ff7-aa9f-6bc6f6f830aa",
+      "id": "c1705371-45ff-4225-aa0e-25b8bff78463",
       "filePath": "src/domains/documentation/domain/services/docs-folder-detector.service.ts",
       "hashValue": "beec97cff6a5c14a1478ed3f661f0ff46301c53121e9bccb3b665e779224ae42",
       "committedHashValue": null,
@@ -1702,7 +1802,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/doc-folder-id.ts": {
-      "id": "21c82218-8f12-4472-a48d-44896b43f4ee",
+      "id": "14f8c24b-c15b-487a-a677-8d1515c12b5e",
       "filePath": "src/domains/documentation/domain/value-objects/doc-folder-id.ts",
       "hashValue": "1b8cbdf0ddb8273fdb451db42188baf5cddc9485f4fd4cd4b972bdc8e3788757",
       "committedHashValue": null,
@@ -1712,7 +1812,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/doc-folder-signature.ts": {
-      "id": "40dbbefa-27cc-4f3d-ba29-0771b33c38d0",
+      "id": "425a6fbe-f0e5-48b1-936b-25fc6cc36f99",
       "filePath": "src/domains/documentation/domain/value-objects/doc-folder-signature.ts",
       "hashValue": "f9c922e9db606eaf27b08a6bb272052f437eba8acac543fdedf0daf1b9630eec",
       "committedHashValue": null,
@@ -1722,7 +1822,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/document-id.ts": {
-      "id": "aa8bf6c2-ca93-4dae-beb6-913df34ee50b",
+      "id": "bc0905a0-7d89-4f01-a49d-428166514ca6",
       "filePath": "src/domains/documentation/domain/value-objects/document-id.ts",
       "hashValue": "e943a643bab1268b146e31141e3ece1c8f7a08ace87396ee20cd2334183e6f64",
       "committedHashValue": null,
@@ -1732,7 +1832,7 @@
       "diff": null
     },
     "src/domains/documentation/domain/value-objects/document-path.ts": {
-      "id": "eb7af5b7-17ad-4abd-9a10-4f0c03909c30",
+      "id": "a75ddd82-8967-47ea-99bd-f747adeca87d",
       "filePath": "src/domains/documentation/domain/value-objects/document-path.ts",
       "hashValue": "7a4c6461dda1060fec73f810224d06db8e968d5041b63602977aea065aa44900",
       "committedHashValue": null,
@@ -1742,7 +1842,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts": {
-      "id": "59c9b0f2-0ac7-407d-9a1c-31c2a5b1b590",
+      "id": "6c8bfac4-7b8b-4c6b-a72c-d964abeb392f",
       "filePath": "src/domains/documentation/infrastructure/adapters/docs-folder-detector.adapter.ts",
       "hashValue": "8b3b4247f8c1363fc793e647e7478051fc43cc222a6563d30305584fcf6d78fb",
       "committedHashValue": null,
@@ -1752,7 +1852,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/node-fs-deletion.adapter.ts": {
-      "id": "bcd01dc9-9fb8-4623-936a-18df4a301b6b",
+      "id": "cabeca15-8d79-403d-a088-b0891ad5fedf",
       "filePath": "src/domains/documentation/infrastructure/adapters/node-fs-deletion.adapter.ts",
       "hashValue": "537296afe94fc38d7610699dfaf4567f106bf6f9d487ba40f46252ada16a6110",
       "committedHashValue": null,
@@ -1762,7 +1862,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/adapters/node-fs-document-scanner.adapter.ts": {
-      "id": "e8cee44c-b748-4642-903e-7a09e6ee0c3b",
+      "id": "3d583e68-4779-4bcb-8c82-f7de581b2101",
       "filePath": "src/domains/documentation/infrastructure/adapters/node-fs-document-scanner.adapter.ts",
       "hashValue": "f7aadb3e170f58495bbb904c072c7ab6b54710cf468abd639782c7b6da712d3b",
       "committedHashValue": null,
@@ -1772,7 +1872,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/repository/doc-folder-json.repository.ts": {
-      "id": "76e061bb-3ac1-4c23-9fd8-06e801864eca",
+      "id": "10953458-2ea6-40e9-97d9-8df2b6de01cc",
       "filePath": "src/domains/documentation/infrastructure/repository/doc-folder-json.repository.ts",
       "hashValue": "3f8faa904245e4449f0d869e50fa74311c22c46d2fdb0848e1ed05d7bd6ef832",
       "committedHashValue": null,
@@ -1782,7 +1882,7 @@
       "diff": null
     },
     "src/domains/documentation/infrastructure/repository/document-json.repository.ts": {
-      "id": "8f6e8807-447f-4814-9736-9d8784dc41e2",
+      "id": "4127b73e-6c61-4218-8388-c9892e71dadd",
       "filePath": "src/domains/documentation/infrastructure/repository/document-json.repository.ts",
       "hashValue": "7b18df48a113da804441ddaec7e36a8607fea0fc560c02f913be34910575832d",
       "committedHashValue": null,
@@ -1792,7 +1892,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/add-ignore-pattern.command.ts": {
-      "id": "9359e37a-093a-44be-ba83-a26e600be8f7",
+      "id": "64f43276-a0e1-45c2-ae88-cbfc1c4693b0",
       "filePath": "src/domains/filesystem/application/commands/add-ignore-pattern.command.ts",
       "hashValue": "afa4acb4673ad8ecf70487d64a53a278cd4b6aeacc4283e6d8a9eaf4ed155bdf",
       "committedHashValue": null,
@@ -1802,7 +1902,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/remove-ignore-pattern.command.ts": {
-      "id": "b267b834-2a78-4072-a20a-043fd9ce85e3",
+      "id": "564dffe5-d28d-442e-ab70-dd2d3adec803",
       "filePath": "src/domains/filesystem/application/commands/remove-ignore-pattern.command.ts",
       "hashValue": "ec20de22b604da7f11bb2b89c626ffa5539a29ec383540a923f5309cce0c00ca",
       "committedHashValue": null,
@@ -1812,7 +1912,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/commands/scan-project.command.ts": {
-      "id": "3371452d-cc33-4102-b950-4c6d04bb23d3",
+      "id": "f9f3527d-d08b-4968-86f4-8e2b639d7aa3",
       "filePath": "src/domains/filesystem/application/commands/scan-project.command.ts",
       "hashValue": "3618281e36ddf0b441ec534399340d68ceef4b0eb30fcf12791ef61e5417d3af",
       "committedHashValue": null,
@@ -1822,7 +1922,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/file-node.dto.ts": {
-      "id": "9fa31b49-40c9-4631-b561-7885df4582fe",
+      "id": "4bb37b79-6cb4-4187-ac80-ba93cce491df",
       "filePath": "src/domains/filesystem/application/dto/file-node.dto.ts",
       "hashValue": "92b8759ae4528147d0018cf5b786e482fc5b25e8909a1be2ea7b03144518dcd1",
       "committedHashValue": null,
@@ -1832,7 +1932,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/file-tree.dto.ts": {
-      "id": "76ba2d5c-0ed4-4f54-9565-fe3c50f48430",
+      "id": "464b47a1-d9b8-491b-aed2-f55df37a64ff",
       "filePath": "src/domains/filesystem/application/dto/file-tree.dto.ts",
       "hashValue": "af958848a35b4030a6bde0ab6cf6c54f4390135e6143aa03954ced45c6bd3702",
       "committedHashValue": null,
@@ -1842,7 +1942,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/dto/folder-node.dto.ts": {
-      "id": "40822c99-1122-4671-87cd-64c398e53890",
+      "id": "7a27df4d-82b8-4c4f-a177-d660145fb9be",
       "filePath": "src/domains/filesystem/application/dto/folder-node.dto.ts",
       "hashValue": "e21f895f53cacc1a6947d08edac88ac767cc90b93cfb7cd9c4e2e7e618372d6f",
       "committedHashValue": null,
@@ -1852,7 +1952,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/add-ignore-pattern.handler.ts": {
-      "id": "b433ad8c-7616-4774-9718-f086aea75b2b",
+      "id": "b2dbf297-2043-426f-8fb9-d052ee69f43d",
       "filePath": "src/domains/filesystem/application/handlers/add-ignore-pattern.handler.ts",
       "hashValue": "7df2bd2e0d40c11c357e3faa1812b368a0b8ca35a4549614d7482ae7b9e4b6c8",
       "committedHashValue": null,
@@ -1862,7 +1962,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/get-file-tree.handler.ts": {
-      "id": "5d02967a-549d-48fb-89fa-d5a1370f506f",
+      "id": "9d75d5a5-01fe-4637-9849-38e56eec593d",
       "filePath": "src/domains/filesystem/application/handlers/get-file-tree.handler.ts",
       "hashValue": "c5d3c3c49c1f4f119a8934a54d2ee9cda6dcf410e65c51a84bd671cb66fe2c1a",
       "committedHashValue": null,
@@ -1872,7 +1972,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/get-ignored-files.handler.ts": {
-      "id": "c0467be7-f5cf-40e2-8733-4d7dd83017f5",
+      "id": "957b9bab-971f-4228-ae12-cc4cec3c0200",
       "filePath": "src/domains/filesystem/application/handlers/get-ignored-files.handler.ts",
       "hashValue": "3b1825dac0726fc5ba8ae476ff9aeec86388811b6abe6eb06eb9ab59af6d2f7c",
       "committedHashValue": null,
@@ -1882,7 +1982,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/remove-ignore-pattern.handler.ts": {
-      "id": "75d9b56d-d1af-47b0-9f98-ff07ffcc5527",
+      "id": "4b48fc6d-ef14-40c4-98e8-a02cd5c825f5",
       "filePath": "src/domains/filesystem/application/handlers/remove-ignore-pattern.handler.ts",
       "hashValue": "60a50f13cdf0fa496e845d5f3245a8c0a6ea1edc512a9bc04977c083afca4cc4",
       "committedHashValue": null,
@@ -1892,7 +1992,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/handlers/scan-project.handler.ts": {
-      "id": "a98f223c-f0e9-4cb2-ba30-e2dfd2064802",
+      "id": "56794b30-b5f7-4fb5-a001-07a5a5561125",
       "filePath": "src/domains/filesystem/application/handlers/scan-project.handler.ts",
       "hashValue": "3be9e03b3c60d30fa4277e351e0bfdfb2418f3fc1f3c1c7055d822d54ff3993a",
       "committedHashValue": null,
@@ -1902,7 +2002,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/ports/file-system-adapter.interface.ts": {
-      "id": "72019738-76d2-42a6-9901-996c3ac904a5",
+      "id": "71bad6b7-210b-4e7a-8b3f-ed8ce5d4144b",
       "filePath": "src/domains/filesystem/application/ports/file-system-adapter.interface.ts",
       "hashValue": "4e442f04d3a34a16b99c1a37811e749bfc92e4734b680006985ceb09023a2bd9",
       "committedHashValue": null,
@@ -1912,7 +2012,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/queries/get-file-tree.query.ts": {
-      "id": "656c7a16-55fb-450e-bbc5-38b16bccbf28",
+      "id": "0e9f3104-6e73-4fce-929f-4de3e3183d33",
       "filePath": "src/domains/filesystem/application/queries/get-file-tree.query.ts",
       "hashValue": "00de6888d0f9bc404fa2abd73107f199779143abb177ccec110d8a22368c0eec",
       "committedHashValue": null,
@@ -1922,7 +2022,7 @@
       "diff": null
     },
     "src/domains/filesystem/application/queries/get-ignored-files.query.ts": {
-      "id": "454f3ac9-fa9a-4c39-8f7a-caf39247183d",
+      "id": "b950dc9e-829a-4fdd-b9b6-44d5c0eae690",
       "filePath": "src/domains/filesystem/application/queries/get-ignored-files.query.ts",
       "hashValue": "816e3ba027a389e72116f27b90fbc4d223002eb607863e58d0a2e29884c11613",
       "committedHashValue": null,
@@ -1932,7 +2032,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/entities/file-node.ts": {
-      "id": "430e87a1-8283-49ba-88fd-a21fd0593239",
+      "id": "23dc0b42-65d1-4447-aa52-60e4a0d99b09",
       "filePath": "src/domains/filesystem/domain/entities/file-node.ts",
       "hashValue": "0ba8b59216da8d6576bfa6533eab560e185e40c4a7cafcb84abf6bbff0842b1e",
       "committedHashValue": null,
@@ -1942,7 +2042,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/entities/folder-node.ts": {
-      "id": "6e595145-dcec-4645-b7b0-e8d94b47fd59",
+      "id": "48f1512b-1614-40bd-95c6-66814beda12a",
       "filePath": "src/domains/filesystem/domain/entities/folder-node.ts",
       "hashValue": "843032bee43f82a14a3a71b06c5d3e080536cbac21d85275511941f56d34be01",
       "committedHashValue": null,
@@ -1952,7 +2052,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-deleted.ts": {
-      "id": "8d347da5-fe58-472d-9a46-6725bb6e6e96",
+      "id": "9d97b5fe-d1fa-4043-a9e5-8fce5e275c42",
       "filePath": "src/domains/filesystem/domain/events/file-deleted.ts",
       "hashValue": "f5dd93877a9e666f17eaaa5ab0382e18a8be98da0cc9b408be65e14ac61e841f",
       "committedHashValue": null,
@@ -1962,7 +2062,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-discovered.ts": {
-      "id": "ccb7ac33-712e-4d82-9f15-a69b7da36a8d",
+      "id": "d95290d0-99c1-44ce-b7c6-8873e3d93667",
       "filePath": "src/domains/filesystem/domain/events/file-discovered.ts",
       "hashValue": "487b20176afa60837f59cc93a1e2729705f9af7494091c1d8331281d6405974e",
       "committedHashValue": null,
@@ -1972,7 +2072,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-excluded.ts": {
-      "id": "3e74220e-4b87-40d8-bb27-bd21a93d7e45",
+      "id": "1fd6a99a-0762-4655-8072-9800af5f364e",
       "filePath": "src/domains/filesystem/domain/events/file-excluded.ts",
       "hashValue": "a25d588bcd0b7206a59ce5e6f5a7e1bbdd1411e5855a629903039b6c075bb25a",
       "committedHashValue": null,
@@ -1982,7 +2082,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-index-rebuilt.ts": {
-      "id": "bed93c8a-bdbc-4228-914c-1c47ab60840e",
+      "id": "6dceb72f-7379-40b6-96fb-180522a6f4f4",
       "filePath": "src/domains/filesystem/domain/events/file-index-rebuilt.ts",
       "hashValue": "e9bde2bd1042b53606243710d87b7ad82cdd3f7a6088dd7a881480b545f37e66",
       "committedHashValue": null,
@@ -1992,7 +2092,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-modified.ts": {
-      "id": "ffdc9ed1-a9ed-4272-8ad0-48333361476c",
+      "id": "39ae8cbc-84e2-4e27-bbce-0a3ac72baa24",
       "filePath": "src/domains/filesystem/domain/events/file-modified.ts",
       "hashValue": "589562ad1af2faa899b517a57f5549972d6ea60aa5ce608cd15231faa0cd17a1",
       "committedHashValue": null,
@@ -2002,7 +2102,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/file-moved.ts": {
-      "id": "be4fc702-bd00-44c3-ab1f-6c6f7c510cf2",
+      "id": "a21a1e1e-d1e4-42c0-8331-d4c51d6ee793",
       "filePath": "src/domains/filesystem/domain/events/file-moved.ts",
       "hashValue": "ac4a472acae446295bf9b9804864dda267385734828fdff38a7f18cf46bafe21",
       "committedHashValue": null,
@@ -2012,7 +2112,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/ignore-patterns-changed.ts": {
-      "id": "aac1cd3a-606a-448d-8440-82b32e7396f7",
+      "id": "b2b82245-7100-4de6-9eaf-e072c99d0799",
       "filePath": "src/domains/filesystem/domain/events/ignore-patterns-changed.ts",
       "hashValue": "63a372522db7f99bb17f6f4f34daae541bddde5c4d4317c011bf0e26a38cbe1c",
       "committedHashValue": null,
@@ -2022,7 +2122,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/events/scan-completed.ts": {
-      "id": "8f167d70-3a5b-468f-a7c8-757455fcf03b",
+      "id": "ac5cfac0-0b83-4eb3-b737-b092f2b61ae2",
       "filePath": "src/domains/filesystem/domain/events/scan-completed.ts",
       "hashValue": "a746ae0f603d2a62efeb9321ec1eecc08f003d07e1d82af08a0947026a61c3f6",
       "committedHashValue": null,
@@ -2032,7 +2132,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/repository/filesystem-repository.interface.ts": {
-      "id": "b6e8f870-275a-4938-b54b-3321f6387748",
+      "id": "c6dd0b64-15f8-4f55-9b3e-a3922bb23b20",
       "filePath": "src/domains/filesystem/domain/repository/filesystem-repository.interface.ts",
       "hashValue": "8609e7883cdc11c881ab0aa322d2355f2bc6eef0053d358a98c150a49790448f",
       "committedHashValue": null,
@@ -2042,7 +2142,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/services/scan-project.service.ts": {
-      "id": "c2576b05-6a44-4b80-ac7c-d27c875c4a60",
+      "id": "8bae4cac-4d9a-42cc-8c11-c938a3794cfc",
       "filePath": "src/domains/filesystem/domain/services/scan-project.service.ts",
       "hashValue": "3a3f9b1cf5353f58b400163c99972109e16dc59b0d5ddc71d8e374ff7cbd5b0d",
       "committedHashValue": null,
@@ -2052,7 +2152,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-hash.ts": {
-      "id": "ea8eec9a-3087-46cd-a60f-d63123135a5b",
+      "id": "daac8151-d881-40b0-8531-078735df1d2e",
       "filePath": "src/domains/filesystem/domain/value-objects/file-hash.ts",
       "hashValue": "4c7d567c5c303957d0fb2243b4198cd0a27a2f939b2d3b3848e05903c7af04c9",
       "committedHashValue": null,
@@ -2062,7 +2162,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-node-id.ts": {
-      "id": "ad151645-9c75-494d-bde9-c7dfd2486301",
+      "id": "381daa86-b27f-4428-97d6-7505e38c0fb6",
       "filePath": "src/domains/filesystem/domain/value-objects/file-node-id.ts",
       "hashValue": "3d2fc1c78dc4cb2d117a3bf31229515632166c1cd7d4ec45285b38086388720b",
       "committedHashValue": null,
@@ -2072,7 +2172,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-path.ts": {
-      "id": "d196da03-30f0-4b9c-b507-5780ea651b86",
+      "id": "64f18548-3307-47a5-845b-a499eb5977a6",
       "filePath": "src/domains/filesystem/domain/value-objects/file-path.ts",
       "hashValue": "f5657eec66de175dd8d04528ecc1eed2f8e61eaafbcdd3f8a2d789eb7ab94204",
       "committedHashValue": null,
@@ -2082,7 +2182,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/file-size.ts": {
-      "id": "97ae7ea6-3545-4ebb-91c0-c409bdb99d5c",
+      "id": "c4b4a871-4eff-4bdf-bfd8-5402d73fb55f",
       "filePath": "src/domains/filesystem/domain/value-objects/file-size.ts",
       "hashValue": "16b6fa88fff91d36397b7787a4b99d41ac02eb1c51cdc8c81096dfef77d021c3",
       "committedHashValue": null,
@@ -2092,7 +2192,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/folder-node-id.ts": {
-      "id": "a8e9a221-5607-482b-a841-f888a01e9834",
+      "id": "61854ca0-fa4a-4164-ab43-0ba924322994",
       "filePath": "src/domains/filesystem/domain/value-objects/folder-node-id.ts",
       "hashValue": "0ca79c64c458435c5e50dee8cd3ab342978552ba66bc0012da632e0df6ce1e94",
       "committedHashValue": null,
@@ -2102,7 +2202,7 @@
       "diff": null
     },
     "src/domains/filesystem/domain/value-objects/ignore-pattern.ts": {
-      "id": "784cbbd1-b502-4a81-b084-8b8bc527d66a",
+      "id": "0086c60a-3c3d-42d3-b59b-d69fcd69c5cc",
       "filePath": "src/domains/filesystem/domain/value-objects/ignore-pattern.ts",
       "hashValue": "7334a9ec53230ada1bae459e5993fb97a261dd2d3560f6f9481847facdf24680",
       "committedHashValue": null,
@@ -2112,7 +2212,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/chokidar.adapter.ts": {
-      "id": "96387d16-647a-42fa-aa5e-d06cf1fce3d0",
+      "id": "13627e2b-472c-4fb2-8259-9698c024db71",
       "filePath": "src/domains/filesystem/infrastructure/adapters/chokidar.adapter.ts",
       "hashValue": "1896362e5f1f648ce22d6aa33af203ab698a2cb66e7ccde8b6c3a7d56d9be0e1",
       "committedHashValue": null,
@@ -2122,7 +2222,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/ignore-parser.adapter.ts": {
-      "id": "2a439b5f-a076-40a0-9f96-ba3b020e9c2e",
+      "id": "acdf02a7-2385-44a6-8622-e5ffbc22cd76",
       "filePath": "src/domains/filesystem/infrastructure/adapters/ignore-parser.adapter.ts",
       "hashValue": "f49e6a1e8b3e8890b7a8ff77241c78e4f40974a11d07657f9f5099aec47312db",
       "committedHashValue": null,
@@ -2132,7 +2232,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/adapters/node-fs.adapter.ts": {
-      "id": "a97f1aac-6ddd-48fc-873b-2daf1a4ac482",
+      "id": "9d062a98-ef0c-4aed-b289-026de15b3788",
       "filePath": "src/domains/filesystem/infrastructure/adapters/node-fs.adapter.ts",
       "hashValue": "73fe0fc00e0b7c20c35633cf7b37c90ab8673b99ada5567e662304e3b31d4559",
       "committedHashValue": null,
@@ -2142,7 +2242,7 @@
       "diff": null
     },
     "src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts": {
-      "id": "8bb98b56-7efa-462c-bc6a-e79d2a48e76c",
+      "id": "8b6d755b-a0e1-4fa9-b416-ade10cd441fc",
       "filePath": "src/domains/filesystem/infrastructure/repository/filesystem-json.repository.ts",
       "hashValue": "6810fcdcc1d2461b11056cdc5fdeb30b6e20df77e07546f7d2751c74e6e51ca9",
       "committedHashValue": null,
@@ -2152,7 +2252,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-bulk-code-links.command.ts": {
-      "id": "315be89d-4efa-4b2c-8a5c-49586d1acdbc",
+      "id": "7f2e1c34-7b74-4c75-a4c5-5f8cf9d5b2a8",
       "filePath": "src/domains/linking/application/commands/create-bulk-code-links.command.ts",
       "hashValue": "68ad1992474cd89c571ac863ff93f096904fba086e15aa5c880e16872d7aee7d",
       "committedHashValue": null,
@@ -2162,7 +2262,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-document-link.command.ts": {
-      "id": "ca8d3336-78dd-4eb8-a0ec-ebc7f51158e3",
+      "id": "08522e52-576d-46ad-ba8f-0e0ce924ff79",
       "filePath": "src/domains/linking/application/commands/create-document-link.command.ts",
       "hashValue": "29f90f75aba0b150437b860ef1ebb1a70e2ddf52b5b8698f713b67a3359da735",
       "committedHashValue": null,
@@ -2172,7 +2272,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/create-link.command.ts": {
-      "id": "9e1e8b90-dff6-4f1e-a8f0-967ed65e96c9",
+      "id": "e6c6d31d-672b-4c28-9953-a70c6f9d6be9",
       "filePath": "src/domains/linking/application/commands/create-link.command.ts",
       "hashValue": "8448e1b76b06e7a11b7cd6b78750e321fdfd9db05c6796b07c492eb0b8144877",
       "committedHashValue": null,
@@ -2182,7 +2282,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/migrate-links.command.ts": {
-      "id": "572f62b3-9d33-4aae-b26b-0cbbd70599a5",
+      "id": "690bd1bd-7977-436d-b496-41dc1cfdab55",
       "filePath": "src/domains/linking/application/commands/migrate-links.command.ts",
       "hashValue": "dd155434987a9c2eb29faef363892dfc87cf1606ce7e7a9f018cc33a3620030a",
       "committedHashValue": null,
@@ -2192,7 +2292,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/remove-document-link.command.ts": {
-      "id": "55c84394-1ec1-4709-950b-212c74ed740f",
+      "id": "7ef73023-c9ea-4b8f-b780-36dc8f3042f5",
       "filePath": "src/domains/linking/application/commands/remove-document-link.command.ts",
       "hashValue": "ceaa408e9aa47f994313436467df1d3b14af8aebf6bd4cbae06741b464e2421e",
       "committedHashValue": null,
@@ -2202,7 +2302,7 @@
       "diff": null
     },
     "src/domains/linking/application/commands/remove-link.command.ts": {
-      "id": "ab3dfc9f-7b80-4c45-aec1-c058910d4494",
+      "id": "65ce0173-55f7-4664-8327-a19173dd2f3a",
       "filePath": "src/domains/linking/application/commands/remove-link.command.ts",
       "hashValue": "f0c2cf1a925c9852bd9c9dbd20a75a3c13762e96b4a8ea9dfd053df2297d88de",
       "committedHashValue": null,
@@ -2212,7 +2312,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/code-to-doc-link.dto.ts": {
-      "id": "3da05528-2673-4521-80cd-ff69656baaaa",
+      "id": "2fe68fda-1677-48bb-9112-f95b39e2c4b3",
       "filePath": "src/domains/linking/application/dto/code-to-doc-link.dto.ts",
       "hashValue": "d35917105a66bddc97e5657b826310cf64a268901288a5ed5b7f4d5af374f063",
       "committedHashValue": null,
@@ -2222,7 +2322,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/document-link.dto.ts": {
-      "id": "8f1d557a-4584-4a38-9d96-debb7fad7034",
+      "id": "af427164-d269-4b8c-a345-468d8737c303",
       "filePath": "src/domains/linking/application/dto/document-link.dto.ts",
       "hashValue": "190dec4c7ac82ab8ae9e0d2f8e6f147f5960864a5d9e61f1243bb0812c61e297",
       "committedHashValue": null,
@@ -2232,7 +2332,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/link-graph.dto.ts": {
-      "id": "ccc573cc-e4c0-4fbc-9c2f-7b23b43d9ff5",
+      "id": "69d43b9c-191d-4efd-a9df-1d48efae1dd2",
       "filePath": "src/domains/linking/application/dto/link-graph.dto.ts",
       "hashValue": "274db5567ce7e3dd3dd70b111f0335b23048c79d91701929df364d956692b6d0",
       "committedHashValue": null,
@@ -2242,7 +2342,7 @@
       "diff": null
     },
     "src/domains/linking/application/dto/link.dto.ts": {
-      "id": "493df6d0-ee03-4ce6-8bb4-ae5228a1b79c",
+      "id": "7ab2ec14-cbcb-4e60-af90-9373227f903c",
       "filePath": "src/domains/linking/application/dto/link.dto.ts",
       "hashValue": "0b45d3a3b2256980c21e4f469176cb8bd794faee36c1e6b5ce359bdb6728f940",
       "committedHashValue": null,
@@ -2252,7 +2352,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-bulk-code-links.handler.ts": {
-      "id": "d4afe130-fcdc-44ad-974d-1361fbdbddad",
+      "id": "7afe76f4-6943-4f73-b69c-7dd8f68ecaa4",
       "filePath": "src/domains/linking/application/handlers/create-bulk-code-links.handler.ts",
       "hashValue": "1f443831b54804c7a3cbf6241b72b033b49bd0aa410e02a8b7c5f2866e934a61",
       "committedHashValue": null,
@@ -2262,7 +2362,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-document-link.handler.ts": {
-      "id": "dc0ac20d-e797-412d-aee7-46b6b849f916",
+      "id": "bf45b350-b843-497f-a244-75979db000be",
       "filePath": "src/domains/linking/application/handlers/create-document-link.handler.ts",
       "hashValue": "21524b1d239d1b371bac6a8150ada09bf6d5eb5b719798871a6659b7a6924ea7",
       "committedHashValue": null,
@@ -2272,7 +2372,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/create-link.handler.ts": {
-      "id": "07c04c6c-4f5e-430c-8021-54fd2050132e",
+      "id": "cb0967eb-99e1-4861-9720-cf0bfaf7043d",
       "filePath": "src/domains/linking/application/handlers/create-link.handler.ts",
       "hashValue": "723cdbdeec6f3a5a9c92a826a54ff99e735c9c4c468af1f33f97615afb854c5a",
       "committedHashValue": null,
@@ -2282,7 +2382,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-document-children.handler.ts": {
-      "id": "dcaaaf03-8a19-405b-a04e-f3176ea7ea54",
+      "id": "aea294bc-1ca6-43ea-9249-7433bc5cac7e",
       "filePath": "src/domains/linking/application/handlers/get-document-children.handler.ts",
       "hashValue": "5f99fde8ab5e77cb3b70b562e5dca6f5e90d5b54a7394689dbd634df33df4ff0",
       "committedHashValue": null,
@@ -2292,7 +2392,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-document-parents.handler.ts": {
-      "id": "23a52209-aa68-4232-9dad-9419ddb9d180",
+      "id": "acd27afc-db44-4b9c-9eed-0c6b5f8f88d7",
       "filePath": "src/domains/linking/application/handlers/get-document-parents.handler.ts",
       "hashValue": "dc050663cdc28024b3bb2024b33994f095b676a59815eb953cd9bfb8edea041d",
       "committedHashValue": null,
@@ -2302,7 +2402,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-links-for-codefile.handler.ts": {
-      "id": "46ba2bc7-aa2a-4cd6-ae9d-571233b6fb98",
+      "id": "4a73843b-79d2-4d60-a987-b7d3ba88b58a",
       "filePath": "src/domains/linking/application/handlers/get-links-for-codefile.handler.ts",
       "hashValue": "8eb2eb12cceccc54b3fccd6dae5e462a9cd56d9a0fec361e1830febe7f89093b",
       "committedHashValue": null,
@@ -2312,7 +2412,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-links-for-document.handler.ts": {
-      "id": "3f44f08c-1731-4ae8-afd6-5bb4a42e81bb",
+      "id": "21f6bffd-ba00-46b6-849c-50895c3c5449",
       "filePath": "src/domains/linking/application/handlers/get-links-for-document.handler.ts",
       "hashValue": "0dd3908041be4a336e9e6217af31737d1ec86029fe5441dbe6543eec0783cbb2",
       "committedHashValue": null,
@@ -2322,7 +2422,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts": {
-      "id": "9e503168-4cba-4d90-ae8c-036986610ac4",
+      "id": "d0a551fb-0960-4279-b158-8f4dabfbeb39",
       "filePath": "src/domains/linking/application/handlers/get-unlinked-codefiles.handler.ts",
       "hashValue": "5ecf41d0a6c4be764691fe3d18ae960ae2c5520ffa6ec73f87c4d4aaad673c61",
       "committedHashValue": null,
@@ -2332,7 +2432,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/migrate-links.handler.ts": {
-      "id": "6e255a3e-4510-4b54-858e-e4e023347409",
+      "id": "0ed3e8d3-4d2d-4c88-99e5-298a20a131c9",
       "filePath": "src/domains/linking/application/handlers/migrate-links.handler.ts",
       "hashValue": "9b01a1191722ca429885eb6b83da6e2764dead1ef85d2c252ec8505f0d8f2481",
       "committedHashValue": null,
@@ -2342,7 +2442,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/remove-document-link.handler.ts": {
-      "id": "5b9cc357-9469-4d48-b9f1-bfb99e040de2",
+      "id": "0d6cffef-21ea-46c4-b7ae-f9d8304b7ff9",
       "filePath": "src/domains/linking/application/handlers/remove-document-link.handler.ts",
       "hashValue": "befe387781ffd8dfd57b828f0f4eafb9efcaef853bb6ec241186a30b8881028e",
       "committedHashValue": null,
@@ -2352,7 +2452,7 @@
       "diff": null
     },
     "src/domains/linking/application/handlers/remove-link.handler.ts": {
-      "id": "485a363f-c808-4b2a-b5dd-032160f14309",
+      "id": "4b9eaa40-5bc9-40bd-8c76-373948809676",
       "filePath": "src/domains/linking/application/handlers/remove-link.handler.ts",
       "hashValue": "28464154cb6918d51c6893d02788cd5d8caba99ef8e6f6034ea158f0e538552b",
       "committedHashValue": null,
@@ -2362,7 +2462,7 @@
       "diff": null
     },
     "src/domains/linking/application/ports/code-file-query.port.ts": {
-      "id": "719e13f8-d1ad-49b0-8277-188eac2ffd2d",
+      "id": "d5430ea7-43d2-48e7-af3e-3285820af675",
       "filePath": "src/domains/linking/application/ports/code-file-query.port.ts",
       "hashValue": "525e392caca7d10d7f4f84986364582a012b794fc3daff782dbd40a8e1c2785b",
       "committedHashValue": null,
@@ -2372,7 +2472,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-document-children.query.ts": {
-      "id": "174e887b-ef6a-4f1a-ba67-2f6c009ee483",
+      "id": "c2bbdf63-3c65-4219-b058-b811c8b1b8f6",
       "filePath": "src/domains/linking/application/queries/get-document-children.query.ts",
       "hashValue": "9d8ef3e1cfe8e7d740305485dcea2d560b8d886688a249775d17eecf6964cb19",
       "committedHashValue": null,
@@ -2382,7 +2482,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-document-parents.query.ts": {
-      "id": "30e7216a-7d12-4955-abe1-256df03993ff",
+      "id": "a2dfcf95-8acf-41d8-be39-305dd3f77473",
       "filePath": "src/domains/linking/application/queries/get-document-parents.query.ts",
       "hashValue": "ab3a93d43244657bcff79cf153c3948b197684580d6fc16dfa10b79171b18370",
       "committedHashValue": null,
@@ -2392,7 +2492,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-links-for-codefile.query.ts": {
-      "id": "96b1f28c-756b-4ca2-b3e4-38ccd7f37023",
+      "id": "71c8a2de-9749-485c-a22c-c860bece7f14",
       "filePath": "src/domains/linking/application/queries/get-links-for-codefile.query.ts",
       "hashValue": "7115dcd85045aaf89dd2d2e0230b218cd6a1f75cd6fbf9d74b34c306f48f1300",
       "committedHashValue": null,
@@ -2402,7 +2502,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-links-for-document.query.ts": {
-      "id": "49c5ddea-4360-49a3-9000-5976651aa817",
+      "id": "402ad574-6b24-4eca-bb8e-28a94154fa70",
       "filePath": "src/domains/linking/application/queries/get-links-for-document.query.ts",
       "hashValue": "19dc899d5fc64e6d63aa9b549256da5ff79635abc6c9092a6c97eadff2c21bbd",
       "committedHashValue": null,
@@ -2412,7 +2512,7 @@
       "diff": null
     },
     "src/domains/linking/application/queries/get-unlinked-codefiles.query.ts": {
-      "id": "501c417a-c090-4cc1-9b9a-7bff03a234ad",
+      "id": "73023219-87a7-4cf9-a14f-b4e24231455b",
       "filePath": "src/domains/linking/application/queries/get-unlinked-codefiles.query.ts",
       "hashValue": "efde6e07e28b6eb833c5f334afc85fe3be83a0f0ff955a1031d8fc60ff9a182c",
       "committedHashValue": null,
@@ -2422,7 +2522,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/code-to-doc-link.ts": {
-      "id": "9267e398-f3b3-4e4f-8ac8-4f213d4a80cd",
+      "id": "242b9d71-6ebb-4166-92e3-db63ccc2a0f8",
       "filePath": "src/domains/linking/domain/entities/code-to-doc-link.ts",
       "hashValue": "1e4671a7085dff66e8f13e16f691b296f4976fd5cf3cdb71cd2c8e159a4e6794",
       "committedHashValue": null,
@@ -2432,7 +2532,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/document-to-document-link.ts": {
-      "id": "67ee8006-719b-4ce1-8c68-695d2c704082",
+      "id": "6531da41-a42a-4ad3-8359-2a238b9367d3",
       "filePath": "src/domains/linking/domain/entities/document-to-document-link.ts",
       "hashValue": "ab39bb1264b1b2b7a1d2ff04883cfacf6e5264e2dee264cbdfaa51e8a090c634",
       "committedHashValue": null,
@@ -2442,7 +2542,7 @@
       "diff": null
     },
     "src/domains/linking/domain/entities/link-graph.ts": {
-      "id": "0b285cd1-3ce6-4d5a-9793-47a5fe003944",
+      "id": "1218c9dd-df6b-4e51-8a94-a265e7dd0e55",
       "filePath": "src/domains/linking/domain/entities/link-graph.ts",
       "hashValue": "8665810b7d97dce1d013e70275cc961e0d751fc9f8f9db89dbd1eded71803536",
       "committedHashValue": null,
@@ -2452,7 +2552,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/document-link-broken.ts": {
-      "id": "5faf8bcd-61dd-47d5-b524-bece8409342e",
+      "id": "ad9f020c-9215-44cd-ac60-9b7a1c49fc6c",
       "filePath": "src/domains/linking/domain/events/document-link-broken.ts",
       "hashValue": "4a9dc62c4f26d5d35ce64af47576aa8c8af2e4b9fa2eb14eb52b9243308db25b",
       "committedHashValue": null,
@@ -2462,7 +2562,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/document-link-created.ts": {
-      "id": "16dce098-bf0c-4956-8a70-98363caa55d7",
+      "id": "43567d34-4525-43be-b123-7351a2529f4a",
       "filePath": "src/domains/linking/domain/events/document-link-created.ts",
       "hashValue": "742627b82362a69184c72cda9c25e1e83b68a7e2107381c6f43308f343e36b08",
       "committedHashValue": null,
@@ -2472,7 +2572,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/link-broken.ts": {
-      "id": "6401915c-476f-4c17-9943-575692b2fb76",
+      "id": "84e70162-7219-4162-9f76-0587a0ed6e97",
       "filePath": "src/domains/linking/domain/events/link-broken.ts",
       "hashValue": "633cb35489eead05911457f8e54d19b17ec7ffd5124cb3d275525c9d8a1788d3",
       "committedHashValue": null,
@@ -2482,7 +2582,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/link-created.ts": {
-      "id": "9cf6dcfd-a7c2-4d4e-a6d9-e744e30636e4",
+      "id": "d1d9d604-1c12-4410-9f8a-413825f5e9f1",
       "filePath": "src/domains/linking/domain/events/link-created.ts",
       "hashValue": "33bf55e3554b15ac24929760dede4cc5884cc4c557078a8b374c03e9d6e56598",
       "committedHashValue": null,
@@ -2492,7 +2592,7 @@
       "diff": null
     },
     "src/domains/linking/domain/events/links-migrated.ts": {
-      "id": "4fe23e70-b37f-4f02-aa18-66f6ad11b3c9",
+      "id": "ef5d5ba1-dc83-4a54-adaa-827b35e0b8fc",
       "filePath": "src/domains/linking/domain/events/links-migrated.ts",
       "hashValue": "b9a03c74198dc6bab643c01520e0ab39c9971d455fa4656e667f559891db897d",
       "committedHashValue": null,
@@ -2502,7 +2602,7 @@
       "diff": null
     },
     "src/domains/linking/domain/repository/document-link-repository.interface.ts": {
-      "id": "03a60b96-5056-45d2-a625-6477e8c773f1",
+      "id": "0c6716dd-9150-4124-a18f-170926245b90",
       "filePath": "src/domains/linking/domain/repository/document-link-repository.interface.ts",
       "hashValue": "4fa872b8be51a918eb94f830a80fb08ad2da993cead746a8e33fd5dd59054a3c",
       "committedHashValue": null,
@@ -2512,7 +2612,7 @@
       "diff": null
     },
     "src/domains/linking/domain/repository/link-repository.interface.ts": {
-      "id": "b81c7d90-4e12-4a50-af79-ca5c2b28fa40",
+      "id": "1e9650d7-6f04-41ac-984e-626f944ae5b5",
       "filePath": "src/domains/linking/domain/repository/link-repository.interface.ts",
       "hashValue": "75264b7f0368d01729e7a8758d0d07495fe5b2c29820e8b6884947185038c461",
       "committedHashValue": null,
@@ -2522,7 +2622,7 @@
       "diff": null
     },
     "src/domains/linking/domain/services/document-link-validator.service.ts": {
-      "id": "97fba6fe-d750-44b9-8302-9861ca2c08fb",
+      "id": "c9a33509-25bb-4d30-a85c-1baba0c2ffe0",
       "filePath": "src/domains/linking/domain/services/document-link-validator.service.ts",
       "hashValue": "50b651c250ec001c6eee401c5b50f4fd18e02945934f85193bac256ca815e054",
       "committedHashValue": null,
@@ -2532,7 +2632,7 @@
       "diff": null
     },
     "src/domains/linking/domain/services/link-migration.service.ts": {
-      "id": "e78cf54d-6eef-4896-8bb5-35db8cff9373",
+      "id": "efdb13bc-37db-46ba-9948-cece96a8e826",
       "filePath": "src/domains/linking/domain/services/link-migration.service.ts",
       "hashValue": "c52c5ebf98e04a68bf6fc56484440502f73e0928e06de36966283cd91e564a78",
       "committedHashValue": null,
@@ -2542,7 +2642,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/document-link-id.ts": {
-      "id": "0f6605ef-5d49-4005-95eb-062afdb48766",
+      "id": "938899f7-0f33-4c36-8f4e-430a43e8c155",
       "filePath": "src/domains/linking/domain/value-objects/document-link-id.ts",
       "hashValue": "5c49abc70d8307fdeb0499338e11d65b4199906a8c3847d84a68848128c7a7db",
       "committedHashValue": null,
@@ -2552,7 +2652,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-graph-id.ts": {
-      "id": "436088bc-72f0-4f20-9b93-b9a0b62fcb6f",
+      "id": "05a362e9-7f1c-43c1-b7c5-f2729f450a1a",
       "filePath": "src/domains/linking/domain/value-objects/link-graph-id.ts",
       "hashValue": "ec88c6799ca2e3a66a77499e0053a0d560685902af75414c41e58b06c7db2541",
       "committedHashValue": null,
@@ -2562,7 +2662,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-id.ts": {
-      "id": "ad76099e-429a-40a5-a209-128add23efee",
+      "id": "202f6ec5-2632-4c8f-aaf7-24f81be6d928",
       "filePath": "src/domains/linking/domain/value-objects/link-id.ts",
       "hashValue": "a1d1925abcb4cafedaed706b3413967a54f9dd4be24204c6eba2f9b90fa4573b",
       "committedHashValue": null,
@@ -2572,7 +2672,7 @@
       "diff": null
     },
     "src/domains/linking/domain/value-objects/link-type.ts": {
-      "id": "65028902-ef87-4876-a7b3-f0df6a494dc9",
+      "id": "b10f19c1-d5c2-4ca0-8b46-0456a88e3f0f",
       "filePath": "src/domains/linking/domain/value-objects/link-type.ts",
       "hashValue": "37096a78239d8704d9a03eeb449d82bbbd3396c9ce2591bdb7d9f36c86c7f3d2",
       "committedHashValue": null,
@@ -2582,7 +2682,7 @@
       "diff": null
     },
     "src/domains/linking/infrastructure/repository/document-link-json.repository.ts": {
-      "id": "ff7e09de-26e1-4f66-b5b4-4a3b1fa4eb75",
+      "id": "1a56c33e-10c0-4490-b275-6281155521ed",
       "filePath": "src/domains/linking/infrastructure/repository/document-link-json.repository.ts",
       "hashValue": "9cde1ba2f0e0aeafa6cb82050152045b552b3e9f51ae66048db2b1a0f2c52fd6",
       "committedHashValue": null,
@@ -2592,7 +2692,7 @@
       "diff": null
     },
     "src/domains/linking/infrastructure/repository/link-json.repository.ts": {
-      "id": "61eb8bbf-d68d-44ea-891f-bac0222e8e3e",
+      "id": "d3c96ab7-58fd-45b0-a43e-0712beb85bd9",
       "filePath": "src/domains/linking/infrastructure/repository/link-json.repository.ts",
       "hashValue": "bd29987b49a19fc507f062dd92af3c1d2cbc068a3a2fd5bc8c743313769760e3",
       "committedHashValue": null,
@@ -2602,7 +2702,7 @@
       "diff": null
     },
     "src/domains/project/application/commands/change-workspace-scope.command.ts": {
-      "id": "e5be34be-6553-438a-82af-eaabf9a07146",
+      "id": "2429772c-03bb-4af8-8a1a-eed4dc42d019",
       "filePath": "src/domains/project/application/commands/change-workspace-scope.command.ts",
       "hashValue": "28405f1f52debdcbc34b109af4c1acb719e8fa6efb5224615cd124d3c5abbd27",
       "committedHashValue": null,
@@ -2612,7 +2712,7 @@
       "diff": null
     },
     "src/domains/project/application/commands/initialize-workspace.command.ts": {
-      "id": "ad41be29-7a02-4355-8855-6526c8b9844d",
+      "id": "affb3b52-b20b-484e-8231-cf431367f796",
       "filePath": "src/domains/project/application/commands/initialize-workspace.command.ts",
       "hashValue": "f4eb7f2d86fcb346826a28fed86148fd9a2b24cdc4bc57b130caf43451522df3",
       "committedHashValue": null,
@@ -2622,7 +2722,7 @@
       "diff": null
     },
     "src/domains/project/application/dto/project-config.dto.ts": {
-      "id": "642e785c-b74e-4b28-beca-e06c6cda7515",
+      "id": "5ad9385a-27ee-4a33-9b84-8c8cf9ed062c",
       "filePath": "src/domains/project/application/dto/project-config.dto.ts",
       "hashValue": "331bc709b62ae9a6ed90c92a17f19e0428f84454d82eeb0591d0b5206a258d0b",
       "committedHashValue": null,
@@ -2632,7 +2732,7 @@
       "diff": null
     },
     "src/domains/project/application/dto/workspace.dto.ts": {
-      "id": "a5f63f55-ebf4-475a-93be-7e35c932f44c",
+      "id": "158efcfe-9e8e-4e5b-b504-73f76185e246",
       "filePath": "src/domains/project/application/dto/workspace.dto.ts",
       "hashValue": "375e9284ce5058eac020f2c7135180d57b9551f2815b0fee8e0c0c9f507faa3f",
       "committedHashValue": null,
@@ -2642,7 +2742,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/change-workspace-scope.handler.ts": {
-      "id": "66b7ec38-fe88-4738-82df-a2429cccae7c",
+      "id": "c7fec85b-67f6-4d1a-a8ee-4bc44ed2804c",
       "filePath": "src/domains/project/application/handlers/change-workspace-scope.handler.ts",
       "hashValue": "a7accf020ac78379f8334a6cc31072d2a8ba0041d985c4b3be80a1832a56c5c1",
       "committedHashValue": null,
@@ -2652,7 +2752,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/get-workspace.handler.ts": {
-      "id": "9fc43b40-0a71-450e-ae38-2aa8cb16a654",
+      "id": "efa8900a-5e98-416d-b29e-c516f784738b",
       "filePath": "src/domains/project/application/handlers/get-workspace.handler.ts",
       "hashValue": "78e41ceb2d9d8e4132495c7673807ec82412b84bbd3dcd0f578eed1562bba152",
       "committedHashValue": null,
@@ -2662,7 +2762,7 @@
       "diff": null
     },
     "src/domains/project/application/handlers/initialize-workspace.handler.ts": {
-      "id": "7e24f338-c711-4256-81b9-77bcee40840d",
+      "id": "595c2ba7-cad5-4fbd-b835-8686a600ad51",
       "filePath": "src/domains/project/application/handlers/initialize-workspace.handler.ts",
       "hashValue": "cb1bcf2658d8f3b5e721609fb22870f5f35288c9e5a4383abd7c969539717be5",
       "committedHashValue": null,
@@ -2672,7 +2772,7 @@
       "diff": null
     },
     "src/domains/project/application/queries/get-workspace.query.ts": {
-      "id": "862c0f2a-e62e-4394-9889-297716431d87",
+      "id": "1e83378b-18c4-49e8-b8f3-21e23882379f",
       "filePath": "src/domains/project/application/queries/get-workspace.query.ts",
       "hashValue": "fa200bb12d9652f92071b9931b02a02d4a40e00524b30fe5e40c1fa558efd39a",
       "committedHashValue": null,
@@ -2682,7 +2782,7 @@
       "diff": null
     },
     "src/domains/project/domain/entities/project-config.ts": {
-      "id": "661d5987-a66b-4895-b299-e52d3a82e059",
+      "id": "0610ce88-e42d-47e2-9027-b09ff9e64486",
       "filePath": "src/domains/project/domain/entities/project-config.ts",
       "hashValue": "eeeef0ba5e09d57ed3bfb2704e770a16d8fc7d0f2f35a7a8ad148853272cffe1",
       "committedHashValue": null,
@@ -2692,7 +2792,7 @@
       "diff": null
     },
     "src/domains/project/domain/entities/workspace.ts": {
-      "id": "226f402c-8013-450b-a95e-882e43d96e94",
+      "id": "eb9937e6-763b-4978-a86a-6d7c68582c63",
       "filePath": "src/domains/project/domain/entities/workspace.ts",
       "hashValue": "ad613d0c127adac5aeca495362cfef209d17580c8df3c044a58d43f8c9c1b932",
       "committedHashValue": null,
@@ -2702,7 +2802,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-closed.ts": {
-      "id": "90f00a33-ded6-4198-b86c-f50febbbf465",
+      "id": "d9af35ef-1f54-4a90-b801-8e38cb9e1e20",
       "filePath": "src/domains/project/domain/events/workspace-closed.ts",
       "hashValue": "062d2e3731ff3b6f35dbebb87425e87d2bb140a54a6465cdc2c004ec7e0621c3",
       "committedHashValue": null,
@@ -2712,7 +2812,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-initialized.ts": {
-      "id": "fce56a3b-5f20-4673-aca3-903fe28eb25b",
+      "id": "861865ba-a927-45f9-8236-880aea3c1bbf",
       "filePath": "src/domains/project/domain/events/workspace-initialized.ts",
       "hashValue": "5ccf29986568a60392bad8665b7bfd772fbb169dd28047e31abf9b1248ef8440",
       "committedHashValue": null,
@@ -2722,7 +2822,7 @@
       "diff": null
     },
     "src/domains/project/domain/events/workspace-scope-changed.ts": {
-      "id": "527be216-b0a8-4a7f-8a03-4e665a9f1a7a",
+      "id": "e855a751-2ffb-433d-85da-0b20bab4cbd4",
       "filePath": "src/domains/project/domain/events/workspace-scope-changed.ts",
       "hashValue": "b1fe64587811989752464bfa548dfc88f6f5b411c4c126cf51141076ffb3ea2c",
       "committedHashValue": null,
@@ -2732,7 +2832,7 @@
       "diff": null
     },
     "src/domains/project/domain/repository/project-config-repository.interface.ts": {
-      "id": "13b52dd4-6d36-457c-8d87-ecd5d18b5719",
+      "id": "30f82552-2bd5-4f1d-8cd4-42b2a41e834f",
       "filePath": "src/domains/project/domain/repository/project-config-repository.interface.ts",
       "hashValue": "973d02c3d870daca4dce5178e71217288f95e4948d2e06348119678033dd3a01",
       "committedHashValue": null,
@@ -2742,7 +2842,7 @@
       "diff": null
     },
     "src/domains/project/domain/repository/workspace-repository.interface.ts": {
-      "id": "9968fe24-b10e-4d01-b9da-6efd4587a2f3",
+      "id": "ad4e2d25-3353-4d17-9b8f-b267e0999676",
       "filePath": "src/domains/project/domain/repository/workspace-repository.interface.ts",
       "hashValue": "4845b3f77532a981fdc076ae0c69951a0414bd26e1c5d59bebc5125422bb570a",
       "committedHashValue": null,
@@ -2752,7 +2852,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/metadata-folder-name.ts": {
-      "id": "4d267525-a9d3-44fa-bc30-809028225bab",
+      "id": "d20c8819-87ed-493f-a238-e08e4817dc9e",
       "filePath": "src/domains/project/domain/value-objects/metadata-folder-name.ts",
       "hashValue": "902afe3f60aedb9c3f1fabb420b88e4c04111344f7f4074987dfaabfa4f29740",
       "committedHashValue": null,
@@ -2762,7 +2862,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/workspace-id.ts": {
-      "id": "914e6e14-bbc0-4f09-99bc-0a30015bb0c5",
+      "id": "b80206e0-9a12-46b0-abb9-a4b7fff3f9c2",
       "filePath": "src/domains/project/domain/value-objects/workspace-id.ts",
       "hashValue": "280fed0688b59fbca6caf1cb2fa0cca1f4978fb422f41f72022770545177a7c2",
       "committedHashValue": null,
@@ -2772,7 +2872,7 @@
       "diff": null
     },
     "src/domains/project/domain/value-objects/workspace-path.ts": {
-      "id": "38827b0b-bd87-4885-8198-2c9d08254aa3",
+      "id": "6cc93342-56e1-42da-81ec-22ddceb292c3",
       "filePath": "src/domains/project/domain/value-objects/workspace-path.ts",
       "hashValue": "5bc5e1c7cc55de3a31419a5e1e6fdf87bfa6ec6e437897cf959ca3aa1553be85",
       "committedHashValue": null,
@@ -2782,7 +2882,7 @@
       "diff": null
     },
     "src/domains/project/infrastructure/repository/project-config-json.repository.ts": {
-      "id": "d03214f4-49c9-456b-91ea-7c4a6350ba77",
+      "id": "f6b1f475-9f0b-4fb9-b4e7-a2dba4185594",
       "filePath": "src/domains/project/infrastructure/repository/project-config-json.repository.ts",
       "hashValue": "30f7c831f5ebad3ce4bd70fcee9d23c33b05a4fc2fa844bf289c105001e68a59",
       "committedHashValue": null,
@@ -2792,7 +2892,7 @@
       "diff": null
     },
     "src/domains/project/infrastructure/repository/workspace-json.repository.ts": {
-      "id": "d948e83b-6a7b-4d06-a314-418a9a0b1ed4",
+      "id": "adafa922-d523-4f57-97fb-06e39a2039cd",
       "filePath": "src/domains/project/infrastructure/repository/workspace-json.repository.ts",
       "hashValue": "5bdd75de12078eb2527d076e0f05c473d89d65d57ac818d4f58879c0dd657a76",
       "committedHashValue": null,
@@ -2802,7 +2902,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/approve-commit.command.ts": {
-      "id": "8fe5c24b-3f9f-4991-a40b-0f43d1679168",
+      "id": "634eb9a0-b014-4929-a7cb-6ddffed17318",
       "filePath": "src/domains/tracking/application/commands/approve-commit.command.ts",
       "hashValue": "4ae64e0167454ca6124d5bd1fe336b6831df3d72ac682117514ca6517e6ee923",
       "committedHashValue": null,
@@ -2812,7 +2912,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/detect-changes.command.ts": {
-      "id": "5b45f3d1-1239-4102-8589-b20dea9d3dc2",
+      "id": "fdf07a89-2237-43d5-9c7b-98222fd1da3a",
       "filePath": "src/domains/tracking/application/commands/detect-changes.command.ts",
       "hashValue": "1c38b41d86d5f67e68e958e62177269c17a27534460753ca4d3b527333d765b6",
       "committedHashValue": null,
@@ -2822,7 +2922,7 @@
       "diff": null
     },
     "src/domains/tracking/application/commands/record-hash.command.ts": {
-      "id": "b901aac6-f810-46ad-87d9-c4db8e78286f",
+      "id": "529a10f7-eb00-4550-a69c-6adb5e0be006",
       "filePath": "src/domains/tracking/application/commands/record-hash.command.ts",
       "hashValue": "2e094d2589ef1fcfffee11c09963414b4b5f295aaa6fcb3dc09946a449c3d382",
       "committedHashValue": null,
@@ -2832,7 +2932,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/content-diff.dto.ts": {
-      "id": "4882f7a9-bc39-4c94-88d9-04ea92ba4c48",
+      "id": "b034b7ae-140d-4657-b4ab-9e5df437926d",
       "filePath": "src/domains/tracking/application/dto/content-diff.dto.ts",
       "hashValue": "4d9e61803a29ccefd7569a26d1a75e9e31e1ad827135834ca0e05ed05e388a1e",
       "committedHashValue": null,
@@ -2842,7 +2942,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/file-hash.dto.ts": {
-      "id": "d32f3618-ef97-4f46-aa35-a184a081a36a",
+      "id": "0bcad925-33b6-4049-8e4c-51d4e153cef7",
       "filePath": "src/domains/tracking/application/dto/file-hash.dto.ts",
       "hashValue": "22c6bc59236c1d049033c592bdb4389c0630d0f0f4ebc4ec45543ac9dd5f2353",
       "committedHashValue": null,
@@ -2852,7 +2952,7 @@
       "diff": null
     },
     "src/domains/tracking/application/dto/granular-commit.dto.ts": {
-      "id": "690277f6-bdcf-4c24-bff2-2c15b5ded984",
+      "id": "bc157958-7ce8-47a4-9c27-2c14f5f63afb",
       "filePath": "src/domains/tracking/application/dto/granular-commit.dto.ts",
       "hashValue": "911492f8138ab163bd09e8c5cd486b9a724370dfecf186eb2f67df85028c24aa",
       "committedHashValue": null,
@@ -2861,8 +2961,18 @@
       "commitId": null,
       "diff": null
     },
+    "src/domains/tracking/application/dto/pending-status.dto.ts": {
+      "id": "04e28c34-c552-4661-808d-1279fa89ab1f",
+      "filePath": "src/domains/tracking/application/dto/pending-status.dto.ts",
+      "hashValue": "e1e1acf838568ffb2ea04aceb2dfa693540e7bd929587181de4d99b830d3b667",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
     "src/domains/tracking/application/handlers/approve-commit.handler.ts": {
-      "id": "fd52c4ec-989e-4665-890c-89138bfd626d",
+      "id": "9781a361-9224-45c3-ad3f-b77adb0c742c",
       "filePath": "src/domains/tracking/application/handlers/approve-commit.handler.ts",
       "hashValue": "3b3c380b12fe04ecc028b3fc10d660390290f4d2d41a9ac6c884e64e5fa5a967",
       "committedHashValue": null,
@@ -2872,7 +2982,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/detect-changes.handler.ts": {
-      "id": "143253d3-6353-4edc-abf1-accfae4164b1",
+      "id": "f83e7645-52b3-431c-9b16-3a0423f7c2e4",
       "filePath": "src/domains/tracking/application/handlers/detect-changes.handler.ts",
       "hashValue": "b2f1c5770ca25512dd680876a6d9883d0d8692112a23eafdbb7cf4432445afee",
       "committedHashValue": null,
@@ -2881,8 +2991,18 @@
       "commitId": null,
       "diff": null
     },
+    "src/domains/tracking/application/handlers/get-all-pending-status.handler.ts": {
+      "id": "a6cbec87-c28b-403a-85bf-2bc63d54910d",
+      "filePath": "src/domains/tracking/application/handlers/get-all-pending-status.handler.ts",
+      "hashValue": "55e4b9320956fdf134b1ae0e6fe9ab9df1ec8bd48e7fb09a15a068b2602bcc53",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
     "src/domains/tracking/application/handlers/get-commit-history.handler.ts": {
-      "id": "14f80e8f-fb6e-4641-9644-a98c8ced5904",
+      "id": "952fc3e2-c9a8-42a3-b5e3-44bf486b1a70",
       "filePath": "src/domains/tracking/application/handlers/get-commit-history.handler.ts",
       "hashValue": "9597963e20f69fcbd9d08da0113b89a7512ee3dead9d826397b770c6e03d4c5d",
       "committedHashValue": null,
@@ -2892,7 +3012,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/get-file-diff.handler.ts": {
-      "id": "ceae3ba8-45e3-4bec-869f-b25246472617",
+      "id": "ecaf790c-8a00-4d95-a1f5-10d232efef7b",
       "filePath": "src/domains/tracking/application/handlers/get-file-diff.handler.ts",
       "hashValue": "18aaebc986c938356fe10a67a43c3cd230b90213a179964f518e6cb7c835cc41",
       "committedHashValue": null,
@@ -2902,7 +3022,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/get-pending-changes.handler.ts": {
-      "id": "8636cfc6-d363-456a-9491-ac28e7c422ba",
+      "id": "52d1305a-b1b6-4217-b5ba-d0ffcc7c4b0b",
       "filePath": "src/domains/tracking/application/handlers/get-pending-changes.handler.ts",
       "hashValue": "a0c49f5c5f4be8c54cafa2101c61f73230bc7a6e6ff61f32654f4d86e62aac9d",
       "committedHashValue": null,
@@ -2912,7 +3032,7 @@
       "diff": null
     },
     "src/domains/tracking/application/handlers/record-hash.handler.ts": {
-      "id": "e0a6b007-2b23-4f2e-abdc-bd562ca10835",
+      "id": "e3212b84-d749-4024-9531-ce49c9347de8",
       "filePath": "src/domains/tracking/application/handlers/record-hash.handler.ts",
       "hashValue": "8002f299767e3b5af0d8b232404877d1aab49cf6aa13826d989a0da55b017ad1",
       "committedHashValue": null,
@@ -2922,7 +3042,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/diff-calculator.interface.ts": {
-      "id": "c81e34b8-3a6a-48b0-8605-4d0f53646c54",
+      "id": "9110b4a3-88f0-43cd-96d4-cf4914d866d9",
       "filePath": "src/domains/tracking/application/ports/diff-calculator.interface.ts",
       "hashValue": "9424b88d06f1cc410068af3125189363de53120f7663f5045cee80ecf22e185b",
       "committedHashValue": null,
@@ -2932,7 +3052,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/file-content-reader.interface.ts": {
-      "id": "32ff707e-63cf-4dbe-a68a-50842a3d24f3",
+      "id": "76428b2e-ff88-4fa7-8c71-7d9c41c96924",
       "filePath": "src/domains/tracking/application/ports/file-content-reader.interface.ts",
       "hashValue": "3e94b812c80625ef6145eb1f194b3215050d55687741e0a017ef852f2795fe56",
       "committedHashValue": null,
@@ -2942,7 +3062,7 @@
       "diff": null
     },
     "src/domains/tracking/application/ports/linked-document-query.port.ts": {
-      "id": "a21fb59c-c8c3-41fc-aeeb-ee4483cabd89",
+      "id": "61fca9d7-b4ea-4bbe-8828-59d3fe0f386d",
       "filePath": "src/domains/tracking/application/ports/linked-document-query.port.ts",
       "hashValue": "7535e3cd962e40223a3710b6670aef1c507649e5441d2e438c515f282d901a3a",
       "committedHashValue": null,
@@ -2951,8 +3071,18 @@
       "commitId": null,
       "diff": null
     },
+    "src/domains/tracking/application/queries/get-all-pending-status.query.ts": {
+      "id": "a2ac5439-cdd3-4e50-8e6d-72b2dc8ce9ce",
+      "filePath": "src/domains/tracking/application/queries/get-all-pending-status.query.ts",
+      "hashValue": "2374b083d06b53b5003210821313f5bd440869e78e1d47b68e381fddac483440",
+      "committedHashValue": null,
+      "committedCommitId": null,
+      "committedAt": null,
+      "commitId": null,
+      "diff": null
+    },
     "src/domains/tracking/application/queries/get-commit-history.query.ts": {
-      "id": "89b7bc58-d919-43f0-9010-2c42753352a9",
+      "id": "e3ae4ba9-8bb8-4b24-b0cb-b771533705c1",
       "filePath": "src/domains/tracking/application/queries/get-commit-history.query.ts",
       "hashValue": "935957688f646a3dfb4a38e6a357840fd1dcfee91177755ea1f8819ee4f172da",
       "committedHashValue": null,
@@ -2962,7 +3092,7 @@
       "diff": null
     },
     "src/domains/tracking/application/queries/get-file-diff.query.ts": {
-      "id": "93e2c3e8-900d-43bd-9748-93d8acc15faa",
+      "id": "df514a0c-bc29-493f-ac09-f618fc9903a0",
       "filePath": "src/domains/tracking/application/queries/get-file-diff.query.ts",
       "hashValue": "9107e169e95b173413b28f25389e53417dfa234e4d7d46a7988d25f6d9a1760f",
       "committedHashValue": null,
@@ -2972,7 +3102,7 @@
       "diff": null
     },
     "src/domains/tracking/application/queries/get-pending-changes.query.ts": {
-      "id": "32ab5afd-091e-4f85-9052-c132e12fa99b",
+      "id": "b2cb8278-9b78-4a42-ad3b-ec09f72391db",
       "filePath": "src/domains/tracking/application/queries/get-pending-changes.query.ts",
       "hashValue": "8923b62ca716f0976d6f7df2efe90d97343e08aadd9c2eb50b37c7196229aba1",
       "committedHashValue": null,
@@ -2982,7 +3112,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/content-diff.ts": {
-      "id": "0faf3bca-2aad-43eb-b967-b10463df65b5",
+      "id": "b266708c-2a4b-4443-8a83-9a352a638bbc",
       "filePath": "src/domains/tracking/domain/entities/content-diff.ts",
       "hashValue": "56922ab6b70dc506aca49ef556777f8a6529bf2f75638cfe10920860edc71138",
       "committedHashValue": null,
@@ -2992,7 +3122,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/file-hash.ts": {
-      "id": "b14ed22a-bd7e-4363-ae1d-5e49bac4ec24",
+      "id": "cbc9f51c-5a35-4b32-ad02-29192d0fcda9",
       "filePath": "src/domains/tracking/domain/entities/file-hash.ts",
       "hashValue": "78e697f87dbf40157332ba6f1c121c73ef602c09df5ed32a18a3971d07b3a4d6",
       "committedHashValue": null,
@@ -3002,7 +3132,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/entities/granular-commit.ts": {
-      "id": "19912b5a-24e2-4ed3-a143-7665125e888e",
+      "id": "4ea47ee3-2bb2-4f10-8e67-18becbe7adfd",
       "filePath": "src/domains/tracking/domain/entities/granular-commit.ts",
       "hashValue": "7d458715c2045b8f3e02a872712bb0c26a61346934ad5980cb733aacfcc7e365",
       "committedHashValue": null,
@@ -3012,7 +3142,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/changes-detected.ts": {
-      "id": "1455ef56-95fc-4751-a979-922ae71d8334",
+      "id": "93291f39-b98a-4828-b51c-1e326595376a",
       "filePath": "src/domains/tracking/domain/events/changes-detected.ts",
       "hashValue": "2935adf9673874244fc1198fe2b7dfec0aa3577e4c06deab1ade30574f53f53c",
       "committedHashValue": null,
@@ -3022,7 +3152,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/commit-approved.ts": {
-      "id": "cbe03421-f0b9-4fd8-bb3e-33f9beedf23f",
+      "id": "a4e25a28-f7d0-4fcc-8b21-8d8061a1cdcc",
       "filePath": "src/domains/tracking/domain/events/commit-approved.ts",
       "hashValue": "d86c6fc132893234ec8d7cfd04010b7fb352fb5ad879b71d6120159196d30af4",
       "committedHashValue": null,
@@ -3032,7 +3162,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/events/review-required.ts": {
-      "id": "027b759c-4e00-4bef-9a36-a8e1dd08cd97",
+      "id": "8de2935e-7982-4be5-aae5-72fb979911e6",
       "filePath": "src/domains/tracking/domain/events/review-required.ts",
       "hashValue": "c666faaa7927be1bf70662bc315126a1c64270bf3a8f8bd9b7b82bb9e2d7a161",
       "committedHashValue": null,
@@ -3042,7 +3172,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/commit-repository.interface.ts": {
-      "id": "a9981289-b3ac-4545-9a06-758f4610d194",
+      "id": "24287c25-66ad-4342-95df-f4f8ed54e60c",
       "filePath": "src/domains/tracking/domain/repository/commit-repository.interface.ts",
       "hashValue": "32785953f2d0adebdc8bd81a671837e0fb1d4cc8f525c88dae08eaf9cb2036d1",
       "committedHashValue": null,
@@ -3052,7 +3182,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/hash-repository.interface.ts": {
-      "id": "8b89f9f0-f190-45ac-9912-2cd0a46d8183",
+      "id": "2dd61ed8-a2b3-430a-892d-93ee2103d1ad",
       "filePath": "src/domains/tracking/domain/repository/hash-repository.interface.ts",
       "hashValue": "1e4f9e708c7014d2b6c1ae1e3a1a55f025807dd8525779e3773b25e0e8e48897",
       "committedHashValue": null,
@@ -3062,7 +3192,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/repository/tracking-repository.interface.ts": {
-      "id": "0d5bca18-b9cb-4f87-8f89-735188c4c240",
+      "id": "bd2505da-6aa5-48ba-b2e0-17c8d51b6358",
       "filePath": "src/domains/tracking/domain/repository/tracking-repository.interface.ts",
       "hashValue": "fe087627cfc27abe0a75452bd9d881b31d87a6dd5de328147344f05bbdd48b6c",
       "committedHashValue": null,
@@ -3072,7 +3202,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/services/diff-calculator.service.ts": {
-      "id": "811c80e0-d7eb-45a9-8183-a7970462557a",
+      "id": "adfc995a-c94d-4dd2-8382-12d5bb5c5c44",
       "filePath": "src/domains/tracking/domain/services/diff-calculator.service.ts",
       "hashValue": "dae0cd47d1df8d72405de3e7ee374dbea1e599b8ab2e91d165d5d5494c041f93",
       "committedHashValue": null,
@@ -3082,7 +3212,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/services/hash-comparison.service.ts": {
-      "id": "64ba2c5a-27f2-41dc-8acc-faee177e1e84",
+      "id": "cd5f22c5-22fb-4152-af45-629a30e54cd7",
       "filePath": "src/domains/tracking/domain/services/hash-comparison.service.ts",
       "hashValue": "028fd23d17a11388363d682df37559486581d41115e4befed206fcc43ca1d2c6",
       "committedHashValue": null,
@@ -3092,7 +3222,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/commit-id.ts": {
-      "id": "ff02e93e-b643-4cc1-b95f-f42b4903aa58",
+      "id": "5027a08c-014a-43b8-aa7a-9c63302f5e8e",
       "filePath": "src/domains/tracking/domain/value-objects/commit-id.ts",
       "hashValue": "623601133b1151beee6888e64f7913f0419fa0184c3ac8cf2992292844fc6971",
       "committedHashValue": null,
@@ -3102,7 +3232,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/commit-status.ts": {
-      "id": "ff452d10-4ca6-438d-8e1f-04bb04dfa091",
+      "id": "2f23238f-f6d3-44a1-926c-dfd8d909eecd",
       "filePath": "src/domains/tracking/domain/value-objects/commit-status.ts",
       "hashValue": "6cc603ea3edf72dc2cd3748a2290f4b6f78c6438a23a79a6d9b7e1346a6e95be",
       "committedHashValue": null,
@@ -3112,7 +3242,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/diff-id.ts": {
-      "id": "7fc55d14-0baf-497d-943a-c5d7c26c8906",
+      "id": "b72e5f72-bec9-408d-8454-083312008dd5",
       "filePath": "src/domains/tracking/domain/value-objects/diff-id.ts",
       "hashValue": "440c815e77f5581f33e2a395eb39405c13fdbdb6a4f7ec0fe9e4958a3d3d9899",
       "committedHashValue": null,
@@ -3122,7 +3252,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/diff-line.ts": {
-      "id": "c12eea1a-de16-4820-93bb-64fd9fb1c6b9",
+      "id": "1bb29408-5150-4b67-b5ac-92e875bc682d",
       "filePath": "src/domains/tracking/domain/value-objects/diff-line.ts",
       "hashValue": "318f471e4512991667a850ae623def01aece415cc105c420612c1077c0bcf138",
       "committedHashValue": null,
@@ -3132,7 +3262,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/file-hash-id.ts": {
-      "id": "c4525e99-f05e-41c2-974b-6f250cca8f75",
+      "id": "9af67954-ee23-475c-ab03-3f8dccdb81b5",
       "filePath": "src/domains/tracking/domain/value-objects/file-hash-id.ts",
       "hashValue": "b58db7774d50dc7d6792cb061b59f4d04f4ff226ce4199b9f3be1e6985359516",
       "committedHashValue": null,
@@ -3142,7 +3272,7 @@
       "diff": null
     },
     "src/domains/tracking/domain/value-objects/hash-value.ts": {
-      "id": "dd425189-ab82-4cf5-a8c5-95554114d484",
+      "id": "d95476dc-c210-466a-84fa-52a6817c9cbd",
       "filePath": "src/domains/tracking/domain/value-objects/hash-value.ts",
       "hashValue": "bfa877826a80c1da6cd274302b1633bcf29d87d77de65ecb1dceac6f8272d44e",
       "committedHashValue": null,
@@ -3152,7 +3282,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/diff-calculator.adapter.ts": {
-      "id": "2dc591d5-b288-4623-8415-02eec99a5826",
+      "id": "880ff85e-d40f-4b34-9d0c-7ed1a9405acb",
       "filePath": "src/domains/tracking/infrastructure/adapters/diff-calculator.adapter.ts",
       "hashValue": "90c20dafa9bc50ecccbbecc5918c5b74419d1d6d7b65c3b8f9d0b5061d814e19",
       "committedHashValue": null,
@@ -3162,7 +3292,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts": {
-      "id": "ad9c756c-cd71-4ca2-887b-6644ffa943b1",
+      "id": "249ac046-8c0c-4bb0-9062-cbf8f8bbf818",
       "filePath": "src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts",
       "hashValue": "a579b9f31bd0f9ef31b4c5afbdc073401bbb5d31dc5d9edf6c72f44ce7f9b340",
       "committedHashValue": null,
@@ -3172,7 +3302,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts": {
-      "id": "a12b0b7f-d746-4c5d-85cd-1ece2c7da3df",
+      "id": "2c57dcd8-27d0-41e5-960c-d384a337868d",
       "filePath": "src/domains/tracking/infrastructure/adapters/hash-generator.adapter.ts",
       "hashValue": "53d45933f896859cb6e458f782256457548eac48cdc3db882de33eec751d3629",
       "committedHashValue": null,
@@ -3182,7 +3312,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/repository/commits-json.repository.ts": {
-      "id": "956d6e2f-91e7-4767-97d5-a4835d7d11f3",
+      "id": "f850fda1-2e43-4286-83fd-91cedea9919e",
       "filePath": "src/domains/tracking/infrastructure/repository/commits-json.repository.ts",
       "hashValue": "7ccc45f52735b19c7489d5b5d26dfe997ee026e30bdf567f01cd0c81541a9487",
       "committedHashValue": null,
@@ -3192,7 +3322,7 @@
       "diff": null
     },
     "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts": {
-      "id": "d7d51645-58a1-4809-8f8f-c23b45fc1123",
+      "id": "322a9faa-a492-49cf-948e-92e38072bcab",
       "filePath": "src/domains/tracking/infrastructure/repository/tracking-json.repository.ts",
       "hashValue": "ec91d713111439266de22d74abcdee0b6235938c0a2c0b01a343721e6f578c86",
       "committedHashValue": null,

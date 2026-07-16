@@ -2,7 +2,7 @@ import { JSX, useState, useEffect } from 'react';
 import { useTracking } from '../hooks/useTracking';
 import { useDocuments } from '../hooks/useDocuments';
 import { TrackingPageHeader } from '../components/tracking/TrackingPageHeader';
-import { DocumentList } from '../components/tracking/DocumentList';
+import { PendingDocumentList } from '../components/tracking/PendingDocumentList';
 import { PendingChangesList } from '../components/tracking/PendingChangesList';
 import { DiffViewer } from '../components/tracking/DiffViewer';
 import { DocumentCommitPanel } from '../components/tracking/DocumentCommitPanel';
@@ -17,50 +17,56 @@ export function TrackingPage(): JSX.Element {
     selectedDiff,
     isLoading,
     error,
+    pendingCountByDocId,
     selectDocument,
     approveCommit,
     fetchFileDiff,
     clearError,
+    fetchAllPendingStatus,
+    startRealtimeListener,
   } = useTracking();
 
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
   const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
 
-  const [pendingCounts, setPendingCounts] = useState<Record<string, number>>({});
-
+  // Initial data load & real-time listener
   useEffect(() => {
-    if (selectedDocument) {
-      setPendingCounts((prev) => ({
-        ...prev,
-        [selectedDocument.id]: pendingChanges.length,
-      }));
-    } else {
-      setPendingCounts({});
-    }
-  }, [pendingChanges, selectedDocument]);
+    fetchAllPendingStatus();
+    const unsubscribe = startRealtimeListener();
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
+  // Auto-select first pending document if none selected
   useEffect(() => {
     if (!selectedDocument && documents.length > 0) {
-      selectDocument(documents[0]);
+      const firstPendingDoc = documents.find(doc => (pendingCountByDocId[doc.id] || 0) > 0);
+      if (firstPendingDoc) {
+        selectDocument(firstPendingDoc);
+      }
     }
-  }, [documents, selectedDocument, selectDocument]);
+  }, [documents, pendingCountByDocId, selectedDocument, selectDocument]);
 
-  // When a file is selected in the list, fetch its diff and open modal
+  // Calculate global stats with explicit type cast to number[]
+  const counts: number[] = Object.values(pendingCountByDocId);
+  const pendingDocCount = counts.filter(c => c > 0).length;
+  const totalPendingFiles = counts.reduce((sum, c) => sum + c, 0);
+
   const handleSelectFile = (filePath: string) => {
     setSelectedFilePath(filePath);
     fetchFileDiff(filePath);
     setIsDiffModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsDiffModalOpen(false);
-  };
+  const handleCloseModal = () => setIsDiffModalOpen(false);
 
   return (
     <div className="tracking-page">
       <TrackingPageHeader
-        pendingCount={pendingChanges.length}
-        commitCount={commitHistory.length}
+        pendingDocCount={pendingDocCount}
+        totalPendingFiles={totalPendingFiles}
       />
 
       {error && (
@@ -72,9 +78,11 @@ export function TrackingPage(): JSX.Element {
 
       <div className="tracking-content">
         <div className="tracking-content__left">
-          <DocumentList
+          <PendingDocumentList
             documents={documents}
-            pendingCounts={pendingCounts}
+            pendingCountByDocId={pendingCountByDocId}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
             selectedDocumentId={selectedDocument?.id ?? null}
             onSelectDocument={selectDocument}
           />
@@ -101,7 +109,6 @@ export function TrackingPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Full-screen diff modal */}
       <DiffViewer
         diff={selectedDiff}
         show={isDiffModalOpen}

@@ -19,6 +19,7 @@ interface TrackingState {
   selectedDiff: ContentDiffDto | null;
   isLoading: boolean;
   error: string | null;
+  pendingCountByDocId: Record<string, number>;
 
   setSelectedDocument: (doc: DocumentDto | null) => void;
   fetchPendingChanges: (documentId?: string) => Promise<void>;
@@ -26,6 +27,8 @@ interface TrackingState {
   fetchFileDiff: (filePath: string) => Promise<void>;
   approveCommit: (documentId: string) => Promise<void>;
   clearError: () => void;
+  fetchAllPendingStatus: () => Promise<void>;
+  startRealtimeListener: () => () => void;
 }
 
 const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
@@ -41,6 +44,7 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
   selectedDiff: null,
   isLoading: false,
   error: null,
+  pendingCountByDocId: {},
 
   setSelectedDocument: (doc) => {
     set({ selectedDocument: doc, selectedDiff: null });
@@ -105,6 +109,8 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
       await invokeIpc<unknown>(IpcChannels.TRACKING_APPROVE_COMMIT, workspace.id, documentId);
       await get().fetchPendingChanges(documentId);
       await get().fetchCommitHistory(documentId);
+      // Update global pending counts
+      await get().fetchAllPendingStatus();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to approve commit';
       set({ error: message, isLoading: false });
@@ -112,4 +118,29 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  fetchAllPendingStatus: async () => {
+    const workspace = useWorkspaceStore.getState().workspace;
+    if (!workspace) return;
+    try {
+      const statuses = await invokeIpc<{ documentId: string; pendingCount: number }[]>(
+        IpcChannels.TRACKING_GET_ALL_PENDING_STATUS, workspace.id
+      );
+      const map: Record<string, number> = {};
+      if (statuses) {
+        statuses.forEach((s) => { map[s.documentId] = s.pendingCount; });
+      }
+      set({ pendingCountByDocId: map });
+    } catch (error) {
+      console.error('Failed to fetch all pending status', error);
+    }
+  },
+
+  startRealtimeListener: () => {
+    const handleUpdate = (_payload: unknown) => {
+      get().fetchAllPendingStatus();
+    };
+    const unsubscribe = window.electronAPI.on(IpcChannels.TRACKING_PENDING_UPDATED, handleUpdate);
+    return unsubscribe;
+  },
 }));

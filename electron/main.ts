@@ -9,7 +9,7 @@ app.whenReady().then(() => {
   FileContentReaderAdapter.setUserDataPath(app.getPath('userData'));
 
   mainWindow = createMainWindow();
-  registerIpcHandlers();
+  registerIpcHandlers(mainWindow);
 
   app.on('activate', () => {
     if (mainWindow === null) {

@@ -28,6 +28,8 @@ export enum IpcChannels {
   TRACKING_GET_PENDING_CHANGES =  'tracking:getPendingChanges',
   TRACKING_GET_COMMIT_HISTORY =   'tracking:getCommitHistory',
   TRACKING_GET_FILE_DIFF = 'tracking:getFileDiff',
+  TRACKING_GET_ALL_PENDING_STATUS = 'tracking:getAllPendingStatus',
+  TRACKING_PENDING_UPDATED = 'tracking:pendingUpdated',
   LINKING_CREATE_LINK = 'linking:createLink',
   LINKING_REMOVE_LINK = 'linking:removeLink',
   LINKING_CREATE_DOCUMENT_LINK = 'linking:createDocumentLink',
