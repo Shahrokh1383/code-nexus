@@ -44,10 +44,13 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
         return Result.fail(`Project config not found for workspace: ${command.workspaceId}`);
       }
 
-      // Remember old index before clearing
+      // Remember old index before clearing (to preserve IDs)
       const oldNodes = await this.fileSystemRepo.findAll();
       const oldFilePaths = new Set<string>();
+      const existingIds = new Map<string, string>();
+
       for (const node of oldNodes) {
+        existingIds.set(node.path.value, node.id.value);
         if (node instanceof FileNode) {
           oldFilePaths.add(node.path.value);
         }
@@ -57,23 +60,21 @@ export class ScanProjectHandler implements ICommandHandler<ScanProjectCommand, F
       const fileMetadata = await this.fileSystemAdapter.scanDirectory(workspace.rootPath.value);
 
       const rootPath = new FilePath('.');
-      const scanResult = this.scanService.scan(rootPath, ignorePatterns, fileMetadata);
+      const scanResult = this.scanService.scan(rootPath, ignorePatterns, fileMetadata, existingIds);
 
-      // Collect new file paths for the rebuilt index
       const newFilePaths = new Set<string>();
       this.collectFilePaths(scanResult.rootFolder, newFilePaths);
 
-      // Emit FileExcluded for files that disappeared (due to ignore rules or actual deletion)
+      // Emit FileExcluded for files that disappeared
       for (const oldPath of oldFilePaths) {
         if (!newFilePaths.has(oldPath)) {
           this.eventBus.emit(new FileExcludedEvent(undefined as any, new FilePath(oldPath)));
         }
       }
 
-      // Rebuild the index in a single operation
       await this.fileSystemRepo.clearAndSaveAll(scanResult.rootFolder);
 
-      // Emit bulk sync event for Tracking to exactly mirror the new file index
+      // Notify tracking to sync
       this.eventBus.emit(new FileIndexRebuiltEvent(newFilePaths));
 
       for (const event of scanResult.events) {

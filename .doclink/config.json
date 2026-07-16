@@ -10,11 +10,12 @@
     "**/*.log",
     "dist-electron",
     "public",
-    "coverage"
+    "coverage",
+    "__tests__"
   ],
   "schemaVersion": "1.0",
   "docFolder": {
-    "id": "66bd9a21-923b-4a7f-869f-26f088277e35",
+    "id": "779a2de7-b0b5-43a8-998c-69d3a9dc81a0",
     "path": "docs",
     "signature": {
       "fileCount": 10,

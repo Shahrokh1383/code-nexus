@@ -31,13 +31,19 @@ export interface ScanResult {
 }
 
 export class ScanProjectService {
-  scan(rootPath: FilePath, ignorePatterns: IgnorePattern[], files: FileMetadata[]): ScanResult {
+  scan(
+    rootPath: FilePath,
+    ignorePatterns: IgnorePattern[],
+    files: FileMetadata[],
+    existingIds?: Map<string, string>
+  ): ScanResult {
     const startTime = Date.now();
 
     const filtered = files.filter(meta => !this.isIgnored(meta.path, ignorePatterns));
 
+    const rootId = existingIds?.get(rootPath.value) ?? UuidGenerator.generate();
     const rootFolder = new FolderNode(
-      new FolderNodeId(UuidGenerator.generate()),
+      new FolderNodeId(rootId),
       rootPath,
       rootPath.getName() || '.'
     );
@@ -68,16 +74,16 @@ export class ScanProjectService {
       }
 
       if (meta.isDirectory) {
-        const folderId = new FolderNodeId(UuidGenerator.generate());
-        const folder = new FolderNode(folderId, path, meta.name);
+        const folderId = existingIds?.get(path.value) ?? UuidGenerator.generate();
+        const folder = new FolderNode(new FolderNodeId(folderId), path, meta.name);
         parent.addChild(folder);
         folderMap.set(path.value, folder);
         folderCount++;
-        events.push(new FileDiscoveredEvent(folderId, path, true));
+        events.push(new FileDiscoveredEvent(new FolderNodeId(folderId), path, true));
       } else {
-        const fileId = new FileNodeId(UuidGenerator.generate());
+        const fileId = existingIds?.get(path.value) ?? UuidGenerator.generate();
         const fileNode = new FileNode(
-          fileId,
+          new FileNodeId(fileId),
           path,
           meta.name,
           parentPath,
@@ -88,7 +94,7 @@ export class ScanProjectService {
         );
         parent.addChild(fileNode);
         fileCount++;
-        events.push(new FileDiscoveredEvent(fileId, path, false));
+        events.push(new FileDiscoveredEvent(new FileNodeId(fileId), path, false));
       }
     }
 
