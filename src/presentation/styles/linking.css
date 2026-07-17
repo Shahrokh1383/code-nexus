@@ -1,7 +1,7 @@
 /* ============================================================
    CodeNexus – Linking Page Styles (Enterprise theming)
    Covers layout, header, sidebar, document selector, tabs,
-   main content, graph, hierarchy, and responsive breakpoints.
+   main content, linked-files list, hierarchy, and responsive breakpoints.
    ============================================================ */
 
 /* ---------- Page & Layout ---------- */
@@ -31,7 +31,6 @@
 }
 
 .linking-header .btn-primary {
-  /* Ensure the Create Link button sits correctly */
   white-space: nowrap;
   margin-left: var(--cn-space-4);
 }
@@ -197,48 +196,96 @@
   min-height: 0;
 }
 
-/* ---------- Graph ---------- */
-.graph-container {
-  width: 100%;
+/* ---------- Linked Files List ---------- */
+.linked-files-list-container {
   height: 100%;
-  min-height: 400px;
-  background-color: var(--cn-bg-primary);
-  position: relative;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
-.graph-zoom-controls {
-  position: absolute;
-  top: 50%;
-  right: var(--cn-space-4);
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: var(--cn-space-2);
-  z-index: 10;
-  background-color: var(--cn-bg-elevated);
-  border: 1px solid var(--cn-border-default);
-  border-radius: var(--cn-radius-lg);
-  padding: var(--cn-space-2);
-  box-shadow: var(--cn-shadow-md);
-}
-
-.graph-zoom-btn {
-  width: 36px;
-  height: 36px;
+.linked-files-list {
+  list-style: none;
   padding: 0;
-  background: transparent;
-  border: 1px solid transparent;
+  margin: 0;
+}
+
+.linked-files-list__item {
+  display: flex;
+  align-items: center;
+  padding: var(--cn-space-3) var(--cn-space-4);
+  border-bottom: 1px solid var(--cn-border-light);
+  transition: background-color 0.1s;
+}
+
+.linked-files-list__item:hover {
+  background-color: var(--cn-bg-hover);
+}
+
+.linked-files-list__item:last-child {
+  border-bottom: none;
+}
+
+.linked-files-list__info {
+  flex: 1;
+  overflow: hidden;
+  margin-right: var(--cn-space-3);
+}
+
+.linked-files-list__name {
+  font-weight: var(--cn-font-weight-medium);
+  font-size: var(--cn-font-size-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linked-files-list__path {
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linked-files-list__type-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-medium);
+  border-radius: var(--cn-radius-full);
+  background-color: var(--cn-primary-muted);
+  color: var(--cn-primary);
+  margin-right: var(--cn-space-2);
+  white-space: nowrap;
+}
+
+.linked-files-list__type-badge--inherited {
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
+}
+
+.linked-files-list__remove-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
   border-radius: var(--cn-radius-md);
   color: var(--cn-text-secondary);
-  font-size: var(--cn-font-size-base);
-  transition: all 0.15s ease;
   cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+  line-height: 1;
 }
 
-.graph-zoom-btn:hover {
-  background-color: var(--cn-bg-hover);
-  color: var(--cn-primary);
+.linked-files-list__remove-btn:hover {
+  color: var(--cn-error);
+  background-color: var(--cn-error-muted);
+}
+
+.linked-files-list__header {
+  padding: var(--cn-space-3) var(--cn-space-4);
+  background-color: var(--cn-bg-secondary);
+  border-bottom: 1px solid var(--cn-border-light);
+  font-size: var(--cn-font-size-base);
+  display: flex;
+  align-items: center;
 }
 
 /* ---------- Responsive ---------- */
@@ -248,8 +295,5 @@
   }
   .linking-sidebar {
     display: none;
-  }
-  .graph-container {
-    min-height: 300px;
   }
 }

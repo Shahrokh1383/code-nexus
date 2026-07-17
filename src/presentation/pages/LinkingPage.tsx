@@ -3,10 +3,10 @@ import { useLinks } from '../hooks/linking/useLinks';
 import { useLinkingPageOrchestrator } from '../hooks/linking/useLinkingPageOrchestrator';
 import { useLinkCreation } from '../hooks/linking/useLinkCreation';
 import { useUnlinkedFiles } from '../hooks/linking/useUnlinkedFiles';
-import { useGraphData } from '../hooks/linking/useGraphData';
+import { useLinkedFiles } from '../hooks/linking/useLinkedFiles';
 import { useDocuments } from '../hooks/useDocuments';
 import { LinkingPageHeader } from '../components/linking/LinkingPageHeader';
-import { InteractiveGraph } from '../components/linking/InteractiveGraph';
+import { LinkedFilesList } from '../components/linking/LinkedFilesList';
 import { DocumentHierarchy } from '../components/linking/DocumentHierarchy';
 import { UnlinkedFilesList } from '../components/linking/UnlinkedFilesList';
 import { FileTreePickerModal } from '../components/linking/FileTreePickerModal';
@@ -19,11 +19,11 @@ import '../components/linking/UnlinkedFilesList.css';
 export function LinkingPage(): JSX.Element {
   const { documents, selectedDocId, setSelectedDocId, selectedDoc, currentDocTitle } = useLinkingPageOrchestrator();
   const { codeLinks, documentLinks, unlinkedFiles, isLoading, error, clearError, fetchLinksForDocument, fetchGraphData, removeDocumentLink } = useLinks();
-  const [activeTab, setActiveTab] = useState<'graph' | 'hierarchy' | 'unlinked'>('graph');
+  const [activeTab, setActiveTab] = useState<'linked' | 'hierarchy' | 'unlinked'>('linked');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleModalLink } = useLinkCreation(() => setIsModalOpen(false));
   const { selectedIds, isAllSelected, isIndeterminate, toggleFile, toggleAll, handleQuickLink, handleBulkLink } = useUnlinkedFiles(selectedDocId);
-  const { codeLinks: graphLinks, removeLink } = useGraphData(selectedDocId);
+  const { codeLinks: linkedFiles, removeLink } = useLinkedFiles(selectedDocId);
 
   // After a document deletion (parent with children), links might have been migrated.
   // The documents array length will change, so we refresh everything.
@@ -35,11 +35,10 @@ export function LinkingPage(): JSX.Element {
         fetchLinksForDocument(selectedDocId);
       }
     }
-  }, [allDocs.length]); // intentionally only on count change, not on every render
+  }, [allDocs.length]);
 
   const handleRemoveDocumentLink = useCallback(async (linkId: string) => {
     await removeDocumentLink(linkId);
-    // Refresh the hierarchy and graph
     await fetchGraphData();
     if (selectedDocId) {
       await fetchLinksForDocument(selectedDocId);
@@ -47,7 +46,7 @@ export function LinkingPage(): JSX.Element {
   }, [removeDocumentLink, fetchGraphData, fetchLinksForDocument, selectedDocId]);
 
   const pageTabs = [
-    { id: 'graph', label: 'Graph View', icon: 'fa-project-diagram' },
+    { id: 'linked', label: 'Linked Files', icon: 'fa-list' },
     { id: 'hierarchy', label: 'Hierarchy', icon: 'fa-sitemap' },
     { id: 'unlinked', label: 'Unlinked Files', icon: 'fa-unlink' },
   ];
@@ -68,7 +67,6 @@ export function LinkingPage(): JSX.Element {
       )}
 
       <div className="linking-body">
-        {/* Sidebar */}
         <aside className="linking-sidebar">
           <div className="linking-sidebar__header">
             <i className="fa-solid fa-file-lines" />
@@ -83,23 +81,21 @@ export function LinkingPage(): JSX.Element {
           </div>
         </aside>
 
-        {/* Main Content */}
         <div className="linking-main">
           <LinkingTabs tabs={pageTabs} activeTab={activeTab} onTabChange={id => setActiveTab(id as any)} />
           <div className="linking-main__content">
-            {activeTab === 'graph' && (
+            {activeTab === 'linked' && (
               selectedDoc ? (
-                <InteractiveGraph
-                  centerDocumentId={selectedDoc.id}
-                  centerDocumentTitle={selectedDoc.title}
-                  codeLinks={graphLinks}
+                <LinkedFilesList
+                  documentTitle={selectedDoc.title}
+                  codeLinks={linkedFiles}
                   onRemoveLink={removeLink}
                 />
               ) : (
                 <div className="d-flex align-items-center justify-content-center h-100" style={{ color: 'var(--cn-text-secondary)' }}>
                   <div className="text-center">
-                    <i className="fa-solid fa-project-diagram fa-3x mb-3" style={{ color: 'var(--cn-text-disabled)' }} />
-                    <p>Select a document from the sidebar to view its knowledge graph</p>
+                    <i className="fa-solid fa-list fa-3x mb-3" style={{ color: 'var(--cn-text-disabled)' }} />
+                    <p>Select a document from the sidebar to view its linked code files</p>
                   </div>
                 </div>
               )
@@ -141,7 +137,7 @@ export function LinkingPage(): JSX.Element {
       />
       {isLoading && (
         <div className="position-fixed bottom-0 end-0 m-4 p-3 rounded shadow-lg" style={{ backgroundColor: 'var(--cn-bg-elevated)', color: 'var(--cn-primary)' }}>
-          <i className="fa-solid fa-spinner fa-spin me-2" /> Syncing Graph...
+          <i className="fa-solid fa-spinner fa-spin me-2" /> Syncing Links...
         </div>
       )}
     </div>
