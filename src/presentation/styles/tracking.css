@@ -1,7 +1,7 @@
 /* ── Tracking Page ───────────────────────────────── */
 
 .tracking-page {
-  padding: 2rem;
+  padding: var(--cn-space-6);
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeIn 0.3s ease-in-out;
@@ -19,20 +19,21 @@
   align-items: center;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--cn-border-light);
 }
 
 .tracking-header__info h1 {
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: var(--cn-font-weight-semibold);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  color: var(--cn-text-primary);
 }
 
 .tracking-header__subtitle {
-  color: var(--doc-text-muted, #8b949e);
+  color: var(--cn-text-secondary);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -48,55 +49,53 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.75rem 1.25rem;
-  background: var(--doc-card-bg, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
+  background-color: var(--cn-bg-secondary);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
   min-width: 80px;
 }
 
 .tracking-stat__value {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
+  font-weight: var(--cn-font-weight-bold);
+  color: var(--cn-text-primary);
 }
 
 .tracking-stat__label {
-  font-size: 0.75rem;
-  color: var(--doc-text-muted, #8b949e);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.tracking-stat--pending .tracking-stat__value { color: #d29922; }
-.tracking-stat--commits .tracking-stat__value { color: #2ea043; }
+.tracking-stat--pending .tracking-stat__value { color: var(--cn-warning); }
+.tracking-stat--commits .tracking-stat__value { color: var(--cn-success); }
 
 /* ── Content Layout ──────────────────────────────── */
-
 .tracking-content {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 2rem;
+  gap: var(--cn-space-6);
 }
 
 .tracking-content__left {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--cn-space-5);
 }
 
 .tracking-content__right {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--cn-space-5);
 }
 
 /* ── Pending Changes ─────────────────────────────── */
-
 .pending-changes {
-  background: var(--doc-card-bg, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
-  padding: 1.5rem;
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
+  padding: var(--cn-space-5);
 }
 
 .pending-changes--empty {
@@ -107,65 +106,68 @@
   text-align: center;
   padding: 3rem;
   min-height: 200px;
+  color: var(--cn-text-secondary);
 }
 
 .pending-changes__icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   opacity: 0.6;
+  color: var(--cn-text-disabled);
 }
 
 .pending-changes__hint {
-  color: var(--doc-text-muted, #8b949e);
-  font-size: 0.85rem;
+  color: var(--cn-text-secondary);
+  font-size: var(--cn-font-size-sm);
   margin-top: 0.5rem;
 }
 
 .pending-changes__title {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: var(--cn-font-weight-semibold);
   margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--cn-text-primary);
 }
 
 .pending-changes__count {
-  background: rgba(210, 153, 34, 0.2);
-  color: #d29922;
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
   padding: 0.2rem 0.6rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: var(--cn-radius-full);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
   margin-left: auto;
 }
 
 .pending-changes__list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--cn-space-3);
   max-height: 400px;
   overflow-y: auto;
 }
 
 .pending-file {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 8px;
+  background-color: var(--cn-bg-secondary);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-md);
   padding: 1rem;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pending-file:hover {
-  background: var(--doc-card-hover, rgba(255, 255, 255, 0.05));
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--cn-bg-hover);
+  border-color: var(--cn-border-default);
   transform: translateX(4px);
 }
 
 .pending-file--selected {
-  border-color: #0d6efd;
-  background: rgba(13, 110, 253, 0.08);
+  border-color: var(--cn-primary);
+  background-color: var(--cn-primary-muted);
 }
 
 .pending-file__header {
@@ -176,14 +178,14 @@
 }
 
 .pending-file__icon {
-  color: var(--doc-text-muted, #8b949e);
+  color: var(--cn-text-secondary);
   font-size: 0.9rem;
 }
 
 .pending-file__path {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.85rem;
-  color: #c9d1d9;
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-sm);
+  color: var(--cn-text-primary);
   word-break: break-all;
 }
 
@@ -191,39 +193,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: var(--cn-font-size-xs);
 }
 
 .pending-file__hash {
-  color: var(--doc-text-muted, #8b949e);
-  font-family: 'Fira Code', monospace;
+  color: var(--cn-text-secondary);
+  font-family: var(--cn-font-mono);
 }
 
 .pending-file__status {
   padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  border-radius: var(--cn-radius-sm);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .pending-file__status--pending {
-  background: rgba(210, 153, 34, 0.15);
-  color: #d29922;
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
 }
 
 .pending-file__status--approved {
-  background: rgba(46, 160, 67, 0.15);
-  color: #2ea043;
+  background-color: var(--cn-success-muted);
+  color: var(--cn-success);
 }
 
 /* ── Diff Viewer ─────────────────────────────────── */
-
 .diff-viewer {
-  background: var(--doc-card-bg, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
   overflow: hidden;
 }
 
@@ -235,12 +236,14 @@
   text-align: center;
   padding: 3rem;
   min-height: 200px;
+  color: var(--cn-text-secondary);
 }
 
 .diff-viewer__icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   opacity: 0.6;
+  color: var(--cn-text-disabled);
 }
 
 .diff-viewer__header {
@@ -248,19 +251,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
+  background-color: var(--cn-bg-secondary);
+  border-bottom: 1px solid var(--cn-border-light);
 }
 
 .diff-viewer__file-path {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.85rem;
-  color: #c9d1d9;
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-sm);
+  color: var(--cn-text-primary);
 }
 
 .diff-viewer__stats {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--cn-space-3);
 }
 
 .diff-stat {
@@ -268,18 +271,18 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: var(--cn-radius-md);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
 }
 
-.diff-stat--added { background: rgba(46, 160, 67, 0.15); color: #2ea043; }
-.diff-stat--removed { background: rgba(248, 81, 73, 0.15); color: #f85149; }
-.diff-stat--modified { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+.diff-stat--added { background-color: var(--cn-success-muted); color: var(--cn-success); }
+.diff-stat--removed { background-color: var(--cn-error-muted); color: var(--cn-error); }
+.diff-stat--modified { background-color: var(--cn-warning-muted); color: var(--cn-warning); }
 
 .diff-viewer__content {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.85rem;
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-sm);
   line-height: 1.6;
   max-height: 400px;
   overflow-y: auto;
@@ -295,15 +298,15 @@
 }
 
 .diff-line__number {
-  color: var(--doc-text-muted, #8b949e);
-  font-size: 0.75rem;
+  color: var(--cn-text-disabled);
+  font-size: var(--cn-font-size-xs);
   min-width: 2rem;
   text-align: right;
   user-select: none;
 }
 
 .diff-line__marker {
-  font-weight: 700;
+  font-weight: var(--cn-font-weight-bold);
   min-width: 1rem;
   text-align: center;
   user-select: none;
@@ -315,25 +318,24 @@
 }
 
 .diff-line--added {
-  background: rgba(46, 160, 67, 0.1);
-  border-left: 3px solid #2ea043;
+  background-color: var(--cn-success-soft);
+  border-left: 3px solid var(--cn-success);
 }
-.diff-line--added .diff-line__marker { color: #2ea043; }
+.diff-line--added .diff-line__marker { color: var(--cn-success); }
 
 .diff-line--removed {
-  background: rgba(248, 81, 73, 0.1);
-  border-left: 3px solid #f85149;
+  background-color: var(--cn-error-soft);
+  border-left: 3px solid var(--cn-error);
 }
-.diff-line--removed .diff-line__marker { color: #f85149; }
+.diff-line--removed .diff-line__marker { color: var(--cn-error); }
 
 .diff-line--modified {
-  background: rgba(210, 153, 34, 0.1);
-  border-left: 3px solid #d29922;
+  background-color: var(--cn-warning-soft);
+  border-left: 3px solid var(--cn-warning);
 }
-.diff-line--modified .diff-line__marker { color: #d29922; }
+.diff-line--modified .diff-line__marker { color: var(--cn-warning); }
 
 /* ── Commit Button ───────────────────────────────── */
-
 .commit-button {
   display: flex;
   align-items: center;
@@ -341,10 +343,17 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.875rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 10px;
+  font-size: var(--cn-font-size-base);
+  font-weight: var(--cn-font-weight-semibold);
+  border-radius: var(--cn-radius-lg);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--cn-primary);
+  color: var(--cn-text-inverse);
+  border: none;
+}
+
+.commit-button:hover:not(:disabled) {
+  background-color: var(--cn-primary-hover);
 }
 
 .commit-button--disabled {
@@ -353,22 +362,21 @@
 }
 
 .commit-button__badge {
-  background: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 0.15rem 0.5rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  border-radius: var(--cn-radius-full);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-bold);
   margin-left: auto;
 }
 
 /* ── Commit History ──────────────────────────────── */
-
 .commit-history {
-  background: var(--doc-card-bg, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
-  padding: 1.5rem;
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
+  padding: var(--cn-space-5);
 }
 
 .commit-history--empty {
@@ -379,48 +387,51 @@
   text-align: center;
   padding: 3rem;
   min-height: 200px;
+  color: var(--cn-text-secondary);
 }
 
 .commit-history__icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   opacity: 0.6;
+  color: var(--cn-text-disabled);
 }
 
 .commit-history__hint {
-  color: var(--doc-text-muted, #8b949e);
-  font-size: 0.85rem;
+  color: var(--cn-text-secondary);
+  font-size: var(--cn-font-size-sm);
   margin-top: 0.5rem;
 }
 
 .commit-history__title {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: var(--cn-font-weight-semibold);
   margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--cn-text-primary);
 }
 
 .commit-history__list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--cn-space-3);
   max-height: 500px;
   overflow-y: auto;
 }
 
 .commit-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 8px;
+  background-color: var(--cn-bg-secondary);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-md);
   padding: 1rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .commit-card:hover {
-  background: var(--doc-card-hover, rgba(255, 255, 255, 0.05));
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--cn-bg-hover);
+  border-color: var(--cn-border-default);
 }
 
 .commit-card__header {
@@ -431,87 +442,86 @@
 }
 
 .commit-card__id {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.8rem;
-  color: var(--doc-text-muted, #8b949e);
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
 }
 
 .commit-card__status {
   padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  border-radius: var(--cn-radius-sm);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .commit-card__status--approved {
-  background: rgba(46, 160, 67, 0.15);
-  color: #2ea043;
+  background-color: var(--cn-success-muted);
+  color: var(--cn-success);
 }
 
 .commit-card__status--pending {
-  background: rgba(210, 153, 34, 0.15);
-  color: #d29922;
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
 }
 
 .commit-card__meta {
   display: flex;
   gap: 1rem;
-  font-size: 0.8rem;
-  color: var(--doc-text-muted, #8b949e);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
   margin-bottom: 0.5rem;
 }
 
 .commit-card__files-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: var(--cn-space-2);
 }
 
 .commit-card__file-path {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.75rem;
-  color: #c9d1d9;
-  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-primary);
+  background-color: var(--cn-bg-active);
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--cn-radius-sm);
 }
 
 .commit-card__more {
-  font-size: 0.75rem;
-  color: var(--doc-text-muted, #8b949e);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
 }
 
 /* ── Loading ─────────────────────────────────────── */
-
 .tracking-loading {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   z-index: 1000;
+  color: var(--cn-text-inverse);
 }
 
 .tracking-loading i {
   font-size: 2rem;
-  color: #0d6efd;
+  color: var(--cn-primary);
 }
 
 /* ── Document List ────────────────────────────────── */
-
 .document-list {
-  background: var(--doc-card-bg, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 12px;
-  padding: 1.5rem;
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
+  padding: var(--cn-space-5);
 }
 
 .document-list--empty {
@@ -522,39 +532,42 @@
   text-align: center;
   padding: 3rem;
   min-height: 200px;
+  color: var(--cn-text-secondary);
 }
 
 .document-list__icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   opacity: 0.6;
+  color: var(--cn-text-disabled);
 }
 
 .document-list__hint {
-  color: var(--doc-text-muted, #8b949e);
-  font-size: 0.85rem;
+  color: var(--cn-text-secondary);
+  font-size: var(--cn-font-size-sm);
   margin-top: 0.5rem;
 }
 
 .document-list__title {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: var(--cn-font-weight-semibold);
   margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--cn-text-primary);
 }
 
 .document-list__items {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--cn-space-3);
 }
 
 .document-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--doc-card-border, rgba(255, 255, 255, 0.08));
-  border-radius: 8px;
+  background-color: var(--cn-bg-secondary);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-md);
   padding: 1rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -564,13 +577,13 @@
 }
 
 .document-card:hover {
-  background: var(--doc-card-hover, rgba(255, 255, 255, 0.05));
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--cn-bg-hover);
+  border-color: var(--cn-border-default);
 }
 
 .document-card--selected {
-  border-color: #0d6efd;
-  background: rgba(13, 110, 253, 0.08);
+  border-color: var(--cn-primary);
+  background-color: var(--cn-primary-muted);
 }
 
 .document-card__info {
@@ -580,61 +593,59 @@
 }
 
 .document-card__name {
-  font-weight: 600;
-  color: #c9d1d9;
+  font-weight: var(--cn-font-weight-semibold);
+  color: var(--cn-text-primary);
 }
 
 .document-card__path {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.8rem;
-  color: var(--doc-text-muted, #8b949e);
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
 }
 
 .document-card__badge {
-  background: rgba(210, 153, 34, 0.2);
-  color: #d29922;
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
   padding: 0.2rem 0.6rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: var(--cn-radius-full);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
 }
 
 /* ── Document Commit Panel ───────────────────────── */
-
 .document-commit-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--cn-space-5);
 }
 
 /* ── Full‑screen Diff Modal ──────────────────────── */
-
 .diff-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1050;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--cn-space-6);
   box-sizing: border-box;
 }
 
 .diff-modal {
-  background: #0d1117;  /* GitHub dark background */
-  border: 1px solid #30363d;
-  border-radius: 12px;
+  background-color: var(--cn-bg-primary);
+  border: 1px solid var(--cn-border-default);
+  border-radius: var(--cn-radius-lg);
   width: 100%;
   max-width: 1200px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  box-shadow: var(--cn-shadow-lg);
 }
 
 .diff-modal__header {
@@ -642,31 +653,31 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  background-color: var(--cn-bg-secondary);
+  border-bottom: 1px solid var(--cn-border-light);
 }
 
 .diff-modal__file-path {
-  font-family: 'Fira Code', monospace;
-  font-size: 0.95rem;
-  color: #c9d1d9;
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-base);
+  color: var(--cn-text-primary);
   word-break: break-all;
 }
 
 .diff-modal__close {
   background: none;
   border: none;
-  color: #8b949e;
+  color: var(--cn-text-secondary);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  border-radius: var(--cn-radius-md);
   transition: color 0.2s, background 0.2s;
 }
 
 .diff-modal__close:hover {
-  color: #f85149;
-  background: rgba(248, 81, 73, 0.1);
+  color: var(--cn-error);
+  background-color: var(--cn-error-muted);
 }
 
 .diff-modal__body {
@@ -688,7 +699,6 @@
 }
 
 /* ── Responsive ──────────────────────────────────── */
-
 @media (max-width: 1024px) {
   .tracking-content {
     grid-template-columns: 1fr;
@@ -708,7 +718,7 @@
 
 @media (max-width: 768px) {
   .tracking-page {
-    padding: 1rem;
+    padding: var(--cn-space-4);
   }
   
   .tracking-header__info h1 {
