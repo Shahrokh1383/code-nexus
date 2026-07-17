@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "CodeNexus - Documentation Linking Desktop Application",
   "main": "dist-electron/electron/main.js",
-  "author": "CodeNexus Team",
+  "author": "Shahrokh1383",
   "license": "MIT",
   "scripts": {
     "dev": "npm run build:electron && concurrently \"npm run dev:vite\" \"electron .\"",
@@ -13,7 +13,7 @@
     "build:electron": "tsc -p tsconfig.electron.json",
     "preview": "vite preview",
     "test": "jest",
-    "dist": "npm run build && electron-builder"
+    "package": "npm run build && electron-builder --config electron-builder.yml"
   },
   "dependencies": {
     "chokidar": "^4.0.0",

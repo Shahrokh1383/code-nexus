@@ -37,11 +37,12 @@
     "electron\\ipc\\handlers\\linking",
     "src\\domains",
     "src\\application",
-    "src\\domains\\linking"
+    "src\\domains\\linking",
+    "src\\presentation"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-16T17:36:24.966Z",
+  "lastModified": "2026-07-16T20:17:59.836Z",
   "version": 1
 }

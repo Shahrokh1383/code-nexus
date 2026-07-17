@@ -1,0 +1,28 @@
+appId: com.codenexus.app
+productName: CodeNexus
+copyright: Copyright © 2024 CodeNexus Team
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+
+win:
+  icon: build/logo.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: build/logo.ico
+  uninstallerIcon: build/logo.ico
+  installerHeaderIcon: build/logo.ico
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: CodeNexus

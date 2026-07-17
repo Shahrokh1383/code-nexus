@@ -388,10 +388,10 @@ pre {
   background-color: var(--cn-bg-secondary);
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: var(--cn-space-3);
+.logo-container:focus-visible {
+  outline: none;
+  border-radius: var(--cn-radius-md);
+  box-shadow: 0 0 0 2px var(--cn-primary);
 }
 
 .logo-animated {
