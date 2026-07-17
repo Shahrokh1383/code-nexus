@@ -12,6 +12,7 @@ interface DocumentSchema {
   lastModified: string;
   linkCount: number;
   isOrphaned: boolean;
+  deleted: boolean;
 }
 
 interface DocumentsIndexSchema {
@@ -42,18 +43,30 @@ export class DocumentJsonRepository implements IDocumentRepository {
     return index.documents.map((d) => this.mapToEntity(d));
   }
 
+  async findAllNonDeleted(): Promise<Document[]> {
+    const index = await this.readIndex();
+    return index.documents
+      .filter((d) => !d.deleted)
+      .map((d) => this.mapToEntity(d));
+  }
+
+  async findAllDeleted(): Promise<Document[]> {
+    const index = await this.readIndex();
+    return index.documents
+      .filter((d) => d.deleted)
+      .map((d) => this.mapToEntity(d));
+  }
+
   async findOrphaned(): Promise<Document[]> {
     const index = await this.readIndex();
     return index.documents
-      .filter((d) => d.isOrphaned)
+      .filter((d) => d.isOrphaned && !d.deleted)
       .map((d) => this.mapToEntity(d));
   }
 
   async save(document: Document): Promise<void> {
     const index = await this.readIndex();
-    const existingIndex = index.documents.findIndex(
-      (d) => d.id === document.id.value
-    );
+    const existingIndex = index.documents.findIndex((d) => d.id === document.id.value);
 
     const schema: DocumentSchema = {
       id: document.id.value,
@@ -62,6 +75,7 @@ export class DocumentJsonRepository implements IDocumentRepository {
       lastModified: document.lastModified.toISO(),
       linkCount: document.linkCount,
       isOrphaned: document.isOrphaned,
+      deleted: document.deleted,
     };
 
     if (existingIndex >= 0) {
@@ -79,21 +93,31 @@ export class DocumentJsonRepository implements IDocumentRepository {
     await this.db.write(this.filename, index);
   }
 
+  async softDelete(id: DocumentId): Promise<void> {
+    const index = await this.readIndex();
+    const doc = index.documents.find((d) => d.id === id.value);
+    if (doc) {
+      doc.deleted = true;
+      await this.db.write(this.filename, index);
+    }
+  }
+
+  async restore(id: DocumentId): Promise<void> {
+    const index = await this.readIndex();
+    const doc = index.documents.find((d) => d.id === id.value);
+    if (doc) {
+      doc.deleted = false;
+      await this.db.write(this.filename, index);
+    }
+  }
+
   async findByDocFolderPath(docFolderPath: string): Promise<Document[]> {
     const index = await this.readIndex();
-
     return index.documents
-      .filter(
-        (d) =>
-          d.path.startsWith(docFolderPath + '/') || d.path === docFolderPath
-      )
+      .filter((d) => (d.path.startsWith(docFolderPath + '/') || d.path === docFolderPath) && !d.deleted)
       .map((d) => this.mapToEntity(d));
   }
 
-  /**
-   * Updates the stored docs folder path in the documents index.
-   * Not part of IDocumentRepository interface — concrete implementation only.
-   */
   async updateDocsFolderPath(path: string | null): Promise<void> {
     const index = await this.readIndex();
     index.docsFolderPath = path;
@@ -114,7 +138,8 @@ export class DocumentJsonRepository implements IDocumentRepository {
       new DocumentPath(raw.path),
       raw.title,
       DateTime.fromISO(raw.lastModified),
-      raw.linkCount
+      raw.linkCount,
+      raw.deleted ?? false
     );
   }
 }

@@ -7,13 +7,15 @@ export class Document {
   private _lastModified: DateTime;
   private _linkCount: number;
   private _isOrphaned: boolean;
+  private _deleted: boolean;
 
   constructor(
     private readonly _id: DocumentId,
     private readonly _path: DocumentPath,
     title: string,
     lastModified: DateTime,
-    linkCount: number = 0
+    linkCount: number = 0,
+    deleted: boolean = false
   ) {
     if (!title || title.trim().length === 0) {
       throw new Error('Document title cannot be empty');
@@ -25,40 +27,22 @@ export class Document {
     this._lastModified = lastModified;
     this._linkCount = linkCount;
     this._isOrphaned = linkCount === 0;
+    this._deleted = deleted;
   }
 
-  get id(): DocumentId {
-    return this._id;
-  }
+  get id(): DocumentId { return this._id; }
+  get path(): DocumentPath { return this._path; }
+  get title(): string { return this._title; }
+  get lastModified(): DateTime { return this._lastModified; }
+  get linkCount(): number { return this._linkCount; }
+  get isOrphaned(): boolean { return this._isOrphaned; }
+  get deleted(): boolean { return this._deleted; }
 
-  get path(): DocumentPath {
-    return this._path;
-  }
+  markAsDeleted(): void { this._deleted = true; }
+  markAsRestored(): void { this._deleted = false; }
 
-  get title(): string {
-    return this._title;
-  }
-
-  get lastModified(): DateTime {
-    return this._lastModified;
-  }
-
-  get linkCount(): number {
-    return this._linkCount;
-  }
-
-  get isOrphaned(): boolean {
-    return this._isOrphaned;
-  }
-
-  markAsOrphaned(): void {
-    this._isOrphaned = true;
-    this._linkCount = 0;
-  }
-
-  markAsLinked(): void {
-    this._isOrphaned = false;
-  }
+  markAsOrphaned(): void { this._isOrphaned = true; this._linkCount = 0; }
+  markAsLinked(): void { this._isOrphaned = false; }
 
   updateTitle(title: string): void {
     if (!title || title.trim().length === 0) {
@@ -68,9 +52,7 @@ export class Document {
   }
 
   updateLinkCount(count: number): void {
-    if (count < 0) {
-      throw new Error('Link count cannot be negative');
-    }
+    if (count < 0) { throw new Error('Link count cannot be negative'); }
     this._linkCount = count;
     this._isOrphaned = count === 0;
   }

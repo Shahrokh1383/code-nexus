@@ -1,4 +1,3 @@
-// src/presentation/components/documentation/DocumentCard.tsx
 import type { JSX } from 'react';
 import { DocumentDto } from '../../../domains/documentation/application/dto/document.dto';
 import { OrphanBadge } from './OrphanBadge';
@@ -8,7 +7,15 @@ interface DocumentCardProps {
   onDelete: (id: string) => void;
 }
 
+function truncatePath(path: string): string {
+  const segments = path.split('/');
+  if (segments.length <= 3) return path;
+  return segments[0] + '/' + segments[1] + '/…/' + segments[segments.length - 1];
+}
+
 export function DocumentCard({ document, onDelete }: DocumentCardProps): JSX.Element {
+  const displayPath = truncatePath(document.path);
+
   return (
     <div className={`document-card ${document.isOrphaned ? 'document-card--orphan' : ''}`}>
       <div className="document-card__header">
@@ -18,10 +25,12 @@ export function DocumentCard({ document, onDelete }: DocumentCardProps): JSX.Ele
       
       <div className="document-card__meta">
         <span className="document-card__path" title={document.path}>
-          <i className="fa-solid fa-file-lines" /> {document.path}
+          <i className="fa-solid fa-file-lines" />
+          <span className="document-card__path-text">{displayPath}</span>
         </span>
         <span className="document-card__date">
-          <i className="fa-regular fa-clock" /> {new Date(document.lastModified).toLocaleDateString()}
+          <i className="fa-regular fa-clock" />
+          <span>{new Date(document.lastModified).toLocaleDateString()}</span>
         </span>
       </div>
 

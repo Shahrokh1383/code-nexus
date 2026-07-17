@@ -1,14 +1,21 @@
-// src/presentation/components/documentation/DocumentationHeader.tsx
 import type { JSX } from 'react';
 import { DocFolderDto } from '../../../domains/documentation/application/dto/doc-folder.dto';
 
 interface DocumentationHeaderProps {
   docFolder: DocFolderDto | null;
   isLoading: boolean;
+  deletedCount: number;
   onDetectRelocation: () => void;
+  onOpenTrash: () => void;
 }
 
-export function DocumentationHeader({ docFolder, isLoading, onDetectRelocation }: DocumentationHeaderProps): JSX.Element {
+export function DocumentationHeader({
+  docFolder,
+  isLoading,
+  deletedCount,
+  onDetectRelocation,
+  onOpenTrash,
+}: DocumentationHeaderProps): JSX.Element {
   return (
     <header className="documentation-header">
       <div className="documentation-header__info">
@@ -20,10 +27,20 @@ export function DocumentationHeader({ docFolder, isLoading, onDetectRelocation }
         )}
       </div>
       {docFolder && (
-        <button className="btn-secondary" onClick={onDetectRelocation} disabled={isLoading}>
-          <i className={`fa-solid ${isLoading ? 'fa-spinner fa-spin' : 'fa-magnifying-glass-location'}`} />
-          Detect Relocation
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn-secondary" onClick={onDetectRelocation} disabled={isLoading}>
+            <i className={`fa-solid ${isLoading ? 'fa-spinner fa-spin' : 'fa-magnifying-glass-location'}`} />
+            Detect Relocation
+          </button>
+          <button className="btn-secondary position-relative" onClick={onOpenTrash}>
+            <i className="fa-solid fa-trash-can" />
+            {deletedCount > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {deletedCount}
+              </span>
+            )}
+          </button>
+        </div>
       )}
     </header>
   );

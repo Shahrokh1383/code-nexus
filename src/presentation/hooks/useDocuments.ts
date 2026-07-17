@@ -4,23 +4,42 @@ import { useWorkspaceStore } from '../stores/workspace.store';
 
 export function useDocuments() {
   const workspace = useWorkspaceStore((s) => s.workspace);
-  const { 
-    documents, docFolder, orphans, isLoading, error, 
-    fetchDocumentation, registerFolder, detectRelocation, deleteDocument, clearError 
+  const {
+    documents, docFolder, orphans, deletedDocuments, isLoading, error,
+    fetchDocumentation, fetchDeletedDocuments,
+    registerFolder, detectRelocation, softDeleteDocument,
+    permanentDeleteDocument, restoreDocument, clearError
   } = useDocumentationStore();
 
   useEffect(() => {
-    if (workspace) fetchDocumentation();
-  }, [workspace, fetchDocumentation]);
-
-  const handleDelete = useCallback(async (id: string) => {
-    if (window.confirm('Are you sure you want to permanently delete this document and its metadata?')) {
-      await deleteDocument(id);
+    if (workspace) {
+      fetchDocumentation();
+      fetchDeletedDocuments();
     }
-  }, [deleteDocument]);
+  }, [workspace, fetchDocumentation, fetchDeletedDocuments]);
+
+  const handleSoftDelete = useCallback(async (id: string) => {
+    if (window.confirm('Move this document to trash? It can be restored later.')) {
+      await softDeleteDocument(id);
+    }
+  }, [softDeleteDocument]);
+
+  const handlePermanentDelete = useCallback(async (id: string) => {
+    if (window.confirm('Permanently delete this document? This action cannot be undone.')) {
+      await permanentDeleteDocument(id);
+    }
+  }, [permanentDeleteDocument]);
+
+  const handleRestore = useCallback(async (id: string) => {
+    await restoreDocument(id);
+  }, [restoreDocument]);
 
   return {
-    documents, docFolder, orphans, isLoading, error,
-    registerFolder, detectRelocation, deleteDocument: handleDelete, clearError,
+    documents, docFolder, orphans, deletedDocuments, isLoading, error,
+    registerFolder, detectRelocation,
+    softDeleteDocument: handleSoftDelete,
+    permanentDeleteDocument: handlePermanentDelete,
+    restoreDocument: handleRestore,
+    clearError,
   };
 }

@@ -24,14 +24,12 @@ export class GetAllDocumentsHandler
     private readonly configRepo: IProjectConfigRepository
   ) {}
 
-  async execute(
-    query: GetAllDocumentsQuery
-  ): Promise<Result<GetAllDocumentsResponse, string>> {
+  async execute(query: GetAllDocumentsQuery): Promise<Result<GetAllDocumentsResponse, string>> {
     try {
       const workspaceId = new WorkspaceId(query.workspaceId);
       const config = await this.configRepo.findByWorkspaceId(workspaceId);
 
-      const documents = await this.documentRepo.findAll();
+      const documents = await this.documentRepo.findAllNonDeleted();
       const documentDtos = documents.map((d) => this.mapToDto(d));
 
       let docFolder: DocFolder | null = null;
@@ -55,8 +53,7 @@ export class GetAllDocumentsHandler
 
       return Result.ok({ documents: documentDtos, docFolder: docFolderDto });
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch documents';
-      return Result.fail(message);
+      return Result.fail(error instanceof Error ? error.message : 'Failed to fetch documents');
     }
   }
 
