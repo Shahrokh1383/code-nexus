@@ -1,8 +1,8 @@
-import { useEffect, useRef, type JSX } from 'react';
+import { useEffect, useRef, useState, useCallback, type JSX } from 'react';
 import { useFileTree } from '../hooks/useFileTree';
 import { useIgnorePatterns } from '../hooks/useIgnorePatterns';
 import { useWorkspaceStore } from '../stores/workspace.store';
-import { FileTree } from '../components/file-tree/FileTree';
+import { SelectableFileTree } from '../components/file-tree/SelectableFileTree';
 import { IgnorePatternEditor } from '../components/file-tree/IgnorePatternEditor';
 import '../styles/file-browser.css';
 
@@ -12,6 +12,10 @@ export function FileBrowserPage(): JSX.Element {
   const hasScanned = useRef(false);
 
   const { fetchPatterns } = useIgnorePatterns({ onPatternChange: scanProject });
+
+  // Selection state for ignoring files/folders
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
+  const { addPattern } = useIgnorePatterns(); // used for bulk ignore
 
   useEffect(() => {
     fetchPatterns();
@@ -24,6 +28,27 @@ export function FileBrowserPage(): JSX.Element {
     }
   }, [workspace, tree, scanProject]);
 
+  const handleToggleSelect = useCallback((path: string) => {
+    setSelectedPaths((prev) => {
+      const next = new Set(prev);
+      if (next.has(path)) {
+        next.delete(path);
+      } else {
+        next.add(path);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleIgnoreSelected = async () => {
+    if (selectedPaths.size === 0) return;
+    // Add each selected path as an ignore pattern
+    for (const path of selectedPaths) {
+      await addPattern(path);
+    }
+    setSelectedPaths(new Set());
+  };
+
   return (
     <div className="file-browser-page">
       <header className="file-browser__header">
@@ -35,10 +60,17 @@ export function FileBrowserPage(): JSX.Element {
             </>
           )}
         </div>
-        <button className="btn-primary" onClick={scanProject} disabled={isScanning}>
-          <i className={`fa-solid ${isScanning ? 'fa-spinner fa-spin' : 'fa-radar'}`} />
-          {isScanning ? 'Scanning...' : 'Rescan Project'}
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {selectedPaths.size > 0 && (
+            <button className="btn-primary" onClick={handleIgnoreSelected}>
+              <i className="fa-solid fa-eye-slash" /> Ignore Selected ({selectedPaths.size})
+            </button>
+          )}
+          <button className="btn-primary" onClick={scanProject} disabled={isScanning}>
+            <i className={`fa-solid ${isScanning ? 'fa-spinner fa-spin' : 'fa-radar'}`} />
+            {isScanning ? 'Scanning...' : 'Rescan Project'}
+          </button>
+        </div>
       </header>
 
       {error && <div className="file-browser__error pill-error">{error}</div>}
@@ -51,9 +83,15 @@ export function FileBrowserPage(): JSX.Element {
               <span>Indexing workspace...</span>
             </div>
           )}
-          {tree && <FileTree nodes={[tree]} />}
+          {tree && (
+            <SelectableFileTree
+              nodes={[tree]}
+              selectedPaths={selectedPaths}
+              onToggleSelect={handleToggleSelect}
+            />
+          )}
         </div>
-        
+
         <aside className="file-browser__sidebar">
           <IgnorePatternEditor />
         </aside>

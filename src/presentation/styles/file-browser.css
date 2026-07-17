@@ -1,3 +1,40 @@
+/* ========== Custom Checkbox (same as UnlinkedFilesList) ========== */
+.cn-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--cn-border-default);
+  border-radius: 4px;
+  background-color: var(--cn-bg-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin: 0;
+  flex-shrink: 0;
+}
+.cn-checkbox:checked {
+  background-color: var(--cn-primary);
+  border-color: var(--cn-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.cn-checkbox:indeterminate {
+  background-color: var(--cn-primary-muted);
+  border-color: var(--cn-primary);
+}
+.cn-checkbox:focus-visible {
+  outline: 2px solid var(--cn-primary);
+  outline-offset: 2px;
+}
+.cn-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  margin-right: var(--cn-space-2);
+  user-select: none;
+}
 .file-browser-page { display: flex; flex-direction: column; height: 100%; gap: var(--cn-space-4); }
 .file-browser__header { display: flex; justify-content: space-between; align-items: center; padding-bottom: var(--cn-space-4); border-bottom: 1px solid var(--cn-border-light); }
 .file-browser__stats { display: flex; gap: var(--cn-space-2); }
@@ -8,7 +45,9 @@
   border-radius: var(--cn-radius-lg); padding: var(--cn-space-4); overflow-y: auto;
   font-family: var(--cn-font-mono); font-size: var(--cn-font-size-sm);
 }
-
+.file-browser__sidebar {
+  overflow: hidden;
+}
 .file-browser__loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: var(--cn-space-3); color: var(--cn-text-secondary); font-size: var(--cn-font-size-lg); }
 .file-browser__error { padding: var(--cn-space-3); border-radius: var(--cn-radius-md); background-color: var(--cn-error-muted); color: var(--cn-error); }
 
