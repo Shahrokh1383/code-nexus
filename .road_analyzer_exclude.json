@@ -14,7 +14,6 @@
     "electron-builder.yml",
     "public",
     "docs",
-    "electron\\ipc\\handlers\\tracking",
     "electron\\ipc\\handlers\\linking",
     "src\\domains\\tracking",
     "src\\domains\\shared-kernel",
@@ -46,6 +45,6 @@
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-17T13:23:13.571Z",
+  "lastModified": "2026-07-17T13:50:35.204Z",
   "version": 1
 }

@@ -2,7 +2,7 @@ import { ipcMain, dialog, BrowserWindow } from 'electron';
 import { IpcChannels } from './channels';
 import { registerProjectHandlers } from './handlers/project-handlers';
 import { registerFilesystemHandlers } from './handlers/filesystem-handlers';
-import { registerDocumentationHandlers } from './handlers/documentation-handlers';
+import { registerDocumentationHandlers } from './handlers/documentation';
 import { registerTrackingHandlers } from './handlers/tracking-handlers';
 import { registerLinkingHandlers } from './handlers/linking-handlers';
 
