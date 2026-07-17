@@ -11,7 +11,7 @@ files:
   - dist-electron/**/*
 
 win:
-  icon: build/logo.ico
+  icon: build/icon.ico
   target:
     - target: nsis
       arch:
@@ -20,9 +20,13 @@ win:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  installerIcon: build/logo.ico
-  uninstallerIcon: build/logo.ico
-  installerHeaderIcon: build/logo.ico
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
   createDesktopShortcut: always
   createStartMenuShortcut: true
   shortcutName: CodeNexus
+
+extraResources:
+  - from: build/icon.ico
+    to: icon.ico

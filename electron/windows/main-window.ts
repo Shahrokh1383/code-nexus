@@ -2,13 +2,17 @@ import { app, BrowserWindow, shell } from 'electron';
 import path from 'path';
 
 export function createMainWindow(): BrowserWindow {
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'icon.ico')
+    : path.join(__dirname, '../../build/icon.ico');
+
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 800,
     minHeight: 600,
     show: false,
-    icon: path.join(__dirname, '../../build/logo.ico'),
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, '../preload.js'),
       contextIsolation: true,
@@ -29,10 +33,8 @@ export function createMainWindow(): BrowserWindow {
 
   // Load the application
   if (!app.isPackaged) {
-    // Development mode: Load from Vite dev server
     mainWindow.loadURL('http://localhost:5173');
   } else {
-    // Production mode: Load built index.html from dist folder
     mainWindow.loadFile(path.join(__dirname, '../../../dist/index.html'));
   }
 

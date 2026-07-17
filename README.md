@@ -59,11 +59,3 @@ To compile the application into a distributable desktop package, execute:
 ```bash
 npm run package
 ```
-
----
-
-## End-User Installation
-
-For developers, project managers, or stakeholders who want to utilize CodeNexus directly without configuring a local development environment, pre-compiled binaries are provided. 
-
-You can download the latest installer for your operating system directly from the [Releases](https://github.com/Shahrokh1383/code-nexus/releases) page of this repository. Download the appropriate package for your architecture, run the installer, and the application will be ready to integrate with your projects immediately.
