@@ -35,7 +35,7 @@ export class DocsFolderDetectorAdapter {
 
     for (const dir of directories) {
       const dirAbsolutePath = path.join(workspaceRoot, dir.name);
-      const allFiles = await this.nodeFsAdapter.scanDirectory(dirAbsolutePath);
+      const allFiles = await this.nodeFsAdapter.readDirRecursively(dirAbsolutePath);
 
       const files: FileNode[] = allFiles.map((meta) => ({
         name: meta.name,
@@ -59,7 +59,7 @@ export class DocsFolderDetectorAdapter {
    * Reads a single candidate folder and returns its file nodes.
    */
   async readCandidateFolder(folderPath: string): Promise<FileNode[]> {
-    const allFiles = await this.nodeFsAdapter.scanDirectory(folderPath);
+    const allFiles = await this.nodeFsAdapter.readDirRecursively(folderPath);
 
     return allFiles.map((meta) => ({
       name: meta.name,

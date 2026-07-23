@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useFileSystemStore } from '../stores/filesystem.store';
 import { useIpc } from './useIpc';
 import { useWorkspaceStore } from '../stores/workspace.store';
@@ -10,22 +10,32 @@ interface IpcResponse<T> { success: boolean; data?: T; error?: string; }
 export function useFileTree() {
   const ipc = useIpc();
   const workspace = useWorkspaceStore((s) => s.workspace);
-  const { setTree, setScanning, setError, tree, isScanning, totalFiles, totalFolders, error } = useFileSystemStore();
+  const { setTree, setError, tree, totalFiles, totalFolders, error } = useFileSystemStore();
 
-  const scanProject = useCallback(async () => {
+  const fetchFileTree = useCallback(async () => {
     if (!workspace) return;
-    setScanning(true);
     setError(null);
     try {
-      const res = await ipc.invoke(IpcChannels.FILESYSTEM_SCAN_PROJECT, workspace.id) as IpcResponse<FileTreeDto>;
-      if (res.success && res.data) setTree(res.data);
-      else setError(res.error || 'Scan failed');
+      const res = await ipc.invoke(IpcChannels.FILESYSTEM_GET_FILE_TREE, workspace.id) as IpcResponse<FileTreeDto>;
+      if (res.success && res.data) {
+        setTree(res.data);
+      } else {
+        setError(res.error || 'Failed to fetch file tree');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
-    } finally {
-      setScanning(false);
     }
-  }, [workspace, ipc, setTree, setScanning, setError]);
+  }, [workspace, ipc, setTree, setError]);
 
-  return { scanProject, tree, isScanning, totalFiles, totalFolders, error };
+  // Listen for real-time backend updates
+  useEffect(() => {
+    const unsubscribe = ipc.on(IpcChannels.FILESYSTEM_TREE_UPDATED, () => {
+      fetchFileTree();
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [ipc, fetchFileTree]);
+
+  return { fetchFileTree, tree, totalFiles, totalFolders, error };
 }

@@ -1,5 +1,14 @@
-import { FileMetadata } from '../../domain/services/scan-project.service';
+export interface FileMetadata {
+  readonly path: string;
+  readonly name: string;
+  readonly size: number;
+  readonly lastModified: Date;
+  readonly isDirectory: boolean;
+}
 
 export interface IFileSystemAdapter {
-  scanDirectory(rootPath: string): Promise<FileMetadata[]>;
+  readDir(dirPath: string): Promise<FileMetadata[]>;
+  readDirRecursively(dirPath: string): Promise<FileMetadata[]>;
+  stat(filePath: string): Promise<FileMetadata>;
+  exists(filePath: string): boolean;
 }

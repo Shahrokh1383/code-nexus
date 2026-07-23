@@ -6,9 +6,6 @@ import { DATABASE_SCHEMA_VERSION } from '../../../src/infrastructure/persistence
 import { WorkspaceJsonRepository } from '../../../src/domains/project/infrastructure/repository/workspace-json.repository';
 import { ProjectConfigJsonRepository } from '../../../src/domains/project/infrastructure/repository/project-config-json.repository';
 import { FileSystemJsonRepository } from '../../../src/domains/filesystem/infrastructure/repository/filesystem-json.repository';
-import { NodeFsAdapter } from '../../../src/domains/filesystem/infrastructure/adapters/node-fs.adapter';
-import { ScanProjectCommand } from '../../../src/domains/filesystem/application/commands/scan-project.command';
-import { ScanProjectHandler } from '../../../src/domains/filesystem/application/handlers/scan-project.handler';
 import { GetFileTreeQuery } from '../../../src/domains/filesystem/application/queries/get-file-tree.query';
 import { GetFileTreeHandler } from '../../../src/domains/filesystem/application/handlers/get-file-tree.handler';
 import { AddIgnorePatternCommand } from '../../../src/domains/filesystem/application/commands/add-ignore-pattern.command';
@@ -33,10 +30,6 @@ function createRepositories(rootPath: string) {
   return { workspaceRepo, configRepo, fileSystemRepo };
 }
 
-/**
- * Validates that the workspace ID (which doubles as the root path) is a non‑empty string.
- * Returns the validated string or null if invalid.
- */
 function validateWorkspaceId(workspaceId: unknown): string | null {
   if (typeof workspaceId !== 'string' || workspaceId.trim().length === 0) {
     return null;
@@ -45,33 +38,6 @@ function validateWorkspaceId(workspaceId: unknown): string | null {
 }
 
 export function registerFilesystemHandlers(): void {
-  // ── SCAN PROJECT ──────────────────────────────────
-  ipcMain.handle(
-    IpcChannels.FILESYSTEM_SCAN_PROJECT,
-    async (_event, workspaceId: unknown): Promise<IpcResponse<unknown>> => {
-      const rootPath = validateWorkspaceId(workspaceId);
-      if (!rootPath) {
-        return { success: false, error: 'Invalid workspace ID' };
-      }
-
-      try {
-        const { workspaceRepo, configRepo, fileSystemRepo } = createRepositories(rootPath);
-        const fileSystemAdapter = new NodeFsAdapter();
-        const handler = new ScanProjectHandler(workspaceRepo, configRepo, fileSystemRepo, fileSystemAdapter);
-
-        const result = await handler.execute(new ScanProjectCommand(workspaceId as string));
-
-        return result.fold<IpcResponse<unknown>>(
-          (dto) => ({ success: true, data: dto }),
-          (error) => ({ success: false, error })
-        );
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error';
-        return { success: false, error: message };
-      }
-    }
-  );
-
   // ── GET FILE TREE ─────────────────────────────────
   ipcMain.handle(
     IpcChannels.FILESYSTEM_GET_FILE_TREE,

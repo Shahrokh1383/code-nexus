@@ -1,3 +1,4 @@
+import { BrowserWindow } from 'electron';
 import { ChokidarAdapter } from '../../src/domains/filesystem/infrastructure/adapters/chokidar.adapter';
 import { FileChangeReactionSaga } from '../../src/application/sagas/file-change-reaction.saga';
 import { ProjectConfigJsonRepository } from '../../src/domains/project/infrastructure/repository/project-config-json.repository';
@@ -11,10 +12,14 @@ import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
 import { IDomainEventHandler } from '../../src/domains/shared-kernel/events/domain-event-handler.interface';
 import { FileSystemJsonRepository } from '../../src/domains/filesystem/infrastructure/repository/filesystem-json.repository';
+import { IpcChannels } from '../ipc/channels';
+import { DomainEvent } from '../../src/domains/shared-kernel/events/domain-event';
 
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
 let ignorePatternChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent> | null = null;
+let uiUpdateHandler: IDomainEventHandler<DomainEvent> | null = null;
+let uiUpdateDebounce: ReturnType<typeof setTimeout> | null = null;
 
 function toWatcherGlob(pattern: string): string {
   if (pattern.endsWith('/')) {
@@ -50,8 +55,26 @@ export async function startWatcher(rootPath: string): Promise<void> {
   currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery, fileSystemRepo);
   currentSaga.register();
 
-  // Register listener for ignore pattern changes to restart the watcher
   const eventBus = EventBus.getInstance();
+
+  // Notify frontend reactively when files change
+  uiUpdateHandler = {
+    handle: async (_event: DomainEvent): Promise<void> => {
+      if (uiUpdateDebounce) clearTimeout(uiUpdateDebounce);
+      uiUpdateDebounce = setTimeout(() => {
+        const windows = BrowserWindow.getAllWindows();
+        if (windows.length > 0 && !windows[0].isDestroyed()) {
+          windows[0].webContents.send(IpcChannels.FILESYSTEM_TREE_UPDATED);
+        }
+      }, 300); // Debounce UI updates to prevent thrashing
+    },
+  };
+  
+  eventBus.register('FileDiscovered', uiUpdateHandler);
+  eventBus.register('FileModified', uiUpdateHandler);
+  eventBus.register('FileDeleted', uiUpdateHandler);
+
+  // Register listener for ignore pattern changes to restart the watcher
   ignorePatternChangedHandler = {
     handle: async (event: IgnorePatternsChangedEvent): Promise<void> => {
       await startWatcher(event.workspaceId.value);
@@ -69,8 +92,18 @@ export async function stopWatcher(): Promise<void> {
     currentSaga.unregister();
     currentSaga = null;
   }
+  
+  const eventBus = EventBus.getInstance();
+  
+  if (uiUpdateHandler) {
+    eventBus.unregister('FileDiscovered', uiUpdateHandler);
+    eventBus.unregister('FileModified', uiUpdateHandler);
+    eventBus.unregister('FileDeleted', uiUpdateHandler);
+    uiUpdateHandler = null;
+  }
+  
   if (ignorePatternChangedHandler) {
-    EventBus.getInstance().unregister('IgnorePatternsChanged', ignorePatternChangedHandler);
+    eventBus.unregister('IgnorePatternsChanged', ignorePatternChangedHandler);
     ignorePatternChangedHandler = null;
   }
 }

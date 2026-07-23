@@ -1,63 +1,8 @@
 import { promises as fsPromises, existsSync } from 'fs';
 import * as path from 'path';
-import * as os from 'os';
-import { IFileSystemAdapter } from '../../application/ports/file-system-adapter.interface';
-import { FileMetadata } from '../../domain/services/scan-project.service';
+import { IFileSystemAdapter, FileMetadata } from '../../application/ports/file-system-adapter.interface';
 
 export class NodeFsAdapter implements IFileSystemAdapter {
-  async scanDirectory(rootPath: string): Promise<FileMetadata[]> {
-    const results: FileMetadata[] = [];
-    const dirQueue: string[] = [rootPath];
-    const concurrency = Math.max(1, os.cpus().length - 1);
-    const workers: Promise<void>[] = [];
-
-    const processDirectory = async (absoluteDir: string): Promise<void> => {
-      const entries = await fsPromises.readdir(absoluteDir, { withFileTypes: true });
-      const childDirs: string[] = [];
-
-      for (const entry of entries) {
-        const absolutePath = path.join(absoluteDir, entry.name);
-        const relativePath = path.relative(rootPath, absolutePath).replace(/\\/g, '/');
-        const statInfo = await fsPromises.stat(absolutePath);
-
-        results.push({
-          path: relativePath,
-          name: entry.name,
-          size: statInfo.size,
-          lastModified: statInfo.mtime,
-          isDirectory: entry.isDirectory(),
-        });
-
-        if (entry.isDirectory()) {
-          childDirs.push(absolutePath);
-        }
-      }
-
-      // Add subdirectories to queue and process them with limited concurrency
-      for (const subDir of childDirs) {
-        dirQueue.push(subDir);
-      }
-    };
-
-    // Worker that processes directories until queue is empty
-    const worker = async (): Promise<void> => {
-      while (dirQueue.length > 0) {
-        const dir = dirQueue.shift();
-        if (dir) {
-          await processDirectory(dir);
-        }
-      }
-    };
-
-    // Start concurrent workers
-    for (let i = 0; i < concurrency; i++) {
-      workers.push(worker());
-    }
-
-    await Promise.all(workers);
-    return results;
-  }
-
   async readDir(dirPath: string): Promise<FileMetadata[]> {
     const entries = await fsPromises.readdir(dirPath, { withFileTypes: true });
     return Promise.all(
@@ -73,6 +18,47 @@ export class NodeFsAdapter implements IFileSystemAdapter {
         };
       })
     );
+  }
+
+  async readDirRecursively(dirPath: string): Promise<FileMetadata[]> {
+    const results: FileMetadata[] = [];
+    const stack: string[] = [dirPath];
+
+    while (stack.length > 0) {
+      const currentDir = stack.pop()!;
+      let entries: import('fs').Dirent[];
+      
+      try {
+        entries = await fsPromises.readdir(currentDir, { withFileTypes: true });
+      } catch {
+        continue; // Ignore directories we can't read (e.g., permission issues)
+      }
+
+      for (const entry of entries) {
+        const absolutePath = path.join(currentDir, entry.name);
+        const relativePath = path.relative(dirPath, absolutePath).replace(/\\/g, '/');
+        
+        let statInfo;
+        try {
+          statInfo = await fsPromises.stat(absolutePath);
+        } catch {
+          continue; // Skip files we can't stat
+        }
+
+        results.push({
+          path: relativePath,
+          name: entry.name,
+          size: statInfo.size,
+          lastModified: statInfo.mtime,
+          isDirectory: entry.isDirectory(),
+        });
+
+        if (entry.isDirectory()) {
+          stack.push(absolutePath);
+        }
+      }
+    }
+    return results;
   }
 
   async stat(filePath: string): Promise<FileMetadata> {

@@ -10,14 +10,12 @@ interface FileSystemState {
   tree: FolderNodeDto | null;
   totalFiles: number;
   totalFolders: number;
-  isScanning: boolean;
   ignoredPatterns: string[];
   expandedPaths: Set<string>;
   error: string | null;
 
   setTree: (tree: FileTreeDto) => void;
   clearTree: () => void;
-  setScanning: (isScanning: boolean) => void;
   setError: (error: string | null) => void;
   setIgnoredPatterns: (patterns: string[]) => void;
   addIgnoredPattern: (pattern: string) => void;
@@ -29,14 +27,12 @@ export const useFileSystemStore = create<FileSystemState>((set) => ({
   tree: null,
   totalFiles: 0,
   totalFolders: 0,
-  isScanning: false,
   ignoredPatterns: [],
   expandedPaths: new Set(),
   error: null,
 
   setTree: (tree) => set({ tree: tree.root, totalFiles: tree.totalFiles, totalFolders: tree.totalFolders }),
   clearTree: () => set({ tree: null, totalFiles: 0, totalFolders: 0 }),
-  setScanning: (isScanning) => set({ isScanning }),
   setError: (error) => set({ error }),
   setIgnoredPatterns: (ignoredPatterns) => set({ ignoredPatterns }),
   
