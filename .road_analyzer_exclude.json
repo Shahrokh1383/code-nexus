@@ -1,0 +1,27 @@
+{
+  "excludedPaths": [
+    "electron-builder.yml",
+    "eslint.config.js",
+    "fix.txt",
+    "fix2.txt",
+    "index.html",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "tsconfig.electron.json",
+    "tsconfig.json",
+    "webpack.config.js",
+    "vite.config.js",
+    "src\\domains\\filesystem",
+    "src\\domains\\linking",
+    "src\\domains\\project",
+    "src\\domains\\shared-kernel",
+    "src\\domains\\tracking",
+    "dist-electron",
+    "docs",
+    "public"
+  ],
+  "globalPatterns": [],
+  "lastModified": "2026-07-23T17:50:18.776Z",
+  "version": 1
+}

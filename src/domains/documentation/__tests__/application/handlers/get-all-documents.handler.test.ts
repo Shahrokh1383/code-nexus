@@ -28,18 +28,26 @@ describe('GetAllDocumentsHandler', () => {
       findById: jest.fn(),
       findByPath: jest.fn(),
       findAll: jest.fn(),
+      findAllNonDeleted: jest.fn(),
+      findAllDeleted: jest.fn(),
       findOrphaned: jest.fn(),
       save: jest.fn(),
       delete: jest.fn(),
+      softDelete: jest.fn(),
+      restore: jest.fn(),
       findByDocFolderPath: jest.fn(),
     } as unknown as jest.Mocked<IDocumentRepository>;
 
     mockDocFolderRepo = {
+      findByWorkspaceId: jest.fn(),
       findByPath: jest.fn(),
+      save: jest.fn(),
+      delete: jest.fn(),
     } as unknown as jest.Mocked<IDocFolderRepository>;
 
     mockConfigRepo = {
       findByWorkspaceId: jest.fn(),
+      save: jest.fn(),
     } as unknown as jest.Mocked<IProjectConfigRepository>;
 
     mockConfigRepo.findByWorkspaceId.mockResolvedValue(
@@ -68,7 +76,7 @@ describe('GetAllDocumentsHandler', () => {
       createDocument('doc-1', 'Readme', false),
       createDocument('doc-2', 'Guide', true),
     ];
-    mockDocumentRepo.findAll.mockResolvedValue(docs);
+    mockDocumentRepo.findAllNonDeleted.mockResolvedValue(docs);
 
     const result = await handler.execute(new GetAllDocumentsQuery('workspace-123'));
 
@@ -82,11 +90,11 @@ describe('GetAllDocumentsHandler', () => {
     expect(dtos[0].isOrphaned).toBe(false);
     expect(dtos[1].id).toBe('doc-2');
     expect(dtos[1].isOrphaned).toBe(true);
-    expect(response!.docFolder).toBeNull(); // because config returned null docsFolderPath
+    expect(response!.docFolder).toBeNull();
   });
 
   it('should return empty array when no documents exist', async () => {
-    mockDocumentRepo.findAll.mockResolvedValue([]);
+    mockDocumentRepo.findAllNonDeleted.mockResolvedValue([]);
 
     const result = await handler.execute(new GetAllDocumentsQuery('workspace-123'));
 
@@ -99,7 +107,7 @@ describe('GetAllDocumentsHandler', () => {
 
   it('should map document properties correctly', async () => {
     const doc = createDocument('doc-1', 'Readme', false);
-    mockDocumentRepo.findAll.mockResolvedValue([doc]);
+    mockDocumentRepo.findAllNonDeleted.mockResolvedValue([doc]);
 
     const result = await handler.execute(new GetAllDocumentsQuery('workspace-123'));
     expect(result.isSuccess).toBe(true);
