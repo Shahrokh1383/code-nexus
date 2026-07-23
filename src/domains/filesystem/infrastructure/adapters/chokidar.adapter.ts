@@ -1,5 +1,4 @@
 import chokidar, { FSWatcher } from 'chokidar';
-import { promises as fsPromises } from 'fs';
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { FileModifiedEvent } from '../../domain/events/file-modified';
 import { FileDeletedEvent } from '../../domain/events/file-deleted';
@@ -7,10 +6,8 @@ import { FileDiscoveredEvent } from '../../domain/events/file-discovered';
 import { FileNodeId } from '../../domain/value-objects/file-node-id';
 import { FolderNodeId } from '../../domain/value-objects/folder-node-id';
 import { FilePath } from '../../domain/value-objects/file-path';
-import { FileHash } from '../../domain/value-objects/file-hash';
 import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
-import { HashUtils } from '../../../shared-kernel/utils/hash-utils';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
 
 export class ChokidarAdapter {
@@ -32,7 +29,7 @@ export class ChokidarAdapter {
 
     this.watcher = chokidar.watch(rootPath, {
       ignored,
-      ignoreInitial: true,
+      ignoreInitial: true, // VS Code style: We don't scan everything upfront
       persistent: true,
       depth: Infinity,
     });
@@ -86,36 +83,26 @@ export class ChokidarAdapter {
       switch (type) {
         case 'add': {
           const filePath = new FilePath(relativePath);
-          const hash = await this.computeHash(absolutePath);
-          const event = new FileDiscoveredEvent(
-            new FileNodeId(UuidGenerator.generate()),
-            filePath,
-            false
+          await this.eventBus.emit(
+            new FileDiscoveredEvent(
+              new FileNodeId(UuidGenerator.generate()),
+              filePath,
+              false
+            )
           );
-          await this.eventBus.emit(event);
-          if (hash) {
-            await this.eventBus.emit(
-              new FileModifiedEvent(
-                new FileNodeId(UuidGenerator.generate()),
-                filePath,
-                new FileHash(hash)
-              )
-            );
-          }
           break;
         }
         case 'change': {
           const filePath = new FilePath(relativePath);
-          const hash = await this.computeHash(absolutePath);
-          if (hash) {
-            await this.eventBus.emit(
-              new FileModifiedEvent(
-                new FileNodeId(UuidGenerator.generate()),
-                filePath,
-                new FileHash(hash)
-              )
-            );
-          }
+          // Emit modified event without reading the file content.
+          // Hash calculation is strictly the Tracking context's responsibility.
+          await this.eventBus.emit(
+            new FileModifiedEvent(
+              new FileNodeId(UuidGenerator.generate()),
+              filePath,
+              null as any // Hash is no longer computed here.
+            )
+          );
           break;
         }
         case 'unlink': {
@@ -148,7 +135,7 @@ export class ChokidarAdapter {
         }
       }
     } catch {
-      // Silently ignore events for paths that fail validation or IO
+      // Silently ignore events for paths that fail validation
     }
   }
 
@@ -163,17 +150,8 @@ export class ChokidarAdapter {
     return normalized;
   }
 
-  private async computeHash(absolutePath: string): Promise<string | null> {
-    try {
-      const content = await fsPromises.readFile(absolutePath, 'utf-8');
-      return HashUtils.sha256(content);
-    } catch {
-      return null;
-    }
-  }
-
   private toChokidarPatter(pattern: IgnorePattern): string {
-    const raw = pattern.pattern
+    const raw = pattern.pattern;
     if (raw.includes('/') || /[*?[\]]/.test(raw)) {
       return raw;
     }

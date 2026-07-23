@@ -5,24 +5,12 @@ jest.mock('chokidar', () => ({
   }),
 }));
 
-jest.mock('fs', () => ({
-  promises: {
-    readFile: jest.fn().mockResolvedValue('mock file content'),
-  },
-}));
-
 import chokidar from 'chokidar';
 import { ChokidarAdapter } from '../../../infrastructure/adapters/chokidar.adapter';
 import { EventBus } from '../../../../shared-kernel/events/event-bus';
 import { FileModifiedEvent } from '../../../domain/events/file-modified';
 import { FileDeletedEvent } from '../../../domain/events/file-deleted';
 import { FileDiscoveredEvent } from '../../../domain/events/file-discovered';
-
-jest.mock('../../../../shared-kernel/utils/hash-utils', () => ({
-  HashUtils: {
-    sha256: jest.fn().mockReturnValue('a'.repeat(64)),
-  },
-}));
 
 jest.mock('../../../../shared-kernel/utils/uuid-generator', () => ({
   UuidGenerator: {
@@ -73,7 +61,7 @@ describe('ChokidarAdapter', () => {
     expect(mockClose).toHaveBeenCalled();
   });
 
-  it('should emit FileModifiedEvent on change after debounce', (done) => {
+  it('should emit FileModifiedEvent on change after debounce without reading file content', (done) => {
     const mockWatcher = { on: jest.fn().mockReturnThis(), close: jest.fn() };
     (chokidar.watch as jest.Mock).mockReturnValue(mockWatcher);
 
@@ -90,7 +78,7 @@ describe('ChokidarAdapter', () => {
       const modifiedEvents = emitSpy.mock.calls.filter(
         ([event]) => event instanceof FileModifiedEvent
       );
-      expect(modifiedEvents.length).toBeGreaterThanOrEqual(1);
+      expect(modifiedEvents.length).toBe(1);
       emitSpy.mockRestore();
       done();
     }, 350);
@@ -113,7 +101,7 @@ describe('ChokidarAdapter', () => {
       const discoveredEvents = emitSpy.mock.calls.filter(
         ([event]) => event instanceof FileDiscoveredEvent
       );
-      expect(discoveredEvents.length).toBeGreaterThanOrEqual(1);
+      expect(discoveredEvents.length).toBe(1);
       emitSpy.mockRestore();
       done();
     }, 350);
@@ -136,7 +124,7 @@ describe('ChokidarAdapter', () => {
       const deletedEvents = emitSpy.mock.calls.filter(
         ([event]) => event instanceof FileDeletedEvent
       );
-      expect(deletedEvents.length).toBeGreaterThanOrEqual(1);
+      expect(deletedEvents.length).toBe(1);
       emitSpy.mockRestore();
       done();
     }, 350);

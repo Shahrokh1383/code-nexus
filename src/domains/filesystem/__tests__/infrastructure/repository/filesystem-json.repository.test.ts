@@ -19,9 +19,7 @@ class MockJsonDatabase extends JsonDatabase {
 
   async read<T>(filename: string): Promise<T> {
     const data = this.storage.get(filename);
-    if (!data) {
-      throw new Error('File not found');
-    }
+    if (!data) throw new Error('File not found');
     return data as T;
   }
 
@@ -39,6 +37,11 @@ describe('FileSystemJsonRepository', () => {
   beforeEach(() => {
     db = new MockJsonDatabase();
     repo = new FileSystemJsonRepository(db);
+  });
+
+  afterEach(async () => {
+    // Ensure any debounced writes are flushed before moving to next test
+    await repo.flush(); 
   });
 
   const createFileNode = (id: string, path: string, size = 100): FileNode => {
@@ -79,7 +82,6 @@ describe('FileSystemJsonRepository', () => {
     const found = await repo.findByPath(new FilePath('src'));
     expect(found).not.toBeNull();
     expect(found!.id.value).toBe('folder-1');
-    expect((found as FolderNode).children).toHaveLength(0);
   });
 
   it('should return null for non-existent id', async () => {

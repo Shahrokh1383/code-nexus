@@ -31,6 +31,11 @@ export class FileChangeReactionSaga {
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
   private readonly fileSystemRepo: IFileSystemRepository;
 
+  // Pre-instantiated to prevent memory leaks and CPU spikes on every file event
+  private readonly trackingRepo: TrackingJsonRepository;
+  private readonly contentReader: FileContentReaderAdapter;
+  private readonly detectChangesHandler: DetectChangesHandler;
+
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
   private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
@@ -48,41 +53,21 @@ export class FileChangeReactionSaga {
     this.linkedDocQuery = linkedDocQuery;
     this.fileSystemRepo = fileSystemRepo;
 
-    this.fileModifiedHandler = {
-      handle: async (event: FileModifiedEvent): Promise<void> => {
-        await this.onFileModified(event);
-      },
-    };
+    // Initialize dependencies ONCE
+    this.trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
+    this.contentReader = new FileContentReaderAdapter(this.workspaceRoot);
+    const diffAdapter = new DiffCalculatorAdapter();
+    const diffService = new DiffCalculatorService(diffAdapter);
+    const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, this.contentReader);
+    this.detectChangesHandler = new DetectChangesHandler(this.contentReader, recordHandler);
 
-    this.fileDiscoveredHandler = {
-      handle: async (event: FileDiscoveredEvent): Promise<void> => {
-        await this.onFileDiscovered(event);
-      },
-    };
-
-    this.fileExcludedHandler = {
-      handle: async (event: FileExcludedEvent): Promise<void> => {
-        await this.onFileExcluded(event);
-      },
-    };
-
-    this.ignorePatternsChangedHandler = {
-      handle: async (_event: IgnorePatternsChangedEvent): Promise<void> => {
-        await this.onIgnorePatternsChanged();
-      },
-    };
-
-    this.fileIndexRebuiltHandler = {
-      handle: async (event: FileIndexRebuiltEvent): Promise<void> => {
-        await this.onFileIndexRebuilt(event);
-      },
-    };
-
-    this.changesDetectedHandler = {
-      handle: async (event: ChangesDetectedEvent): Promise<void> => {
-        await this.onChangesDetected(event);
-      },
-    };
+    // Bind handlers
+    this.fileModifiedHandler = { handle: (e) => this.onFileModified(e) };
+    this.fileDiscoveredHandler = { handle: (e) => this.onFileDiscovered(e) };
+    this.fileExcludedHandler = { handle: (e) => this.onFileExcluded(e) };
+    this.ignorePatternsChangedHandler = { handle: () => this.onIgnorePatternsChanged() };
+    this.fileIndexRebuiltHandler = { handle: (e) => this.onFileIndexRebuilt(e) };
+    this.changesDetectedHandler = { handle: (e) => this.onChangesDetected(e) };
   }
 
   register(): void {
@@ -103,63 +88,44 @@ export class FileChangeReactionSaga {
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
-  /** Handle FileModifiedEvent: tracking + keep file index in sync. */
   private async onFileModified(event: FileModifiedEvent): Promise<void> {
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
-    // Tracking: detect changes and record hash
-    const repository = new TrackingJsonRepository(this.workspaceRoot);
-    const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
-    const diffAdapter = new DiffCalculatorAdapter();
-    const diffService = new DiffCalculatorService(diffAdapter);
-    const recordHandler = new RecordHashHandler(repository, diffService, contentReader);
-    const handler = new DetectChangesHandler(contentReader, recordHandler);
-    await handler.execute(new DetectChangesCommand(normalized));
-
-    // File index: ensure the file node exists (idempotent upsert)
+    // Tracking: detect changes and record hash using pre-instantiated handler
+    await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
+    
+    // File index: ensure the file node exists
     await this.upsertFileNode(normalized);
   }
 
-  /** Handle FileDiscoveredEvent: only for new files, ensure index entry. */
   private async onFileDiscovered(event: FileDiscoveredEvent): Promise<void> {
     if (event.isDirectory) return;
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
-    // Tracking: record initial hash (creates tracking entry)
-    const repository = new TrackingJsonRepository(this.workspaceRoot);
-    const contentReader = new FileContentReaderAdapter(this.workspaceRoot);
-    const diffAdapter = new DiffCalculatorAdapter();
-    const diffService = new DiffCalculatorService(diffAdapter);
-    const recordHandler = new RecordHashHandler(repository, diffService, contentReader);
-    const handler = new DetectChangesHandler(contentReader, recordHandler);
-    await handler.execute(new DetectChangesCommand(normalized));
-
+    // Tracking: record initial hash
+    await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
+    
     // File index: ensure the new file is added
     await this.upsertFileNode(normalized);
   }
 
   private async onFileExcluded(event: FileExcludedEvent): Promise<void> {
-    const repository = new TrackingJsonRepository(this.workspaceRoot);
-    await repository.deleteHashByPath(event.path);
+    await this.trackingRepo.deleteHashByPath(event.path);
   }
 
   private async onIgnorePatternsChanged(): Promise<void> {
     const allNodes = await this.fileSystemRepo.findAll();
     const currentFilePaths = new Set<string>();
     for (const node of allNodes) {
-      if (node instanceof FileNode) {
-        currentFilePaths.add(node.path.value);
-      }
+      if (node instanceof FileNode) currentFilePaths.add(node.path.value);
     }
-    const trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
-    await trackingRepo.deleteAllExcept(currentFilePaths);
+    await this.trackingRepo.deleteAllExcept(currentFilePaths);
   }
 
   private async onFileIndexRebuilt(event: FileIndexRebuiltEvent): Promise<void> {
-    const trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
-    await trackingRepo.deleteAllExcept(event.filePaths);
+    await this.trackingRepo.deleteAllExcept(event.filePaths);
   }
 
   private async onChangesDetected(event: ChangesDetectedEvent): Promise<void> {
@@ -169,19 +135,12 @@ export class FileChangeReactionSaga {
     }
   }
 
-  /**
-   * Idempotent upsert: if a FileNode for the given path exists, do nothing;
-   * otherwise create one with minimal metadata.
-   */
   private async upsertFileNode(normalizedPath: string): Promise<void> {
     try {
       const filePath = new FilePath(normalizedPath);
       const existing = await this.fileSystemRepo.findByPath(filePath);
-      if (existing && existing instanceof FileNode) {
-        // Already exists – no need to update
-        return;
-      }
-      // Create a minimal node; size and hash are optional.
+      if (existing && existing instanceof FileNode) return;
+
       const id = new FileNodeId(UuidGenerator.generate());
       const name = filePath.getName();
       const parent = filePath.getParentPath();

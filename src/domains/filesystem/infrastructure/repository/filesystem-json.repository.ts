@@ -14,6 +14,9 @@ import { FileIndexSchema } from '../../../../infrastructure/persistence/database
 
 export class FileSystemJsonRepository implements IFileSystemRepository {
   private readonly filename = 'file-index.json';
+  private cache: FileIndexSchema | null = null;
+  private writeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly DEBOUNCE_DELAY_MS = 300;
 
   constructor(private readonly db: JsonDatabase) {}
 
@@ -30,9 +33,7 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
   async findByPath(path: FilePath): Promise<FileNode | FolderNode | null> {
     const index = await this.readIndex();
     const entry = index.files[path.value];
-    if (!entry) {
-      return null;
-    }
+    if (!entry) return null;
     return this.mapEntryToNode(path.value, entry);
   }
 
@@ -53,7 +54,7 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
       isDirectory: entity instanceof FolderNode,
     };
 
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
   async delete(id: Identifier): Promise<void> {
@@ -61,15 +62,14 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     for (const [path, entry] of Object.entries(index.files)) {
       if (entry.id === id.value) {
         delete index.files[path];
-        await this.writeIndex(index);
+        this.scheduleWrite();
         return;
       }
     }
   }
 
   async exists(id: Identifier): Promise<boolean> {
-    const found = await this.findById(id);
-    return found !== null;
+    return (await this.findById(id)) !== null;
   }
 
   async findAll(): Promise<Array<FileNode | FolderNode>> {
@@ -93,7 +93,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
         }
       }
     }
-
     return children;
   }
 
@@ -105,17 +104,15 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
       if (entry.isDirectory) continue;
       if (path.includes(pattern)) {
         const node = this.mapEntryToNode(path, entry);
-        if (node instanceof FileNode) {
-          results.push(node);
-        }
+        if (node instanceof FileNode) results.push(node);
       }
     }
-
     return results;
   }
 
   async clear(): Promise<void> {
-    await this.writeIndex({ version: '1.0', lastScan: null, files: {} });
+    this.cache = { version: '1.0', lastScan: null, files: {} };
+    this.scheduleWrite();
   }
 
   async clearAndSaveAll(root: FolderNode): Promise<void> {
@@ -139,31 +136,50 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
       };
 
       if (node instanceof FolderNode) {
-        for (const child of node.children) {
-          stack.push(child);
-        }
+        for (const child of node.children) stack.push(child);
       }
     }
 
-    const index: FileIndexSchema = {
+    this.cache = {
       version: '1.0',
       lastScan: new Date().toISOString(),
       files,
     };
-
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
-  private async readIndex(): Promise<FileIndexSchema> {
-    try {
-      return await this.db.read<FileIndexSchema>(this.filename);
-    } catch {
-      return { version: '1.0', lastScan: null, files: {} };
+  // Exposed for testing purposes to force immediate disk write
+  async flush(): Promise<void> {
+    if (this.writeDebounceTimer) {
+      clearTimeout(this.writeDebounceTimer);
+      this.writeDebounceTimer = null;
+    }
+    if (this.cache) {
+      await this.db.write(this.filename, this.cache);
     }
   }
 
-  private async writeIndex(index: FileIndexSchema): Promise<void> {
-    await this.db.write(this.filename, index);
+  private async readIndex(): Promise<FileIndexSchema> {
+    if (this.cache) return this.cache;
+    try {
+      this.cache = await this.db.read<FileIndexSchema>(this.filename);
+    } catch {
+      this.cache = { version: '1.0', lastScan: null, files: {} };
+    }
+    return this.cache;
+  }
+
+  private scheduleWrite(): void {
+    if (this.writeDebounceTimer) {
+      clearTimeout(this.writeDebounceTimer);
+    }
+    
+    this.writeDebounceTimer = setTimeout(async () => {
+      if (this.cache) {
+        await this.db.write(this.filename, this.cache);
+      }
+      this.writeDebounceTimer = null;
+    }, this.DEBOUNCE_DELAY_MS);
   }
 
   private mapEntryToNode(path: string, entry: FileIndexSchema['files'][string]): FileNode | FolderNode {
