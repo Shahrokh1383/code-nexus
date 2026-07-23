@@ -12,16 +12,16 @@
     "tsconfig.json",
     "webpack.config.js",
     "vite.config.js",
-    "src\\domains\\shared-kernel",
     "dist-electron",
     "docs",
     "public",
     "src\\domains\\documentation",
     "src\\domains\\filesystem",
     "src\\domains\\linking",
-    "src\\domains\\project"
+    "src\\domains\\project",
+    "src\\domains\\tracking"
   ],
   "globalPatterns": [],
-  "lastModified": "2026-07-23T19:09:02.958Z",
+  "lastModified": "2026-07-23T19:16:29.004Z",
   "version": 1
 }
