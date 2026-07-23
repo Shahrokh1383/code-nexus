@@ -68,6 +68,14 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     }
   }
 
+  async deleteByPath(path: FilePath): Promise<void> {
+    const index = await this.readIndex();
+    if (index.files[path.value]) {
+      delete index.files[path.value];
+      this.scheduleWrite();
+    }
+  }
+
   async exists(id: Identifier): Promise<boolean> {
     return (await this.findById(id)) !== null;
   }

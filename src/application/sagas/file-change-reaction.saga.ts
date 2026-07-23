@@ -2,6 +2,7 @@ import { EventBus } from '../../domains/shared-kernel/events/event-bus';
 import { IDomainEventHandler } from '../../domains/shared-kernel/events/domain-event-handler.interface';
 import { FileModifiedEvent } from '../../domains/filesystem/domain/events/file-modified';
 import { FileDiscoveredEvent } from '../../domains/filesystem/domain/events/file-discovered';
+import { FileDeletedEvent } from '../../domains/filesystem/domain/events/file-deleted'; // New Import
 import { FileExcludedEvent } from '../../domains/filesystem/domain/events/file-excluded';
 import { IgnorePatternsChangedEvent } from '../../domains/filesystem/domain/events/ignore-patterns-changed';
 import { FileIndexRebuiltEvent } from '../../domains/filesystem/domain/events/file-index-rebuilt';
@@ -17,7 +18,9 @@ import { IFileSystemRepository } from '../../domains/filesystem/domain/repositor
 import { DiffCalculatorAdapter } from '../../domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../domains/tracking/domain/services/diff-calculator.service';
 import { FileNode } from '../../domains/filesystem/domain/entities/file-node';
+import { FolderNode } from '../../domains/filesystem/domain/entities/folder-node';
 import { FileNodeId } from '../../domains/filesystem/domain/value-objects/file-node-id';
+import { FolderNodeId } from '../../domains/filesystem/domain/value-objects/folder-node-id';
 import { FilePath } from '../../domains/filesystem/domain/value-objects/file-path';
 import { FileSize } from '../../domains/filesystem/domain/value-objects/file-size';
 import { FileHash } from '../../domains/filesystem/domain/value-objects/file-hash';
@@ -31,13 +34,13 @@ export class FileChangeReactionSaga {
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
   private readonly fileSystemRepo: IFileSystemRepository;
 
-  // Pre-instantiated to prevent memory leaks and CPU spikes on every file event
   private readonly trackingRepo: TrackingJsonRepository;
   private readonly contentReader: FileContentReaderAdapter;
   private readonly detectChangesHandler: DetectChangesHandler;
 
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
+  private readonly fileDeletedHandler: IDomainEventHandler<FileDeletedEvent>; // New Handler
   private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
   private readonly ignorePatternsChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent>;
   private readonly fileIndexRebuiltHandler: IDomainEventHandler<FileIndexRebuiltEvent>;
@@ -53,7 +56,6 @@ export class FileChangeReactionSaga {
     this.linkedDocQuery = linkedDocQuery;
     this.fileSystemRepo = fileSystemRepo;
 
-    // Initialize dependencies ONCE
     this.trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
     this.contentReader = new FileContentReaderAdapter(this.workspaceRoot);
     const diffAdapter = new DiffCalculatorAdapter();
@@ -61,9 +63,9 @@ export class FileChangeReactionSaga {
     const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, this.contentReader);
     this.detectChangesHandler = new DetectChangesHandler(this.contentReader, recordHandler);
 
-    // Bind handlers
     this.fileModifiedHandler = { handle: (e) => this.onFileModified(e) };
     this.fileDiscoveredHandler = { handle: (e) => this.onFileDiscovered(e) };
+    this.fileDeletedHandler = { handle: (e) => this.onFileDeleted(e) }; // Bind
     this.fileExcludedHandler = { handle: (e) => this.onFileExcluded(e) };
     this.ignorePatternsChangedHandler = { handle: () => this.onIgnorePatternsChanged() };
     this.fileIndexRebuiltHandler = { handle: (e) => this.onFileIndexRebuilt(e) };
@@ -73,6 +75,7 @@ export class FileChangeReactionSaga {
   register(): void {
     this.eventBus.register('FileModified', this.fileModifiedHandler);
     this.eventBus.register('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.register('FileDeleted', this.fileDeletedHandler); // Register
     this.eventBus.register('FileExcluded', this.fileExcludedHandler);
     this.eventBus.register('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.register('FileIndexRebuilt', this.fileIndexRebuiltHandler);
@@ -82,6 +85,7 @@ export class FileChangeReactionSaga {
   unregister(): void {
     this.eventBus.unregister('FileModified', this.fileModifiedHandler);
     this.eventBus.unregister('FileDiscovered', this.fileDiscoveredHandler);
+    this.eventBus.unregister('FileDeleted', this.fileDeletedHandler); // Unregister
     this.eventBus.unregister('FileExcluded', this.fileExcludedHandler);
     this.eventBus.unregister('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.unregister('FileIndexRebuilt', this.fileIndexRebuiltHandler);
@@ -92,23 +96,36 @@ export class FileChangeReactionSaga {
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
-    // Tracking: detect changes and record hash using pre-instantiated handler
     await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
-    
-    // File index: ensure the file node exists
     await this.upsertFileNode(normalized);
   }
 
   private async onFileDiscovered(event: FileDiscoveredEvent): Promise<void> {
-    if (event.isDirectory) return;
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
-    // Tracking: record initial hash
-    await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
-    
-    // File index: ensure the new file is added
-    await this.upsertFileNode(normalized);
+    if (event.isDirectory) {
+      await this.upsertFolderNode(normalized);
+    } else {
+      await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
+      await this.upsertFileNode(normalized);
+    }
+  }
+
+  // New Handler Implementation
+  private async onFileDeleted(event: FileDeletedEvent): Promise<void> {
+    const normalized = event.path.value.replace(/\\/g, '/');
+    if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+
+    try {
+      // Remove from FileSystem index using O(1) path lookup
+      await this.fileSystemRepo.deleteByPath(event.path);
+      
+      // Remove from Tracking index to prevent memory leaks
+      await this.trackingRepo.deleteHashByPath(event.path);
+    } catch (error) {
+      console.error('[Saga] Failed to delete file node:', normalized, error);
+    }
   }
 
   private async onFileExcluded(event: FileExcludedEvent): Promise<void> {
@@ -157,6 +174,21 @@ export class FileChangeReactionSaga {
       await this.fileSystemRepo.save(node);
     } catch (error) {
       console.error('[Saga] Failed to upsert file node:', normalizedPath, error);
+    }
+  }
+
+  private async upsertFolderNode(normalizedPath: string): Promise<void> {
+    try {
+      const filePath = new FilePath(normalizedPath);
+      const existing = await this.fileSystemRepo.findByPath(filePath);
+      if (existing && existing instanceof FolderNode) return;
+
+      const id = new FolderNodeId(UuidGenerator.generate());
+      const name = filePath.getName() || '.';
+      const node = new FolderNode(id, filePath, name);
+      await this.fileSystemRepo.save(node);
+    } catch (error) {
+      console.error('[Saga] Failed to upsert folder node:', normalizedPath, error);
     }
   }
 }

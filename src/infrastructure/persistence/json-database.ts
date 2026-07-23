@@ -3,6 +3,9 @@ import { promises as fs } from 'fs';
 
 export class JsonDatabase {
   private readonly doclinkPath: string;
+  
+  // Static map to track write locks per absolute file path across all instances
+  private static writeLocks = new Map<string, Promise<void>>();
 
   constructor(workspaceRoot: string) {
     this.doclinkPath = PathUtils.join(workspaceRoot, '.doclink');
@@ -56,13 +59,13 @@ export class JsonDatabase {
     await this.ensureDoclinkExists();
     const filePath = PathUtils.join(this.doclinkPath, filename);
     const json = JSON.stringify(data, null, 2);
-    await this.atomicWrite(filePath, json);
+    await this.queueWrite(filePath, () => this.atomicWrite(filePath, json));
   }
 
   async writeTextFile(filename: string, content: string): Promise<void> {
     await this.ensureDoclinkExists();
     const filePath = PathUtils.join(this.doclinkPath, filename);
-    await this.atomicWrite(filePath, content);
+    await this.queueWrite(filePath, () => this.atomicWrite(filePath, content));
   }
 
   async readTextFile(filename: string): Promise<string> {
@@ -73,12 +76,37 @@ export class JsonDatabase {
   // ─────────────────────── Private Helpers ───────────────────────
 
   /**
+   * Ensures writes to the same file are queued sequentially to prevent
+   * race conditions where multiple IPC handlers write at the same time.
+   */
+  private async queueWrite(filePath: string, writeFn: () => Promise<void>): Promise<void> {
+    const previousLock = JsonDatabase.writeLocks.get(filePath) || Promise.resolve();
+    
+    const currentWrite = (async () => {
+      await previousLock; // Wait for the previous write to finish
+      await writeFn();
+    })();
+
+    JsonDatabase.writeLocks.set(filePath, currentWrite);
+
+    try {
+      await currentWrite;
+    } finally {
+      // Clean up the lock if this was the last write in the queue
+      if (JsonDatabase.writeLocks.get(filePath) === currentWrite) {
+        JsonDatabase.writeLocks.delete(filePath);
+      }
+    }
+  }
+
+  /**
    * Writes data to a temporary file and renames it to the target path.
    * On Windows, rename may fail with EPERM if the target is transiently locked.
    * Retries several times with backoff, then falls back to a direct write as a last resort.
    */
   private async atomicWrite(targetPath: string, data: string): Promise<void> {
-    const tmpPath = targetPath + '.tmp.' + Date.now();
+    // Added Math.random to ensure absolute uniqueness even across rapid sequential calls
+    const tmpPath = `${targetPath}.tmp.${Date.now()}.${Math.random().toString(36).substring(2)}`;
     await fs.writeFile(tmpPath, data, 'utf-8');
 
     // Try atomic rename up to 3 times with increasing delay.

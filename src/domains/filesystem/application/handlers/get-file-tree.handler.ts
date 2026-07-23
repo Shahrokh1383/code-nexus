@@ -17,8 +17,22 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
       const targetPath = query.parentPath ? new FilePath(query.parentPath) : new FilePath('.');
 
       const target = await this.fileSystemRepo.findByPath(targetPath);
-      if (!target || !(target instanceof FolderNode)) {
+      
+      // If the root folder doesn't exist yet, return an empty tree.
+      // The UI will render instantly and populate reactively via the watcher.
+      if (!target) {
+        if (targetPath.value === '.') {
+          return Result.ok({
+            root: { id: 'root', path: '.', name: '.', children: [] },
+            totalFiles: 0,
+            totalFolders: 1,
+          });
+        }
         return Result.fail(`Folder not found at path: ${targetPath.value}`);
+      }
+
+      if (!(target instanceof FolderNode)) {
+        return Result.fail(`Path is not a folder: ${targetPath.value}`);
       }
 
       const { dto, fileCount, folderCount } = await this.buildTreeDto(target);
@@ -40,7 +54,7 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
     const children = await this.fileSystemRepo.findChildrenOf(folder.path);
     const childDtos: Array<FileNodeDto | FolderNodeDto> = [];
     let fileCount = 0;
-    let folderCount = 1; // count this folder
+    let folderCount = 1;
 
     for (const child of children) {
       if (child instanceof FileNode) {

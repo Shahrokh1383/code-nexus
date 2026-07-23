@@ -59,25 +59,31 @@ export class NodeFsDocumentScannerAdapter implements IDocumentFolderScannerPort 
       prefix ? PathUtils.join(folderRelativePath, prefix) : folderRelativePath
     );
 
-    const entries = await fs.readdir(absolutePath, { withFileTypes: true });
+    try {
+      const entries = await fs.readdir(absolutePath, { withFileTypes: true });
 
-    for (const entry of entries) {
-      const entryRelativePath = prefix
-        ? PathUtils.join(prefix, entry.name)
-        : entry.name;
+      for (const entry of entries) {
+        const entryRelativePath = prefix
+          ? PathUtils.join(prefix, entry.name)
+          : entry.name;
 
-      const entryAbsolutePath = path.join(absolutePath, entry.name);
-      const stat = await fs.stat(entryAbsolutePath);
+        const entryAbsolutePath = path.join(absolutePath, entry.name);
+        const stat = await fs.stat(entryAbsolutePath);
 
-      results.push({
-        name: entry.name,
-        path: entryRelativePath,
-        isDirectory: entry.isDirectory(),
-        lastModified: stat.mtime,
-      });
+        results.push({
+          name: entry.name,
+          path: entryRelativePath,
+          isDirectory: entry.isDirectory(),
+          lastModified: stat.mtime,
+        });
 
-      if (entry.isDirectory()) {
-        await this.scanRecursive(folderRelativePath, entryRelativePath, results);
+        if (entry.isDirectory()) {
+          await this.scanRecursive(folderRelativePath, entryRelativePath, results);
+        }
+      }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        console.error(`[Scanner] Error reading directory ${absolutePath}:`, error);
       }
     }
   }

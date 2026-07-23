@@ -29,7 +29,7 @@ export class ChokidarAdapter {
 
     this.watcher = chokidar.watch(rootPath, {
       ignored,
-      ignoreInitial: true, // VS Code style: We don't scan everything upfront
+      ignoreInitial: false, // Changed to false to discover existing files
       persistent: true,
       depth: Infinity,
     });
@@ -94,13 +94,11 @@ export class ChokidarAdapter {
         }
         case 'change': {
           const filePath = new FilePath(relativePath);
-          // Emit modified event without reading the file content.
-          // Hash calculation is strictly the Tracking context's responsibility.
           await this.eventBus.emit(
             new FileModifiedEvent(
               new FileNodeId(UuidGenerator.generate()),
               filePath,
-              null as any // Hash is no longer computed here.
+              null as any
             )
           );
           break;

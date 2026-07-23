@@ -21,20 +21,19 @@
     "src\\presentation\\components\\welcome",
     "src\\presentation\\components\\tracking",
     "src\\presentation\\components\\linking",
-    "src\\presentation\\components\\documentation",
     "src\\presentation\\components\\layout",
     "src\\presentation\\components\\common",
     "src\\presentation\\hooks\\linking",
     "src\\presentation\\styles",
     "src\\presentation\\pages\\WelcomePage.tsx",
     "src\\presentation\\pages\\TrackingPage.tsx",
-    "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\presentation\\pages\\LinkingPage.tsx",
     "electron\\ipc\\handlers\\tracking",
     "electron\\ipc\\handlers\\linking",
-    "electron\\ipc\\handlers\\documentation"
+    "electron\\ipc\\handlers\\documentation",
+    "src\\domains\\project"
   ],
   "globalPatterns": [],
-  "lastModified": "2026-07-23T19:34:03.793Z",
+  "lastModified": "2026-07-23T20:59:23.907Z",
   "version": 1
 }
