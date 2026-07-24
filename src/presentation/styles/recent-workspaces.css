@@ -1,6 +1,6 @@
-/* ============================================================
-   CodeNexus – Recent Workspaces List
-   ============================================================ */
+/*
+  CodeNexus – Recent Workspaces List
+ */
 
 .recent-workspaces {
   width: 100%;
@@ -31,7 +31,6 @@
   background-color: var(--cn-bg-elevated);
   border: 1px solid var(--cn-border-light);
   border-radius: var(--cn-radius-md);
-  overflow: hidden;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -42,6 +41,8 @@
 
 .recent-workspaces__open {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: var(--cn-space-3);
@@ -112,6 +113,7 @@
   color: var(--cn-text-disabled);
   cursor: pointer;
   transition: color 0.15s ease, background-color 0.15s ease;
+  flex-shrink: 0;
 }
 
 .recent-workspaces__remove:hover {

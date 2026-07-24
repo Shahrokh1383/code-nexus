@@ -1,3 +1,5 @@
+// src/presentation/hooks/useFileTree.ts
+
 import { useCallback, useEffect } from 'react';
 import { useFileSystemStore } from '../stores/filesystem.store';
 import { useIpc } from './useIpc';
@@ -6,6 +8,17 @@ import { IpcChannels } from '../../../electron/ipc/channels';
 import { FileTreeDto } from '../../domains/filesystem/application/dto/file-tree.dto';
 
 interface IpcResponse<T> { success: boolean; data?: T; error?: string; }
+
+/**
+ * Extracts the human‑readable folder name from the workspace root path.
+ * Ensures the file‑tree root is displayed with the actual folder name,
+ * not the internal relative path ".".
+ */
+const getWorkspaceFolderName = (rootPath: string): string => {
+  const normalized = rootPath.replace(/\\/g, '/');
+  const segments = normalized.split('/').filter(Boolean);
+  return segments[segments.length - 1] || 'Workspace';
+};
 
 export function useFileTree() {
   const ipc = useIpc();
@@ -18,7 +31,16 @@ export function useFileTree() {
     try {
       const res = await ipc.invoke(IpcChannels.FILESYSTEM_GET_FILE_TREE, workspace.id) as IpcResponse<FileTreeDto>;
       if (res.success && res.data) {
-        setTree(res.data);
+        // Replace root node name with the actual workspace folder name
+        const folderName = getWorkspaceFolderName(workspace.rootPath);
+        const fixedTree: FileTreeDto = {
+          ...res.data,
+          root: {
+            ...res.data.root,
+            name: folderName,
+          },
+        };
+        setTree(fixedTree);
       } else {
         setError(res.error || 'Failed to fetch file tree');
       }
