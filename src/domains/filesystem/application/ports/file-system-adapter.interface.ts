@@ -1,7 +1,6 @@
 export interface FileMetadata {
   readonly path: string;
   readonly name: string;
-  readonly size: number;
   readonly lastModified: Date;
   readonly isDirectory: boolean;
 }

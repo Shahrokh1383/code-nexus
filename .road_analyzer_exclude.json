@@ -15,9 +15,7 @@
     "dist-electron",
     "docs",
     "public",
-    "src\\domains\\documentation",
     "src\\domains\\linking",
-    "src\\domains\\tracking",
     "src\\presentation\\components\\welcome",
     "src\\presentation\\components\\tracking",
     "src\\presentation\\components\\linking",
@@ -31,9 +29,15 @@
     "electron\\ipc\\handlers\\tracking",
     "electron\\ipc\\handlers\\linking",
     "electron\\ipc\\handlers\\documentation",
-    "src\\domains\\project"
+    "src\\domains\\project",
+    "src\\infrastructure",
+    "src\\domains\\shared-kernel",
+    "src\\domains\\filesystem",
+    "src\\domains\\documentation"
   ],
-  "globalPatterns": [],
-  "lastModified": "2026-07-23T20:59:23.907Z",
+  "globalPatterns": [
+    "__tests__"
+  ],
+  "lastModified": "2026-07-24T09:58:11.452Z",
   "version": 1
 }

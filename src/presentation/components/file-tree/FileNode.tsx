@@ -6,13 +6,6 @@ import { FileIcon } from './FileIcon';
 
 interface FileNodeProps { node: FileNodeDto | FolderNodeDto; depth: number; }
 
-const formatBytes = (bytes: number): string => {
-  if (bytes === 0) return '0 B';
-  const k = 1024, sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-};
-
 const formatRelativeTime = (dateString: string): string => {
   const diffDays = Math.floor((new Date().getTime() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24));
   if (diffDays === 0) return 'Today';
@@ -44,7 +37,6 @@ export const FileNode = memo(function FileNode({ node, depth }: FileNodeProps): 
       
       {!isFolder && (
         <div className="file-node__meta">
-          <span className="file-node__size">{formatBytes((node as FileNodeDto).size)}</span>
           <span className="file-node__date">{formatRelativeTime((node as FileNodeDto).lastModified)}</span>
         </div>
       )}

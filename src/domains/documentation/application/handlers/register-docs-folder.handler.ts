@@ -37,8 +37,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
 
   async execute(command: RegisterDocsFolderCommand): Promise<Result<void, string>> {
     try {
-      // The workspace ID is the normalized root path (see InitializeWorkspaceHandler)
-      const workspaceRoot = command.workspaceId; // e.g., "C:/Users/.../CodeNexus"
+      const workspaceRoot = command.workspaceId;
       const config = await this.configRepo.findByWorkspaceId(new WorkspaceId(workspaceRoot));
 
       if (!config) {
@@ -48,16 +47,11 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       let docFolder: DocFolder;
 
       if (command.suggestedPath) {
-        // The suggestedPath comes from a native folder dialog and is absolute.
-        // We must convert it to a workspace‑relative path before storing.
         let normalizedPath = PathUtils.normalize(command.suggestedPath);
-
-        // If the path is absolute (starts with a drive letter or '/'), make it relative
         if (PathUtils.isAbsolute(normalizedPath)) {
           normalizedPath = PathUtils.relative(workspaceRoot, normalizedPath);
         }
 
-        // Ensure the folder exists (relative path now)
         const exists = await this.scanner.exists(normalizedPath);
         if (!exists) {
           return Result.fail(`Folder '${normalizedPath}' does not exist inside the workspace`);
@@ -77,8 +71,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
           files.filter((f) => !f.isDirectory).length
         );
       } else {
-        // No path provided: auto‑detect
-        const candidates = await this.buildCandidates();
+        const candidates = await this.buildCandidates(workspaceRoot);
         const detectResult = this.detectorService.detect(candidates);
 
         if (detectResult.isFailure) {
@@ -106,16 +99,10 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
     }
   }
 
-  private async buildCandidates(): Promise<CandidateFolder[]> {
-    const candidateNames = await this.scanner.listDirectories('');
-    const candidates: CandidateFolder[] = [];
-
-    for (const name of candidateNames) {
-      const files = await this.scanner.scanFolder(name);
-      candidates.push({ path: name, files });
-    }
-
-    return candidates;
+  private async buildCandidates(workspaceRoot: string): Promise<CandidateFolder[]> {
+    const config = await this.configRepo.findByWorkspaceId(new WorkspaceId(workspaceRoot));
+    const ignorePatterns = config?.ignorePatterns || [];
+    return this.scanner.scanWorkspaceForCandidates(ignorePatterns);
   }
 
   private async createAndEmitDocuments(docsFolderPath: string): Promise<void> {

@@ -4,7 +4,6 @@ import { FolderNode } from '../../domain/entities/folder-node';
 import { FileNodeId } from '../../domain/value-objects/file-node-id';
 import { FolderNodeId } from '../../domain/value-objects/folder-node-id';
 import { FilePath } from '../../domain/value-objects/file-path';
-import { FileSize } from '../../domain/value-objects/file-size';
 import { FileHash } from '../../domain/value-objects/file-hash';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 import { Maybe } from '../../../shared-kernel/types/maybe';
@@ -39,9 +38,7 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
 
   async save(entity: FileNode | FolderNode): Promise<void> {
     const index = await this.readIndex();
-
     const hash = entity instanceof FileNode ? entity.hash.getOrNull()?.value ?? null : null;
-    const size = entity instanceof FileNode ? entity.size.bytes : 0;
     const lastModified = entity instanceof FileNode
       ? entity.lastModified.toISO()
       : DateTime.now().toISO();
@@ -50,7 +47,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
       id: entity.id.value,
       hash,
       lastModified,
-      size,
       isDirectory: entity instanceof FolderNode,
     };
 
@@ -130,7 +126,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     while (stack.length > 0) {
       const node = stack.pop()!;
       const hash = node instanceof FileNode ? node.hash.getOrNull()?.value ?? null : null;
-      const size = node instanceof FileNode ? node.size.bytes : 0;
       const lastModified = node instanceof FileNode
         ? node.lastModified.toISO()
         : DateTime.now().toISO();
@@ -139,7 +134,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
         id: node.id.value,
         hash,
         lastModified,
-        size,
         isDirectory: node instanceof FolderNode,
       };
 
@@ -156,7 +150,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     this.scheduleWrite();
   }
 
-  // Exposed for testing purposes to force immediate disk write
   async flush(): Promise<void> {
     if (this.writeDebounceTimer) {
       clearTimeout(this.writeDebounceTimer);
@@ -206,7 +199,6 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
       filePath,
       filePath.getName(),
       filePath.getParentPath(),
-      new FileSize(entry.size),
       DateTime.fromISO(entry.lastModified),
       entry.hash ? Maybe.some(new FileHash(entry.hash)) : Maybe.none<FileHash>(),
       false

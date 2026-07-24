@@ -32,9 +32,9 @@ export class DocsFolderDetectorService {
     const bestMatch = scored[0];
 
     if (existingDocFolder) {
-      const existingPath = existingDocFolder.path;
+      const existingPath = existingDocFolder.path.toLowerCase();
       const existingStillExists = candidates.some(
-        (c) => PathUtils.normalize(c.path) === existingPath
+        (c) => PathUtils.normalize(c.path).toLowerCase() === existingPath
       );
 
       if (!existingStillExists) {
@@ -57,7 +57,7 @@ export class DocsFolderDetectorService {
 
           this._eventBus.emit(
             new DocsFolderRelocatedEvent(
-              existingPath,
+              existingDocFolder.path,
               relocatedFolder.path,
               relocatedFolder.signature
             )

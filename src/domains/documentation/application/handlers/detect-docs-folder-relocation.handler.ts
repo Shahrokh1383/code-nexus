@@ -35,7 +35,7 @@ export class DetectDocsFolderRelocationHandler
         return Result.ok(void 0);
       }
 
-      const candidates = await this.buildCandidates();
+      const candidates = await this.buildCandidates(command.workspaceId);
       const detectResult = this.detectorService.detect(
         candidates,
         existingDocFolder
@@ -71,15 +71,9 @@ export class DetectDocsFolderRelocationHandler
     }
   }
 
-  private async buildCandidates(): Promise<CandidateFolder[]> {
-    const candidateNames = await this.scanner.listDirectories('');
-    const candidates: CandidateFolder[] = [];
-
-    for (const name of candidateNames) {
-      const files = await this.scanner.scanFolder(name);
-      candidates.push({ path: name, files });
-    }
-
-    return candidates;
+  private async buildCandidates(workspaceRoot: string): Promise<CandidateFolder[]> {
+    const config = await this.configRepo.findByWorkspaceId(new WorkspaceId(workspaceRoot));
+    const ignorePatterns = config?.ignorePatterns || [];
+    return this.scanner.scanWorkspaceForCandidates(ignorePatterns);
   }
 }

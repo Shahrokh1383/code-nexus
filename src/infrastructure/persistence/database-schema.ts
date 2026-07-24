@@ -51,7 +51,6 @@ export interface FileIndexEntrySchema {
   id: string;
   hash: string | null;
   lastModified: string;
-  size: number;
   isDirectory: boolean;
 }
 

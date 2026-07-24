@@ -32,3 +32,29 @@ export interface IDocumentFolderScannerPort {
     }>
   >;
 }
+
+export interface IDocumentFolderScannerPort {
+  exists(relativePath: string): Promise<boolean>;
+  isDirectory(relativePath: string): Promise<boolean>;
+  listDirectories(relativePath: string): Promise<string[]>;
+  scanFolder(relativePath: string): Promise<
+    Array<{
+      name: string;
+      path: string;
+      isDirectory: boolean;
+      lastModified: Date;
+    }>
+  >;
+
+  /**
+   * High-performance method that scans the workspace recursively for all directories
+   * without fetching file stats (mtime/size). Prevents CPU bottlenecks.
+   * Respects ignore patterns.
+   */
+  scanWorkspaceForCandidates(ignorePatterns: string[]): Promise<
+    Array<{
+      path: string;
+      files: Array<{ name: string; path: string; isDirectory: boolean }>;
+    }>
+  >;
+}

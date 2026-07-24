@@ -1,6 +1,5 @@
 import { FileNodeId } from '../value-objects/file-node-id';
 import { FilePath } from '../value-objects/file-path';
-import { FileSize } from '../value-objects/file-size';
 import { FileHash } from '../value-objects/file-hash';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 import { Maybe } from '../../../shared-kernel/types/maybe';
@@ -12,7 +11,6 @@ export class FileNode {
     private readonly _path: FilePath,
     private readonly _name: string,
     private readonly _parentPath: FilePath,
-    private readonly _size: FileSize,
     private readonly _lastModified: DateTime,
     private readonly _hash: Maybe<FileHash>,
     private readonly _isDirectory: boolean
@@ -27,35 +25,11 @@ export class FileNode {
     }
   }
 
-  get id(): FileNodeId {
-    return this._id;
-  }
-
-  get path(): FilePath {
-    return this._path;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get parentPath(): FilePath {
-    return this._parentPath;
-  }
-
-  get size(): FileSize {
-    return this._size;
-  }
-
-  get lastModified(): DateTime {
-    return this._lastModified;
-  }
-
-  get hash(): Maybe<FileHash> {
-    return this._hash;
-  }
-
-  get isDirectory(): boolean {
-    return this._isDirectory;
-  }
+  get id(): FileNodeId { return this._id; }
+  get path(): FilePath { return this._path; }
+  get name(): string { return this._name; }
+  get parentPath(): FilePath { return this._parentPath; }
+  get lastModified(): DateTime { return this._lastModified; }
+  get hash(): Maybe<FileHash> { return this._hash; }
+  get isDirectory(): boolean { return this._isDirectory; }
 }

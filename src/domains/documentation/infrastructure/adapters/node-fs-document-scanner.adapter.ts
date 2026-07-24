@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { promises as fs, Dirent } from 'fs';
 import * as path from 'path';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 import { IDocumentFolderScannerPort } from '../../application/ports/document-folder-scanner-port.interface';
@@ -48,6 +48,59 @@ export class NodeFsDocumentScannerAdapter implements IDocumentFolderScannerPort 
 
     await this.scanRecursive(relativePath, '', results);
     return results;
+  }
+
+  async scanWorkspaceForCandidates(
+    ignorePatterns: string[]
+  ): Promise<Array<{ path: string; files: Array<{ name: string; path: string; isDirectory: boolean }> }>> {
+    const candidates: Array<{ path: string; files: Array<{ name: string; path: string; isDirectory: boolean }> }> = [];
+
+    const isIgnored = (relativePath: string, isDir: boolean) => {
+      const pathWithSlash = isDir ? relativePath + '/' : relativePath;
+      for (const pattern of ignorePatterns) {
+        const cleanPattern = pattern.endsWith('/') ? pattern.slice(0, -1) : pattern;
+        if (relativePath === cleanPattern) return true;
+        if (pathWithSlash.startsWith(cleanPattern + '/')) return true;
+        if (pathWithSlash.includes('/' + cleanPattern + '/')) return true;
+        if (cleanPattern.includes('*')) {
+          const regex = new RegExp('^' + cleanPattern.replace(/\*/g, '.*') + '$');
+          if (regex.test(relativePath)) return true;
+        }
+      }
+      return false;
+    };
+
+    const traverse = async (relativePath: string): Promise<Array<{ name: string; path: string; isDirectory: boolean }>> => {
+      const absolutePath = this.resolve(relativePath);
+      let entries: Dirent[];
+      try {
+        entries = await fs.readdir(absolutePath, { withFileTypes: true });
+      } catch {
+        return [];
+      }
+
+      const filesInThisFolder: Array<{ name: string; path: string; isDirectory: boolean }> = [];
+
+      for (const entry of entries) {
+        const entryRelativePath = relativePath === '.' ? entry.name : PathUtils.join(relativePath, entry.name);
+        
+        if (isIgnored(entryRelativePath, entry.isDirectory())) {
+          continue;
+        }
+
+        const node = { name: entry.name, path: entryRelativePath, isDirectory: entry.isDirectory() };
+        filesInThisFolder.push(node);
+
+        if (entry.isDirectory()) {
+          const nestedFiles = await traverse(entryRelativePath);
+          candidates.push({ path: entryRelativePath, files: [node, ...nestedFiles] });
+        }
+      }
+      return filesInThisFolder;
+    };
+
+    await traverse('.');
+    return candidates;
   }
 
   private async scanRecursive(

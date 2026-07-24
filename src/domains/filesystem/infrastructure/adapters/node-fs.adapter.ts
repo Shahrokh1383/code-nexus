@@ -12,7 +12,6 @@ export class NodeFsAdapter implements IFileSystemAdapter {
         return {
           path: entry.name,
           name: entry.name,
-          size: statInfo.size,
           lastModified: statInfo.mtime,
           isDirectory: entry.isDirectory(),
         };
@@ -31,7 +30,7 @@ export class NodeFsAdapter implements IFileSystemAdapter {
       try {
         entries = await fsPromises.readdir(currentDir, { withFileTypes: true });
       } catch {
-        continue; // Ignore directories we can't read (e.g., permission issues)
+        continue; 
       }
 
       for (const entry of entries) {
@@ -42,13 +41,12 @@ export class NodeFsAdapter implements IFileSystemAdapter {
         try {
           statInfo = await fsPromises.stat(absolutePath);
         } catch {
-          continue; // Skip files we can't stat
+          continue; 
         }
 
         results.push({
           path: relativePath,
           name: entry.name,
-          size: statInfo.size,
           lastModified: statInfo.mtime,
           isDirectory: entry.isDirectory(),
         });
@@ -66,7 +64,6 @@ export class NodeFsAdapter implements IFileSystemAdapter {
     return {
       path: filePath,
       name: path.basename(filePath),
-      size: statInfo.size,
       lastModified: statInfo.mtime,
       isDirectory: statInfo.isDirectory(),
     };
