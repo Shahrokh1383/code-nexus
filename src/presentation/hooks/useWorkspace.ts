@@ -1,5 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useWorkspaceStore } from '../stores/workspace.store';
+import { useFileSystemStore } from '../stores/filesystem.store';
+import { useDocumentationStore } from '../stores/documentation.store';
+import { useLinkingStore } from '../stores/linking.store';
+import { useTrackingStore } from '../stores/tracking.store';
 import { useIpc } from './useIpc';
 import { IpcChannels } from '../../../electron/ipc/channels';
 import { WorkspaceDto } from '../../domains/project/application/dto/workspace.dto';
@@ -17,6 +21,14 @@ export function useWorkspace() {
   const [error, setError] = useState<string | null>(null);
   const { workspace, setWorkspace, clearWorkspace } = useWorkspaceStore();
   const ipc = useIpc();
+
+  const purgeAllStores = useCallback(() => {
+    clearWorkspace();
+    useFileSystemStore.getState().clearTree();
+    useDocumentationStore.getState().clearStore();
+    useLinkingStore.getState().clearStore();
+    useTrackingStore.getState().clearStore();
+  }, [clearWorkspace]);
 
   const initialize = useCallback(
     async (rootPath: string) => {
@@ -44,6 +56,36 @@ export function useWorkspace() {
     [ipc, setWorkspace]
   );
 
+  const switchWorkspace = useCallback(
+    async (rootPath: string) => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // 1. Purge all frontend state immediately to prevent data leaks
+        purgeAllStores();
+
+        // 2. Initialize the new workspace via IPC (Backend handles watcher stop/start)
+        const response = (await ipc.invoke(
+          IpcChannels.PROJECT_INITIALIZE,
+          rootPath
+        )) as IpcResponse<WorkspaceDto>;
+
+        if (response.success && response.data) {
+          localStorage.setItem(STORAGE_KEY, response.data.id);
+          setWorkspace(response.data);
+        } else {
+          setError(response.error || 'Failed to switch workspace');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [ipc, setWorkspace, purgeAllStores]
+  );
+
   const closeWorkspace = useCallback(async () => {
     if (!workspace) return;
 
@@ -51,9 +93,9 @@ export function useWorkspace() {
       await ipc.invoke(IpcChannels.PROJECT_CLOSE, workspace.id);
     } finally {
       localStorage.removeItem(STORAGE_KEY);
-      clearWorkspace();
+      purgeAllStores();
     }
-  }, [workspace, ipc, clearWorkspace]);
+  }, [workspace, ipc, purgeAllStores]);
 
   const rehydrate = useCallback(async () => {
     const storedId = localStorage.getItem(STORAGE_KEY);
@@ -79,6 +121,7 @@ export function useWorkspace() {
 
   return {
     initialize,
+    switchWorkspace,
     closeWorkspace,
     rehydrate,
     workspace,

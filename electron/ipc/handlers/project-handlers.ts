@@ -106,8 +106,13 @@ export function registerProjectHandlers(): void {
         const workspaceRepo = new WorkspaceJsonRepository(db);
         const handler = new ChangeWorkspaceScopeHandler(workspaceRepo);
         const result = await handler.execute(new ChangeWorkspaceScopeCommand(workspaceId, newRootPath));
-        // TODO: On successful scope change, stop watcher for old root and start for new root?
-        // For now, the old watcher remains; you might want to restart it on scope change.
+        
+        if (result.isSuccess) {
+          // Restart watcher for the new scope immediately
+          await stopWatcher();
+          await startWatcher(newRootPath);
+        }
+
         return result.fold<IpcResponse<unknown>>(
           () => ({ success: true }),
           (error) => ({ success: false, error })

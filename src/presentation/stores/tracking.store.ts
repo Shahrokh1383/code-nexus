@@ -29,6 +29,7 @@ interface TrackingState {
   clearError: () => void;
   fetchAllPendingStatus: () => Promise<void>;
   startRealtimeListener: () => () => void;
+  clearStore: () => void;
 }
 
 const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
@@ -150,4 +151,14 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
     const unsubscribe = window.electronAPI.on(IpcChannels.TRACKING_PENDING_UPDATED, handleUpdate);
     return unsubscribe;
   },
+
+  clearStore: () => set({ 
+    selectedDocument: null, 
+    pendingChanges: [], 
+    commitHistory: [], 
+    selectedDiff: null, 
+    isLoading: false, 
+    error: null, 
+    pendingCountByDocId: {} 
+  }),
 }));

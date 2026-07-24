@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FolderNodeDto } from '../../../domains/filesystem/application/dto/folder-node.dto';
 import { FileNodeDto } from '../../../domains/filesystem/application/dto/file-node.dto';
-import { useFileSystemStore } from '../../stores/filesystem.store';
 import { useFileTree } from '../useFileTree';
 
 type PickerTab = 'code' | 'document';
@@ -25,22 +24,21 @@ export function useFileTreePicker(
   documents: DocumentOption[],
   initialDocumentId: string
 ) {
-  const { tree, isScanning } = useFileSystemStore();
-  const { scanProject } = useFileTree();
+  // Replaced scanProject with fetchFileTree and pulled isScanning from the hook directly
+  const { tree, isScanning, fetchFileTree } = useFileTree();
 
   const [activeTab, setActiveTab] = useState<PickerTab>('code');
   const [selectedFileIds, setSelectedFileIds] = useState<Set<string>>(new Set());
   const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set());
 
-  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setSelectedFileIds(new Set());
       setSelectedDocumentIds(new Set());
       setActiveTab('code');
-      if (!tree) scanProject();
+      if (!tree) fetchFileTree();
     }
-  }, [isOpen, initialDocumentId, tree, scanProject]);
+  }, [isOpen, initialDocumentId, tree, fetchFileTree]);
 
   const toggleFile = useCallback((id: string) => {
     setSelectedFileIds(prev => {
@@ -90,7 +88,6 @@ export function useFileTreePicker(
     }
   }, [tree, isAllFilesSelected]);
 
-  // Filter out the target document so a document cannot link to itself
   const documentSourceList = useMemo(
     () => documents.filter(d => d.id !== initialDocumentId),
     [documents, initialDocumentId]

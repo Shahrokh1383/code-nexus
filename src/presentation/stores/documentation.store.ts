@@ -27,6 +27,7 @@ interface DocumentationState {
   permanentDeleteDocument: (documentId: string) => Promise<void>;
   restoreDocument: (documentId: string) => Promise<void>;
   clearError: () => void;
+  clearStore: () => void;
 }
 
 export const useDocumentationStore = create<DocumentationState>((set, get) => ({
@@ -140,4 +141,13 @@ export const useDocumentationStore = create<DocumentationState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  clearStore: () => set({
+    documents: [], 
+    docFolder: null, 
+    orphans: [], 
+    deletedDocuments: [], 
+    isLoading: false, 
+    error: null
+  }),
 }));

@@ -13,10 +13,12 @@ interface FileSystemState {
   ignoredPatterns: string[];
   expandedPaths: Set<string>;
   error: string | null;
+  isScanning: boolean; // NEW: Added missing loading state
 
   setTree: (tree: FileTreeDto) => void;
   clearTree: () => void;
   setError: (error: string | null) => void;
+  setIsScanning: (isScanning: boolean) => void; // NEW
   setIgnoredPatterns: (patterns: string[]) => void;
   addIgnoredPattern: (pattern: string) => void;
   removeIgnoredPattern: (pattern: string) => void;
@@ -30,10 +32,12 @@ export const useFileSystemStore = create<FileSystemState>((set) => ({
   ignoredPatterns: [],
   expandedPaths: new Set(),
   error: null,
+  isScanning: false, // NEW: Initial state
 
   setTree: (tree) => set({ tree: tree.root, totalFiles: tree.totalFiles, totalFolders: tree.totalFolders }),
-  clearTree: () => set({ tree: null, totalFiles: 0, totalFolders: 0 }),
+  clearTree: () => set({ tree: null, totalFiles: 0, totalFolders: 0, isScanning: false }),
   setError: (error) => set({ error }),
+  setIsScanning: (isScanning) => set({ isScanning }), // NEW
   setIgnoredPatterns: (ignoredPatterns) => set({ ignoredPatterns }),
   
   addIgnoredPattern: (pattern) => set((state) => ({ ignoredPatterns: [...state.ignoredPatterns, pattern] })),

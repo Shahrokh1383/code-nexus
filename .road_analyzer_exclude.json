@@ -31,11 +31,17 @@
     "src\\domains\\shared-kernel",
     "src\\domains\\documentation",
     "src\\domains\\tracking",
-    "src\\presentation\\components\\documentation"
+    "src\\presentation\\components\\documentation",
+    "tsconfig.test.json",
+    "todo",
+    "roadmap.txt",
+    "content.txt",
+    "src\\presentation\\components\\welcome",
+    "src\\presentation\\pages\\DocumentManagerPage.tsx"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-24T12:35:50.254Z",
+  "lastModified": "2026-07-24T15:18:39.073Z",
   "version": 1
 }

@@ -1,0 +1,212 @@
+/* ========== Workspace Switcher (Enterprise Overlay) ========== */
+.ws-switcher-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1050; /* Ensure it sits above Bootstrap components */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.ws-switcher-modal {
+  background-color: var(--cn-bg-elevated);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-lg);
+  width: 650px;
+  max-width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+.ws-switcher-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--cn-space-5);
+  border-bottom: 1px solid var(--cn-border-light);
+}
+
+.ws-switcher-header h2 {
+  margin: 0;
+  font-size: var(--cn-font-size-xl);
+  font-weight: 600;
+  color: var(--cn-text-primary);
+}
+
+.ws-close-btn {
+  padding: var(--cn-space-2);
+  border-radius: var(--cn-radius-md);
+  color: var(--cn-text-secondary);
+  background-color: transparent;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.ws-close-btn:hover {
+  color: var(--cn-text-primary);
+  background-color: var(--cn-bg-hover);
+}
+
+.ws-switcher-body {
+  padding: var(--cn-space-5);
+  overflow-y: auto;
+}
+
+.ws-add-new-card {
+  width: 100%;
+  padding: var(--cn-space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cn-space-3);
+  background-color: transparent;
+  border: 2px dashed var(--cn-border-default);
+  border-radius: var(--cn-radius-lg);
+  color: var(--cn-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ws-add-new-card:hover {
+  border-color: var(--cn-primary);
+  background-color: var(--cn-bg-hover);
+}
+
+.ws-add-new-card i {
+  font-size: 1.75rem;
+}
+
+.ws-add-new-card span {
+  font-weight: 500;
+  font-size: var(--cn-font-size-base);
+}
+
+.ws-recents-list {
+  margin-top: var(--cn-space-5);
+}
+
+.ws-recents-list h3 {
+  font-size: var(--cn-font-size-sm);
+  text-transform: uppercase;
+  color: var(--cn-text-secondary);
+  margin-bottom: var(--cn-space-3);
+  letter-spacing: 0.5px;
+}
+
+.ws-empty-state {
+  color: var(--cn-text-disabled);
+  font-size: var(--cn-font-size-base);
+  text-align: center;
+  padding: var(--cn-space-4);
+}
+
+.ws-recent-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--cn-space-3) var(--cn-space-4);
+  border-radius: var(--cn-radius-md);
+  margin-bottom: var(--cn-space-2);
+  border: 1px solid transparent;
+  background-color: var(--cn-bg-secondary);
+  transition: all 0.15s ease;
+}
+
+.ws-recent-card:hover {
+  background-color: var(--cn-bg-hover);
+  border-color: var(--cn-border-light);
+}
+
+.ws-recent-card.active {
+  border-color: var(--cn-primary);
+  background-color: var(--cn-primary-muted);
+}
+
+.ws-recent-info {
+  display: flex;
+  align-items: center;
+  gap: var(--cn-space-3);
+  cursor: pointer;
+  flex: 1;
+  min-width: 0; /* Prevents flex overflow */
+}
+
+.ws-recent-info i {
+  color: var(--cn-primary);
+  font-size: var(--cn-font-size-lg);
+}
+
+.ws-path-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ws-root-name {
+  font-weight: 600;
+  font-size: var(--cn-font-size-base);
+  color: var(--cn-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ws-full-path {
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-disabled);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}
+
+.ws-recent-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--cn-space-2);
+}
+
+.ws-active-badge {
+  font-size: var(--cn-font-size-xs);
+  font-weight: 600;
+  color: var(--cn-primary);
+  background-color: var(--cn-bg-elevated);
+  padding: var(--cn-space-1) var(--cn-space-2);
+  border-radius: var(--cn-radius-sm);
+  border: 1px solid var(--cn-border-light);
+}
+
+.ws-remove-btn {
+  color: var(--cn-text-disabled);
+  padding: var(--cn-space-1);
+  background-color: transparent;
+  border: none;
+  border-radius: var(--cn-radius-sm);
+  transition: all 0.15s ease;
+}
+
+.ws-remove-btn:hover {
+  color: var(--cn-error);
+  background-color: var(--cn-error-muted);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

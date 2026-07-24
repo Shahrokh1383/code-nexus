@@ -20,6 +20,7 @@ interface LinkingState {
   removeDocumentLink: (linkId: string) => Promise<void>;
   createBulkCodeLinks: (codeFileIds: string[], documentId: string) => Promise<void>;
   clearError: () => void;
+  clearStore: () => void;
 }
 
 export const useLinkingStore = create<LinkingState>((set, get) => ({
@@ -115,4 +116,12 @@ export const useLinkingStore = create<LinkingState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  clearStore: () => set({ 
+    codeLinks: [], 
+    documentLinks: [], 
+    unlinkedFiles: [], 
+    isLoading: false, 
+    error: null 
+  }),
 }));

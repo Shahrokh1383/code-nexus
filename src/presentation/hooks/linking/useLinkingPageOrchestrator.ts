@@ -5,7 +5,8 @@ import { useLinks } from './useLinks';
 
 export function useLinkingPageOrchestrator() {
   const { documents } = useDocuments();
-  const { scanProject, isScanning, tree } = useFileTree();
+  // Replaced scanProject with fetchFileTree
+  const { fetchFileTree, isScanning, tree } = useFileTree();
   const { fetchLinksForDocument, fetchGraphData } = useLinks();
 
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
@@ -16,7 +17,6 @@ export function useLinkingPageOrchestrator() {
     }
   }, [documents, selectedDocId]);
 
-  // If the selected document was deleted, pick a new one
   useEffect(() => {
     if (selectedDocId && documents.length > 0 && !documents.find(d => d.id === selectedDocId)) {
       setSelectedDocId(documents[0].id);
@@ -29,9 +29,9 @@ export function useLinkingPageOrchestrator() {
 
   useEffect(() => {
     if (!tree && !isScanning) {
-      scanProject();
+      fetchFileTree();
     }
-  }, [tree, isScanning, scanProject]);
+  }, [tree, isScanning, fetchFileTree]);
 
   useEffect(() => {
     if (tree && !isScanning) {

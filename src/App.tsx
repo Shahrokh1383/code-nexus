@@ -25,12 +25,6 @@ function AppBootstrap(): JSX.Element {
     rehydrate().finally(() => setIsBootstrapping(false));
   }, [rehydrate]);
 
-  useEffect(() => {
-    if (!isBootstrapping && !workspace && location.pathname !== '/') {
-      // Route guard handled in render
-    }
-  }, [isBootstrapping, workspace, location]);
-
   if (isBootstrapping) {
     return (
       <div className="app-bootstrap-loader">
@@ -47,7 +41,9 @@ function AppBootstrap(): JSX.Element {
   }
 
   return (
-    <div className="app-container">
+    // The key prop forces React to completely unmount and remount the entire app tree
+    // when the workspace ID changes. This guarantees zero local state leakage.
+    <div className="app-container" key={workspace?.id ?? 'no-workspace'}>
       <Header />
       <main className="app-main">
         <Routes>
