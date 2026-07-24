@@ -38,6 +38,7 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
 
   async save(entity: FileNode | FolderNode): Promise<void> {
     const index = await this.readIndex();
+
     const hash = entity instanceof FileNode ? entity.hash.getOrNull()?.value ?? null : null;
     const lastModified = entity instanceof FileNode
       ? entity.lastModified.toISO()
@@ -66,8 +67,24 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
 
   async deleteByPath(path: FilePath): Promise<void> {
     const index = await this.readIndex();
+    const prefix = path.value + '/';
+    let changed = false;
+
+    // Delete the exact path
     if (index.files[path.value]) {
       delete index.files[path.value];
+      changed = true;
+    }
+
+    // Delete all nested children recursively to prevent ghost files
+    for (const entryPath of Object.keys(index.files)) {
+      if (entryPath.startsWith(prefix)) {
+        delete index.files[entryPath];
+        changed = true;
+      }
+    }
+
+    if (changed) {
       this.scheduleWrite();
     }
   }

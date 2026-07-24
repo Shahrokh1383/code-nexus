@@ -1,11 +1,14 @@
 import { BrowserWindow } from 'electron';
+import * as path from 'path';
 import { ChokidarAdapter } from '../../src/domains/filesystem/infrastructure/adapters/chokidar.adapter';
+import { NodeFsAdapter } from '../../src/domains/filesystem/infrastructure/adapters/node-fs.adapter';
 import { FileChangeReactionSaga } from '../../src/application/sagas/file-change-reaction.saga';
 import { ProjectConfigJsonRepository } from '../../src/domains/project/infrastructure/repository/project-config-json.repository';
 import { JsonDatabase } from '../../src/infrastructure/persistence/json-database';
 import { SchemaMigrator } from '../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/database-schema';
 import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects/ignore-pattern';
+import { FilePath } from '../../src/domains/filesystem/domain/value-objects/file-path';
 import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking/adapter'; 
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
 import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
@@ -28,8 +31,44 @@ function toWatcherGlob(pattern: string): string {
   return pattern;
 }
 
+/**
+ * Startup reconciliation: remove any entries from file-index.json that
+ * no longer correspond to a real file or folder on disk.
+ * This eliminates ghost entries caused by missed Chokidar events or
+ * offline folder moves.
+ */
+async function reconcileFileIndex(rootPath: string): Promise<void> {
+  const db = new JsonDatabase(rootPath);
+  const repo = new FileSystemJsonRepository(db);
+  const fsAdapter = new NodeFsAdapter();
+
+  const allNodes = await repo.findAll();
+  const toDelete: string[] = [];
+
+  for (const node of allNodes) {
+    const absolutePath = path.join(rootPath, node.path.value);
+    if (!fsAdapter.exists(absolutePath)) {
+      toDelete.push(node.path.value);
+    }
+  }
+
+  for (const relPath of toDelete) {
+    // deleteByPath also removes all nested children – safe for directories
+    await repo.deleteByPath(new FilePath(relPath));
+  }
+
+  if (toDelete.length > 0) {
+    console.log(`[Reconcile] Removed ${toDelete.length} stale entries from file index.`);
+  }
+
+  // Ensure all pending writes are flushed before the watcher starts
+  await repo.flush();
+}
+
 export async function startWatcher(rootPath: string): Promise<void> {
   await stopWatcher();
+
+  await reconcileFileIndex(rootPath);
 
   const db = new JsonDatabase(rootPath);
   const configRepo = new ProjectConfigJsonRepository(db, new SchemaMigrator(DATABASE_SCHEMA_VERSION));

@@ -15,10 +15,13 @@ export function useDocuments() {
 
   useEffect(() => {
     if (workspace) {
-      fetchDocumentation();
-      fetchDeletedDocuments();
+      // Automatically attempt to detect relocation before fetching documents
+      detectRelocationFromStore().finally(() => {
+        fetchDocumentation();
+        fetchDeletedDocuments();
+      });
     }
-  }, [workspace, fetchDocumentation, fetchDeletedDocuments]);
+  }, [workspace, fetchDocumentation, fetchDeletedDocuments, detectRelocationFromStore]);
 
   const handleSoftDelete = useCallback(async (id: string) => {
     if (window.confirm('Move this document to trash? It can be restored later.')) {
