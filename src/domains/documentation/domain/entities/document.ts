@@ -8,10 +8,11 @@ export class Document {
   private _linkCount: number;
   private _isOrphaned: boolean;
   private _deleted: boolean;
+  private _path: DocumentPath;
 
   constructor(
     private readonly _id: DocumentId,
-    private readonly _path: DocumentPath,
+    path: DocumentPath,
     title: string,
     lastModified: DateTime,
     linkCount: number = 0,
@@ -23,6 +24,7 @@ export class Document {
     if (linkCount < 0) {
       throw new Error('Link count cannot be negative');
     }
+    this._path = path;
     this._title = title.trim();
     this._lastModified = lastModified;
     this._linkCount = linkCount;
@@ -59,5 +61,9 @@ export class Document {
 
   updateLastModified(lastModified: DateTime): void {
     this._lastModified = lastModified;
+  }
+
+  updatePath(newPath: DocumentPath): void {
+    this._path = newPath;
   }
 }

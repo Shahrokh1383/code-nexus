@@ -32,12 +32,12 @@
     "src\\domains\\project",
     "src\\infrastructure",
     "src\\domains\\shared-kernel",
-    "src\\domains\\filesystem",
-    "src\\domains\\documentation"
+    "src\\domains\\documentation",
+    "src\\domains\\tracking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-24T09:58:11.452Z",
+  "lastModified": "2026-07-24T11:13:36.511Z",
   "version": 1
 }

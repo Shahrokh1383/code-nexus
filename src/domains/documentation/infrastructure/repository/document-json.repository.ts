@@ -17,7 +17,6 @@ interface DocumentSchema {
 
 interface DocumentsIndexSchema {
   version: string;
-  docsFolderPath: string | null;
   documents: DocumentSchema[];
 }
 
@@ -118,17 +117,11 @@ export class DocumentJsonRepository implements IDocumentRepository {
       .map((d) => this.mapToEntity(d));
   }
 
-  async updateDocsFolderPath(path: string | null): Promise<void> {
-    const index = await this.readIndex();
-    index.docsFolderPath = path;
-    await this.db.write(this.filename, index);
-  }
-
   private async readIndex(): Promise<DocumentsIndexSchema> {
     try {
       return await this.db.read<DocumentsIndexSchema>(this.filename);
     } catch {
-      return { version: '1.0', docsFolderPath: null, documents: [] };
+      return { version: '1.0', documents: [] };
     }
   }
 

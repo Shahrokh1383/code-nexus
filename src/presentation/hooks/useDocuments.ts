@@ -1,14 +1,16 @@
 import { useCallback, useEffect } from 'react';
 import { useDocumentationStore } from '../stores/documentation.store';
 import { useWorkspaceStore } from '../stores/workspace.store';
+import { useFileTree } from './useFileTree';
 
 export function useDocuments() {
   const workspace = useWorkspaceStore((s) => s.workspace);
+  const { fetchFileTree } = useFileTree();
   const {
     documents, docFolder, orphans, deletedDocuments, isLoading, error,
     fetchDocumentation, fetchDeletedDocuments,
-    registerFolder, detectRelocation, softDeleteDocument,
-    permanentDeleteDocument, restoreDocument, clearError
+    registerFolder, detectRelocation: detectRelocationFromStore,
+    softDeleteDocument, permanentDeleteDocument, restoreDocument, clearError
   } = useDocumentationStore();
 
   useEffect(() => {
@@ -34,9 +36,14 @@ export function useDocuments() {
     await restoreDocument(id);
   }, [restoreDocument]);
 
+  const handleDetectRelocation = useCallback(async () => {
+    await detectRelocationFromStore();
+    await fetchFileTree();
+  }, [detectRelocationFromStore, fetchFileTree]);
+
   return {
     documents, docFolder, orphans, deletedDocuments, isLoading, error,
-    registerFolder, detectRelocation,
+    registerFolder, detectRelocation: handleDetectRelocation,
     softDeleteDocument: handleSoftDelete,
     permanentDeleteDocument: handlePermanentDelete,
     restoreDocument: handleRestore,

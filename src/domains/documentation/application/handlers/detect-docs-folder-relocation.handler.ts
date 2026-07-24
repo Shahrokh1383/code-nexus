@@ -3,10 +3,13 @@ import { Result } from '../../../shared-kernel/types/result';
 import { WorkspaceId } from '../../../project/domain/value-objects/workspace-id';
 import { IProjectConfigRepository } from '../../../project/domain/repository/project-config-repository.interface';
 import { IDocFolderRepository } from '../../domain/repository/doc-folder-repository.interface';
+import { IDocumentRepository } from '../../domain/repository/document-repository.interface';
 import { DocsFolderDetectorService } from '../../domain/services/docs-folder-detector.service';
 import { CandidateFolder } from '../../domain/services/docs-folder-detector.service';
 import { DetectDocsFolderRelocationCommand } from '../commands/detect-docs-folder-relocation.command';
 import { IDocumentFolderScannerPort } from '../ports/document-folder-scanner-port.interface';
+import { DocumentPath } from '../../domain/value-objects/document-path';
+import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 
 export class DetectDocsFolderRelocationHandler
   implements ICommandHandler<DetectDocsFolderRelocationCommand, void>
@@ -15,7 +18,8 @@ export class DetectDocsFolderRelocationHandler
     private readonly docFolderRepo: IDocFolderRepository,
     private readonly configRepo: IProjectConfigRepository,
     private readonly detectorService: DocsFolderDetectorService,
-    private readonly scanner: IDocumentFolderScannerPort
+    private readonly scanner: IDocumentFolderScannerPort,
+    private readonly documentRepo: IDocumentRepository
   ) {}
 
   async execute(
@@ -60,6 +64,17 @@ export class DetectDocsFolderRelocationHandler
         if (config) {
           config.updateDocsFolderPath(relocatedFolder.path);
           await this.configRepo.save(config);
+        }
+
+        // Update document paths to prevent them from being deleted by sync-files
+        const oldPath = existingDocFolder.path;
+        const newPath = relocatedFolder.path;
+        const documents = await this.documentRepo.findByDocFolderPath(oldPath);
+        for (const doc of documents) {
+          const relativePath = doc.path.value.slice(oldPath.length);
+          const updatedPath = PathUtils.join(newPath, relativePath);
+          doc.updatePath(new DocumentPath(updatedPath));
+          await this.documentRepo.save(doc);
         }
       }
 

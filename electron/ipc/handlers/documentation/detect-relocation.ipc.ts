@@ -11,14 +11,15 @@ export function registerDetectRelocationIpcHandler(): void {
     IpcChannels.DOCUMENTATION_DETECT_RELOCATION,
     async (_event, workspaceId: unknown) =>
       handleIpcCall(workspaceId, async (rootPath) => {
-        const { configRepo, docFolderRepo, scanner } =
+        const { configRepo, docFolderRepo, scanner, documentRepo } =
           createDocumentationDependencies(rootPath);
         const detectorService = new DocsFolderDetectorService(EventBus.getInstance());
         const handler = new DetectDocsFolderRelocationHandler(
           docFolderRepo,
           configRepo,
           detectorService,
-          scanner
+          scanner,
+          documentRepo
         );
         const result = await handler.execute(
           new DetectDocsFolderRelocationCommand(rootPath)

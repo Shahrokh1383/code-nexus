@@ -22,7 +22,6 @@ import { FolderNode } from '../../domains/filesystem/domain/entities/folder-node
 import { FileNodeId } from '../../domains/filesystem/domain/value-objects/file-node-id';
 import { FolderNodeId } from '../../domains/filesystem/domain/value-objects/folder-node-id';
 import { FilePath } from '../../domains/filesystem/domain/value-objects/file-path';
-import { FileSize } from '../../domains/filesystem/domain/value-objects/file-size';
 import { FileHash } from '../../domains/filesystem/domain/value-objects/file-hash';
 import { DateTime } from '../../domains/shared-kernel/types/date-time';
 import { Maybe } from '../../domains/shared-kernel/types/maybe';
@@ -166,7 +165,6 @@ export class FileChangeReactionSaga {
         filePath,
         name,
         parent,
-        new FileSize(0),
         DateTime.now(),
         Maybe.none<FileHash>(),
         false

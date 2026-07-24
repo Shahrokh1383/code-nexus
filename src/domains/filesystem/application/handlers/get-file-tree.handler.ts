@@ -86,7 +86,6 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
       id: node.id.value,
       path: node.path.value,
       name: node.name,
-      size: node.size.bytes,
       lastModified: node.lastModified.toISO(),
       isDirectory: false,
     };
