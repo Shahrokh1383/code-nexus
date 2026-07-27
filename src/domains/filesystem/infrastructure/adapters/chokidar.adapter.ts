@@ -9,8 +9,9 @@ import { FilePath } from '../../domain/value-objects/file-path';
 import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { PathUtils } from '../../../shared-kernel/utils/path-utils';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
+import { IFileWatcherPort } from '../../application/ports/file-watcher.port';
 
-export class ChokidarAdapter {
+export class ChokidarAdapter implements IFileWatcherPort {
   private watcher: FSWatcher | null = null;
   private eventBus: EventBus;
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -29,7 +30,7 @@ export class ChokidarAdapter {
 
     this.watcher = chokidar.watch(rootPath, {
       ignored,
-      ignoreInitial: false, // Changed to false to discover existing files
+      ignoreInitial: false,
       persistent: true,
       depth: Infinity,
     });
@@ -53,6 +54,12 @@ export class ChokidarAdapter {
       this.debounceTimer = null;
     }
     this.pendingEvents = [];
+  }
+
+  async updateIgnorePatterns(patterns: IgnorePattern[]): Promise<void> {
+    if (this.rootPath) {
+      this.startWatching(this.rootPath, patterns);
+    }
   }
 
   private queueEvent(type: string, absolutePath: string): void {

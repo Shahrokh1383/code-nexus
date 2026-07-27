@@ -19,7 +19,6 @@ import { CommitApprovedEvent } from '../../domain/events/commit-approved';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
 import { CommitMatcherService } from '../../domain/services/commit-matcher.service';
 import { DocumentCommitApproval } from '../../domain/entities/document-commit-approval';
-import { FileContentReaderAdapter } from '../../infrastructure/adapters/file-content-reader.adapter';
 
 export class ApproveCommitHandler implements ICommandHandler<ApproveCommitCommand, void> {
   constructor(
@@ -42,40 +41,30 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
       for (const filePathStr of linkedFilePaths) {
         const filePath = new FilePath(filePathStr);
         const existing = await this.hashRepo.findHashByPath(filePath);
-        if (!existing) {
-          return Result.fail(`No hash record found for file: ${filePathStr}`);
-        }
+        if (!existing) return Result.fail(`No hash record found for file: ${filePathStr}`);
+        
         currentHashMap.set(filePathStr, existing.hashValue);
-        fileHashEntities.push(new FileHash(
-          new FileHashId(UuidGenerator.generate()),
-          filePath,
-          existing.hashValue
-        ));
+        fileHashEntities.push(new FileHash(new FileHashId(UuidGenerator.generate()), filePath, existing.hashValue));
       }
 
       let commit = await this.commitMatcher.findMatchingCommit(currentHashMap, this.commitRepo);
       if (!commit) {
-        const commitId = new CommitId(UuidGenerator.generate());
-        commit = new GranularCommit(commitId, fileHashEntities, DateTime.now());
+        commit = new GranularCommit(new CommitId(UuidGenerator.generate()), fileHashEntities, DateTime.now());
         await this.commitRepo.save(commit);
       }
 
-      // Save baselines for all linked files
       for (const filePathStr of linkedFilePaths) {
         const content = await this.contentReader.readContent(filePathStr);
-        const adapter = this.contentReader as FileContentReaderAdapter;
-        await FileContentReaderAdapter.saveBaseline(adapter.workspaceRoot, filePathStr, content);
+        await this.contentReader.saveBaseline(filePathStr, content);
       }
 
       const approval = new DocumentCommitApproval(documentId, commit.id, DateTime.now());
       await this.approvalRepo.save(approval);
-
       await EventBus.getInstance().emit(new CommitApprovedEvent(commit.id, documentId, commit.getLinkedFiles()));
 
       return Result.ok(undefined);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to approve commit';
-      return Result.fail(message);
+      return Result.fail(error instanceof Error ? error.message : 'Failed to approve commit');
     }
   }
 }

@@ -3,13 +3,14 @@ import * as path from 'path';
 import { IFileContentReader } from '../../application/ports/file-content-reader.interface';
 
 export class FileContentReaderAdapter implements IFileContentReader {
-  private static cache = new Map<string, string>();
-  private static userDataPath: string | null = null;
+  private readonly cache = new Map<string, string>();
+  private readonly baselinesPath: string;
 
-  constructor(private readonly _workspaceRoot: string) {}
-
-  static setUserDataPath(userDataPath: string): void {
-    FileContentReaderAdapter.userDataPath = userDataPath;
+  constructor(
+    private readonly _workspaceRoot: string,
+    userDataPath: string
+  ) {
+    this.baselinesPath = path.join(userDataPath, 'codeness-baselines.json');
   }
 
   get workspaceRoot(): string {
@@ -27,43 +28,37 @@ export class FileContentReaderAdapter implements IFileContentReader {
   }
 
   async getPreviousContent(filePath: string): Promise<string | undefined> {
-    const cached = FileContentReaderAdapter.cache.get(filePath);
-    return cached !== undefined ? cached : undefined;
+    return this.cache.get(filePath);
   }
 
   updateCache(filePath: string, content: string): void {
-    FileContentReaderAdapter.cache.set(filePath, content);
+    this.cache.set(filePath, content);
   }
 
-  static clearCache(): void {
-    FileContentReaderAdapter.cache.clear();
+  clearCache(): void {
+    this.cache.clear();
   }
 
-  private static getBaselinesPath(): string {
-    if (!FileContentReaderAdapter.userDataPath) {
-      throw new Error('User data path not set. Call FileContentReaderAdapter.setUserDataPath() first.');
-    }
-    return path.join(FileContentReaderAdapter.userDataPath, 'codeness-baselines.json');
-  }
-
-  static async saveBaseline(workspaceRoot: string, filePath: string, content: string): Promise<void> {
-    const baselinesFile = FileContentReaderAdapter.getBaselinesPath();
+  async saveBaseline(filePath: string, content: string): Promise<void> {
     let baselines: Record<string, Record<string, string>> = {};
     try {
-      const raw = await fs.readFile(baselinesFile, 'utf-8');
+      const raw = await fs.readFile(this.baselinesPath, 'utf-8');
       baselines = JSON.parse(raw);
     } catch {}
-    if (!baselines[workspaceRoot]) baselines[workspaceRoot] = {};
-    baselines[workspaceRoot][filePath] = content;
-    await fs.writeFile(baselinesFile, JSON.stringify(baselines, null, 2), 'utf-8');
+    
+    if (!baselines[this._workspaceRoot]) {
+      baselines[this._workspaceRoot] = {};
+    }
+    
+    baselines[this._workspaceRoot][filePath] = content;
+    await fs.writeFile(this.baselinesPath, JSON.stringify(baselines, null, 2), 'utf-8');
   }
 
-  static async loadBaseline(workspaceRoot: string, filePath: string): Promise<string | null> {
-    const baselinesFile = FileContentReaderAdapter.getBaselinesPath();
+  async loadBaseline(filePath: string): Promise<string | null> {
     try {
-      const raw = await fs.readFile(baselinesFile, 'utf-8');
+      const raw = await fs.readFile(this.baselinesPath, 'utf-8');
       const baselines = JSON.parse(raw);
-      return baselines[workspaceRoot]?.[filePath] ?? null;
+      return baselines[this._workspaceRoot]?.[filePath] ?? null;
     } catch {
       return null;
     }

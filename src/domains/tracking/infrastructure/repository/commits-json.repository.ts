@@ -11,11 +11,7 @@ import { DateTime } from '../../../shared-kernel/types/date-time';
 
 interface CommitEntrySchema {
   id: string;
-  fileHashes: {
-    id: string;
-    filePath: string;
-    hashValue: string;
-  }[];
+  fileHashes: { id: string; filePath: string; hashValue: string; }[];
   committedAt: string;
 }
 
@@ -30,6 +26,9 @@ const SCHEMA_VERSION = '1.1';
 export class CommitsJsonRepository implements ICommitRepository {
   private readonly db: JsonDatabase;
   private readonly migrator: SchemaMigrator;
+  private cache: CommitsIndexSchema | null = null;
+  private writeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly DEBOUNCE_DELAY_MS = 300;
 
   constructor(workspaceRoot: string) {
     this.db = new JsonDatabase(workspaceRoot);
@@ -39,20 +38,20 @@ export class CommitsJsonRepository implements ICommitRepository {
   async findById(id: CommitId): Promise<GranularCommit | null> {
     const index = await this.readIndex();
     const entry = index.commits.find(c => c.id === id.value);
-    if (!entry) return null;
-    return this.mapToEntity(entry);
+    return entry ? this.mapToEntity(entry) : null;
   }
 
   async save(commit: GranularCommit): Promise<void> {
     const index = await this.readIndex();
     const existingIdx = index.commits.findIndex(c => c.id === commit.id.value);
     const entry = this.mapToEntry(commit);
+    
     if (existingIdx >= 0) {
       index.commits[existingIdx] = entry;
     } else {
       index.commits.push(entry);
     }
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
   async findAll(): Promise<GranularCommit[]> {
@@ -61,20 +60,27 @@ export class CommitsJsonRepository implements ICommitRepository {
   }
 
   private async readIndex(): Promise<CommitsIndexSchema> {
+    if (this.cache) return this.cache;
     try {
       const data = await this.db.read<CommitsIndexSchema>(COMMITS_INDEX_FILE);
       const migrated = this.migrator.migrate(data as unknown as Record<string, unknown>);
-      return migrated as unknown as CommitsIndexSchema;
+      this.cache = migrated as unknown as CommitsIndexSchema;
     } catch (error) {
       if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-        return { version: SCHEMA_VERSION, commits: [] };
+        this.cache = { version: SCHEMA_VERSION, commits: [] };
+      } else {
+        throw error;
       }
-      throw error;
     }
+    return this.cache!;
   }
 
-  private async writeIndex(index: CommitsIndexSchema): Promise<void> {
-    await this.db.write(COMMITS_INDEX_FILE, index);
+  private scheduleWrite(): void {
+    if (this.writeDebounceTimer) clearTimeout(this.writeDebounceTimer);
+    this.writeDebounceTimer = setTimeout(async () => {
+      if (this.cache) await this.db.write(COMMITS_INDEX_FILE, this.cache);
+      this.writeDebounceTimer = null;
+    }, this.DEBOUNCE_DELAY_MS);
   }
 
   private mapToEntity(entry: CommitEntrySchema): GranularCommit {

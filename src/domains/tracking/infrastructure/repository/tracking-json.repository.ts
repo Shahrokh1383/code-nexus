@@ -25,6 +25,9 @@ const SCHEMA_VERSION = '1.1';
 export class TrackingJsonRepository implements IHashRepository {
   private readonly db: JsonDatabase;
   private readonly migrator: SchemaMigrator;
+  private cache: TrackingIndexSchema | null = null;
+  private writeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly DEBOUNCE_DELAY_MS = 300;
 
   constructor(workspaceRoot: string) {
     this.db = new JsonDatabase(workspaceRoot);
@@ -47,7 +50,7 @@ export class TrackingJsonRepository implements IHashRepository {
     const index = await this.readIndex();
     const existing = index.hashes[fileHash.filePath.value];
     index.hashes[fileHash.filePath.value] = this.mapHashEntityToEntry(fileHash, existing?.diff, diff);
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
   async findDiffByPath(filePath: FilePath): Promise<ContentDiffDto | null> {
@@ -60,7 +63,7 @@ export class TrackingJsonRepository implements IHashRepository {
   async deleteHashByPath(filePath: FilePath): Promise<void> {
     const index = await this.readIndex();
     delete index.hashes[filePath.value];
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
   async deleteAllExcept(filePaths: Set<string>): Promise<void> {
@@ -70,24 +73,35 @@ export class TrackingJsonRepository implements IHashRepository {
     for (const key of keysToRemove) {
       delete index.hashes[key];
     }
-    await this.writeIndex(index);
+    this.scheduleWrite();
   }
 
   private async readIndex(): Promise<TrackingIndexSchema> {
+    if (this.cache) return this.cache;
     try {
       const data = await this.db.read<TrackingIndexSchema>(TRACKING_INDEX_FILE);
       const migrated = this.migrator.migrate(data as unknown as Record<string, unknown>);
-      return migrated as unknown as TrackingIndexSchema;
+      this.cache = migrated as unknown as TrackingIndexSchema;
     } catch (error) {
       if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-        return { version: SCHEMA_VERSION, hashes: {} };
+        this.cache = { version: SCHEMA_VERSION, hashes: {} };
+      } else {
+        throw error;
       }
-      throw error;
     }
+    return this.cache!;
   }
 
-  private async writeIndex(index: TrackingIndexSchema): Promise<void> {
-    await this.db.write(TRACKING_INDEX_FILE, index);
+  private scheduleWrite(): void {
+    if (this.writeDebounceTimer) {
+      clearTimeout(this.writeDebounceTimer);
+    }
+    this.writeDebounceTimer = setTimeout(async () => {
+      if (this.cache) {
+        await this.db.write(TRACKING_INDEX_FILE, this.cache);
+      }
+      this.writeDebounceTimer = null;
+    }, this.DEBOUNCE_DELAY_MS);
   }
 
   private mapHashEntryToEntity(entry: HashEntrySchema): FileHash {

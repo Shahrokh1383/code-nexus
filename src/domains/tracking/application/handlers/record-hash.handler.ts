@@ -13,7 +13,6 @@ import { HashComparisonService } from '../../domain/services/hash-comparison.ser
 import { DiffCalculatorService } from '../../domain/services/diff-calculator.service';
 import { ContentDiffDto } from '../dto/content-diff.dto';
 import { DiffLine } from '../../domain/value-objects/diff-line';
-import { FileContentReaderAdapter } from '../../infrastructure/adapters/file-content-reader.adapter';
 
 export class RecordHashHandler implements ICommandHandler<RecordHashCommand, void> {
   constructor(
@@ -36,38 +35,22 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         existing.updateHash(newHash);
 
         let diffDto: ContentDiffDto | null = null;
-        const workspaceRoot = this.contentReader.getWorkspaceRoot();
-        const baselineContent = await FileContentReaderAdapter.loadBaseline(workspaceRoot, command.filePath);
+        // FIX: Use abstracted port method instead of illegal concrete cast
+        const baselineContent = await this.contentReader.loadBaseline(command.filePath);
         const oldContent = baselineContent ?? command.oldContent ?? '';
 
         try {
           const oldHashForDiff = baselineContent ? HashValue.fromContent(baselineContent) : existing.hashValue;
-          const diffEntity = this.diffService.calculate(
-            oldContent,
-            command.newContent,
-            filePath,
-            oldHashForDiff,
-            newHash
-          );
+          const diffEntity = this.diffService.calculate(oldContent, command.newContent, filePath, oldHashForDiff, newHash);
+          
+          const mapDiffLines = (lines: DiffLine[]) => lines.map(l => ({ lineNumber: l.lineNumber, content: l.content, type: l.type }));
           diffDto = {
             filePath: diffEntity.filePath.value,
             oldHash: diffEntity.oldHash.value,
             newHash: diffEntity.newHash.value,
-            addedLines: diffEntity.addedLines.map((l: DiffLine) => ({
-              lineNumber: l.lineNumber,
-              content: l.content,
-              type: l.type,
-            })),
-            removedLines: diffEntity.removedLines.map((l: DiffLine) => ({
-              lineNumber: l.lineNumber,
-              content: l.content,
-              type: l.type,
-            })),
-            modifiedLines: diffEntity.modifiedLines.map((l: DiffLine) => ({
-              lineNumber: l.lineNumber,
-              content: l.content,
-              type: l.type,
-            })),
+            addedLines: mapDiffLines(diffEntity.addedLines),
+            removedLines: mapDiffLines(diffEntity.removedLines),
+            modifiedLines: mapDiffLines(diffEntity.modifiedLines),
           };
         } catch (diffError) {
           console.error('[Tracking] Diff calculation failed for', command.filePath, diffError);
@@ -82,9 +65,8 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
 
       return Result.ok(undefined);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to record hash';
-      console.error('[Tracking] RecordHashHandler failed:', message, error);
-      return Result.fail(message);
+      console.error('[Tracking] RecordHashHandler failed:', error);
+      return Result.fail(error instanceof Error ? error.message : 'Failed to record hash');
     }
   }
 }

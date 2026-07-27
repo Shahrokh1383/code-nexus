@@ -2,7 +2,7 @@ import { EventBus } from '../../domains/shared-kernel/events/event-bus';
 import { IDomainEventHandler } from '../../domains/shared-kernel/events/domain-event-handler.interface';
 import { FileModifiedEvent } from '../../domains/filesystem/domain/events/file-modified';
 import { FileDiscoveredEvent } from '../../domains/filesystem/domain/events/file-discovered';
-import { FileDeletedEvent } from '../../domains/filesystem/domain/events/file-deleted'; // New Import
+import { FileDeletedEvent } from '../../domains/filesystem/domain/events/file-deleted';
 import { FileExcludedEvent } from '../../domains/filesystem/domain/events/file-excluded';
 import { IgnorePatternsChangedEvent } from '../../domains/filesystem/domain/events/ignore-patterns-changed';
 import { FileIndexRebuiltEvent } from '../../domains/filesystem/domain/events/file-index-rebuilt';
@@ -11,11 +11,10 @@ import { ReviewRequiredEvent } from '../../domains/tracking/domain/events/review
 import { DetectChangesCommand } from '../../domains/tracking/application/commands/detect-changes.command';
 import { DetectChangesHandler } from '../../domains/tracking/application/handlers/detect-changes.handler';
 import { RecordHashHandler } from '../../domains/tracking/application/handlers/record-hash.handler';
-import { TrackingJsonRepository } from '../../domains/tracking/infrastructure/repository/tracking-json.repository';
-import { FileContentReaderAdapter } from '../../domains/tracking/infrastructure/adapters/file-content-reader.adapter';
+import { IHashRepository } from '../../domains/tracking/domain/repository/hash-repository.interface';
+import { IFileContentReader } from '../../domains/tracking/application/ports/file-content-reader.interface';
 import { ILinkedDocumentQueryPort } from '../../domains/tracking/application/ports/linked-document-query.port';
 import { IFileSystemRepository } from '../../domains/filesystem/domain/repository/filesystem-repository.interface';
-import { DiffCalculatorAdapter } from '../../domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../domains/tracking/domain/services/diff-calculator.service';
 import { FileNode } from '../../domains/filesystem/domain/entities/file-node';
 import { FolderNode } from '../../domains/filesystem/domain/entities/folder-node';
@@ -29,42 +28,37 @@ import { UuidGenerator } from '../../domains/shared-kernel/utils/uuid-generator'
 
 export class FileChangeReactionSaga {
   private readonly eventBus: EventBus;
-  private readonly workspaceRoot: string;
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
   private readonly fileSystemRepo: IFileSystemRepository;
-
-  private readonly trackingRepo: TrackingJsonRepository;
-  private readonly contentReader: FileContentReaderAdapter;
+  private readonly trackingRepo: IHashRepository;
   private readonly detectChangesHandler: DetectChangesHandler;
 
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
   private readonly fileDiscoveredHandler: IDomainEventHandler<FileDiscoveredEvent>;
-  private readonly fileDeletedHandler: IDomainEventHandler<FileDeletedEvent>; // New Handler
+  private readonly fileDeletedHandler: IDomainEventHandler<FileDeletedEvent>;
   private readonly fileExcludedHandler: IDomainEventHandler<FileExcludedEvent>;
   private readonly ignorePatternsChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent>;
   private readonly fileIndexRebuiltHandler: IDomainEventHandler<FileIndexRebuiltEvent>;
   private readonly changesDetectedHandler: IDomainEventHandler<ChangesDetectedEvent>;
 
   constructor(
-    workspaceRoot: string,
     linkedDocQuery: ILinkedDocumentQueryPort,
-    fileSystemRepo: IFileSystemRepository
+    fileSystemRepo: IFileSystemRepository,
+    trackingRepo: IHashRepository,
+    contentReader: IFileContentReader,
+    diffService: DiffCalculatorService
   ) {
     this.eventBus = EventBus.getInstance();
-    this.workspaceRoot = workspaceRoot;
     this.linkedDocQuery = linkedDocQuery;
     this.fileSystemRepo = fileSystemRepo;
+    this.trackingRepo = trackingRepo;
 
-    this.trackingRepo = new TrackingJsonRepository(this.workspaceRoot);
-    this.contentReader = new FileContentReaderAdapter(this.workspaceRoot);
-    const diffAdapter = new DiffCalculatorAdapter();
-    const diffService = new DiffCalculatorService(diffAdapter);
-    const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, this.contentReader);
-    this.detectChangesHandler = new DetectChangesHandler(this.contentReader, recordHandler);
+    const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, contentReader);
+    this.detectChangesHandler = new DetectChangesHandler(contentReader, recordHandler);
 
     this.fileModifiedHandler = { handle: (e) => this.onFileModified(e) };
     this.fileDiscoveredHandler = { handle: (e) => this.onFileDiscovered(e) };
-    this.fileDeletedHandler = { handle: (e) => this.onFileDeleted(e) }; // Bind
+    this.fileDeletedHandler = { handle: (e) => this.onFileDeleted(e) };
     this.fileExcludedHandler = { handle: (e) => this.onFileExcluded(e) };
     this.ignorePatternsChangedHandler = { handle: () => this.onIgnorePatternsChanged() };
     this.fileIndexRebuiltHandler = { handle: (e) => this.onFileIndexRebuilt(e) };
@@ -74,7 +68,7 @@ export class FileChangeReactionSaga {
   register(): void {
     this.eventBus.register('FileModified', this.fileModifiedHandler);
     this.eventBus.register('FileDiscovered', this.fileDiscoveredHandler);
-    this.eventBus.register('FileDeleted', this.fileDeletedHandler); // Register
+    this.eventBus.register('FileDeleted', this.fileDeletedHandler);
     this.eventBus.register('FileExcluded', this.fileExcludedHandler);
     this.eventBus.register('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.register('FileIndexRebuilt', this.fileIndexRebuiltHandler);
@@ -84,7 +78,7 @@ export class FileChangeReactionSaga {
   unregister(): void {
     this.eventBus.unregister('FileModified', this.fileModifiedHandler);
     this.eventBus.unregister('FileDiscovered', this.fileDiscoveredHandler);
-    this.eventBus.unregister('FileDeleted', this.fileDeletedHandler); // Unregister
+    this.eventBus.unregister('FileDeleted', this.fileDeletedHandler);
     this.eventBus.unregister('FileExcluded', this.fileExcludedHandler);
     this.eventBus.unregister('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.unregister('FileIndexRebuilt', this.fileIndexRebuiltHandler);
@@ -111,16 +105,12 @@ export class FileChangeReactionSaga {
     }
   }
 
-  // New Handler Implementation
   private async onFileDeleted(event: FileDeletedEvent): Promise<void> {
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
 
     try {
-      // Remove from FileSystem index using O(1) path lookup
       await this.fileSystemRepo.deleteByPath(event.path);
-      
-      // Remove from Tracking index to prevent memory leaks
       await this.trackingRepo.deleteHashByPath(event.path);
     } catch (error) {
       console.error('[Saga] Failed to delete file node:', normalized, error);
@@ -132,12 +122,9 @@ export class FileChangeReactionSaga {
   }
 
   private async onIgnorePatternsChanged(): Promise<void> {
-    const allNodes = await this.fileSystemRepo.findAll();
-    const currentFilePaths = new Set<string>();
-    for (const node of allNodes) {
-      if (node instanceof FileNode) currentFilePaths.add(node.path.value);
-    }
-    await this.trackingRepo.deleteAllExcept(currentFilePaths);
+    const currentFilePaths = await this.fileSystemRepo.getAllFilePaths();
+    const currentFilePathsSet = new Set<string>(currentFilePaths);
+    await this.trackingRepo.deleteAllExcept(currentFilePathsSet);
   }
 
   private async onFileIndexRebuilt(event: FileIndexRebuiltEvent): Promise<void> {

@@ -5,6 +5,7 @@ import { FileNodeId } from '../../domain/value-objects/file-node-id';
 import { FolderNodeId } from '../../domain/value-objects/folder-node-id';
 import { FilePath } from '../../domain/value-objects/file-path';
 import { FileHash } from '../../domain/value-objects/file-hash';
+import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 import { Maybe } from '../../../shared-kernel/types/maybe';
 import { Identifier } from '../../../shared-kernel/types/identifier';
@@ -175,6 +176,29 @@ export class FileSystemJsonRepository implements IFileSystemRepository {
     if (this.cache) {
       await this.db.write(this.filename, this.cache);
     }
+  }
+
+  async deleteByPattern(pattern: IgnorePattern): Promise<string[]> {
+    const index = await this.readIndex();
+    const deletedPaths: string[] = [];
+
+    for (const path of Object.keys(index.files)) {
+      if (pattern.matches(path)) {
+        deletedPaths.push(path);
+        delete index.files[path];
+      }
+    }
+
+    if (deletedPaths.length > 0) {
+      this.scheduleWrite();
+    }
+
+    return deletedPaths;
+  }
+
+  async getAllFilePaths(): Promise<string[]> {
+    const index = await this.readIndex();
+    return Object.keys(index.files).filter(path => !index.files[path].isDirectory);
   }
 
   private async readIndex(): Promise<FileIndexSchema> {

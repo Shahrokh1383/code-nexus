@@ -1,6 +1,7 @@
 import { DiffLine, DiffLineType } from '../../domain/value-objects/diff-line';
+import { IDiffCalculator } from '../../application/ports/diff-calculator.interface';
 
-export class DiffCalculatorAdapter {
+export class DiffCalculatorAdapter implements IDiffCalculator {
   /**
    * Computes a line‑level diff.
    * - Uses LCS to find unchanged lines.
