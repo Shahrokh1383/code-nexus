@@ -8,6 +8,7 @@ import { IFileSystemRepository } from '../../domain/repository/filesystem-reposi
 import { FilePath } from '../../domain/value-objects/file-path';
 import { FileNode } from '../../domain/entities/file-node';
 import { FolderNode } from '../../domain/entities/folder-node';
+import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 
 export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileTreeDto> {
   constructor(private readonly fileSystemRepo: IFileSystemRepository) {}
@@ -18,8 +19,6 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
 
       const target = await this.fileSystemRepo.findByPath(targetPath);
       
-      // If the root folder doesn't exist yet, return an empty tree.
-      // The UI will render instantly and populate reactively via the watcher.
       if (!target) {
         if (targetPath.value === '.') {
           return Result.ok({
@@ -35,7 +34,12 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
         return Result.fail(`Path is not a folder: ${targetPath.value}`);
       }
 
-      const { dto, fileCount, folderCount } = await this.buildTreeDto(target);
+      // Build ignore matchers if patterns provided
+      const ignorePatterns = (query.ignorePatterns ?? []).map(p => {
+        try { return new IgnorePattern(p); } catch { return null; }
+      }).filter((p): p is IgnorePattern => p !== null);
+
+      const { dto, fileCount, folderCount } = await this.buildTreeDto(target, ignorePatterns);
 
       return Result.ok({
         root: dto,
@@ -49,7 +53,8 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
   }
 
   private async buildTreeDto(
-    folder: FolderNode
+    folder: FolderNode,
+    ignorePatterns: IgnorePattern[]
   ): Promise<{ dto: FolderNodeDto; fileCount: number; folderCount: number }> {
     const children = await this.fileSystemRepo.findChildrenOf(folder.path);
     const childDtos: Array<FileNodeDto | FolderNodeDto> = [];
@@ -57,12 +62,17 @@ export class GetFileTreeHandler implements IQueryHandler<GetFileTreeQuery, FileT
     let folderCount = 1;
 
     for (const child of children) {
+      // Skip ignored children completely
+      if (ignorePatterns.some(p => p.matches(child.path.value))) {
+        continue;
+      }
+
       if (child instanceof FileNode) {
         childDtos.push(this.mapFileToDto(child));
         fileCount++;
       } else {
         const { dto: childDto, fileCount: childFiles, folderCount: childFolders } =
-          await this.buildTreeDto(child);
+          await this.buildTreeDto(child, ignorePatterns);
         childDtos.push(childDto);
         fileCount += childFiles;
         folderCount += childFolders;

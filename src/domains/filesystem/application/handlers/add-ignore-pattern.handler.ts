@@ -3,7 +3,6 @@ import { Result } from '../../../shared-kernel/types/result';
 import { WorkspaceId } from '../../../project/domain/value-objects/workspace-id';
 import { IProjectConfigRepository } from '../../../project/domain/repository/project-config-repository.interface';
 import { IFileSystemRepository } from '../../domain/repository/filesystem-repository.interface';
-import { IFileWatcherPort } from '../../application/ports/file-watcher.port';
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { AddIgnorePatternCommand } from '../commands/add-ignore-pattern.command';
 import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
@@ -15,7 +14,6 @@ export class AddIgnorePatternHandler implements ICommandHandler<AddIgnorePattern
   constructor(
     private readonly configRepo: IProjectConfigRepository,
     private readonly fileSystemRepo: IFileSystemRepository,
-    private readonly fileWatcherPort: IFileWatcherPort,
     private readonly eventBus: EventBus
   ) {}
 
@@ -30,18 +28,17 @@ export class AddIgnorePatternHandler implements ICommandHandler<AddIgnorePattern
       config.addIgnorePattern(validatedPattern.pattern);
       await this.configRepo.save(config);
 
-      // 1. High-performance bulk deletion from file-index.json
+      // Delete matching entries from file index
       const deletedPaths = await this.fileSystemRepo.deleteByPattern(validatedPattern);
+      // Flush immediately so that the watcher restart does not see stale data
+      await this.fileSystemRepo.flush();
 
-      // 2. Emit events for tracking cleanup
+      // Emit excluded events for tracking cleanup
       for (const path of deletedPaths) {
         await this.eventBus.emit(new FileExcludedEvent(undefined, new FilePath(path)));
       }
 
-      // 3. Update Chokidar watcher to unwatch the newly ignored files
-      const allPatterns = config.ignorePatterns.map(p => new IgnorePattern(p));
-      await this.fileWatcherPort.updateIgnorePatterns(allPatterns);
-
+      // Emit event to restart watcher with new ignore list
       await this.eventBus.emit(new IgnorePatternsChangedEvent(new WorkspaceId(command.workspaceId)));
 
       return Result.ok(undefined);

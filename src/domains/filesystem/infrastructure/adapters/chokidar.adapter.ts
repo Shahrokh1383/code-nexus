@@ -157,11 +157,24 @@ export class ChokidarAdapter implements IFileWatcherPort {
 
   private toChokidarPatter(pattern: IgnorePattern): string {
     const raw = pattern.pattern;
-    if (raw.includes('/') || /[*?[\]]/.test(raw)) {
+
+    // 1. Explicit directory (trailing slash)
+    if (raw.endsWith('/')) {
+      const dirName = raw.slice(0, -1);
+      return `**/${dirName}/**`;
+    }
+
+    // 2. Contains a slash → already a relative path, use as-is
+    if (raw.includes('/')) {
       return raw;
     }
 
-    const name = raw.endsWith('/') ? raw.slice(0, -1) : raw;
-    return `**/${name}`;
+    // 3. Wildcard pattern without slash → match at any depth
+    if (/[*?[\]]/.test(raw)) {
+      return `**/${raw}`;
+    }
+
+    // 4. Plain name (file or directory) → `**/name` will match both
+    return `**/${raw}`;
   }
 }

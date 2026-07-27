@@ -15,7 +15,6 @@
     "dist-electron",
     "docs",
     "public",
-    "src\\domains\\linking",
     "src\\presentation\\components\\linking",
     "src\\presentation\\components\\layout",
     "src\\presentation\\components\\common",
@@ -35,15 +34,16 @@
     "content.txt",
     "src\\presentation\\components\\welcome",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
-    "src\\domains\\project",
-    "src\\domains\\filesystem",
     "src\\application",
-    "src\\domains",
-    "src\\presentation\\styles"
+    "src\\presentation\\styles",
+    "electron\\ipc\\handlers\\tracking-handlers.ts",
+    "electron\\ipc\\handlers\\linking-handlers.ts",
+    "src\\domains\\project",
+    "src\\domains\\linking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-27T17:28:31.490Z",
+  "lastModified": "2026-07-27T18:53:58.046Z",
   "version": 1
 }

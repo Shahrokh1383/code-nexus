@@ -10,7 +10,8 @@ import { GetIgnoredFilesQuery } from '../../../src/domains/filesystem/applicatio
 import { GetIgnoredFilesHandler } from '../../../src/domains/filesystem/application/handlers/get-ignored-files.handler';
 import { EventBus } from '../../../src/domains/shared-kernel/events/event-bus';
 import { getWorkspaceContext } from './tracking/workspace-context';
-import { PathUtils } from '../../../src/domains/shared-kernel/utils/path-utils'; // NEW IMPORT
+import { PathUtils } from '../../../src/domains/shared-kernel/utils/path-utils';
+import { WorkspaceId } from '../../../src/domains/project/domain/value-objects/workspace-id';
 
 interface IpcResponse<T> {
   success: boolean;
@@ -20,7 +21,6 @@ interface IpcResponse<T> {
 
 function createRepositories(rootPath: string) {
   const ctx = getWorkspaceContext();
-  // FIX: Normalize rootPath before comparison
   const normalizedRoot = PathUtils.normalize(rootPath);
   if (!ctx || ctx.rootPath !== normalizedRoot) {
     throw new Error('Workspace context is not initialized or path mismatch.');
@@ -48,9 +48,12 @@ export function registerFilesystemHandlers(): void {
       if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
 
       try {
-        const { fileSystemRepo } = createRepositories(rootPath);
+        const { fileSystemRepo, configRepo } = createRepositories(rootPath);
+        const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
+        const ignorePatterns = config ? config.ignorePatterns : [];
+
         const handler = new GetFileTreeHandler(fileSystemRepo);
-        const result = await handler.execute(new GetFileTreeQuery(PathUtils.normalize(rootPath), parentPath));
+        const result = await handler.execute(new GetFileTreeQuery(PathUtils.normalize(rootPath), parentPath, ignorePatterns));
 
         return result.fold<IpcResponse<unknown>>(
           (dto) => ({ success: true, data: dto }),
@@ -69,8 +72,8 @@ export function registerFilesystemHandlers(): void {
       if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
 
       try {
-        const { configRepo, fileSystemRepo, fileWatcher } = createRepositories(rootPath);
-        const handler = new AddIgnorePatternHandler(configRepo, fileSystemRepo, fileWatcher, EventBus.getInstance());
+        const { configRepo, fileSystemRepo } = createRepositories(rootPath);
+        const handler = new AddIgnorePatternHandler(configRepo, fileSystemRepo, EventBus.getInstance());
         const result = await handler.execute(new AddIgnorePatternCommand(PathUtils.normalize(rootPath), pattern));
 
         return result.fold<IpcResponse<unknown>>(
@@ -90,8 +93,8 @@ export function registerFilesystemHandlers(): void {
       if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
 
       try {
-        const { configRepo, fileWatcher } = createRepositories(rootPath);
-        const handler = new RemoveIgnorePatternHandler(configRepo, fileWatcher, EventBus.getInstance());
+        const { configRepo } = createRepositories(rootPath);
+        const handler = new RemoveIgnorePatternHandler(configRepo, EventBus.getInstance());
         const result = await handler.execute(new RemoveIgnorePatternCommand(PathUtils.normalize(rootPath), pattern));
 
         return result.fold<IpcResponse<unknown>>(

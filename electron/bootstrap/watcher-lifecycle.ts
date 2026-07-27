@@ -34,11 +34,6 @@ let ignorePatternChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent>
 let uiUpdateHandler: IDomainEventHandler<DomainEvent> | null = null;
 let uiUpdateDebounce: ReturnType<typeof setTimeout> | null = null;
 
-function toWatcherGlob(pattern: string): string {
-  if (pattern.endsWith('/')) return `**/${pattern}**`;
-  return pattern;
-}
-
 async function reconcileFileIndex(rootPath: string, repo: FileSystemJsonRepository): Promise<void> {
   const fsAdapter = new NodeFsAdapter();
   const allNodes = await repo.findAll();
@@ -74,13 +69,24 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
   
   const ignorePatternStrings = config ? config.ignorePatterns : [];
-  const globPatterns = ignorePatternStrings.map(toWatcherGlob);
+  
+  // Remove any file‑index entries that match current ignore patterns
+  for (const raw of ignorePatternStrings) {
+    try {
+      const ip = new IgnorePattern(raw);
+      await fileSystemRepo.deleteByPattern(ip);
+    } catch {
+      // ignore invalid patterns
+    }
+  }
+  await fileSystemRepo.flush();   // persist immediately
 
-  const ignorePatterns = globPatterns.map((p) => {
-    try { return new IgnorePattern(p); } catch { return null; }
-  }).filter((p): p is IgnorePattern => p !== null);
+  // Build IgnorePattern objects directly from raw strings
+  const ignorePatterns = ignorePatternStrings
+    .map(p => { try { return new IgnorePattern(p); } catch { return null; } })
+    .filter((p): p is IgnorePattern => p !== null);
 
-  // 1. Instantiate Infrastructure Adapters & Repositories (Singletons per workspace)
+  // Instantiate Infrastructure Adapters & Repositories
   const fileWatcher = new ChokidarAdapter();
   fileWatcher.startWatching(rootPath, ignorePatterns);
   currentWatcher = fileWatcher;
@@ -92,11 +98,11 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   const diffService = new DiffCalculatorService(new DiffCalculatorAdapter());
   const commitMatcher = new CommitMatcherService();
   
-  // 2. Instantiate Application Adapters
   const linkRepo = new LinkJsonRepository(rootPath);
   const linkedDocQuery = new LinkedDocumentQueryAdapter(linkRepo, fileSystemRepo);
 
-  // 3. Set the global Workspace Context (Composition Root)
+  const workspaceId = new WorkspaceId(rootPath);
+
   const context: WorkspaceContext = {
     rootPath, db, 
     workspaceRepo: new WorkspaceJsonRepository(db), 
@@ -106,8 +112,16 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   };
   setWorkspaceContext(context);
 
-  // 4. Instantiate Saga with injected dependencies
-  currentSaga = new FileChangeReactionSaga(linkedDocQuery, fileSystemRepo, hashRepo, contentReader, diffService);
+  // Saga with ignore-pattern filtering capability
+  currentSaga = new FileChangeReactionSaga(
+    linkedDocQuery,
+    fileSystemRepo,
+    hashRepo,
+    contentReader,
+    diffService,
+    configRepo,
+    workspaceId
+  );
   currentSaga.register();
 
   const eventBus = EventBus.getInstance();

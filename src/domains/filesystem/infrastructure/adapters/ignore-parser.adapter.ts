@@ -21,9 +21,15 @@ export class IgnoreMatcher {
   }
 
   private matchGlob(path: string, pattern: string): boolean {
+    // Directory patterns (ending with slash)
     if (pattern.endsWith('/')) {
       const dirName = pattern.slice(0, -1);
       return path === dirName || path.startsWith(pattern);
+    }
+
+    // If the pattern has wildcards but no slash, prepend **/ to match anywhere
+    if (!pattern.includes('/') && /[*?[\]]/.test(pattern)) {
+      pattern = `**/${pattern}`;
     }
 
     const regexSource = pattern

@@ -14,4 +14,5 @@ export interface IFileSystemRepository extends IRepository<FileNode | FolderNode
   deleteByPath(path: FilePath): Promise<void>;
   deleteByPattern(pattern: IgnorePattern): Promise<string[]>;
   getAllFilePaths(): Promise<string[]>;
+  flush(): Promise<void>;
 }

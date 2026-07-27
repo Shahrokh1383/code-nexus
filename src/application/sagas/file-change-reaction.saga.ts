@@ -15,6 +15,7 @@ import { IHashRepository } from '../../domains/tracking/domain/repository/hash-r
 import { IFileContentReader } from '../../domains/tracking/application/ports/file-content-reader.interface';
 import { ILinkedDocumentQueryPort } from '../../domains/tracking/application/ports/linked-document-query.port';
 import { IFileSystemRepository } from '../../domains/filesystem/domain/repository/filesystem-repository.interface';
+import { IProjectConfigRepository } from '../../domains/project/domain/repository/project-config-repository.interface';
 import { DiffCalculatorService } from '../../domains/tracking/domain/services/diff-calculator.service';
 import { FileNode } from '../../domains/filesystem/domain/entities/file-node';
 import { FolderNode } from '../../domains/filesystem/domain/entities/folder-node';
@@ -22,15 +23,19 @@ import { FileNodeId } from '../../domains/filesystem/domain/value-objects/file-n
 import { FolderNodeId } from '../../domains/filesystem/domain/value-objects/folder-node-id';
 import { FilePath } from '../../domains/filesystem/domain/value-objects/file-path';
 import { FileHash } from '../../domains/filesystem/domain/value-objects/file-hash';
+import { IgnorePattern } from '../../domains/filesystem/domain/value-objects/ignore-pattern';
 import { DateTime } from '../../domains/shared-kernel/types/date-time';
 import { Maybe } from '../../domains/shared-kernel/types/maybe';
 import { UuidGenerator } from '../../domains/shared-kernel/utils/uuid-generator';
+import { WorkspaceId } from '../../domains/project/domain/value-objects/workspace-id';
 
 export class FileChangeReactionSaga {
   private readonly eventBus: EventBus;
   private readonly linkedDocQuery: ILinkedDocumentQueryPort;
   private readonly fileSystemRepo: IFileSystemRepository;
   private readonly trackingRepo: IHashRepository;
+  private readonly configRepo: IProjectConfigRepository;
+  private readonly workspaceId: WorkspaceId;
   private readonly detectChangesHandler: DetectChangesHandler;
 
   private readonly fileModifiedHandler: IDomainEventHandler<FileModifiedEvent>;
@@ -46,12 +51,16 @@ export class FileChangeReactionSaga {
     fileSystemRepo: IFileSystemRepository,
     trackingRepo: IHashRepository,
     contentReader: IFileContentReader,
-    diffService: DiffCalculatorService
+    diffService: DiffCalculatorService,
+    configRepo: IProjectConfigRepository,
+    workspaceId: WorkspaceId
   ) {
     this.eventBus = EventBus.getInstance();
     this.linkedDocQuery = linkedDocQuery;
     this.fileSystemRepo = fileSystemRepo;
     this.trackingRepo = trackingRepo;
+    this.configRepo = configRepo;
+    this.workspaceId = workspaceId;
 
     const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, contentReader);
     this.detectChangesHandler = new DetectChangesHandler(contentReader, recordHandler);
@@ -85,9 +94,26 @@ export class FileChangeReactionSaga {
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
   }
 
+  private async isPathIgnored(filePath: string): Promise<boolean> {
+    try {
+      const config = await this.configRepo.findByWorkspaceId(this.workspaceId);
+      if (!config) return false;
+      return config.ignorePatterns.some(pattern => {
+        try {
+          return new IgnorePattern(pattern).matches(filePath);
+        } catch {
+          return false;
+        }
+      });
+    } catch {
+      return false;
+    }
+  }
+
   private async onFileModified(event: FileModifiedEvent): Promise<void> {
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+    if (await this.isPathIgnored(normalized)) return;
 
     await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
     await this.upsertFileNode(normalized);
@@ -96,6 +122,7 @@ export class FileChangeReactionSaga {
   private async onFileDiscovered(event: FileDiscoveredEvent): Promise<void> {
     const normalized = event.path.value.replace(/\\/g, '/');
     if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+    if (await this.isPathIgnored(normalized)) return;
 
     if (event.isDirectory) {
       await this.upsertFolderNode(normalized);

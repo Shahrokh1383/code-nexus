@@ -2,16 +2,13 @@ import { ICommandHandler } from '../../../shared-kernel/application/command-hand
 import { Result } from '../../../shared-kernel/types/result';
 import { WorkspaceId } from '../../../project/domain/value-objects/workspace-id';
 import { IProjectConfigRepository } from '../../../project/domain/repository/project-config-repository.interface';
-import { IFileWatcherPort } from '../../application/ports/file-watcher.port';
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { RemoveIgnorePatternCommand } from '../commands/remove-ignore-pattern.command';
-import { IgnorePattern } from '../../domain/value-objects/ignore-pattern';
 import { IgnorePatternsChangedEvent } from '../../domain/events/ignore-patterns-changed';
 
 export class RemoveIgnorePatternHandler implements ICommandHandler<RemoveIgnorePatternCommand, void> {
   constructor(
     private readonly configRepo: IProjectConfigRepository,
-    private readonly fileWatcherPort: IFileWatcherPort,
     private readonly eventBus: EventBus
   ) {}
 
@@ -25,10 +22,7 @@ export class RemoveIgnorePatternHandler implements ICommandHandler<RemoveIgnoreP
       config.removeIgnorePattern(command.pattern);
       await this.configRepo.save(config);
 
-      // Update watcher to re-discover files that are no longer ignored
-      const allPatterns = config.ignorePatterns.map(p => new IgnorePattern(p));
-      await this.fileWatcherPort.updateIgnorePatterns(allPatterns);
-
+      // Restart watcher via event; the watcher will now re-discover the previously ignored files
       await this.eventBus.emit(new IgnorePatternsChangedEvent(new WorkspaceId(command.workspaceId)));
 
       return Result.ok(undefined);
