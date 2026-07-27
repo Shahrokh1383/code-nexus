@@ -1,3 +1,4 @@
+// src/presentation/components/documentation/TrashModal.tsx
 import type { JSX } from 'react';
 import { DocumentDto } from '../../../domains/documentation/application/dto/document.dto';
 
@@ -9,53 +10,46 @@ interface TrashModalProps {
   onPermanentDelete: (id: string) => void;
 }
 
-export function TrashModal({ show, onClose, deletedDocuments, onRestore, onPermanentDelete }: TrashModalProps): JSX.Element {
-  if (!show) return <></>;
+export function TrashModal({ show, onClose, deletedDocuments, onRestore, onPermanentDelete }: TrashModalProps): JSX.Element | null {
+  if (!show) return null;
 
   return (
-    <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-        <div className="modal-content bg-dark text-light">
-          <div className="modal-header border-secondary">
-            <h5 className="modal-title">
-              <i className="fa-solid fa-trash-can text-warning me-2" />
-              Trash
-            </h5>
-            <button type="button" className="btn-close btn-close-white" onClick={onClose} aria-label="Close" />
-          </div>
-          <div className="modal-body">
-            {deletedDocuments.length === 0 ? (
-              <p className="text-muted text-center py-4">Trash is empty.</p>
-            ) : (
-              <div className="list-group">
-                {deletedDocuments.map((doc) => (
-                  <div key={doc.id} className="list-group-item bg-dark text-light border-secondary d-flex justify-content-between align-items-center">
-                    <div>
-                      <h6 className="mb-1">{doc.title}</h6>
-                      <small className="text-muted">{doc.path}</small>
-                    </div>
-                    <div>
-                      <button
-                        className="btn btn-sm btn-outline-success me-2"
-                        onClick={() => onRestore(doc.id)}
-                      >
-                        <i className="fa-solid fa-rotate-left me-1" /> Restore
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => onPermanentDelete(doc.id)}
-                      >
-                        <i className="fa-solid fa-eraser me-1" /> Delete Forever
-                      </button>
+    <div className="trash-modal-overlay" onClick={onClose}>
+      <div className="trash-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="trash-modal-header">
+          <h2><i className="fa-solid fa-trash-can text-warning me-2" /> Trash</h2>
+          <button className="btn-ghost trash-close-btn" onClick={onClose} aria-label="Close trash">
+            <i className="fa-solid fa-xmark" />
+          </button>
+        </div>
+
+        <div className="trash-modal-body">
+          {deletedDocuments.length === 0 ? (
+            <p className="trash-empty-state">Trash is empty.</p>
+          ) : (
+            <div className="trash-list">
+              {deletedDocuments.map((doc) => (
+                <div key={doc.id} className="trash-item">
+                  <div className="trash-item-info">
+                    <i className="fa-solid fa-file-lines text-secondary"></i>
+                    <div className="trash-path-container">
+                      <span className="trash-root-name">{doc.title}</span>
+                      <span className="trash-full-path">{doc.path}</span>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="modal-footer border-secondary">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
-          </div>
+                  
+                  <div className="trash-item-actions">
+                    <button className="btn-ghost trash-restore-btn" onClick={() => onRestore(doc.id)}>
+                      <i className="fa-solid fa-rotate-left" /> Restore
+                    </button>
+                    <button className="btn-ghost trash-delete-btn" onClick={() => onPermanentDelete(doc.id)}>
+                      <i className="fa-solid fa-eraser" /> Delete Forever
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

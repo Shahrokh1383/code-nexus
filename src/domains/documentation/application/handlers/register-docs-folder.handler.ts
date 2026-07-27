@@ -16,7 +16,6 @@ import { DocumentPath } from '../../domain/value-objects/document-path';
 import { DocFolderSignature } from '../../domain/value-objects/doc-folder-signature';
 import { CandidateFolder } from '../../domain/services/docs-folder-detector.service';
 import { DocumentDiscoveredEvent } from '../../domain/events/document-discovered';
-import { OrphanDetectedEvent } from '../../domain/events/orphan-detected';
 import { RegisterDocsFolderCommand } from '../commands/register-docs-folder.command';
 import { IDocumentFolderScannerPort } from '../ports/document-folder-scanner-port.interface';
 
@@ -39,10 +38,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
     try {
       const workspaceRoot = command.workspaceId;
       const config = await this.configRepo.findByWorkspaceId(new WorkspaceId(workspaceRoot));
-
-      if (!config) {
-        return Result.fail('Project configuration not found');
-      }
+      if (!config) return Result.fail('Project configuration not found');
 
       let docFolder: DocFolder;
 
@@ -53,14 +49,10 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
         }
 
         const exists = await this.scanner.exists(normalizedPath);
-        if (!exists) {
-          return Result.fail(`Folder '${normalizedPath}' does not exist inside the workspace`);
-        }
-
+        if (!exists) return Result.fail(`Folder '${normalizedPath}' does not exist`);
+        
         const isDir = await this.scanner.isDirectory(normalizedPath);
-        if (!isDir) {
-          return Result.fail(`Path '${normalizedPath}' is not a directory`);
-        }
+        if (!isDir) return Result.fail(`Path '${normalizedPath}' is not a directory`);
 
         const files = await this.scanner.scanFolder(normalizedPath);
         const signature = DocFolderSignature.calculateFrom(files);
@@ -73,17 +65,17 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       } else {
         const candidates = await this.buildCandidates(workspaceRoot);
         const detectResult = this.detectorService.detect(candidates);
-
-        if (detectResult.isFailure) {
-          return Result.fail(detectResult.getError() || 'Failed to detect docs folder');
-        }
-
+        if (detectResult.isFailure) return Result.fail(detectResult.getError() || 'Failed to detect docs folder');
+        
         const detected = detectResult.getValue();
-        if (!detected) {
-          return Result.fail('Failed to detect docs folder');
-        }
-
+        if (!detected) return Result.fail('Failed to detect docs folder');
         docFolder = detected;
+      }
+
+      // SECURE FOLDER CHANGE: Migrate paths instead of deleting to preserve DocumentIDs and Links
+      const existingFolder = await this.docFolderRepo.findByWorkspaceId(workspaceRoot);
+      if (existingFolder && existingFolder.path !== docFolder.path) {
+        await this.migrateDocumentPaths(existingFolder.path, docFolder.path);
       }
 
       await this.docFolderRepo.save(docFolder);
@@ -91,11 +83,22 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       await this.configRepo.save(config);
 
       await this.createAndEmitDocuments(docFolder.path);
-
       return Result.ok(void 0);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to register docs folder';
-      return Result.fail(message);
+      return Result.fail(error instanceof Error ? error.message : 'Failed to register docs folder');
+    }
+  }
+
+  private async migrateDocumentPaths(oldPath: string, newPath: string): Promise<void> {
+    const oldDocs = await this.documentRepo.findByDocFolderPath(oldPath);
+    for (const doc of oldDocs) {
+      // Calculate relative path from the old docs folder
+      const relativePath = doc.path.value.slice(oldPath.length);
+      const updatedPath = PathUtils.join(newPath, relativePath);
+      
+      // Update path on the existing entity (preserves ID and linkCount)
+      doc.updatePath(new DocumentPath(updatedPath));
+      await this.documentRepo.save(doc);
     }
   }
 
@@ -107,9 +110,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
 
   private async createAndEmitDocuments(docsFolderPath: string): Promise<void> {
     const files = await this.scanner.scanFolder(docsFolderPath);
-    const documentFiles = files.filter(
-      (f) => !f.isDirectory && DOCUMENT_EXTENSIONS.test(f.name)
-    );
+    const documentFiles = files.filter((f) => !f.isDirectory && DOCUMENT_EXTENSIONS.test(f.name));
 
     for (const file of documentFiles) {
       const relativePath = PathUtils.join(docsFolderPath, file.path);
@@ -122,15 +123,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       );
 
       await this.documentRepo.save(document);
-      await this.eventBus.emit(
-        new DocumentDiscoveredEvent(document.id, document.path, document.title)
-      );
-
-      if (document.isOrphaned) {
-        await this.eventBus.emit(
-          new OrphanDetectedEvent(document.id, document.path)
-        );
-      }
+      await this.eventBus.emit(new DocumentDiscoveredEvent(document.id, document.path, document.title));
     }
   }
 

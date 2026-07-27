@@ -1,3 +1,4 @@
+// src/presentation/components/documentation/DocumentationHeader.tsx
 import type { JSX } from 'react';
 import { DocFolderDto } from '../../../domains/documentation/application/dto/doc-folder.dto';
 
@@ -5,7 +6,7 @@ interface DocumentationHeaderProps {
   docFolder: DocFolderDto | null;
   isLoading: boolean;
   deletedCount: number;
-  onDetectRelocation: () => void;
+  onChangeFolder: () => void;
   onOpenTrash: () => void;
 }
 
@@ -13,7 +14,7 @@ export function DocumentationHeader({
   docFolder,
   isLoading,
   deletedCount,
-  onDetectRelocation,
+  onChangeFolder,
   onOpenTrash,
 }: DocumentationHeaderProps): JSX.Element {
   return (
@@ -28,9 +29,9 @@ export function DocumentationHeader({
       </div>
       {docFolder && (
         <div className="d-flex gap-2">
-          <button className="btn-secondary" onClick={onDetectRelocation} disabled={isLoading}>
-            <i className={`fa-solid ${isLoading ? 'fa-spinner fa-spin' : 'fa-magnifying-glass-location'}`} />
-            Detect Relocation
+          <button className="btn-secondary" onClick={onChangeFolder} disabled={isLoading}>
+            <i className={`fa-solid ${isLoading ? 'fa-spinner fa-spin' : 'fa-folder-open'}`} />
+            Change Folder
           </button>
           <button className="btn-secondary position-relative" onClick={onOpenTrash}>
             <i className="fa-solid fa-trash-can" />

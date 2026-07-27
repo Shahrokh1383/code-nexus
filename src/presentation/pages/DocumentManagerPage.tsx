@@ -14,15 +14,13 @@ export function DocumentManagerPage(): JSX.Element {
   const ipc = useIpc();
   const {
     documents, docFolder, orphans, deletedDocuments, isLoading, error,
-    registerFolder, detectRelocation, softDeleteDocument,
-    permanentDeleteDocument, restoreDocument, clearError
+    registerFolder, softDeleteDocument, permanentDeleteDocument, restoreDocument, clearError
   } = useDocuments();
 
   const [showTrashModal, setShowTrashModal] = useState(false);
-
   const linkedDocuments = (documents || []).filter(doc => !doc.isOrphaned);
 
-  const handleRegisterFolder = async () => {
+  const handleFolderSelection = async () => {
     try {
       const response = await ipc.invoke(IpcChannels.DIALOG_OPEN_FOLDER) as { success: boolean; data?: string[] };
       if (response.success && response.data && response.data.length > 0) {
@@ -37,7 +35,7 @@ export function DocumentManagerPage(): JSX.Element {
         docFolder={docFolder}
         isLoading={isLoading}
         deletedCount={deletedDocuments.length}
-        onDetectRelocation={detectRelocation}
+        onChangeFolder={handleFolderSelection}
         onOpenTrash={() => setShowTrashModal(true)}
       />
 
@@ -50,7 +48,7 @@ export function DocumentManagerPage(): JSX.Element {
 
       <div className="document-manager-content">
         {!docFolder && !isLoading ? (
-          <FolderRegistrationPrompt isLoading={isLoading} onRegister={handleRegisterFolder} />
+          <FolderRegistrationPrompt isLoading={isLoading} onRegister={handleFolderSelection} />
         ) : (
           <>
             <OrphanSection orphans={orphans} onDelete={softDeleteDocument} />

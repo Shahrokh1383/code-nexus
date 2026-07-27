@@ -26,7 +26,6 @@
     "electron\\ipc\\handlers\\documentation",
     "src\\infrastructure",
     "src\\domains\\shared-kernel",
-    "src\\domains\\documentation",
     "src\\presentation\\components\\documentation",
     "tsconfig.test.json",
     "todo",
@@ -38,12 +37,12 @@
     "src\\presentation\\styles",
     "electron\\ipc\\handlers\\tracking-handlers.ts",
     "electron\\ipc\\handlers\\linking-handlers.ts",
-    "src\\domains\\project",
-    "src\\domains\\linking"
+    "src\\domains\\linking",
+    "src\\domains\\tracking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-27T18:53:58.046Z",
+  "lastModified": "2026-07-27T19:49:39.442Z",
   "version": 1
 }

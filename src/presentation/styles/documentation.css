@@ -68,3 +68,170 @@
 .btn-icon { background: transparent; border: none; color: var(--doc-text-muted); cursor: pointer; padding: 0.5rem; border-radius: 6px; transition: all 0.2s; }
 .btn-icon:hover { background: rgba(255, 255, 255, 0.1); }
 .btn-icon.btn-danger:hover { color: #ff5555; background: rgba(255, 85, 85, 0.15); }
+
+/* ========== Trash Modal (Unified Overlay) ========== */
+.trash-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.trash-modal-content {
+  background-color: var(--cn-bg-elevated, #161b22);
+  border: 1px solid var(--cn-border-light, #30363d);
+  border-radius: var(--cn-radius-lg, 12px);
+  width: 650px;
+  max-width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+.trash-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--cn-border-light, #30363d);
+}
+
+.trash-modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cn-text-primary, #e6edf3);
+}
+
+.trash-close-btn {
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: var(--cn-text-secondary, #8b949e);
+  background-color: transparent;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.trash-close-btn:hover {
+  color: var(--cn-text-primary, #e6edf3);
+  background-color: var(--cn-bg-hover, #21262d);
+}
+
+.trash-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.trash-empty-state {
+  color: var(--cn-text-disabled, #6e7681);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.trash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trash-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background-color: var(--cn-bg-secondary, #0d1117);
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.trash-item:hover {
+  background-color: var(--cn-bg-hover, #21262d);
+  border-color: var(--cn-border-light, #30363d);
+}
+
+.trash-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.trash-item-info i {
+  color: var(--cn-text-disabled, #6e7681);
+  font-size: 1.1rem;
+}
+
+.trash-path-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.trash-root-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--cn-text-primary, #e6edf3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trash-full-path {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: var(--cn-text-disabled, #6e7681);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trash-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.trash-restore-btn, .trash-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  background-color: transparent;
+  border: 1px solid var(--cn-border-light, #30363d);
+  transition: all 0.15s ease;
+}
+
+.trash-restore-btn {
+  color: #3fb950; /* Success Green */
+}
+
+.trash-restore-btn:hover {
+  background-color: rgba(63, 185, 80, 0.1);
+  border-color: #3fb950;
+}
+
+.trash-delete-btn {
+  color: #ff5555; /* Danger Red */
+}
+
+.trash-delete-btn:hover {
+  background-color: rgba(255, 85, 85, 0.1);
+  border-color: #ff5555;
+}
