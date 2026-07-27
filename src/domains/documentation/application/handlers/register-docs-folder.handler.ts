@@ -82,7 +82,7 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
       config.updateDocsFolderPath(docFolder.path);
       await this.configRepo.save(config);
 
-      await this.createAndEmitDocuments(docFolder.path);
+      await this.syncAndEmitDocuments(docFolder.path);
       return Result.ok(void 0);
     } catch (error) {
       return Result.fail(error instanceof Error ? error.message : 'Failed to register docs folder');
@@ -92,11 +92,8 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
   private async migrateDocumentPaths(oldPath: string, newPath: string): Promise<void> {
     const oldDocs = await this.documentRepo.findByDocFolderPath(oldPath);
     for (const doc of oldDocs) {
-      // Calculate relative path from the old docs folder
       const relativePath = doc.path.value.slice(oldPath.length);
       const updatedPath = PathUtils.join(newPath, relativePath);
-      
-      // Update path on the existing entity (preserves ID and linkCount)
       doc.updatePath(new DocumentPath(updatedPath));
       await this.documentRepo.save(doc);
     }
@@ -108,22 +105,32 @@ export class RegisterDocsFolderHandler implements ICommandHandler<RegisterDocsFo
     return this.scanner.scanWorkspaceForCandidates(ignorePatterns);
   }
 
-  private async createAndEmitDocuments(docsFolderPath: string): Promise<void> {
+  private async syncAndEmitDocuments(docsFolderPath: string): Promise<void> {
     const files = await this.scanner.scanFolder(docsFolderPath);
     const documentFiles = files.filter((f) => !f.isDirectory && DOCUMENT_EXTENSIONS.test(f.name));
 
     for (const file of documentFiles) {
       const relativePath = PathUtils.join(docsFolderPath, file.path);
-      const document = new Document(
-        DocumentId.generate(),
-        new DocumentPath(relativePath),
-        this.deriveTitle(file.name),
-        new DateTime(file.lastModified),
-        0
-      );
-
-      await this.documentRepo.save(document);
-      await this.eventBus.emit(new DocumentDiscoveredEvent(document.id, document.path, document.title));
+      const existingDoc = await this.documentRepo.findByPath(new DocumentPath(relativePath));
+      
+      if (existingDoc) {
+        // If it was previously deleted but reappeared, restore it
+        if (existingDoc.deleted) {
+          existingDoc.markAsRestored();
+          await this.documentRepo.save(existingDoc);
+        }
+      } else {
+        // Only create if it truly doesn't exist
+        const document = new Document(
+          DocumentId.generate(),
+          new DocumentPath(relativePath),
+          this.deriveTitle(file.name),
+          new DateTime(file.lastModified),
+          0
+        );
+        await this.documentRepo.save(document);
+        await this.eventBus.emit(new DocumentDiscoveredEvent(document.id, document.path, document.title));
+      }
     }
   }
 

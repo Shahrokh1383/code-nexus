@@ -22,10 +22,15 @@ interface DocumentsIndexSchema {
 
 export class DocumentJsonRepository implements IDocumentRepository {
   private readonly filename = 'documents.json';
-  private cache: DocumentsIndexSchema | null = null;
-  private saveTimer: NodeJS.Timeout | null = null;
+  private readonly workspaceRoot: string;
 
-  constructor(private readonly db: JsonDatabase) {}
+  // Static cache ensures all transient IPC instances share the same state
+  private static cache = new Map<string, DocumentsIndexSchema>();
+  private static saveTimers = new Map<string, NodeJS.Timeout | null>();
+
+  constructor(private readonly db: JsonDatabase, workspaceRoot: string) {
+    this.workspaceRoot = workspaceRoot;
+  }
 
   async findById(id: DocumentId): Promise<Document | null> {
     const index = await this.readIndex();
@@ -116,27 +121,33 @@ export class DocumentJsonRepository implements IDocumentRepository {
   // ─────────────────────── Private Helpers ───────────────────────
 
   private async readIndex(): Promise<DocumentsIndexSchema> {
-    if (this.cache) return this.cache;
+    const cached = DocumentJsonRepository.cache.get(this.workspaceRoot);
+    if (cached) return cached;
+    
     try {
-      this.cache = await this.db.read<DocumentsIndexSchema>(this.filename);
+      const data = await this.db.read<DocumentsIndexSchema>(this.filename);
+      DocumentJsonRepository.cache.set(this.workspaceRoot, data);
+      return data;
     } catch {
-      this.cache = { version: '1.0', documents: [] };
+      const empty: DocumentsIndexSchema = { version: '1.0', documents: [] };
+      DocumentJsonRepository.cache.set(this.workspaceRoot, empty);
+      return empty;
     }
-    return this.cache;
   }
 
-  /**
-   * Debounces disk writes. If called 100 times in a loop,
-   * it will only write to disk once 300ms after the last call.
-   * This completely eliminates the N+1 I/O bottleneck.
-   */
   private scheduleWrite(): void {
-    if (this.saveTimer) clearTimeout(this.saveTimer);
-    this.saveTimer = setTimeout(async () => {
-      if (this.cache) {
-        await this.db.write(this.filename, this.cache);
+    const existingTimer = DocumentJsonRepository.saveTimers.get(this.workspaceRoot);
+    if (existingTimer) clearTimeout(existingTimer);
+    
+    const timer = setTimeout(async () => {
+      const data = DocumentJsonRepository.cache.get(this.workspaceRoot);
+      if (data) {
+        await this.db.write(this.filename, data);
       }
+      DocumentJsonRepository.saveTimers.set(this.workspaceRoot, null);
     }, 300);
+    
+    DocumentJsonRepository.saveTimers.set(this.workspaceRoot, timer);
   }
 
   private mapToEntity(raw: DocumentSchema): Document {

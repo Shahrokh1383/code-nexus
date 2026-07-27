@@ -22,7 +22,7 @@ export function createLinkingDependencies(rootPath: string) {
   const db = new JsonDatabase(rootPath);
   const linkRepo = new LinkJsonRepository(rootPath);
   const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
-  const documentRepo = new DocumentJsonRepository(db);
+  const documentRepo = new DocumentJsonRepository(db, rootPath);
 
   const validator = new DocumentLinkValidatorService(docLinkRepo);
   const migrationService = new LinkMigrationService();

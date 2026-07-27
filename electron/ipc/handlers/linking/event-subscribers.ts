@@ -20,7 +20,7 @@ import { getCurrentWorkspaceRoot } from './workspace-context';
 async function recalculateAndSaveDocumentLinkCount(rootPath: string, documentId: string): Promise<void> {
   try {
     const db = new JsonDatabase(rootPath);
-    const docRepo = new DocumentJsonRepository(db);
+    const docRepo = new DocumentJsonRepository(db, rootPath); // FIX: Added rootPath
     const linkRepo = new LinkJsonRepository(rootPath);
     const docLinkRepo = new DocumentLinkJsonRepository(rootPath);
 

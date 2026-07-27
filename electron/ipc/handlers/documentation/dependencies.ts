@@ -1,3 +1,4 @@
+// electron/ipc/handlers/documentation/dependencies.ts
 import { JsonDatabase } from '../../../../src/infrastructure/persistence/json-database';
 import { SchemaMigrator } from '../../../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../../../src/infrastructure/persistence/database-schema';
@@ -36,7 +37,7 @@ export function createDocumentationDependencies(rootPath: string) {
   const schemaMigrator = new SchemaMigrator(DATABASE_SCHEMA_VERSION);
   const configRepo = new ProjectConfigJsonRepository(db, schemaMigrator);
   const docFolderRepo = new DocFolderJsonRepository(db);
-  const documentRepo = new DocumentJsonRepository(db);
+  const documentRepo = new DocumentJsonRepository(db, rootPath);
   const scanner = new NodeFsDocumentScannerAdapter(rootPath);
   const deletionAdapter = new NodeFsDeletionAdapter(rootPath);
   return { configRepo, docFolderRepo, documentRepo, scanner, deletionAdapter };
