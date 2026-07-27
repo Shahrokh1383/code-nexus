@@ -1,13 +1,5 @@
-import { TrackingJsonRepository } from '../../../../src/domains/tracking/infrastructure/repository/tracking-json.repository';
-import { CommitsJsonRepository } from '../../../../src/domains/tracking/infrastructure/repository/commits-json.repository';
-import { DocumentCommitApprovalJsonRepository } from '../../../../src/domains/tracking/infrastructure/repository/document-commit-approval-json.repository';
-import { FileContentReaderAdapter } from '../../../../src/domains/tracking/infrastructure/adapters/file-content-reader.adapter';
-import { DiffCalculatorAdapter } from '../../../../src/domains/tracking/infrastructure/adapters/diff-calculator.adapter';
-import { DiffCalculatorService } from '../../../../src/domains/tracking/domain/services/diff-calculator.service';
-import { CommitMatcherService } from '../../../../src/domains/tracking/domain/services/commit-matcher.service';
-import { ILinkedDocumentQueryPort } from '../../../../src/domains/tracking/application/ports/linked-document-query.port';
-import { LinkedDocumentQueryAdapter } from './adapter';
-import { setCurrentWorkspaceRoot } from './workspace-context';
+import { getWorkspaceContext } from './workspace-context';
+import { PathUtils } from '../../../../src/domains/shared-kernel/utils/path-utils';
 
 export interface IpcResponse<T> {
   success: boolean;
@@ -26,7 +18,7 @@ export async function handleIpcCall<T>(
 ): Promise<IpcResponse<T>> {
   const rootPath = validateWorkspaceId(workspaceId);
   if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
-  setCurrentWorkspaceRoot(rootPath);
+  
   try {
     return await handler(rootPath);
   } catch (error) {
@@ -35,13 +27,19 @@ export async function handleIpcCall<T>(
 }
 
 export function createTrackingDependencies(rootPath: string) {
-  const hashRepo = new TrackingJsonRepository(rootPath);
-  const commitRepo = new CommitsJsonRepository(rootPath);
-  const approvalRepo = new DocumentCommitApprovalJsonRepository(rootPath);
-  const linkedDocQuery: ILinkedDocumentQueryPort = new LinkedDocumentQueryAdapter(rootPath);
-  const contentReader = new FileContentReaderAdapter(rootPath);
-  const diffService = new DiffCalculatorService(new DiffCalculatorAdapter());
-  const commitMatcher = new CommitMatcherService();
-
-  return { hashRepo, commitRepo, approvalRepo, linkedDocQuery, contentReader, diffService, commitMatcher };
+  const ctx = getWorkspaceContext();
+  const normalizedRoot = PathUtils.normalize(rootPath);
+  if (!ctx || ctx.rootPath !== normalizedRoot) {
+    throw new Error('Workspace context is not initialized or path mismatch.');
+  }
+  
+  return {
+    hashRepo: ctx.hashRepo,
+    commitRepo: ctx.commitRepo,
+    approvalRepo: ctx.approvalRepo,
+    linkedDocQuery: ctx.linkedDocQuery,
+    contentReader: ctx.contentReader,
+    diffService: ctx.diffService,
+    commitMatcher: ctx.commitMatcher
+  };
 }

@@ -4,6 +4,7 @@ import { ChokidarAdapter } from '../../src/domains/filesystem/infrastructure/ada
 import { NodeFsAdapter } from '../../src/domains/filesystem/infrastructure/adapters/node-fs.adapter';
 import { FileChangeReactionSaga } from '../../src/application/sagas/file-change-reaction.saga';
 import { ProjectConfigJsonRepository } from '../../src/domains/project/infrastructure/repository/project-config-json.repository';
+import { WorkspaceJsonRepository } from '../../src/domains/project/infrastructure/repository/workspace-json.repository';
 import { JsonDatabase } from '../../src/infrastructure/persistence/json-database';
 import { SchemaMigrator } from '../../src/infrastructure/persistence/migration/schema-migrator';
 import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/database-schema';
@@ -15,6 +16,15 @@ import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
 import { IDomainEventHandler } from '../../src/domains/shared-kernel/events/domain-event-handler.interface';
 import { FileSystemJsonRepository } from '../../src/domains/filesystem/infrastructure/repository/filesystem-json.repository';
+import { TrackingJsonRepository } from '../../src/domains/tracking/infrastructure/repository/tracking-json.repository';
+import { CommitsJsonRepository } from '../../src/domains/tracking/infrastructure/repository/commits-json.repository';
+import { DocumentCommitApprovalJsonRepository } from '../../src/domains/tracking/infrastructure/repository/document-commit-approval-json.repository';
+import { LinkJsonRepository } from '../../src/domains/linking/infrastructure/repository/link-json.repository';
+import { FileContentReaderAdapter } from '../../src/domains/tracking/infrastructure/adapters/file-content-reader.adapter';
+import { DiffCalculatorAdapter } from '../../src/domains/tracking/infrastructure/adapters/diff-calculator.adapter';
+import { DiffCalculatorService } from '../../src/domains/tracking/domain/services/diff-calculator.service';
+import { CommitMatcherService } from '../../src/domains/tracking/domain/services/commit-matcher.service';
+import { setWorkspaceContext, clearWorkspaceContext, WorkspaceContext } from '../ipc/handlers/tracking/workspace-context';
 import { IpcChannels } from '../ipc/channels';
 import { DomainEvent } from '../../src/domains/shared-kernel/events/domain-event';
 
@@ -25,23 +35,12 @@ let uiUpdateHandler: IDomainEventHandler<DomainEvent> | null = null;
 let uiUpdateDebounce: ReturnType<typeof setTimeout> | null = null;
 
 function toWatcherGlob(pattern: string): string {
-  if (pattern.endsWith('/')) {
-    return `**/${pattern}**`;
-  }
+  if (pattern.endsWith('/')) return `**/${pattern}**`;
   return pattern;
 }
 
-/**
- * Startup reconciliation: remove any entries from file-index.json that
- * no longer correspond to a real file or folder on disk.
- * This eliminates ghost entries caused by missed Chokidar events or
- * offline folder moves.
- */
-async function reconcileFileIndex(rootPath: string): Promise<void> {
-  const db = new JsonDatabase(rootPath);
-  const repo = new FileSystemJsonRepository(db);
+async function reconcileFileIndex(rootPath: string, repo: FileSystemJsonRepository): Promise<void> {
   const fsAdapter = new NodeFsAdapter();
-
   const allNodes = await repo.findAll();
   const toDelete: string[] = [];
 
@@ -53,24 +52,24 @@ async function reconcileFileIndex(rootPath: string): Promise<void> {
   }
 
   for (const relPath of toDelete) {
-    // deleteByPath also removes all nested children – safe for directories
     await repo.deleteByPath(new FilePath(relPath));
   }
 
   if (toDelete.length > 0) {
     console.log(`[Reconcile] Removed ${toDelete.length} stale entries from file index.`);
   }
-
-  // Ensure all pending writes are flushed before the watcher starts
   await repo.flush();
 }
 
-export async function startWatcher(rootPath: string): Promise<void> {
+export async function startWatcher(rootPath: string, userDataPath: string): Promise<void> {
   await stopWatcher();
 
-  await reconcileFileIndex(rootPath);
-
   const db = new JsonDatabase(rootPath);
+  await db.ensureDoclinkExists();
+  
+  const fileSystemRepo = new FileSystemJsonRepository(db);
+  await reconcileFileIndex(rootPath, fileSystemRepo);
+
   const configRepo = new ProjectConfigJsonRepository(db, new SchemaMigrator(DATABASE_SCHEMA_VERSION));
   const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
   
@@ -78,25 +77,41 @@ export async function startWatcher(rootPath: string): Promise<void> {
   const globPatterns = ignorePatternStrings.map(toWatcherGlob);
 
   const ignorePatterns = globPatterns.map((p) => {
-    try {
-      return new IgnorePattern(p);
-    } catch {
-      return null;
-    }
+    try { return new IgnorePattern(p); } catch { return null; }
   }).filter((p): p is IgnorePattern => p !== null);
 
-  currentWatcher = new ChokidarAdapter();
-  currentWatcher.startWatching(rootPath, ignorePatterns);
+  // 1. Instantiate Infrastructure Adapters & Repositories (Singletons per workspace)
+  const fileWatcher = new ChokidarAdapter();
+  fileWatcher.startWatching(rootPath, ignorePatterns);
+  currentWatcher = fileWatcher;
 
-  const linkedDocQuery = new LinkedDocumentQueryAdapter(rootPath);
-  const fileSystemRepo = new FileSystemJsonRepository(db);
+  const hashRepo = new TrackingJsonRepository(rootPath);
+  const commitRepo = new CommitsJsonRepository(rootPath);
+  const approvalRepo = new DocumentCommitApprovalJsonRepository(rootPath);
+  const contentReader = new FileContentReaderAdapter(rootPath, userDataPath);
+  const diffService = new DiffCalculatorService(new DiffCalculatorAdapter());
+  const commitMatcher = new CommitMatcherService();
+  
+  // 2. Instantiate Application Adapters
+  const linkRepo = new LinkJsonRepository(rootPath);
+  const linkedDocQuery = new LinkedDocumentQueryAdapter(linkRepo, fileSystemRepo);
 
-  currentSaga = new FileChangeReactionSaga(rootPath, linkedDocQuery, fileSystemRepo);
+  // 3. Set the global Workspace Context (Composition Root)
+  const context: WorkspaceContext = {
+    rootPath, db, 
+    workspaceRepo: new WorkspaceJsonRepository(db), 
+    configRepo, fileSystemRepo, fileWatcher,
+    hashRepo, commitRepo, approvalRepo, 
+    linkedDocQuery, contentReader, diffService, commitMatcher
+  };
+  setWorkspaceContext(context);
+
+  // 4. Instantiate Saga with injected dependencies
+  currentSaga = new FileChangeReactionSaga(linkedDocQuery, fileSystemRepo, hashRepo, contentReader, diffService);
   currentSaga.register();
 
   const eventBus = EventBus.getInstance();
 
-  // Notify frontend reactively when files change
   uiUpdateHandler = {
     handle: async (_event: DomainEvent): Promise<void> => {
       if (uiUpdateDebounce) clearTimeout(uiUpdateDebounce);
@@ -105,7 +120,7 @@ export async function startWatcher(rootPath: string): Promise<void> {
         if (windows.length > 0 && !windows[0].isDestroyed()) {
           windows[0].webContents.send(IpcChannels.FILESYSTEM_TREE_UPDATED);
         }
-      }, 300); // Debounce UI updates to prevent thrashing
+      }, 300);
     },
   };
   
@@ -113,10 +128,9 @@ export async function startWatcher(rootPath: string): Promise<void> {
   eventBus.register('FileModified', uiUpdateHandler);
   eventBus.register('FileDeleted', uiUpdateHandler);
 
-  // Register listener for ignore pattern changes to restart the watcher
   ignorePatternChangedHandler = {
     handle: async (event: IgnorePatternsChangedEvent): Promise<void> => {
-      await startWatcher(event.workspaceId.value);
+      await startWatcher(event.workspaceId.value, userDataPath);
     },
   };
   eventBus.register('IgnorePatternsChanged', ignorePatternChangedHandler);
@@ -145,4 +159,6 @@ export async function stopWatcher(): Promise<void> {
     eventBus.unregister('IgnorePatternsChanged', ignorePatternChangedHandler);
     ignorePatternChangedHandler = null;
   }
+
+  clearWorkspaceContext();
 }

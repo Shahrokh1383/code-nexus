@@ -10,11 +10,9 @@ export function FileBrowserPage(): JSX.Element {
   const { fetchFileTree, tree, totalFiles, totalFolders, error } = useFileTree();
   const workspace = useWorkspaceStore((s) => s.workspace);
 
-  const { fetchPatterns } = useIgnorePatterns({ onPatternChange: fetchFileTree });
+  const { fetchPatterns, addPattern } = useIgnorePatterns({ onPatternChange: fetchFileTree });
 
-  // Selection state for ignoring files/folders
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
-  const { addPattern } = useIgnorePatterns();
 
   useEffect(() => {
     fetchPatterns();

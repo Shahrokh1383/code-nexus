@@ -5,12 +5,7 @@ import { GranularCommitDto } from '../../domains/tracking/application/dto/granul
 import { ContentDiffDto } from '../../domains/tracking/application/dto/content-diff.dto';
 import { DocumentDto } from '../../domains/documentation/application/dto/document.dto';
 import { useWorkspaceStore } from './workspace.store';
-
-interface IpcResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
+import { invokeIpc } from '../utils/ipc-invoke'; // FIX: Import shared utility (DRY)
 
 interface TrackingState {
   selectedDocument: DocumentDto | null;
@@ -31,12 +26,6 @@ interface TrackingState {
   startRealtimeListener: () => () => void;
   clearStore: () => void;
 }
-
-const invokeIpc = async <T>(channel: IpcChannels, ...args: unknown[]): Promise<T> => {
-  const response = (await window.electronAPI.invoke(channel, ...args)) as IpcResponse<T>;
-  if (!response.success) throw new Error(response.error || 'Unknown IPC error');
-  return response.data as T;
-};
 
 export const useTrackingStore = create<TrackingState>((set, get) => ({
   selectedDocument: null,
@@ -110,7 +99,6 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
       await invokeIpc<unknown>(IpcChannels.TRACKING_APPROVE_COMMIT, workspace.id, documentId);
       await get().fetchPendingChanges(documentId);
       await get().fetchCommitHistory(documentId);
-      // Update global pending counts
       await get().fetchAllPendingStatus();
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to approve commit';
@@ -139,10 +127,7 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
 
   startRealtimeListener: () => {
     const handleUpdate = (_payload: unknown) => {
-      // Refresh aggregated counts (left panel)
       get().fetchAllPendingStatus();
-
-      // Also refresh pending file list for the currently selected document (right panel)
       const currentDoc = get().selectedDocument;
       if (currentDoc) {
         get().fetchPendingChanges(currentDoc.id);

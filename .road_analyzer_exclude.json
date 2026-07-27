@@ -16,7 +16,6 @@
     "docs",
     "public",
     "src\\domains\\linking",
-    "src\\presentation\\components\\tracking",
     "src\\presentation\\components\\linking",
     "src\\presentation\\components\\layout",
     "src\\presentation\\components\\common",
@@ -24,7 +23,6 @@
     "src\\presentation\\pages\\WelcomePage.tsx",
     "src\\presentation\\pages\\TrackingPage.tsx",
     "src\\presentation\\pages\\LinkingPage.tsx",
-    "electron\\ipc\\handlers\\tracking",
     "electron\\ipc\\handlers\\linking",
     "electron\\ipc\\handlers\\documentation",
     "src\\infrastructure",
@@ -38,11 +36,14 @@
     "src\\presentation\\components\\welcome",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\domains\\project",
-    "src\\domains\\filesystem"
+    "src\\domains\\filesystem",
+    "src\\application",
+    "src\\domains",
+    "src\\presentation\\styles"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-27T17:07:46.016Z",
+  "lastModified": "2026-07-27T17:28:31.490Z",
   "version": 1
 }
