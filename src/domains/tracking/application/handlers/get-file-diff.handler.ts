@@ -2,15 +2,14 @@ import { IQueryHandler } from '../../../shared-kernel/application/query-handler.
 import { Result } from '../../../shared-kernel/types/result';
 import { GetFileDiffQuery } from '../queries/get-file-diff.query';
 import { ContentDiffDto } from '../dto/content-diff.dto';
-import { IHashRepository } from '../../domain/repository/hash-repository.interface';
-import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
+import { IBaselineDiffCacheRepository } from '../../domain/repository/baseline-diff-cache-repository.interface';
 
 export class GetFileDiffHandler implements IQueryHandler<GetFileDiffQuery, ContentDiffDto | null> {
-  constructor(private readonly hashRepo: IHashRepository) {}
+  constructor(private readonly cacheRepo: IBaselineDiffCacheRepository) {}
 
   async execute(query: GetFileDiffQuery): Promise<Result<ContentDiffDto | null, string>> {
     try {
-      const diff = await this.hashRepo.findDiffByPath(new TrackedFilePath(query.filePath));
+      const diff = await this.cacheRepo.loadDiff(query.filePath);
       return Result.ok(diff);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to get file diff';

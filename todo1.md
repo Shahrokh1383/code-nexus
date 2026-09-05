@@ -1,36 +1,4 @@
 
-### Phase 2: Port & Adapter Realignment (Removing Illegal `fs` Access)
-**Goal:** Tracking must not touch `fs` directly. It must use ports.
-
-1. **Refactor `IFileContentReader` Port:**
-   * **Modify:** `src/domains/tracking/application/ports/file-content-reader.interface.ts`
-   * **Action:** Strip it down to a pure read-only port:
-     ```typescript
-     export interface IFileContentReader {
-       readContent(relativePath: string): Promise<string>;
-     }
-     ```
-2. **Create `IBaselineDiffCacheRepository` Port:**
-   * **New File:** `src/domains/tracking/domain/repository/baseline-diff-cache-repository.interface.ts`
-   * **Logic:** Defines methods for caching heavy data outside `.doclink`.
-     ```typescript
-     export interface IBaselineDiffCacheRepository {
-       saveBaseline(filePath: string, content: string): Promise<void>;
-       loadBaseline(filePath: string): Promise<string | null>;
-       saveDiff(filePath: string, diff: ContentDiffDto): Promise<void>;
-       loadDiff(filePath: string): Promise<ContentDiffDto | null>;
-       clearCacheForFile(filePath: string): Promise<void>;
-     }
-     ```
-3. **Implement the Cache Repository Adapter:**
-   * **New File:** `src/domains/tracking/infrastructure/repository/baseline-diff-cache-json.repository.ts`
-   * **Logic:** Uses `userDataPath` (injected via constructor) to read/write JSON files in a dedicated cache folder (e.g., `{userDataPath}/code-nexus-cache/{workspaceId}/`). **No `.doclink` involvement.**
-4. **Delete Illegal Adapter:**
-   * **Delete:** `src/domains/tracking/infrastructure/adapters/file-content-reader.adapter.ts` (It uses `fs` directly, violating Rule VI.2).
-5. **Implement `IFileContentReader` in Composition Root:**
-   * **Modify:** `electron/ipc/handlers/tracking/dependencies.ts`
-   * **Action:** The adapter for `IFileContentReader` should delegate to the **FileSystem Context's** query handler (e.g., a new `ReadFileContentQuery` in FileSystem) to fetch the content, strictly respecting Bounded Context boundaries.
-
 ### Phase 3: Persistence Layer Diet (`.doclink` Optimization)
 **Goal:** Shrink `tracking-index.json` to pure metadata.
 

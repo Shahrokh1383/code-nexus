@@ -18,7 +18,7 @@ export async function handleIpcCall<T>(
 ): Promise<IpcResponse<T>> {
   const rootPath = validateWorkspaceId(workspaceId);
   if (!rootPath) return { success: false, error: 'Invalid workspace ID' };
-  
+
   try {
     return await handler(rootPath);
   } catch (error) {
@@ -32,7 +32,7 @@ export function createTrackingDependencies(rootPath: string) {
   if (!ctx || ctx.rootPath !== normalizedRoot) {
     throw new Error('Workspace context is not initialized or path mismatch.');
   }
-  
+
   return {
     hashRepo: ctx.hashRepo,
     commitRepo: ctx.commitRepo,
@@ -40,6 +40,7 @@ export function createTrackingDependencies(rootPath: string) {
     linkedDocQuery: ctx.linkedDocQuery,
     contentReader: ctx.contentReader,
     diffService: ctx.diffService,
-    commitMatcher: ctx.commitMatcher
+    commitMatcher: ctx.commitMatcher,
+    cacheRepo: ctx.cacheRepo,
   };
 }

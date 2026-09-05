@@ -5,13 +5,13 @@ import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
 import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
-import { ContentDiffDto } from '../../application/dto/content-diff.dto';
 
 interface HashEntrySchema {
   id: string;
   filePath: string;
-  hashValue: string;
-  diff: ContentDiffDto | null;
+  currentHash: string;
+  committedHash: string | null;
+  isPending: boolean;
 }
 
 interface TrackingIndexSchema {
@@ -20,7 +20,7 @@ interface TrackingIndexSchema {
 }
 
 const TRACKING_INDEX_FILE = 'tracking-index.json';
-const SCHEMA_VERSION = '1.1';
+const SCHEMA_VERSION = '2.0';
 
 export class TrackingJsonRepository implements IHashRepository {
   private readonly db: JsonDatabase;
@@ -32,6 +32,26 @@ export class TrackingJsonRepository implements IHashRepository {
   constructor(workspaceRoot: string) {
     this.db = new JsonDatabase(workspaceRoot);
     this.migrator = new SchemaMigrator(SCHEMA_VERSION);
+    this.registerMigrations();
+  }
+
+  private registerMigrations(): void {
+    this.migrator.register('1.1', (data) => {
+      const old = data as any;
+      const oldHashes = old.hashes || {};
+      const newHashes: Record<string, HashEntrySchema> = {};
+      for (const [key, entry] of Object.entries(oldHashes)) {
+        const oldEntry = entry as any;
+        newHashes[key] = {
+          id: oldEntry.id,
+          filePath: oldEntry.filePath,
+          currentHash: oldEntry.hashValue,
+          committedHash: null,
+          isPending: false,
+        };
+      }
+      return { version: SCHEMA_VERSION, hashes: newHashes };
+    });
   }
 
   async findHashByPath(filePath: TrackedFilePath): Promise<FileHash | null> {
@@ -46,18 +66,26 @@ export class TrackingJsonRepository implements IHashRepository {
     return Object.values(index.hashes).map(e => this.mapHashEntryToEntity(e));
   }
 
-  async saveHash(fileHash: FileHash, diff?: ContentDiffDto | null): Promise<void> {
+  async saveHash(fileHash: FileHash): Promise<void> {
     const index = await this.readIndex();
     const existing = index.hashes[fileHash.filePath.value];
-    index.hashes[fileHash.filePath.value] = this.mapHashEntityToEntry(fileHash, existing?.diff, diff);
+    index.hashes[fileHash.filePath.value] = this.mapHashEntityToEntry(fileHash, existing);
     this.scheduleWrite();
   }
 
-  async findDiffByPath(filePath: TrackedFilePath): Promise<ContentDiffDto | null> {
+  async updatePendingStatus(
+    filePath: TrackedFilePath,
+    isPending: boolean,
+    committedHash?: string
+  ): Promise<void> {
     const index = await this.readIndex();
     const entry = index.hashes[filePath.value];
-    if (!entry) return null;
-    return entry.diff;
+    if (!entry) return;
+    entry.isPending = isPending;
+    if (committedHash !== undefined) {
+      entry.committedHash = committedHash;
+    }
+    this.scheduleWrite();
   }
 
   async deleteHashByPath(filePath: TrackedFilePath): Promise<void> {
@@ -108,21 +136,20 @@ export class TrackingJsonRepository implements IHashRepository {
     return new FileHash(
       new FileHashId(entry.id),
       new TrackedFilePath(entry.filePath),
-      new HashValue(entry.hashValue)
+      new HashValue(entry.currentHash)
     );
   }
 
   private mapHashEntityToEntry(
     fileHash: FileHash,
-    existingDiff: ContentDiffDto | null = null,
-    newDiff: ContentDiffDto | null | undefined = undefined
+    existing?: HashEntrySchema
   ): HashEntrySchema {
-    const diffToSave = newDiff !== undefined ? newDiff : existingDiff;
     return {
       id: fileHash.id.value,
       filePath: fileHash.filePath.value,
-      hashValue: fileHash.hashValue.value,
-      diff: diffToSave,
+      currentHash: fileHash.hashValue.value,
+      committedHash: existing?.committedHash ?? null,
+      isPending: existing?.isPending ?? false,
     };
   }
 }
