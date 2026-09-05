@@ -2,16 +2,16 @@ import { create } from 'zustand';
 import { IpcChannels } from '../../../electron/ipc/channels';
 import { FileHashDto } from '../../domains/tracking/application/dto/file-hash.dto';
 import { GranularCommitDto } from '../../domains/tracking/application/dto/granular-commit.dto';
-import { ContentDiffDto } from '../../domains/tracking/application/dto/content-diff.dto';
 import { DocumentDto } from '../../domains/documentation/application/dto/document.dto';
 import { useWorkspaceStore } from './workspace.store';
-import { invokeIpc } from '../utils/ipc-invoke'; // FIX: Import shared utility (DRY)
+import { invokeIpc } from '../utils/ipc-invoke';
+import { FileDiffResult } from '../../domains/tracking/application/handlers/get-file-diff.handler';
 
 interface TrackingState {
   selectedDocument: DocumentDto | null;
   pendingChanges: FileHashDto[];
   commitHistory: GranularCommitDto[];
-  selectedDiff: ContentDiffDto | null;
+  selectedDiff: FileDiffResult | null;
   isLoading: boolean;
   error: string | null;
   pendingCountByDocId: Record<string, number>;
@@ -81,7 +81,7 @@ export const useTrackingStore = create<TrackingState>((set, get) => ({
     const workspace = useWorkspaceStore.getState().workspace;
     if (!workspace) return;
     try {
-      const diff = await invokeIpc<ContentDiffDto | null>(
+      const diff = await invokeIpc<FileDiffResult>(
         IpcChannels.TRACKING_GET_FILE_DIFF, workspace.id, filePath
       );
       set({ selectedDiff: diff });

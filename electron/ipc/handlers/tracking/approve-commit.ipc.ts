@@ -9,15 +9,12 @@ export function registerApproveCommitIpcHandler(): void {
     IpcChannels.TRACKING_APPROVE_COMMIT,
     async (_event, workspaceId: unknown, documentId: string) =>
       handleIpcCall(workspaceId, async (rootPath) => {
-        const { hashRepo, commitRepo, approvalRepo, linkedDocQuery, contentReader, commitMatcher } =
+        const { hashRepo, cacheRepo, linkedDocQuery } =
           createTrackingDependencies(rootPath);
         const handler = new ApproveCommitHandler(
           hashRepo,
-          commitRepo,
-          approvalRepo,
-          linkedDocQuery,
-          contentReader,
-          commitMatcher
+          cacheRepo,
+          linkedDocQuery
         );
         const result = await handler.execute(new ApproveCommitCommand(documentId));
         return result.fold<IpcResponse<unknown>>(

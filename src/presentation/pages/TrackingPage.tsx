@@ -30,7 +30,6 @@ export function TrackingPage(): JSX.Element {
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
   const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
 
-  // Initial data load & real-time listener
   useEffect(() => {
     fetchAllPendingStatus();
     const unsubscribe = startRealtimeListener();
@@ -39,7 +38,6 @@ export function TrackingPage(): JSX.Element {
     };
   }, []);
 
-  // Auto-select first pending document if none selected
   useEffect(() => {
     if (!selectedDocument && documents.length > 0) {
       const firstPendingDoc = documents.find(doc => (pendingCountByDocId[doc.id] || 0) > 0);
@@ -49,7 +47,6 @@ export function TrackingPage(): JSX.Element {
     }
   }, [documents, pendingCountByDocId, selectedDocument, selectDocument]);
 
-  // Calculate global stats with explicit type cast to number[]
   const counts: number[] = Object.values(pendingCountByDocId);
   const pendingDocCount = counts.filter(c => c > 0).length;
   const totalPendingFiles = counts.reduce((sum, c) => sum + c, 0);
@@ -62,6 +59,8 @@ export function TrackingPage(): JSX.Element {
 
   const handleCloseModal = () => setIsDiffModalOpen(false);
 
+  const isCacheMissing = selectedDiff === 'CACHE_MISSING';
+
   return (
     <div className="tracking-page">
       <TrackingPageHeader
@@ -73,6 +72,13 @@ export function TrackingPage(): JSX.Element {
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
           <i className="fa-solid fa-circle-exclamation" /> <strong>Error:</strong> {error}
           <button type="button" className="btn-close" onClick={clearError} aria-label="Close"></button>
+        </div>
+      )}
+
+      {isCacheMissing && (
+        <div className="alert alert-warning" role="alert">
+          <i className="fa-solid fa-triangle-exclamation me-2"></i>
+          Baseline cache is missing for this file. Please review and re-commit to establish a new baseline.
         </div>
       )}
 
@@ -109,11 +115,13 @@ export function TrackingPage(): JSX.Element {
         </div>
       </div>
 
-      <DiffViewer
-        diff={selectedDiff}
-        show={isDiffModalOpen}
-        onClose={handleCloseModal}
-      />
+      {selectedDiff && selectedDiff !== 'CACHE_MISSING' && (
+        <DiffViewer
+          diff={selectedDiff}
+          show={isDiffModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
 
       {isLoading && (
         <div className="tracking-loading">
