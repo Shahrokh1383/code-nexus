@@ -2,5 +2,6 @@ import { DocumentId } from '../../../documentation/domain/value-objects/document
 
 export interface ILinkedDocumentQueryPort {
   findLinkedDocuments(filePath: string): Promise<DocumentId[]>;
-  findLinkedFiles(documentId: string): Promise<string[]>; 
+  findLinkedFiles(documentId: string): Promise<string[]>;
+  findFilePathByFileId(fileId: string): Promise<string | null>;
 }

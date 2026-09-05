@@ -15,7 +15,6 @@
     "dist-electron",
     "docs",
     "public",
-    "src\\presentation\\components\\linking",
     "src\\presentation\\components\\layout",
     "src\\presentation\\components\\common",
     "src\\presentation\\hooks\\linking",
@@ -31,12 +30,17 @@
     "src\\presentation\\components\\welcome",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
     "src\\presentation\\styles",
-    "src\\presentation",
-    "src\\types"
+    "src\\types",
+    "src\\presentation\\components\\file-tree",
+    "src\\domains\\documentation",
+    "src\\domains\\filesystem",
+    "src\\domains\\shared-kernel",
+    "src\\domains\\project",
+    "optimized_roadmap.txt"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-09-05T21:54:17.224Z",
+  "lastModified": "2026-09-05T22:22:24.598Z",
   "version": 1
 }

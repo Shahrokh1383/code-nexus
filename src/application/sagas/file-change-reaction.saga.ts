@@ -8,6 +8,7 @@ import { IgnorePatternsChangedEvent } from '../../domains/filesystem/domain/even
 import { FileIndexRebuiltEvent } from '../../domains/filesystem/domain/events/file-index-rebuilt';
 import { ChangesDetectedEvent } from '../../domains/tracking/domain/events/changes-detected';
 import { ReviewRequiredEvent } from '../../domains/tracking/domain/events/review-required';
+import { LinkCreatedEvent } from '../../domains/linking/domain/events/link-created'; // ADDED
 import { DetectChangesCommand } from '../../domains/tracking/application/commands/detect-changes.command';
 import { DetectChangesHandler } from '../../domains/tracking/application/handlers/detect-changes.handler';
 import { RecordHashHandler } from '../../domains/tracking/application/handlers/record-hash.handler';
@@ -47,6 +48,7 @@ export class FileChangeReactionSaga {
   private readonly ignorePatternsChangedHandler: IDomainEventHandler<IgnorePatternsChangedEvent>;
   private readonly fileIndexRebuiltHandler: IDomainEventHandler<FileIndexRebuiltEvent>;
   private readonly changesDetectedHandler: IDomainEventHandler<ChangesDetectedEvent>;
+  private readonly linkCreatedHandler: IDomainEventHandler<LinkCreatedEvent>; // ADDED
 
   constructor(
     linkedDocQuery: ILinkedDocumentQueryPort,
@@ -75,6 +77,7 @@ export class FileChangeReactionSaga {
     this.ignorePatternsChangedHandler = { handle: () => this.onIgnorePatternsChanged() };
     this.fileIndexRebuiltHandler = { handle: (e) => this.onFileIndexRebuilt(e) };
     this.changesDetectedHandler = { handle: (e) => this.onChangesDetected(e) };
+    this.linkCreatedHandler = { handle: (e) => this.onLinkCreated(e) }; // ADDED
   }
 
   register(): void {
@@ -85,6 +88,7 @@ export class FileChangeReactionSaga {
     this.eventBus.register('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.register('FileIndexRebuilt', this.fileIndexRebuiltHandler);
     this.eventBus.register('ChangesDetectedEvent', this.changesDetectedHandler);
+    this.eventBus.register('LinkCreatedEvent', this.linkCreatedHandler); // ADDED
   }
 
   unregister(): void {
@@ -95,6 +99,7 @@ export class FileChangeReactionSaga {
     this.eventBus.unregister('IgnorePatternsChanged', this.ignorePatternsChangedHandler);
     this.eventBus.unregister('FileIndexRebuilt', this.fileIndexRebuiltHandler);
     this.eventBus.unregister('ChangesDetectedEvent', this.changesDetectedHandler);
+    this.eventBus.unregister('LinkCreatedEvent', this.linkCreatedHandler); // ADDED
   }
 
   private async isPathIgnored(filePath: string): Promise<boolean> {
@@ -165,6 +170,21 @@ export class FileChangeReactionSaga {
     const linkedDocs = await this.linkedDocQuery.findLinkedDocuments(event.filePath.value);
     for (const docId of linkedDocs) {
       await this.eventBus.emit(new ReviewRequiredEvent(docId, event.filePath, 'OUTDATED'));
+    }
+  }
+
+  private async onLinkCreated(event: LinkCreatedEvent): Promise<void> {
+    if (event.category !== 'code') return;
+    try {
+      const filePath = await this.linkedDocQuery.findFilePathByFileId(event.sourceId);
+      if (!filePath) return;
+      const normalized = filePath.replace(/\\/g, '/');
+      if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+      if (await this.isPathIgnored(normalized)) return;
+
+      await this.detectChangesHandler.execute(new DetectChangesCommand(normalized));
+    } catch (error) {
+      console.error('[Saga] Failed to process link created event:', error);
     }
   }
 

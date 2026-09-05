@@ -3,6 +3,7 @@ import { LinkJsonRepository } from '../../../../src/domains/linking/infrastructu
 import { FileSystemJsonRepository } from '../../../../src/domains/filesystem/infrastructure/repository/filesystem-json.repository';
 import { DocumentId } from '../../../../src/domains/documentation/domain/value-objects/document-id';
 import { FilePath } from '../../../../src/domains/filesystem/domain/value-objects/file-path';
+import { FileNodeId } from '../../../../src/domains/filesystem/domain/value-objects/file-node-id';
 
 export class LinkedDocumentQueryAdapter implements ILinkedDocumentQueryPort {
   constructor(
@@ -30,5 +31,10 @@ export class LinkedDocumentQueryAdapter implements ILinkedDocumentQueryPort {
       }
     }
     return filePaths;
+  }
+
+  async findFilePathByFileId(fileId: string): Promise<string | null> {
+    const fileNode = await this.fileSystemRepo.findById(new FileNodeId(fileId));
+    return fileNode ? fileNode.path.value : null;
   }
 }
