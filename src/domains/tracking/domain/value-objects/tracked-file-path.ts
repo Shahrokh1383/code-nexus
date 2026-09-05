@@ -1,0 +1,54 @@
+import { DomainException } from '../../../shared-kernel/exceptions/domain-exception';
+import { PathUtils } from '../../../shared-kernel/utils/path-utils';
+
+export class TrackedFilePath {
+  private readonly _value: string;
+
+  constructor(value: string) {
+    const normalized = PathUtils.normalize(value);
+
+    if (!normalized || normalized.length === 0) {
+      throw new DomainException('TRACKED_FILE_PATH_EMPTY', 'File path cannot be empty');
+    }
+
+    if (normalized.startsWith('/') || /^[A-Za-z]:\//.test(normalized)) {
+      throw new DomainException('TRACKED_FILE_PATH_ABSOLUTE', 'File path must be relative to workspace root');
+    }
+
+    if (normalized.includes('..')) {
+      throw new DomainException('TRACKED_FILE_PATH_TRAVERSAL', 'File path contains invalid traversal segments');
+    }
+
+    this._value = normalized;
+  }
+
+  get value(): string {
+    return this._value;
+  }
+
+  getName(): string {
+    if (this._value === '.') {
+      return '.';
+    }
+    const segments = this._value.split('/');
+    return segments[segments.length - 1] || '';
+  }
+
+  getParentPath(): TrackedFilePath {
+    if (this._value === '.') {
+      return new TrackedFilePath('.');
+    }
+    const segments = this._value.split('/');
+    segments.pop();
+    const parentValue = segments.join('/') || '.';
+    return new TrackedFilePath(parentValue);
+  }
+
+  equals(other: TrackedFilePath): boolean {
+    return this._value === other._value;
+  }
+
+  toString(): string {
+    return this._value;
+  }
+}

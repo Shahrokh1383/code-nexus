@@ -12,7 +12,7 @@ import { CommitId } from '../../domain/value-objects/commit-id';
 import { GranularCommit } from '../../domain/entities/granular-commit';
 import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 import { CommitApprovedEvent } from '../../domain/events/commit-approved';
@@ -39,7 +39,7 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
       const fileHashEntities: FileHash[] = [];
 
       for (const filePathStr of linkedFilePaths) {
-        const filePath = new FilePath(filePathStr);
+        const filePath = new TrackedFilePath(filePathStr);
         const existing = await this.hashRepo.findHashByPath(filePath);
         if (!existing) return Result.fail(`No hash record found for file: ${filePathStr}`);
         

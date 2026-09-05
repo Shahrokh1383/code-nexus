@@ -7,7 +7,7 @@ import { ICommitRepository } from '../../domain/repository/commit-repository.int
 import { IDocumentCommitApprovalRepository } from '../../domain/repository/document-commit-approval-repository.interface';
 import { ILinkedDocumentQueryPort } from '../ports/linked-document-query.port';
 import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 
 export class GetPendingChangesHandler implements IQueryHandler<GetPendingChangesQuery, FileHashDto[]> {
   constructor(
@@ -20,9 +20,6 @@ export class GetPendingChangesHandler implements IQueryHandler<GetPendingChanges
   async execute(query: GetPendingChangesQuery): Promise<Result<FileHashDto[], string>> {
     try {
       if (!query.documentId) {
-        // Without document, return all files that are not committed anywhere? Not clear.
-        // Keep old behaviour: return all hashes that would be pending for any document.
-        // For simplicity, we just return an empty list (safe fallback).
         return Result.ok([]);
       }
 
@@ -32,10 +29,9 @@ export class GetPendingChangesHandler implements IQueryHandler<GetPendingChanges
       const latestApproval = approvals.length > 0 ? approvals[approvals.length - 1] : null;
 
       if (!latestApproval) {
-        // All linked files are pending
         const result: FileHashDto[] = [];
         for (const filePathStr of linkedFiles) {
-          const hash = await this.hashRepo.findHashByPath(new FilePath(filePathStr));
+          const hash = await this.hashRepo.findHashByPath(new TrackedFilePath(filePathStr));
           if (hash) {
             result.push({
               filePath: hash.filePath.value,
@@ -55,8 +51,8 @@ export class GetPendingChangesHandler implements IQueryHandler<GetPendingChanges
 
       const result: FileHashDto[] = [];
       for (const filePathStr of linkedFiles) {
-        const currentHash = await this.hashRepo.findHashByPath(new FilePath(filePathStr));
-        if (!currentHash) continue; // file might not be tracked yet
+        const currentHash = await this.hashRepo.findHashByPath(new TrackedFilePath(filePathStr));
+        if (!currentHash) continue;
 
         const committedHash = commit.fileHashes.find(fh => fh.filePath.value === filePathStr);
         const isPending = !committedHash || !currentHash.hashValue.equals(committedHash.hashValue);

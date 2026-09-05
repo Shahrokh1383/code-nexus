@@ -1,7 +1,7 @@
 import { CommitId } from '../value-objects/commit-id';
 import { FileHash } from './file-hash';
 import { DateTime } from '../../../shared-kernel/types/date-time';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../value-objects/tracked-file-path';
 
 export class GranularCommit {
   private readonly _id: CommitId;
@@ -22,7 +22,7 @@ export class GranularCommit {
   get fileHashes(): FileHash[] { return [...this._fileHashes]; }
   get committedAt(): DateTime { return this._committedAt; }
 
-  getLinkedFiles(): FilePath[] {
+  getLinkedFiles(): TrackedFilePath[] {
     return this._fileHashes.map(fh => fh.filePath);
   }
 }

@@ -1,4 +1,4 @@
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../value-objects/tracked-file-path';
 import { HashValue } from '../value-objects/hash-value';
 import { DiffId } from '../value-objects/diff-id';
 import { ContentDiff } from '../entities/content-diff';
@@ -11,7 +11,7 @@ export class DiffCalculatorService {
   calculate(
     oldContent: string,
     newContent: string,
-    filePath: FilePath,
+    filePath: TrackedFilePath,
     oldHash: HashValue,
     newHash: HashValue
   ): ContentDiff {

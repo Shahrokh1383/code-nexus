@@ -1,11 +1,11 @@
 import { DiffId } from '../value-objects/diff-id';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../value-objects/tracked-file-path';
 import { HashValue } from '../value-objects/hash-value';
 import { DiffLine } from '../value-objects/diff-line';
 
 export class ContentDiff {
   private readonly _id: DiffId;
-  private readonly _filePath: FilePath;
+  private readonly _filePath: TrackedFilePath;
   private readonly _oldHash: HashValue;
   private readonly _newHash: HashValue;
   private readonly _addedLines: DiffLine[];
@@ -14,7 +14,7 @@ export class ContentDiff {
 
   constructor(
     id: DiffId,
-    filePath: FilePath,
+    filePath: TrackedFilePath,
     oldHash: HashValue,
     newHash: HashValue,
     addedLines: DiffLine[],
@@ -34,7 +34,7 @@ export class ContentDiff {
     return this._id;
   }
 
-  get filePath(): FilePath {
+  get filePath(): TrackedFilePath {
     return this._filePath;
   }
 

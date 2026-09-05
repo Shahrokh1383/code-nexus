@@ -3,7 +3,7 @@ import { SchemaMigrator } from '../../../../infrastructure/persistence/migration
 import { IHashRepository } from '../../domain/repository/hash-repository.interface';
 import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { ContentDiffDto } from '../../application/dto/content-diff.dto';
 
@@ -34,7 +34,7 @@ export class TrackingJsonRepository implements IHashRepository {
     this.migrator = new SchemaMigrator(SCHEMA_VERSION);
   }
 
-  async findHashByPath(filePath: FilePath): Promise<FileHash | null> {
+  async findHashByPath(filePath: TrackedFilePath): Promise<FileHash | null> {
     const index = await this.readIndex();
     const entry = index.hashes[filePath.value];
     if (!entry) return null;
@@ -53,14 +53,14 @@ export class TrackingJsonRepository implements IHashRepository {
     this.scheduleWrite();
   }
 
-  async findDiffByPath(filePath: FilePath): Promise<ContentDiffDto | null> {
+  async findDiffByPath(filePath: TrackedFilePath): Promise<ContentDiffDto | null> {
     const index = await this.readIndex();
     const entry = index.hashes[filePath.value];
     if (!entry) return null;
     return entry.diff;
   }
 
-  async deleteHashByPath(filePath: FilePath): Promise<void> {
+  async deleteHashByPath(filePath: TrackedFilePath): Promise<void> {
     const index = await this.readIndex();
     delete index.hashes[filePath.value];
     this.scheduleWrite();
@@ -107,7 +107,7 @@ export class TrackingJsonRepository implements IHashRepository {
   private mapHashEntryToEntity(entry: HashEntrySchema): FileHash {
     return new FileHash(
       new FileHashId(entry.id),
-      new FilePath(entry.filePath),
+      new TrackedFilePath(entry.filePath),
       new HashValue(entry.hashValue)
     );
   }

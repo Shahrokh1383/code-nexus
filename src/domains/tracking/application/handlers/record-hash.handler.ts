@@ -5,7 +5,7 @@ import { RecordHashCommand } from '../commands/record-hash.command';
 import { IHashRepository } from '../../domain/repository/hash-repository.interface';
 import { IFileContentReader } from '../ports/file-content-reader.interface';
 import { HashValue } from '../../domain/value-objects/hash-value';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
 import { UuidGenerator } from '../../../shared-kernel/utils/uuid-generator';
@@ -23,7 +23,7 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
 
   async execute(command: RecordHashCommand): Promise<Result<void, string>> {
     try {
-      const filePath = new FilePath(command.filePath);
+      const filePath = new TrackedFilePath(command.filePath);
       const newHash = HashValue.fromContent(command.newContent);
       const existing = await this.repository.findHashByPath(filePath);
 
@@ -35,7 +35,6 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         existing.updateHash(newHash);
 
         let diffDto: ContentDiffDto | null = null;
-        // FIX: Use abstracted port method instead of illegal concrete cast
         const baselineContent = await this.contentReader.loadBaseline(command.filePath);
         const oldContent = baselineContent ?? command.oldContent ?? '';
 

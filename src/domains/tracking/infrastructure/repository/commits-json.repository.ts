@@ -5,7 +5,7 @@ import { GranularCommit } from '../../domain/entities/granular-commit';
 import { CommitId } from '../../domain/value-objects/commit-id';
 import { FileHash } from '../../domain/entities/file-hash';
 import { FileHashId } from '../../domain/value-objects/file-hash-id';
-import { FilePath } from '../../../filesystem/domain/value-objects/file-path';
+import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { DateTime } from '../../../shared-kernel/types/date-time';
 
@@ -86,7 +86,7 @@ export class CommitsJsonRepository implements ICommitRepository {
   private mapToEntity(entry: CommitEntrySchema): GranularCommit {
     const fileHashes = entry.fileHashes.map(fh => new FileHash(
       new FileHashId(fh.id),
-      new FilePath(fh.filePath),
+      new TrackedFilePath(fh.filePath),
       new HashValue(fh.hashValue)
     ));
     return new GranularCommit(
