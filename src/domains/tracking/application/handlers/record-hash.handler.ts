@@ -60,12 +60,14 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
           await this.cacheRepo.saveDiff(command.filePath, diffDto);
         }
 
-        // Save hash metadata only (no diff)
+        // Save hash metadata only and mark as pending
         await this.repository.saveHash(existing);
+        await this.repository.updatePendingStatus(filePath, true);
         await EventBus.getInstance().emit(event);
       } else {
         const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);
         await this.repository.saveHash(fileHash);
+        // New file is not pending unless explicitly linked; keep false for now
       }
 
       return Result.ok(undefined);
