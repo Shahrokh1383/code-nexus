@@ -22,10 +22,7 @@
     "src\\presentation\\pages\\WelcomePage.tsx",
     "src\\presentation\\pages\\TrackingPage.tsx",
     "src\\presentation\\pages\\LinkingPage.tsx",
-    "electron\\ipc\\handlers\\linking",
     "electron\\ipc\\handlers\\documentation",
-    "src\\infrastructure",
-    "src\\domains\\shared-kernel",
     "src\\presentation\\components\\documentation",
     "tsconfig.test.json",
     "todo",
@@ -33,16 +30,13 @@
     "content.txt",
     "src\\presentation\\components\\welcome",
     "src\\presentation\\pages\\DocumentManagerPage.tsx",
-    "src\\application",
     "src\\presentation\\styles",
-    "electron\\ipc\\handlers\\tracking-handlers.ts",
-    "electron\\ipc\\handlers\\linking-handlers.ts",
-    "src\\domains\\linking",
-    "src\\domains\\tracking"
+    "src\\presentation",
+    "src\\types"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-07-27T19:49:39.442Z",
+  "lastModified": "2026-09-05T20:11:11.575Z",
   "version": 1
 }
