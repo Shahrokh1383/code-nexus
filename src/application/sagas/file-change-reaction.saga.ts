@@ -16,6 +16,7 @@ import { IFileContentReader } from '../../domains/tracking/application/ports/fil
 import { ILinkedDocumentQueryPort } from '../../domains/tracking/application/ports/linked-document-query.port';
 import { IFileSystemRepository } from '../../domains/filesystem/domain/repository/filesystem-repository.interface';
 import { IProjectConfigRepository } from '../../domains/project/domain/repository/project-config-repository.interface';
+import { IBaselineDiffCacheRepository } from '../../domains/tracking/domain/repository/baseline-diff-cache-repository.interface';
 import { DiffCalculatorService } from '../../domains/tracking/domain/services/diff-calculator.service';
 import { FileNode } from '../../domains/filesystem/domain/entities/file-node';
 import { FolderNode } from '../../domains/filesystem/domain/entities/folder-node';
@@ -23,6 +24,7 @@ import { FileNodeId } from '../../domains/filesystem/domain/value-objects/file-n
 import { FolderNodeId } from '../../domains/filesystem/domain/value-objects/folder-node-id';
 import { FilePath } from '../../domains/filesystem/domain/value-objects/file-path';
 import { FileHash } from '../../domains/filesystem/domain/value-objects/file-hash';
+import { TrackedFilePath } from '../../domains/tracking/domain/value-objects/tracked-file-path';
 import { IgnorePattern } from '../../domains/filesystem/domain/value-objects/ignore-pattern';
 import { DateTime } from '../../domains/shared-kernel/types/date-time';
 import { Maybe } from '../../domains/shared-kernel/types/maybe';
@@ -53,7 +55,8 @@ export class FileChangeReactionSaga {
     contentReader: IFileContentReader,
     diffService: DiffCalculatorService,
     configRepo: IProjectConfigRepository,
-    workspaceId: WorkspaceId
+    workspaceId: WorkspaceId,
+    cacheRepo: IBaselineDiffCacheRepository
   ) {
     this.eventBus = EventBus.getInstance();
     this.linkedDocQuery = linkedDocQuery;
@@ -62,8 +65,8 @@ export class FileChangeReactionSaga {
     this.configRepo = configRepo;
     this.workspaceId = workspaceId;
 
-    const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, contentReader);
-    this.detectChangesHandler = new DetectChangesHandler(contentReader, recordHandler);
+    const recordHandler = new RecordHashHandler(this.trackingRepo, diffService, cacheRepo);
+    this.detectChangesHandler = new DetectChangesHandler(contentReader, recordHandler, linkedDocQuery);
 
     this.fileModifiedHandler = { handle: (e) => this.onFileModified(e) };
     this.fileDiscoveredHandler = { handle: (e) => this.onFileDiscovered(e) };
@@ -138,14 +141,14 @@ export class FileChangeReactionSaga {
 
     try {
       await this.fileSystemRepo.deleteByPath(event.path);
-      await this.trackingRepo.deleteHashByPath(event.path);
+      await this.trackingRepo.deleteHashByPath(new TrackedFilePath(event.path.value));
     } catch (error) {
       console.error('[Saga] Failed to delete file node:', normalized, error);
     }
   }
 
   private async onFileExcluded(event: FileExcludedEvent): Promise<void> {
-    await this.trackingRepo.deleteHashByPath(event.path);
+    await this.trackingRepo.deleteHashByPath(new TrackedFilePath(event.path.value));
   }
 
   private async onIgnorePatternsChanged(): Promise<void> {

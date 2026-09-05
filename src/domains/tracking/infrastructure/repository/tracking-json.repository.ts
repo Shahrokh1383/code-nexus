@@ -136,7 +136,8 @@ export class TrackingJsonRepository implements IHashRepository {
     return new FileHash(
       new FileHashId(entry.id),
       new TrackedFilePath(entry.filePath),
-      new HashValue(entry.currentHash)
+      new HashValue(entry.currentHash),
+      entry.isPending
     );
   }
 

@@ -10,7 +10,7 @@ import { SchemaMigrator } from '../../src/infrastructure/persistence/migration/s
 import { DATABASE_SCHEMA_VERSION } from '../../src/infrastructure/persistence/database-schema';
 import { IgnorePattern } from '../../src/domains/filesystem/domain/value-objects/ignore-pattern';
 import { FilePath } from '../../src/domains/filesystem/domain/value-objects/file-path';
-import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking/adapter'; 
+import { LinkedDocumentQueryAdapter } from '../ipc/handlers/tracking/adapter';
 import { WorkspaceId } from '../../src/domains/project/domain/value-objects/workspace-id';
 import { EventBus } from '../../src/domains/shared-kernel/events/event-bus';
 import { IgnorePatternsChangedEvent } from '../../src/domains/filesystem/domain/events/ignore-patterns-changed';
@@ -20,10 +20,12 @@ import { TrackingJsonRepository } from '../../src/domains/tracking/infrastructur
 import { CommitsJsonRepository } from '../../src/domains/tracking/infrastructure/repository/commits-json.repository';
 import { DocumentCommitApprovalJsonRepository } from '../../src/domains/tracking/infrastructure/repository/document-commit-approval-json.repository';
 import { LinkJsonRepository } from '../../src/domains/linking/infrastructure/repository/link-json.repository';
-import { FileContentReaderAdapter } from '../../src/domains/tracking/infrastructure/adapters/file-content-reader.adapter';
+import { FileSystemContentReaderAdapter } from '../../src/domains/tracking/infrastructure/adapters/file-system-content-reader.adapter';
 import { DiffCalculatorAdapter } from '../../src/domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../src/domains/tracking/domain/services/diff-calculator.service';
 import { CommitMatcherService } from '../../src/domains/tracking/domain/services/commit-matcher.service';
+import { NodeCacheFileSystemAdapter } from '../../src/domains/tracking/infrastructure/adapters/node-cache-file-system.adapter';
+import { BaselineDiffCacheJsonRepository } from '../../src/domains/tracking/infrastructure/repository/baseline-diff-cache-json.repository';
 import { setWorkspaceContext, clearWorkspaceContext, WorkspaceContext } from '../ipc/handlers/tracking/workspace-context';
 import { IpcChannels } from '../ipc/channels';
 import { DomainEvent } from '../../src/domains/shared-kernel/events/domain-event';
@@ -61,16 +63,15 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
 
   const db = new JsonDatabase(rootPath);
   await db.ensureDoclinkExists();
-  
+
   const fileSystemRepo = new FileSystemJsonRepository(db);
   await reconcileFileIndex(rootPath, fileSystemRepo);
 
   const configRepo = new ProjectConfigJsonRepository(db, new SchemaMigrator(DATABASE_SCHEMA_VERSION));
   const config = await configRepo.findByWorkspaceId(new WorkspaceId(rootPath));
-  
+
   const ignorePatternStrings = config ? config.ignorePatterns : [];
-  
-  // Remove any file‑index entries that match current ignore patterns
+
   for (const raw of ignorePatternStrings) {
     try {
       const ip = new IgnorePattern(raw);
@@ -79,14 +80,12 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
       // ignore invalid patterns
     }
   }
-  await fileSystemRepo.flush();   // persist immediately
+  await fileSystemRepo.flush();
 
-  // Build IgnorePattern objects directly from raw strings
   const ignorePatterns = ignorePatternStrings
     .map(p => { try { return new IgnorePattern(p); } catch { return null; } })
     .filter((p): p is IgnorePattern => p !== null);
 
-  // Instantiate Infrastructure Adapters & Repositories
   const fileWatcher = new ChokidarAdapter();
   fileWatcher.startWatching(rootPath, ignorePatterns);
   currentWatcher = fileWatcher;
@@ -94,25 +93,36 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   const hashRepo = new TrackingJsonRepository(rootPath);
   const commitRepo = new CommitsJsonRepository(rootPath);
   const approvalRepo = new DocumentCommitApprovalJsonRepository(rootPath);
-  const contentReader = new FileContentReaderAdapter(rootPath, userDataPath);
+  const contentReader = new FileSystemContentReaderAdapter(rootPath);
   const diffService = new DiffCalculatorService(new DiffCalculatorAdapter());
   const commitMatcher = new CommitMatcherService();
-  
+
   const linkRepo = new LinkJsonRepository(rootPath);
   const linkedDocQuery = new LinkedDocumentQueryAdapter(linkRepo, fileSystemRepo);
+
+  const cacheFileSystem = new NodeCacheFileSystemAdapter();
+  const cacheRepo = new BaselineDiffCacheJsonRepository(cacheFileSystem, userDataPath, rootPath);
 
   const workspaceId = new WorkspaceId(rootPath);
 
   const context: WorkspaceContext = {
-    rootPath, db, 
-    workspaceRepo: new WorkspaceJsonRepository(db), 
-    configRepo, fileSystemRepo, fileWatcher,
-    hashRepo, commitRepo, approvalRepo, 
-    linkedDocQuery, contentReader, diffService, commitMatcher
+    rootPath,
+    db,
+    workspaceRepo: new WorkspaceJsonRepository(db),
+    configRepo,
+    fileSystemRepo,
+    fileWatcher,
+    hashRepo,
+    commitRepo,
+    approvalRepo,
+    linkedDocQuery,
+    contentReader,
+    diffService,
+    commitMatcher,
+    cacheRepo,
   };
   setWorkspaceContext(context);
 
-  // Saga with ignore-pattern filtering capability
   currentSaga = new FileChangeReactionSaga(
     linkedDocQuery,
     fileSystemRepo,
@@ -120,7 +130,8 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
     contentReader,
     diffService,
     configRepo,
-    workspaceId
+    workspaceId,
+    cacheRepo
   );
   currentSaga.register();
 
@@ -137,7 +148,7 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
       }, 300);
     },
   };
-  
+
   eventBus.register('FileDiscovered', uiUpdateHandler);
   eventBus.register('FileModified', uiUpdateHandler);
   eventBus.register('FileDeleted', uiUpdateHandler);
@@ -159,16 +170,16 @@ export async function stopWatcher(): Promise<void> {
     currentSaga.unregister();
     currentSaga = null;
   }
-  
+
   const eventBus = EventBus.getInstance();
-  
+
   if (uiUpdateHandler) {
     eventBus.unregister('FileDiscovered', uiUpdateHandler);
     eventBus.unregister('FileModified', uiUpdateHandler);
     eventBus.unregister('FileDeleted', uiUpdateHandler);
     uiUpdateHandler = null;
   }
-  
+
   if (ignorePatternChangedHandler) {
     eventBus.unregister('IgnorePatternsChanged', ignorePatternChangedHandler);
     ignorePatternChangedHandler = null;

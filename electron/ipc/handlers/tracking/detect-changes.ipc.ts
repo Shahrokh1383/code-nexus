@@ -11,8 +11,8 @@ export function registerDetectChangesIpcHandlers(): void {
     IpcChannels.TRACKING_RECORD_HASH,
     async (_event, workspaceId: unknown, filePath: string, content: string) =>
       handleIpcCall(workspaceId, async (rootPath) => {
-        const { hashRepo, diffService, contentReader } = createTrackingDependencies(rootPath);
-        const handler = new RecordHashHandler(hashRepo, diffService, contentReader);
+        const { hashRepo, diffService, cacheRepo } = createTrackingDependencies(rootPath);
+        const handler = new RecordHashHandler(hashRepo, diffService, cacheRepo);
         const result = await handler.execute(new RecordHashCommand(filePath, content));
         return result.fold<IpcResponse<unknown>>(
           () => ({ success: true }),
@@ -25,9 +25,9 @@ export function registerDetectChangesIpcHandlers(): void {
     IpcChannels.TRACKING_DETECT_CHANGES,
     async (_event, workspaceId: unknown, filePath: string) =>
       handleIpcCall(workspaceId, async (rootPath) => {
-        const { contentReader, diffService, hashRepo } = createTrackingDependencies(rootPath);
-        const recordHandler = new RecordHashHandler(hashRepo, diffService, contentReader);
-        const handler = new DetectChangesHandler(contentReader, recordHandler);
+        const { contentReader, diffService, hashRepo, linkedDocQuery, cacheRepo } = createTrackingDependencies(rootPath);
+        const recordHandler = new RecordHashHandler(hashRepo, diffService, cacheRepo);
+        const handler = new DetectChangesHandler(contentReader, recordHandler, linkedDocQuery);
         const result = await handler.execute(new DetectChangesCommand(filePath));
         return result.fold<IpcResponse<unknown>>(
           () => ({ success: true }),

@@ -68,7 +68,5 @@ export class BaselineDiffCacheJsonRepository implements IBaselineDiffCacheReposi
     return entry?.diff ?? null;
   }
 
-  async clearCacheForFile(relativePath: string): Promise<void> {
-    // Not implemented; optional for Phase 2
-  }
+  async clearCacheForFile(_relativePath: string): Promise<void> {}
 }
