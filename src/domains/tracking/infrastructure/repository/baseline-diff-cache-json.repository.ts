@@ -68,5 +68,8 @@ export class BaselineDiffCacheJsonRepository implements IBaselineDiffCacheReposi
     return entry?.diff ?? null;
   }
 
-  async clearCacheForFile(_relativePath: string): Promise<void> {}
+  async clearCacheForFile(relativePath: string): Promise<void> {
+    const filePath = this.getFilePath(relativePath);
+    await this.fileSystem.deleteFile(filePath);
+  }
 }

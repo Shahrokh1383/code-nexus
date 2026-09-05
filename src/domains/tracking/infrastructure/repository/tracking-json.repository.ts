@@ -150,7 +150,7 @@ export class TrackingJsonRepository implements IHashRepository {
       filePath: fileHash.filePath.value,
       currentHash: fileHash.hashValue.value,
       committedHash: existing?.committedHash ?? null,
-      isPending: existing?.isPending ?? false,
+      isPending: fileHash.isPending ?? existing?.isPending ?? false,
     };
   }
 }

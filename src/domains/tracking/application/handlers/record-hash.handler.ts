@@ -33,6 +33,7 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         if (!event) return Result.ok(undefined);
 
         existing.updateHash(newHash);
+        existing.markPending(); // <-- set pending on entity
 
         let diffDto: ContentDiffDto | null = null;
         const baselineContent = await this.cacheRepo.loadBaseline(command.filePath);
@@ -55,14 +56,11 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
           console.error('[Tracking] Diff calculation failed for', command.filePath, diffError);
         }
 
-        // Save diff to separate cache repository, not inside .doclink
         if (diffDto) {
           await this.cacheRepo.saveDiff(command.filePath, diffDto);
         }
 
-        // Save hash metadata only and mark as pending
-        await this.repository.saveHash(existing);
-        await this.repository.updatePendingStatus(filePath, true);
+        await this.repository.saveHash(existing); // entity carries isPending=true
         await EventBus.getInstance().emit(event);
       } else {
         const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);

@@ -28,4 +28,8 @@ export class FileHash {
   updateHash(newHash: HashValue): void {
     this._hashValue = newHash;
   }
+
+  markPending(): void {
+    this._isPending = true;
+  }
 }

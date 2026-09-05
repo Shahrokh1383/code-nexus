@@ -23,7 +23,6 @@ import { LinkJsonRepository } from '../../src/domains/linking/infrastructure/rep
 import { FileSystemContentReaderAdapter } from '../../src/domains/tracking/infrastructure/adapters/file-system-content-reader.adapter';
 import { DiffCalculatorAdapter } from '../../src/domains/tracking/infrastructure/adapters/diff-calculator.adapter';
 import { DiffCalculatorService } from '../../src/domains/tracking/domain/services/diff-calculator.service';
-import { CommitMatcherService } from '../../src/domains/tracking/domain/services/commit-matcher.service';
 import { NodeCacheFileSystemAdapter } from '../../src/domains/tracking/infrastructure/adapters/node-cache-file-system.adapter';
 import { BaselineDiffCacheJsonRepository } from '../../src/domains/tracking/infrastructure/repository/baseline-diff-cache-json.repository';
 import { setWorkspaceContext, clearWorkspaceContext, WorkspaceContext } from '../ipc/handlers/tracking/workspace-context';
@@ -95,7 +94,6 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   const approvalRepo = new DocumentCommitApprovalJsonRepository(rootPath);
   const contentReader = new FileSystemContentReaderAdapter(rootPath);
   const diffService = new DiffCalculatorService(new DiffCalculatorAdapter());
-  const commitMatcher = new CommitMatcherService();
 
   const linkRepo = new LinkJsonRepository(rootPath);
   const linkedDocQuery = new LinkedDocumentQueryAdapter(linkRepo, fileSystemRepo);
@@ -118,7 +116,6 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
     linkedDocQuery,
     contentReader,
     diffService,
-    commitMatcher,
     cacheRepo,
   };
   setWorkspaceContext(context);

@@ -15,4 +15,8 @@ export class NodeCacheFileSystemAdapter implements ICacheFileSystem {
   async ensureDir(absolutePath: string): Promise<void> {
     await fs.mkdir(absolutePath, { recursive: true });
   }
+
+  async deleteFile(absolutePath: string): Promise<void> {
+    await fs.unlink(absolutePath).catch(() => {});
+  }
 }

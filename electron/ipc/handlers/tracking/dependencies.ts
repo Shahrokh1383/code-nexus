@@ -40,7 +40,6 @@ export function createTrackingDependencies(rootPath: string) {
     linkedDocQuery: ctx.linkedDocQuery,
     contentReader: ctx.contentReader,
     diffService: ctx.diffService,
-    commitMatcher: ctx.commitMatcher,
     cacheRepo: ctx.cacheRepo,
   };
 }
