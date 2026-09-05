@@ -1,4 +1,5 @@
 import * as fs from 'fs/promises';
+import * as path from 'path';
 import { ICacheFileSystem } from '../../../../src/domains/tracking/application/ports/cache-file-system.interface';
 
 export class NodeCacheFileSystem implements ICacheFileSystem {
@@ -7,10 +8,15 @@ export class NodeCacheFileSystem implements ICacheFileSystem {
   }
 
   async writeTextFile(absolutePath: string, content: string): Promise<void> {
+    await fs.mkdir(path.dirname(absolutePath), { recursive: true });
     await fs.writeFile(absolutePath, content, 'utf-8');
   }
 
   async ensureDir(absolutePath: string): Promise<void> {
     await fs.mkdir(absolutePath, { recursive: true });
+  }
+
+  async deleteFile(absolutePath: string): Promise<void> {
+    await fs.unlink(absolutePath).catch(() => {});
   }
 }
