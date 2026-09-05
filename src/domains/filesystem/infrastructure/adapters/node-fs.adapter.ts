@@ -26,22 +26,22 @@ export class NodeFsAdapter implements IFileSystemAdapter {
     while (stack.length > 0) {
       const currentDir = stack.pop()!;
       let entries: import('fs').Dirent[];
-      
+
       try {
         entries = await fsPromises.readdir(currentDir, { withFileTypes: true });
       } catch {
-        continue; 
+        continue;
       }
 
       for (const entry of entries) {
         const absolutePath = path.join(currentDir, entry.name);
         const relativePath = path.relative(dirPath, absolutePath).replace(/\\/g, '/');
-        
+
         let statInfo;
         try {
           statInfo = await fsPromises.stat(absolutePath);
         } catch {
-          continue; 
+          continue;
         }
 
         results.push({
@@ -71,5 +71,10 @@ export class NodeFsAdapter implements IFileSystemAdapter {
 
   exists(filePath: string): boolean {
     return existsSync(filePath);
+  }
+
+  async readFile(absolutePath: string): Promise<string> {
+    const raw = await fsPromises.readFile(absolutePath, 'utf-8');
+    return raw.replace(/\r\n|\r/g, '\n');
   }
 }

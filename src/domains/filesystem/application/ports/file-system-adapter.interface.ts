@@ -10,4 +10,5 @@ export interface IFileSystemAdapter {
   readDirRecursively(dirPath: string): Promise<FileMetadata[]>;
   stat(filePath: string): Promise<FileMetadata>;
   exists(filePath: string): boolean;
+  readFile(absolutePath: string): Promise<string>;
 }

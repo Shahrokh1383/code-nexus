@@ -3,7 +3,7 @@ import { Result } from '../../../shared-kernel/types/result';
 import { EventBus } from '../../../shared-kernel/events/event-bus';
 import { RecordHashCommand } from '../commands/record-hash.command';
 import { IHashRepository } from '../../domain/repository/hash-repository.interface';
-import { IFileContentReader } from '../ports/file-content-reader.interface';
+import { IBaselineDiffCacheRepository } from '../../domain/repository/baseline-diff-cache-repository.interface';
 import { HashValue } from '../../domain/value-objects/hash-value';
 import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
 import { FileHash } from '../../domain/entities/file-hash';
@@ -18,7 +18,7 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
   constructor(
     private readonly repository: IHashRepository,
     private readonly diffService: DiffCalculatorService,
-    private readonly contentReader: IFileContentReader
+    private readonly cacheRepo: IBaselineDiffCacheRepository
   ) {}
 
   async execute(command: RecordHashCommand): Promise<Result<void, string>> {
@@ -35,13 +35,13 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         existing.updateHash(newHash);
 
         let diffDto: ContentDiffDto | null = null;
-        const baselineContent = await this.contentReader.loadBaseline(command.filePath);
+        const baselineContent = await this.cacheRepo.loadBaseline(command.filePath);
         const oldContent = baselineContent ?? command.oldContent ?? '';
 
         try {
           const oldHashForDiff = baselineContent ? HashValue.fromContent(baselineContent) : existing.hashValue;
           const diffEntity = this.diffService.calculate(oldContent, command.newContent, filePath, oldHashForDiff, newHash);
-          
+
           const mapDiffLines = (lines: DiffLine[]) => lines.map(l => ({ lineNumber: l.lineNumber, content: l.content, type: l.type }));
           diffDto = {
             filePath: diffEntity.filePath.value,
@@ -55,11 +55,17 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
           console.error('[Tracking] Diff calculation failed for', command.filePath, diffError);
         }
 
-        await this.repository.saveHash(existing, diffDto);
+        // Save diff to separate cache repository, not inside .doclink
+        if (diffDto) {
+          await this.cacheRepo.saveDiff(command.filePath, diffDto);
+        }
+
+        // Save hash metadata only (no diff)
+        await this.repository.saveHash(existing);
         await EventBus.getInstance().emit(event);
       } else {
         const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);
-        await this.repository.saveHash(fileHash, null);
+        await this.repository.saveHash(fileHash);
       }
 
       return Result.ok(undefined);
