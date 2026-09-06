@@ -28,6 +28,7 @@ import { BaselineDiffCacheJsonRepository } from '../../src/domains/tracking/infr
 import { setWorkspaceContext, clearWorkspaceContext, WorkspaceContext } from '../ipc/handlers/tracking/workspace-context';
 import { IpcChannels } from '../ipc/channels';
 import { DomainEvent } from '../../src/domains/shared-kernel/events/domain-event';
+import { HashUtils } from '../../src/domains/shared-kernel/utils/hash-utils';
 
 let currentWatcher: ChokidarAdapter | null = null;
 let currentSaga: FileChangeReactionSaga | null = null;
@@ -99,7 +100,10 @@ export async function startWatcher(rootPath: string, userDataPath: string): Prom
   const linkedDocQuery = new LinkedDocumentQueryAdapter(linkRepo, fileSystemRepo);
 
   const cacheFileSystem = new NodeCacheFileSystemAdapter();
-  const cacheRepo = new BaselineDiffCacheJsonRepository(cacheFileSystem, userDataPath, rootPath);
+  // Use a deterministic, filesystem-safe hash of the workspace root path
+  // to avoid invalid path segments (e.g., 'c:\...') in the cache directory.
+  const cacheWorkspaceId = HashUtils.sha256(rootPath);
+  const cacheRepo = new BaselineDiffCacheJsonRepository(cacheFileSystem, userDataPath, cacheWorkspaceId);
 
   const workspaceId = new WorkspaceId(rootPath);
 

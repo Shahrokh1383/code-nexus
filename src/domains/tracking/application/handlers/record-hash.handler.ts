@@ -33,18 +33,22 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         if (!event) return Result.ok(undefined);
 
         existing.updateHash(newHash);
-        existing.markPending(); // <-- set pending on entity
+        existing.markPending();
 
-        let diffDto: ContentDiffDto | null = null;
-        const baselineContent = await this.cacheRepo.loadBaseline(command.filePath);
-        const oldContent = baselineContent ?? command.oldContent ?? '';
-
+        // Attempt cache operations, but do not fail if cache is unavailable
         try {
+          const baselineContent = await this.cacheRepo.loadBaseline(command.filePath);
+          const oldContent = baselineContent ?? command.oldContent ?? '';
           const oldHashForDiff = baselineContent ? HashValue.fromContent(baselineContent) : existing.hashValue;
           const diffEntity = this.diffService.calculate(oldContent, command.newContent, filePath, oldHashForDiff, newHash);
 
-          const mapDiffLines = (lines: DiffLine[]) => lines.map(l => ({ lineNumber: l.lineNumber, content: l.content, type: l.type }));
-          diffDto = {
+          const mapDiffLines = (lines: DiffLine[]) => lines.map(l => ({
+            lineNumber: l.lineNumber,
+            content: l.content,
+            type: l.type
+          }));
+
+          const diffDto: ContentDiffDto = {
             filePath: diffEntity.filePath.value,
             oldHash: diffEntity.oldHash.value,
             newHash: diffEntity.newHash.value,
@@ -52,15 +56,15 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
             removedLines: mapDiffLines(diffEntity.removedLines),
             modifiedLines: mapDiffLines(diffEntity.modifiedLines),
           };
-        } catch (diffError) {
-          console.error('[Tracking] Diff calculation failed for', command.filePath, diffError);
-        }
 
-        if (diffDto) {
           await this.cacheRepo.saveDiff(command.filePath, diffDto);
+        } catch (cacheError) {
+          // Cache is not critical; tracking metadata must still be updated
+          console.warn('[Tracking] Cache update failed, continuing without diff cache:', cacheError);
         }
 
-        await this.repository.saveHash(existing); // entity carries isPending=true
+        // Save hash metadata and mark pending
+        await this.repository.saveHash(existing);
         await EventBus.getInstance().emit(event);
       } else {
         const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);
