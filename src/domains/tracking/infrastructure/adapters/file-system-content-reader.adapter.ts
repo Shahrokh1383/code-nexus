@@ -7,6 +7,7 @@ export class FileSystemContentReaderAdapter implements IFileContentReader {
 
   async readContent(relativePath: string): Promise<string> {
     const absolutePath = path.join(this.workspaceRoot, relativePath);
-    return fs.readFile(absolutePath, 'utf-8');
+    const raw = await fs.readFile(absolutePath, 'utf-8');
+    return raw.replace(/\r\n|\r/g, '\n');
   }
 }

@@ -7,6 +7,7 @@ import { IBaselineDiffCacheRepository } from '../../domain/repository/baseline-d
 import { ICommitRepository } from '../../domain/repository/commit-repository.interface';
 import { IDocumentCommitApprovalRepository } from '../../domain/repository/document-commit-approval-repository.interface';
 import { ILinkedDocumentQueryPort } from '../ports/linked-document-query.port';
+import { IFileContentReader } from '../ports/file-content-reader.interface';
 import { DocumentId } from '../../../documentation/domain/value-objects/document-id';
 import { CommitId } from '../../domain/value-objects/commit-id';
 import { TrackedFilePath } from '../../domain/value-objects/tracked-file-path';
@@ -22,7 +23,8 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
     private readonly cacheRepo: IBaselineDiffCacheRepository,
     private readonly linkedDocQuery: ILinkedDocumentQueryPort,
     private readonly commitRepo: ICommitRepository,
-    private readonly approvalRepo: IDocumentCommitApprovalRepository
+    private readonly approvalRepo: IDocumentCommitApprovalRepository,
+    private readonly contentReader: IFileContentReader
   ) {}
 
   async execute(command: ApproveCommitCommand): Promise<Result<void, string>> {
@@ -44,10 +46,15 @@ export class ApproveCommitHandler implements ICommandHandler<ApproveCommitComman
           return Result.fail(`No hash record found for file: ${filePathStr}`);
         }
 
+        // Snapshot current content as the new baseline so future diffs are
+        // computed against the committed state (git-like), not an empty file.
+        const currentContent = await this.contentReader.readContent(filePathStr);
+
         // Mark as committed and clear pending status
         await this.hashRepo.updatePendingStatus(filePath, false, existing.hashValue.value);
-        // Clear baseline and diff cache
+        // Reset cache, then re-seed the baseline.
         await this.cacheRepo.clearCacheForFile(filePathStr);
+        await this.cacheRepo.saveBaseline(filePathStr, currentContent);
         filePaths.push(filePath);
         fileHashesForCommit.push(existing);
       }

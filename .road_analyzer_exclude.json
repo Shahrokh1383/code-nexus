@@ -36,11 +36,17 @@
     "src\\domains\\filesystem",
     "src\\domains\\shared-kernel",
     "src\\domains\\project",
-    "optimized_roadmap.txt"
+    "optimized_roadmap.txt",
+    "src\\presentation",
+    "src\\vite-env.d.ts",
+    "src\\setupTests.ts",
+    "src\\main.tsx",
+    "src\\App.tsx",
+    "src\\domains\\linking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-09-05T23:01:40.807Z",
+  "lastModified": "2026-10-15T18:39:49.422Z",
   "version": 1
 }

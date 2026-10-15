@@ -29,7 +29,8 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
 
       if (existing) {
         const comparison = new HashComparisonService();
-        const event = comparison.detectChanges(existing.hashValue, newHash, filePath);
+        const previousHashValue = existing.hashValue;
+        const event = comparison.detectChanges(previousHashValue, newHash, filePath);
         if (!event) return Result.ok(undefined);
 
         existing.updateHash(newHash);
@@ -39,7 +40,9 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
         try {
           const baselineContent = await this.cacheRepo.loadBaseline(command.filePath);
           const oldContent = baselineContent ?? command.oldContent ?? '';
-          const oldHashForDiff = baselineContent ? HashValue.fromContent(baselineContent) : existing.hashValue;
+          const oldHashForDiff = baselineContent
+            ? HashValue.fromContent(baselineContent)
+            : previousHashValue;
           const diffEntity = this.diffService.calculate(oldContent, command.newContent, filePath, oldHashForDiff, newHash);
 
           const mapDiffLines = (lines: DiffLine[]) => lines.map(l => ({
@@ -69,7 +72,13 @@ export class RecordHashHandler implements ICommandHandler<RecordHashCommand, voi
       } else {
         const fileHash = new FileHash(new FileHashId(UuidGenerator.generate()), filePath, newHash);
         await this.repository.saveHash(fileHash);
-        // New file is not pending unless explicitly linked; keep false for now
+        // New file is not pending unless explicitly linked; keep false for now.
+        // Seed the baseline so the next edit diffs against this initial state.
+        try {
+          await this.cacheRepo.saveBaseline(command.filePath, command.newContent);
+        } catch (cacheError) {
+          console.warn('[Tracking] Failed to seed baseline for new file:', cacheError);
+        }
       }
 
       return Result.ok(undefined);
