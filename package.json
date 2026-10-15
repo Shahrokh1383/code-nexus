@@ -1,6 +1,6 @@
 {
   "name": "codenexus",
-  "version": "1.0.4",
+  "version": "1.3.0",
   "description": "CodeNexus - Documentation Linking Desktop Application",
   "main": "dist-electron/electron/main.js",
   "author": "Shahrokh1383",
