@@ -42,11 +42,12 @@
     "src\\setupTests.ts",
     "src\\main.tsx",
     "src\\App.tsx",
-    "src\\domains\\linking"
+    "release",
+    "src\\domains\\tracking"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-10-15T18:39:49.422Z",
+  "lastModified": "2026-10-15T19:37:04.298Z",
   "version": 1
 }
