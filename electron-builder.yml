@@ -1,32 +1,66 @@
 appId: com.codenexus.app
 productName: CodeNexus
-copyright: Copyright © 2024 CodeNexus Team
+copyright: Copyright © 2026 CodeNexus
 
 directories:
   output: release
   buildResources: build
 
+# Include only the build outputs
 files:
   - dist/**/*
   - dist-electron/**/*
+  - "!**/*.map"
 
+# Extra resource for runtime access (icon.ico)
+extraResources:
+  - from: build/icon.ico
+    to: icon.ico
+
+# Windows configuration
 win:
-  icon: build/icon.ico
   target:
     - target: nsis
       arch:
         - x64
+  icon: build/icon.ico
+  artifactName: "${productName}-Setup-${version}.${ext}"
 
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  installerIcon: build/icon.ico
-  uninstallerIcon: build/icon.ico
-  installerHeaderIcon: build/icon.ico
   createDesktopShortcut: always
   createStartMenuShortcut: true
-  shortcutName: CodeNexus
 
-extraResources:
-  - from: build/icon.ico
-    to: icon.ico
+# macOS configuration
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  icon: build/icon.icns
+  category: public.app-category.developer-tools
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+# Linux configuration
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  icon: build/icons
+  category: Development
+  artifactName: "${productName}-${version}.${ext}"
+
+# Prevent native module rebuild (not needed)
+npmRebuild: false

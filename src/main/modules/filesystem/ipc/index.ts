@@ -1,0 +1,1 @@
+export { registerFilesystemIpc } from './filesystem-ipc';

@@ -1,0 +1,1 @@
+export { registerSystemIpc } from './system-ipc';
