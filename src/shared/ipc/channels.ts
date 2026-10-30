@@ -5,11 +5,13 @@
 import { WORKSPACE_CHANNELS } from './workspace';
 import { FILESYSTEM_CHANNELS } from './filesystem';
 import { SYSTEM_CHANNELS } from './system';
+import { DOCUMENTATION_CHANNELS } from './documentation';
 
 export const ALL_IPC_CHANNELS = [
   ...Object.values(WORKSPACE_CHANNELS),
   ...Object.values(FILESYSTEM_CHANNELS),
   ...Object.values(SYSTEM_CHANNELS),
+  ...Object.values(DOCUMENTATION_CHANNELS),
 ] as const;
 
 export type IpcChannel = (typeof ALL_IPC_CHANNELS)[number];

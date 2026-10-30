@@ -25,6 +25,17 @@ export interface DomainEventMap {
     oldRootPath: string;
     newRootPath: string;
   };
+  'DocumentDiscovered': { documentId: string; path: string; title: string } ;
+  'DocumentDeleted': { documentId: string; path: string };
+  'DocsFolderRelocated': {
+    oldPath: string;
+    newPath: string;
+    signature: {
+      fileCount: number;
+      topLevelFileNames: string[];
+      directoryDepth: number;
+    };
+  };
 }
 
 export type DomainEventName = keyof DomainEventMap & string;

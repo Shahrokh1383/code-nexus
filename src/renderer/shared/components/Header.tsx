@@ -48,6 +48,11 @@ export function Header(): JSX.Element {
                 <span className="nav-label">Files</span>
               </button>
 
+              <button className="btn-ghost nav-setup-btn" onClick={() => navigate('/docs')}>
+                <i className="fa-solid fa-book-open" />
+                <span className="nav-label">Docs</span>
+              </button>
+
               <button className="btn-ghost nav-setup-btn nav-danger-btn" onClick={handleClose}>
                 <i className="fa-solid fa-right-from-bracket" />
                 <span className="nav-label">Close</span>

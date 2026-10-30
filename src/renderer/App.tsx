@@ -1,15 +1,20 @@
 import { type JSX } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Header } from './shared/components/Header';
 import { WelcomePage } from './pages/WelcomePage';
 import { FileBrowserPage } from './pages/FileBrowserPage';
+import { DocumentManagerPage } from './pages/DocumentManagerPage';
 import { useWorkspace } from './features/workspace';
+import { queryClient } from './query-client';
 
 export default function App(): JSX.Element {
   return (
-    <HashRouter>
-      <AppBootstrap />
-    </HashRouter>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <AppBootstrap />
+      </HashRouter>
+    </QueryClientProvider>
   );
 }
 
@@ -41,6 +46,7 @@ function AppBootstrap(): JSX.Element {
         <Routes>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/files" element={<FileBrowserPage />} />
+          <Route path="/docs" element={<DocumentManagerPage />} />
         </Routes>
       </main>
     </div>
