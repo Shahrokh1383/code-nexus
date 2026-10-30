@@ -2,7 +2,7 @@ import type { FileTreeDto, FolderNodeDto, FileNodeDto } from '@shared/ipc/filesy
 import { DomainException } from '../../../shared/errors/domain-exception';
 import { validateRelativePath, pathNameOf } from '../domain/file-path';
 import { IgnorePattern } from '../domain/ignore-pattern';
-import type { FileIndexStore } from '../infrastructure/file-index-store';
+import type { FsDirEntry, NodeFsProbe } from '../infrastructure/node-fs-probe';
 
 function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
   return patterns
@@ -17,65 +17,53 @@ function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
 }
 
 /**
- * Builds the DTO tree from the file index (ports the legacy
- * GetFileTreeHandler), including the synthetic empty-root response and
- * query-time ignore filtering.
+ * Builds a SHALLOW tree DTO for one directory, read from disk on demand.
+ * Folder children are returned with `children: []` and loaded lazily by the
+ * renderer when the user expands them. Keeps workspace-open cost O(children
+ * of the requested directory), independent of total workspace size
+ * (Constitution §2: Main orchestrates, infra reads OS).
  */
 export async function buildFileTree(
-  store: FileIndexStore,
+  rootPath: string,
+  fsProbe: NodeFsProbe,
   parentPath: string | undefined,
   ignorePatterns: readonly string[]
 ): Promise<FileTreeDto> {
   const targetPath = parentPath ? validateRelativePath(parentPath) : '.';
+  const absolutePath = targetPath === '.' ? rootPath : fsProbe.absolutePath(rootPath, targetPath);
+  const matchers = compileMatchers(ignorePatterns);
 
-  const target = await store.findByPath(targetPath);
-  if (!target) {
+  let entries: FsDirEntry[];
+  try {
+    entries = await fsProbe.readDir(absolutePath);
+  } catch {
     if (targetPath === '.') {
-      return {
-        root: { id: 'root', path: '.', name: '.', children: [] },
-        totalFiles: 0,
-        totalFolders: 1,
-      };
+      throw new DomainException(
+        'FOLDER_READ_FAILED',
+        `Cannot read workspace root at path: ${targetPath}`
+      );
     }
     throw new DomainException('FOLDER_NOT_FOUND', `Folder not found at path: ${targetPath}`);
   }
 
-  if (!target.isDirectory) {
-    throw new DomainException('NOT_A_FOLDER', `Path is not a folder: ${targetPath}`);
-  }
-
-  const matchers = compileMatchers(ignorePatterns);
-  const { dto, fileCount, folderCount } = await buildFolderDto(store, targetPath, matchers);
-  return { root: dto, totalFiles: fileCount, totalFolders: folderCount };
-}
-
-async function buildFolderDto(
-  store: FileIndexStore,
-  folderPath: string,
-  matchers: readonly IgnorePattern[]
-): Promise<{ dto: FolderNodeDto; fileCount: number; folderCount: number }> {
-  const children = await store.findChildrenOf(folderPath);
-  const childDtos: Array<FileNodeDto | FolderNodeDto> = [];
+  const children: Array<FileNodeDto | FolderNodeDto> = [];
   let fileCount = 0;
-  let folderCount = 1;
+  let folderCount = 0;
 
-  const rootEntry = await store.findByPath(folderPath);
-
-  for (const { path, entry } of children) {
-    if (matchers.some((matcher) => matcher.matches(path))) {
+  for (const entry of entries) {
+    const childPath = targetPath === '.' ? entry.name : `${targetPath}/${entry.name}`;
+    if (matchers.some((matcher) => matcher.matches(childPath))) {
       continue;
     }
 
     if (entry.isDirectory) {
-      const nested = await buildFolderDto(store, path, matchers);
-      childDtos.push(nested.dto);
-      fileCount += nested.fileCount;
-      folderCount += nested.folderCount;
+      children.push({ id: childPath, path: childPath, name: entry.name, children: [] });
+      folderCount++;
     } else {
-      childDtos.push({
-        id: entry.id,
-        path,
-        name: pathNameOf(path),
+      children.push({
+        id: childPath,
+        path: childPath,
+        name: entry.name,
         lastModified: entry.lastModified,
         isDirectory: false,
       });
@@ -83,14 +71,19 @@ async function buildFolderDto(
     }
   }
 
-  return {
-    dto: {
-      id: rootEntry?.id ?? 'root',
-      path: folderPath,
-      name: pathNameOf(folderPath),
-      children: childDtos,
-    },
-    fileCount,
-    folderCount,
+  children.sort((a, b) => {
+    const aIsDir = !('lastModified' in a);
+    const bIsDir = !('lastModified' in b);
+    if (aIsDir !== bIsDir) return aIsDir ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  const root: FolderNodeDto = {
+    id: targetPath === '.' ? 'root' : targetPath,
+    path: targetPath,
+    name: targetPath === '.' ? '.' : pathNameOf(targetPath),
+    children,
   };
+
+  return { root, totalFiles: fileCount, totalFolders: folderCount };
 }

@@ -17,36 +17,44 @@ function toErrorMessage(error: unknown): string {
 }
 
 /**
- * File tree query + realtime refresh. Subscribes to `filesystem:tree-updated`
- * and invalidates the tree cache, replacing the legacy manual refetch flow.
+ * File tree query per directory. Renders one directory at a time; folder
+ * children are loaded lazily on expand. `TREE_UPDATED` performs a soft
+ * invalidation (marks stale, no immediate refetch) so background scans do
+ * not cause refetch storms; refetch happens on next mount / window focus.
  */
-export function useFileTree() {
+export function useFileTree(parentPath?: string) {
   const { workspace } = useWorkspace();
   const queryClient = useQueryClient();
   const workspaceId = workspace?.id ?? '';
+  const parent = parentPath ?? '.';
 
   const treeQuery = useQuery({
-    queryKey: filesystemKeys.tree(workspaceId),
+    queryKey: filesystemKeys.tree(workspaceId, parent),
     enabled: workspace !== null,
-    queryFn: () => filesystemApi.getFileTree(workspaceId),
-    select: (dto: FileTreeDto): FileTreeDto =>
-      workspace
+    queryFn: () => filesystemApi.getFileTree(workspaceId, parentPath),
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
+    select: (dto: FileTreeDto): FileTreeDto => {
+      if (parent !== '.') return dto;
+      return workspace
         ? {
             ...dto,
-            root: {
-              ...dto.root,
-              name: getWorkspaceFolderName(workspace.rootPath),
-            },
+            root: { ...dto.root, name: getWorkspaceFolderName(workspace.rootPath) },
           }
-        : dto,
+        : dto;
+    },
   });
 
   useEffect(() => {
+    if (!workspaceId) return;
     const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
-      void queryClient.invalidateQueries({ queryKey: filesystemKeys.all });
+      void queryClient.invalidateQueries({
+        queryKey: filesystemKeys.workspace(workspaceId),
+        refetchType: 'none',
+      });
     });
     return unsubscribe;
-  }, [queryClient]);
+  }, [queryClient, workspaceId]);
 
   const data = treeQuery.data ?? null;
 

@@ -62,7 +62,8 @@ export class ConfigStore {
       return {
         workspaceId: migrated.workspaceId,
         docsFolderPath: migrated.docsFolderPath ?? null,
-        ignorePatterns: Array.isArray(migrated.ignorePatterns) ? migrated.ignorePatterns : [],
+        ignorePatterns: Array.isArray(migrated.ignorePatterns) ? migrated.ignorePatterns
+        : [...DEFAULT_IGNORE_PATTERNS]
       };
     } catch {
       return null;

@@ -31,6 +31,7 @@ export class FileIndexStore {
   private cache: FileIndexFile | null = null;
   private writeTimer: ReturnType<typeof setTimeout> | null = null;
   private childrenByParent: Map<string, IndexedPath[]> | null = null;
+  private dirty = false;
 
   constructor(
     private readonly rootPath: string,
@@ -74,6 +75,7 @@ export class FileIndexStore {
       isDirectory: false,
     };
     this.invalidateChildrenCache();
+    this.dirty = true;
     this.scheduleWrite();
     return true;
   }
@@ -92,6 +94,7 @@ export class FileIndexStore {
       isDirectory: true,
     };
     this.invalidateChildrenCache();
+    this.dirty = true;
     this.scheduleWrite();
     return true;
   }
@@ -114,6 +117,7 @@ export class FileIndexStore {
     }
     if (changed) {
       this.invalidateChildrenCache();
+      this.dirty = true;
       this.scheduleWrite();
     }
   }
@@ -139,6 +143,7 @@ export class FileIndexStore {
     }
     if (changed) {
       this.invalidateChildrenCache();
+      this.dirty = true;
       this.scheduleWrite();
     }
   }
@@ -155,6 +160,7 @@ export class FileIndexStore {
     }
     if (deletedPaths.length > 0) {
       this.invalidateChildrenCache();
+      this.dirty = true;
       this.scheduleWrite();
     }
     return deletedPaths;
@@ -165,7 +171,8 @@ export class FileIndexStore {
       clearTimeout(this.writeTimer);
       this.writeTimer = null;
     }
-    if (this.cache) {
+    if (this.cache && this.dirty) {
+      this.dirty = false;
       await this.file.writeJson(this.filePath, this.cache);
     }
   }
@@ -176,8 +183,10 @@ export class FileIndexStore {
     }
     try {
       this.cache = await this.file.readJson<FileIndexFile>(this.filePath);
+      this.dirty = false;
     } catch {
       this.cache = emptyIndex();
+      this.dirty = false;
     }
     return this.cache;
   }
@@ -216,10 +225,11 @@ export class FileIndexStore {
     }
     this.writeTimer = setTimeout(() => {
       this.writeTimer = null;
-      if (this.cache) {
+      if (this.cache && this.dirty) {
         this.file
           .writeJson(this.filePath, this.cache as FileIndexFile)
           .catch((error: unknown) => {
+            this.dirty = false;
             this.logger.error('file-index debounced write failed', {
               message: error instanceof Error ? error.message : String(error),
             });

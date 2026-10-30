@@ -46,16 +46,18 @@ export class FileIndexMaintainer {
         if (this.isIgnored(relativePath)) {
           return;
         }
-        await this.store.upsertFile(relativePath);
-        this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
+        if (await this.store.upsertFile(relativePath)) {
+          this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
+        }
         return;
 
       case 'change':
         if (this.isIgnored(relativePath)) {
           return;
         }
-        await this.store.upsertFile(relativePath);
-        this.eventBus.emit('FileModified', { path: relativePath });
+        if (await this.store.upsertFolder(relativePath)) {
+          this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: true });
+        }
         return;
 
       case 'unlink':

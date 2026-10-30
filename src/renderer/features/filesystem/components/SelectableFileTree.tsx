@@ -2,6 +2,7 @@ import { type JSX } from 'react';
 import type { FileNodeDto, FolderNodeDto } from '@shared/ipc/filesystem';
 import { useFileSystemStore, isFolderNode } from '../stores/filesystem.store';
 import { SelectableFileNode } from './SelectableFileNode';
+import { useFileTree } from '../hooks/useFileTree';
 
 interface SelectableFileTreeProps {
   nodes: ReadonlyArray<FileNodeDto | FolderNodeDto>;
@@ -32,9 +33,9 @@ export function SelectableFileTree({
               isSelected={selectedPaths.has(node.path)}
               onToggleSelect={onToggleSelect}
             />
-            {isFolder && isExpanded && node.children.length > 0 && (
-              <SelectableFileTree
-                nodes={node.children}
+            {isFolder && isExpanded && (
+              <FolderChildren
+                folderPath={node.path}
                 depth={depth + 1}
                 selectedPaths={selectedPaths}
                 onToggleSelect={onToggleSelect}
@@ -44,5 +45,41 @@ export function SelectableFileTree({
         );
       })}
     </div>
+  );
+}
+
+interface FolderChildrenProps {
+  folderPath: string;
+  depth: number;
+  selectedPaths: Set<string>;
+  onToggleSelect: (path: string) => void;
+}
+
+function FolderChildren({
+  folderPath,
+  depth,
+  selectedPaths,
+  onToggleSelect,
+}: FolderChildrenProps): JSX.Element {
+  const { tree } = useFileTree(folderPath);
+  if (!tree) {
+    return (
+      <div
+        className="file-tree__loading"
+        style={{ paddingLeft: `${depth * 16 + 8}px` }}
+        aria-busy="true"
+      >
+        Loading…
+      </div>
+    );
+  }
+  if (tree.children.length === 0) return <></>;
+  return (
+    <SelectableFileTree
+      nodes={tree.children}
+      depth={depth}
+      selectedPaths={selectedPaths}
+      onToggleSelect={onToggleSelect}
+    />
   );
 }

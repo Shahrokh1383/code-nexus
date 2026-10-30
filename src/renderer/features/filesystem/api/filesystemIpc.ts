@@ -6,8 +6,8 @@ import type { FileTreeDto } from '@shared/ipc/filesystem';
  * File-system feature IPC client — the only place this feature talks to IPC.
  */
 export const filesystemApi = {
-  getFileTree: (workspaceId: string): Promise<FileTreeDto> =>
-    ipcInvoke(FILESYSTEM_CHANNELS.GET_FILE_TREE, { workspaceId }),
+  getFileTree: (workspaceId: string, parentPath?: string): Promise<FileTreeDto> => 
+    ipcInvoke(FILESYSTEM_CHANNELS.GET_FILE_TREE, { workspaceId, parentPath }),
 
   getIgnoredFiles: (workspaceId: string): Promise<string[]> =>
     ipcInvoke(FILESYSTEM_CHANNELS.GET_IGNORED_FILES, { workspaceId }),

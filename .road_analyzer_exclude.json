@@ -20,16 +20,17 @@
     "electron-builder.yml",
     "content.txt",
     "src\\renderer\\vite-env.d.ts",
-    "src\\renderer\\main.tsx",
-    "src\\renderer\\App.tsx",
-    "src\\renderer\\shared",
     "dist-electron",
     "vite.config.ts",
-    "roadmap_content.txt"
+    "roadmap_content.txt",
+    "src\\main\\shared",
+    "src\\main\\kernel",
+    "src\\main\\config",
+    "src\\main\\bootstrap"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-10-30T19:40:43.401Z",
+  "lastModified": "2026-10-30T20:44:21.896Z",
   "version": 1
 }

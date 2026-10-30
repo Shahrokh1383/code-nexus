@@ -82,7 +82,10 @@ export class WorkspaceService implements WorkspaceServiceContract {
       throw notFound();
     }
     const config = await this.configStore.load(normalized);
-    await this.fileSystem().activateSession(normalized, config?.ignorePatterns ?? []);
+    await this.fileSystem().activateSession(
+      normalized,
+      config?.ignorePatterns ?? [...DEFAULT_IGNORE_PATTERNS]
+    );
     return this.workspaceStore.toDto(schema);
   }
 
@@ -103,7 +106,10 @@ export class WorkspaceService implements WorkspaceServiceContract {
 
     await this.fileSystem().deactivateSession();
     const config = await this.configStore.load(newRoot);
-    await this.fileSystem().activateSession(newRoot, config?.ignorePatterns ?? []);
+    await this.fileSystem().activateSession(
+      newRoot,
+      config?.ignorePatterns ?? [...DEFAULT_IGNORE_PATTERNS]
+    );
     this.logger.info('workspace scope changed', { from: oldRoot, to: newRoot });
   }
 

@@ -6,8 +6,11 @@ import { FILESYSTEM_CHANNELS } from '@shared/ipc/filesystem';
  */
 export const filesystemKeys = {
   all: ['filesystem'] as const,
-  tree: (workspaceId: string) => ['filesystem', 'tree', workspaceId] as const,
-  patterns: (workspaceId: string) => ['filesystem', 'patterns', workspaceId] as const,
+  workspace: (workspaceId: string) => ['filesystem', workspaceId] as const,
+  tree: (workspaceId: string, parentPath: string = '.') =>
+    ['filesystem', workspaceId, 'tree', parentPath] as const,
+  patterns: (workspaceId: string) =>
+    ['filesystem', workspaceId, 'patterns'] as const,
 };
 
 export const TREE_UPDATED_CHANNEL = FILESYSTEM_CHANNELS.TREE_UPDATED;

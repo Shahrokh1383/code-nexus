@@ -102,9 +102,10 @@ export class FileSystemService implements FileSystemServiceContract {
   }
 
   async getFileTree(workspaceId: string, parentPath?: string): Promise<FileTreeDto> {
-    const store = this.assertActiveSession(workspaceId);
+    this.assertActiveSession(workspaceId);
+    const rootPath = this.activeRootPath!;
     const patterns = await this.workspace().getIgnorePatterns(workspaceId);
-    return buildFileTree(store, parentPath, patterns);
+    return buildFileTree(rootPath, this.fsProbe, parentPath, patterns);
   }
 
   async getIgnoredFiles(workspaceId: string): Promise<string[]> {
