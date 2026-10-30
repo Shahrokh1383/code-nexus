@@ -11,7 +11,7 @@ export class PathUtils {
       .replace(/\/+/g, '/')
       .replace(/\/$/, '');
 
-    normalized = normalized.replace(/^([A-Z]):\//, (_, letter: string) => `${letter.toLowerCase()}/`);
+    normalized = normalized.replace(/^([A-Za-z]):\//, (_, letter: string) => `${letter.toLowerCase()}:/`);
     return normalized;
   }
 

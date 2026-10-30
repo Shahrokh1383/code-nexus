@@ -18,11 +18,21 @@
     "eslint.config.js",
     "index.html",
     "electron-builder.yml",
-    "content.txt"
+    "content.txt",
+    "src\\renderer\\vite-env.d.ts",
+    "src\\renderer\\main.tsx",
+    "src\\renderer\\App.tsx",
+    "src\\renderer\\shared",
+    "src\\main\\config",
+    "src\\main\\bootstrap",
+    "src\\main\\kernel",
+    "src\\shared",
+    "dist-electron",
+    "vite.config.ts"
   ],
   "globalPatterns": [
     "__tests__"
   ],
-  "lastModified": "2026-10-30T11:37:30.559Z",
+  "lastModified": "2026-10-30T14:56:10.651Z",
   "version": 1
 }

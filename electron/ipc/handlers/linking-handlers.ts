@@ -1,1 +1,0 @@
-export { registerLinkingHandlers } from './linking';

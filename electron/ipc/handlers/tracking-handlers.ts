@@ -1,1 +1,0 @@
-export { registerTrackingHandlers } from './tracking';
