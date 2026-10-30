@@ -47,10 +47,9 @@ export function useWorkspace() {
     [queryClient]
   );
 
-  const purgeAllState = useCallback(() => {
+  const resetFileSystemState = useCallback(() => {
     useFileSystemStore.getState().reset();
-    queryClient.clear();
-  }, [queryClient]);
+  }, []);
 
   const initialize = useMutation({
     mutationFn: (rootPath: string) => workspaceApi.initialize(rootPath),
@@ -59,8 +58,7 @@ export function useWorkspace() {
 
   const switchWorkspace = useMutation({
     mutationFn: async (rootPath: string) => {
-      // Purge all frontend state immediately to prevent data leaks.
-      purgeAllState();
+      resetFileSystemState();
       return workspaceApi.initialize(rootPath);
     },
     onSuccess: persistActive,
@@ -70,7 +68,8 @@ export function useWorkspace() {
     mutationFn: (workspaceId: string) => workspaceApi.closeWorkspace(workspaceId),
     onSettled: () => {
       localStorage.removeItem(ACTIVE_WORKSPACE_STORAGE_KEY);
-      purgeAllState();
+      resetFileSystemState();
+      queryClient.setQueryData(workspaceKeys.active, null);
     },
   });
 
