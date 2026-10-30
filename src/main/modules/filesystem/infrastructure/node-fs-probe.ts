@@ -1,4 +1,5 @@
 import { existsSync } from 'fs';
+import { access } from 'fs/promises';
 import { join } from 'path';
 
 /**
@@ -9,6 +10,15 @@ import { join } from 'path';
 export class NodeFsProbe {
   exists(absolutePath: string): boolean {
     return existsSync(absolutePath);
+  }
+
+  async existsAsync(absolutePath: string): Promise<boolean> {
+    try {
+      await access(absolutePath);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   absolutePath(rootPath: string, relativePath: string): string {

@@ -5,14 +5,8 @@ import type { IgnorePattern } from '../domain/ignore-pattern';
 import type { FileIndexStore } from '../infrastructure/file-index-store';
 import type { WatcherEvent } from '../infrastructure/chokidar-watcher';
 
-/**
- * Applies watcher event batches to the file index and emits the
- * corresponding domain events. Ports the legacy FileChangeReactionSaga's
- * file-system-side behavior with its exact per-event semantics:
- * `.doclink` paths always skipped; ignore check on discover/modify only
- * (never on delete); upsert inserts when missing.
- */
 export class FileIndexMaintainer {
+  private static readonly YIELD_EVERY = 200;
   constructor(
     private readonly store: FileIndexStore,
     private readonly eventBus: EventBus,
@@ -21,17 +15,21 @@ export class FileIndexMaintainer {
   ) {}
 
   async applyBatch(events: readonly WatcherEvent[]): Promise<void> {
+    let processed = 0;
     for (const event of events) {
       try {
         await this.processEvent(event);
       } catch (error) {
-        // Paths failing validation (e.g. events outside the workspace root)
-        // are skipped silently, like the legacy adapter did.
         this.logger.debug('watcher event skipped', {
           type: event.type,
           path: event.relativePath,
           message: error instanceof Error ? error.message : String(error),
         });
+      }
+      processed += 1;
+      if (processed >= FileIndexMaintainer.YIELD_EVERY) {
+        processed = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
       }
     }
   }

@@ -10,7 +10,7 @@ import { PathUtils } from '../../../shared/utils/path-utils';
  */
 export class IgnorePattern {
   private readonly pattern: string;
-
+  private readonly globRegex: RegExp | null;
   constructor(pattern: string) {
     const trimmed = pattern.trim();
 
@@ -19,6 +19,10 @@ export class IgnorePattern {
     }
 
     this.pattern = trimmed;
+
+    const hasWildcards = /[*?[\]]/.test(trimmed);
+    this.globRegex =
+      hasWildcards && !trimmed.endsWith('/') ? this.compileGlobRegex() : null;
   }
 
   get value(): string {
@@ -44,12 +48,13 @@ export class IgnorePattern {
     if (this.pattern === normalized) {
       return true;
     }
+    return this.globRegex !== null && this.globRegex.test(normalized);
+  }
 
-    // Convert to glob regex, handling implicit "**/" for patterns without a slash
+  private compileGlobRegex(): RegExp {
     const patternForRegex = this.needsGlobstarPrefix() ? `**/${this.pattern}` : this.pattern;
-
     const regexPattern = this.globToRegex(patternForRegex);
-    return new RegExp(`^${regexPattern}$`).test(normalized);
+    return new RegExp(`^${regexPattern}$`);
   }
 
   /**

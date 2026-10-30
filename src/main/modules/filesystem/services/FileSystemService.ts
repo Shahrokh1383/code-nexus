@@ -141,24 +141,39 @@ export class FileSystemService implements FileSystemServiceContract {
     return this.indexStore;
   }
 
-  /** Remove index entries whose files no longer exist on disk. */
   private async reconcileIndex(rootPath: string, store: FileIndexStore): Promise<void> {
     const entries = await store.listEntries();
+    if (entries.length === 0) {
+      return;
+    }
+
+    const CONCURRENCY = 64;
     const toDelete: string[] = [];
 
-    for (const { path } of entries) {
-      if (!this.fsProbe.exists(this.fsProbe.absolutePath(rootPath, path))) {
-        toDelete.push(path);
+    for (let i = 0; i < entries.length; i += CONCURRENCY) {
+      const chunk = entries.slice(i, i + CONCURRENCY);
+      const checks = await Promise.all(
+        chunk.map(async ({ path }) => ({
+          path,
+          exists: await this.fsProbe.existsAsync(
+            this.fsProbe.absolutePath(rootPath, path)
+          ),
+        }))
+      );
+      for (const { path, exists } of checks) {
+        if (!exists) {
+          toDelete.push(path);
+        }
+      }
+      if (i + CONCURRENCY < entries.length) {
+        await new Promise<void>((resolve) => setImmediate(resolve));
       }
     }
 
-    for (const relativePath of toDelete) {
-      await store.deleteByPath(relativePath);
-    }
-
     if (toDelete.length > 0) {
+      await store.deleteBatch(toDelete);
       this.logger.info('reconciled stale index entries', { removed: toDelete.length });
+      await store.flush();
     }
-    await store.flush();
   }
 }

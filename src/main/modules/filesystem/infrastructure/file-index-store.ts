@@ -26,15 +26,11 @@ function emptyIndex(): FileIndexFile {
   return { version: '1.0', lastScan: null, files: {} };
 }
 
-/**
- * `.doclink/file-index.json` store — flat path-keyed index with an in-memory
- * cache and a 300 ms debounced write, exactly like the legacy repository.
- * `flush()` forces pending writes (session stop, ignore-pattern purge).
- */
 export class FileIndexStore {
   private readonly DEBOUNCE_MS = 300;
   private cache: FileIndexFile | null = null;
   private writeTimer: ReturnType<typeof setTimeout> | null = null;
+  private childrenByParent: Map<string, IndexedPath[]> | null = null;
 
   constructor(
     private readonly rootPath: string,
@@ -57,20 +53,11 @@ export class FileIndexStore {
   }
 
   async findChildrenOf(parentPath: string): Promise<IndexedPath[]> {
-    const index = await this.read();
-    const prefix = parentPath === '.' ? '' : `${parentPath}/`;
-    const children: IndexedPath[] = [];
-
-    for (const [path, entry] of Object.entries(index.files)) {
-      if (prefix === '') {
-        if (!path.includes('/') && path !== '.') {
-          children.push({ path, entry });
-        }
-      } else if (path.startsWith(prefix) && !path.slice(prefix.length).includes('/')) {
-        children.push({ path, entry });
-      }
+    await this.read();
+    if (!this.childrenByParent) {
+      this.rebuildChildrenCache();
     }
-    return children;
+    return this.childrenByParent?.get(parentPath) ?? [];
   }
 
   /** Insert a file entry if absent (ports the legacy saga upsertFileNode). */
@@ -86,6 +73,7 @@ export class FileIndexStore {
       lastModified: new Date().toISOString(),
       isDirectory: false,
     };
+    this.invalidateChildrenCache();
     this.scheduleWrite();
     return true;
   }
@@ -103,6 +91,7 @@ export class FileIndexStore {
       lastModified: new Date().toISOString(),
       isDirectory: true,
     };
+    this.invalidateChildrenCache();
     this.scheduleWrite();
     return true;
   }
@@ -124,6 +113,32 @@ export class FileIndexStore {
       }
     }
     if (changed) {
+      this.invalidateChildrenCache();
+      this.scheduleWrite();
+    }
+  }
+
+  /** Batch delete — one scan of the index for many paths (used by reconcile). */
+  async deleteBatch(paths: readonly string[]): Promise<void> {
+    if (paths.length === 0) {
+      return;
+    }
+    const index = await this.read();
+    const direct = new Set(paths);
+    const prefixes = paths.map((p) => `${p}/`);
+    let changed = false;
+
+    for (const entryPath of Object.keys(index.files)) {
+      if (
+        direct.has(entryPath) ||
+        prefixes.some((prefix) => entryPath.startsWith(prefix))
+      ) {
+        delete index.files[entryPath];
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.invalidateChildrenCache();
       this.scheduleWrite();
     }
   }
@@ -139,6 +154,7 @@ export class FileIndexStore {
       }
     }
     if (deletedPaths.length > 0) {
+      this.invalidateChildrenCache();
       this.scheduleWrite();
     }
     return deletedPaths;
@@ -166,9 +182,37 @@ export class FileIndexStore {
     return this.cache;
   }
 
+  private rebuildChildrenCache(): void {
+    if (!this.cache) {
+      this.childrenByParent = new Map();
+      return;
+    }
+    const map = new Map<string, IndexedPath[]>();
+    for (const [path, entry] of Object.entries(this.cache.files)) {
+      if (path === '.') {
+        continue;
+      }
+      const lastSlash = path.lastIndexOf('/');
+      const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
+      const bucket = map.get(parent);
+      if (bucket) {
+        bucket.push({ path, entry });
+      } else {
+        map.set(parent, [{ path, entry }]);
+      }
+    }
+    this.childrenByParent = map;
+  }
+
+  private invalidateChildrenCache(): void {
+    this.childrenByParent = null;
+  }
+
   private scheduleWrite(): void {
     if (this.writeTimer) {
-      clearTimeout(this.writeTimer);
+      // A write is already queued; it will capture every pending mutation.
+      // Avoid timer churn under high mutation volume (e.g. 10k upserts).
+      return;
     }
     this.writeTimer = setTimeout(() => {
       this.writeTimer = null;
