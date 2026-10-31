@@ -14,7 +14,7 @@ import {
 } from '../infrastructure/chokidar-watcher';
 import { NodeFsProbe } from '../infrastructure/node-fs-probe';
 import { FileIndexMaintainer } from './file-index-maintainer';
-import { buildFileTree } from './tree-builder';
+import { buildFileTree, buildFileTreeFromIndex  } from './tree-builder';
 
 function sessionMismatch(): DomainException {
   return new DomainException(
@@ -125,10 +125,17 @@ export class FileSystemService implements FileSystemServiceContract {
     this.activeRootPath = null;
   }
 
-  async getFileTree(workspaceId: string, parentPath?: string): Promise<FileTreeDto> {
-    this.assertActiveSession(workspaceId);
+  async getFileTree(workspaceId: string, parentPath?: string): Promise<FileTreeDto>  {
+    const store = this.assertActiveSession(workspaceId);
     const rootPath = this.activeRootPath!;
     const patterns = await this.workspace().getIgnorePatterns(workspaceId);
+    const parent = parentPath ?? '.';
+    const parentEntry = parent === '.' ? { isDirectory: true as const } : await store.findByPath(parent);
+    if (parentEntry?.isDirectory) {
+      const indexed = await store.findChildrenOf(parent);
+      return buildFileTreeFromIndex(parent, indexed, patterns);
+    }
+
     return buildFileTree(rootPath, this.fsProbe, parentPath, patterns);
   }
 

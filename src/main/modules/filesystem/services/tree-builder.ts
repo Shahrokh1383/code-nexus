@@ -3,6 +3,7 @@ import { DomainException } from '../../../shared/errors/domain-exception';
 import { validateRelativePath, pathNameOf } from '../domain/file-path';
 import { IgnorePattern } from '../domain/ignore-pattern';
 import type { FsDirEntry, NodeFsProbe } from '../infrastructure/node-fs-probe';
+import type { IndexedPath } from '../infrastructure/file-index-store';
 
 function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
   return patterns
@@ -82,6 +83,55 @@ export async function buildFileTree(
     id: targetPath === '.' ? 'root' : targetPath,
     path: targetPath,
     name: targetPath === '.' ? '.' : pathNameOf(targetPath),
+    children,
+  };
+
+  return { root, totalFiles: fileCount, totalFolders: folderCount };
+}
+
+export function buildFileTreeFromIndex(
+  parentPath: string,
+  entries: readonly IndexedPath[],
+  ignorePatterns: readonly string[]
+): FileTreeDto {
+  const matchers = compileMatchers(ignorePatterns);
+  const children: Array<FileNodeDto | FolderNodeDto> = [];
+  let fileCount = 0;
+  let folderCount = 0;
+
+  for (const { path, entry } of entries) {
+    if (matchers.some((matcher) => matcher.matches(path))) {
+      continue;
+    }
+
+    const name = pathNameOf(path);
+
+    if (entry.isDirectory) {
+      children.push({ id: path, path, name, children: [] });
+      folderCount++;
+    } else {
+      children.push({
+        id: path,
+        path,
+        name,
+        lastModified: entry.lastModified,
+        isDirectory: false,
+      });
+      fileCount++;
+    }
+  }
+
+  children.sort((a, b) => {
+    const aIsDir = !('lastModified' in a);
+    const bIsDir = !('lastModified' in b);
+    if (aIsDir !== bIsDir) return aIsDir ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  const root: FolderNodeDto = {
+    id: parentPath === '.' ? 'root' : parentPath,
+    path: parentPath,
+    name: parentPath === '.' ? '.' : pathNameOf(parentPath),
     children,
   };
 
