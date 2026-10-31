@@ -219,8 +219,10 @@ export class DocsFolderService {
   private relative(fromPath: string, toPath: string): string {
     const fromParts = fromPath.split('/').filter((s) => s.length > 0 && s !== '.');
     const toParts = toPath.split('/').filter((s) => s.length > 0 && s !== '.');
+    const caseInsensitive = /^[A-Za-z]:$/.test(fromParts[0] ?? '');
     let common = 0;
-    while (common < fromParts.length && common < toParts.length && fromParts[common] === toParts[common]) {
+    while(common < fromParts.length && common < toParts.length && (caseInsensitive ? fromParts[common].toLowerCase() === toParts[common].toLowerCase() : fromParts[common] === toParts[common])
+    ) {
       common++;
     }
     const upSegments = fromParts.slice(common).map(() => '..');
