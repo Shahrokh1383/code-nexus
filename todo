@@ -1,0 +1,135 @@
+# Future Work: Orphan Document Detection
+
+**Status:** Blocked — requires linking domain (not yet built)
+**Owner (consumer):** Documentation module
+**Owner (producer):** Linking domain (TBD)
+**Legacy reference:** `src/application/sagas/document-split.saga.ts` (legacy codebase)
+
+## Current State
+
+- `Document.isOrphaned` field exists on the domain entity and is persisted in `documents.json`.
+- `DocumentJsonRepository.findOrphaned()` returns documents where `isOrphaned === true`.
+- `DocumentService.getOrphans()` surfaces these to IPC via `GET_ORPHANED`.
+- `useDocuments` queries `GET_ORPHANED` and renders the `OrphanSection`.
+- **No code path sets `isOrphaned` to `true`.** The orphan list is always empty. This is intentional — legacy orphan detection was driven by the linking domain, which has not been migrated.
+
+## Legacy Behavior (reference — not reproduced)
+
+`DocumentSplitSaga` subscribed to `DocumentDeletedEvent` and performed cross-domain orchestration:
+
+1. Query the children of the deleted document via the linking module (`GetDocumentChildrenQuery`).
+2. Migrate code links from the deleted parent to its children (`MigrateLinksCommand`).
+3. For each child, count inbound links via the linking module's `ILinkRepository`.
+   - If count is `0`, emit `OrphanDetectedEvent` — the sole producer of `isOrphaned: true` in the legacy system.
+4. Additionally, `DocumentCleanupOnFileDelete` reacted to `FileDeletedEvent` (filesystem domain) to hard-delete tracked documents when their source file disappeared.
+
+**Item 4 is now implemented** in `DocumentationProvider.boot()` via a `FileDeleted` subscription + `DocsFolderService.cleanupDeletedFile()`.
+
+**Items 1–3 remain blocked.**
+
+## Blockers
+
+Three capabilities are missing from the current codebase:
+
+1. **Linking domain** — a bounded context that tracks code-level links between documents.
+2. **`ILinkRepository`** — persistence for link records (inbound / outbound reference counts per document).
+3. **`OrphanDetected` domain event** — not registered in `DomainEventMap` (`src/main/shared/event-bus/event-contracts.ts`).
+
+Per Constitution §1: these must **not** be implemented inside the documentation module. They require a new bounded context (`src/main/modules/linking/` per §7 skeleton).
+
+## Implementation Plan (when linking domain exists)
+
+### Phase 1 — Register the domain event
+
+Extend `DomainEventMap`:
+
+```ts
+'OrphanDetected': {
+  documentId: string;
+  path: string;
+};
+```
+
+### Phase 2 — Emit from a saga in the linking (or a coordinating) module
+
+Subscribe to `DocumentDeleted` in a saga owned by the linking module (or a dedicated `coordinator` module per §1 "Aggregator contexts"):
+
+- For each child document (resolved via the linking module's public Service Contract — cross-module sync read per §2).
+- Read inbound link count via the same contract.
+- If `0`, emit `OrphanDetected { documentId, path }`.
+
+**Do not** subscribe to `DocumentDeleted` inside `DocumentationProvider.boot()` for this purpose — that would force a documentation → linking dependency inside documentation, violating §1.
+
+### Phase 3 — Persist the flag in documentation
+
+In `DocumentationProvider.boot()`, subscribe:
+
+```ts
+eventBus.on('OrphanDetected', async ({ documentId }) => {
+  await c.resolve(DocumentServiceToken).markOrphaned(documentId);
+});
+```
+
+Add `DocumentService.markOrphaned(rootPath, id)` delegating to a new `DocumentJsonRepository.markOrphaned(rootPath, id)` that mirrors the existing `softDelete` / `restore` shape:
+
+```ts
+async markOrphaned(rootPath: string, id: string): Promise<void> {
+  const index = await this.readIndex(rootPath);
+  const doc = index.documents.find((d) => d.id === id);
+  if (doc && !doc.isOrphaned) {
+    doc.isOrphaned = true;
+    this.scheduleFlush(rootPath);
+  }
+}
+```
+
+### Phase 4 — Clear the flag when links are restored
+
+Subscribe in the same saga (or documentation provider) to the linking module's "link created" event and call `DocumentService.clearOrphaned(rootPath, documentId)` symmetrically. The flag is **derived state** — it must track the linking module's truth, never be toggled manually.
+
+Add the symmetric repository method:
+
+```ts
+async clearOrphaned(rootPath: string, id: string): Promise<void> {
+  const index = await this.readIndex(rootPath);
+  const doc = index.documents.find((d) => d.id === id);
+  if (doc && doc.isOrphaned) {
+    doc.isOrphaned = false;
+    this.scheduleFlush(rootPath);
+  }
+}
+```
+
+### Phase 5 — Renderer
+
+**No renderer changes required.** `useDocuments` already:
+
+- Queries `GET_ORPHANED` and surfaces the list via the `orphans` array.
+- Routes restored documents back to the orphan list via `doc.isOrphaned` (see `restoreMutation.onSuccess`).
+- Renders `<OrphanSection>` with `<OrphanBadge>` and `<DocumentList>`.
+
+Once the backend sets `isOrphaned` reliably, the UI populates automatically.
+
+## Acceptance Criteria
+
+1. Deleting a document that has inbound links triggers orphan evaluation for all its children.
+2. A child with `0` inbound links transitions to `isOrphaned: true` and appears in the Orphan section within one event-bus tick.
+3. A child with `≥1` inbound link remains `isOrphaned: false`.
+4. Creating a new link to an orphaned document clears its orphan status immediately.
+5. `syncFiles` does **not** reset `isOrphaned` — the flag is managed exclusively by the saga (only `deleted` is toggled by sync).
+6. Soft-deleted documents do not appear in the orphan list (already enforced by `findOrphaned` filtering `!d.deleted`).
+
+## Explicit Non-Goals
+
+- **No markdown link parsing inside documentation.** The linking domain owns link detection.
+- **No "what is a link" rule inside documentation.** The linking domain owns the definition.
+- **No saga implementation inside `DocumentationProvider.boot()`.** Module boundaries are sacred (§1, §2, §26.1).
+- **No speculative scaffolding.** Only implement when the linking domain is scoped and approved.
+
+## Verification Path
+
+1. Phase 1 lands → `DomainEventMap` compiles, no consumers exist yet.
+2. Phase 2 lands → delete a parent doc, observe `OrphanDetected` logs from the saga.
+3. Phase 3 lands → observe `isOrphaned: true` in `documents.json` after the saga fires.
+4. Phase 4 lands → create a link, observe the flag clear.
+5. Renderer requires no changes; the Orphan section starts populating.

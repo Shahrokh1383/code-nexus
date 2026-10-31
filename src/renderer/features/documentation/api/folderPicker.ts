@@ -1,5 +1,5 @@
 import { SYSTEM_CHANNELS } from '@shared/ipc/system';
-import { invokeIpc } from './ipc';
+import { invokeIpc } from './documentationIpc';
 
 export async function openDirectoryPicker(): Promise<string | null> {
   const selected = await invokeIpc<string[]>(SYSTEM_CHANNELS.OPEN_FOLDER);

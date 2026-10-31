@@ -12,6 +12,9 @@ export function createQueryClient(): QueryClient {
         retry: false,
         refetchOnWindowFocus: false,
       },
+      mutations: {
+        retry: false,
+      },
     },
   });
 }

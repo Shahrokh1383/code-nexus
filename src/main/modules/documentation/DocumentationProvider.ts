@@ -5,6 +5,7 @@ import { AtomicJsonFileToken } from '../../shared/persistence/atomic-json-file';
 import { EventBusToken } from '../../shared/event-bus/event-bus';
 import { LoggerToken } from '../../shared/logger/logger';
 import { WorkspaceServiceToken } from '../workspace';
+import { FileSystemServiceToken } from '../filesystem/services/contracts/FileSystemServiceContract';
 import { DocsFolderDetector } from './domain/DocsFolderDetector';
 import { DocumentScanner } from './infrastructure/DocumentScanner';
 import { DocumentJsonRepository } from './infrastructure/DocumentJsonRepository';
@@ -50,5 +51,22 @@ export class DocumentationProvider implements ModuleProvider {
 
   boot(c: ServiceContainer): void {
     registerDocumentationIpc(c, c.resolve(LoggerToken).child('documentation:ipc'));
+    const logger = c.resolve(LoggerToken).child('documentation:cleanup');
+    const eventBus = c.resolve(EventBusToken);
+    const folders = () => c.resolve(DocsFolderServiceToken);
+    const activeRootPath = () => c.resolve(FileSystemServiceToken).getActiveRootPath();
+
+    eventBus.on('FileDeleted', async ({ path }) => {
+      const rootPath = activeRootPath();
+      if (!rootPath) return;
+      try {
+        await folders().cleanupDeletedFile(rootPath, path);
+      } catch (error) {
+        logger.warn('document cleanup on file delete failed', {
+          path,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    });
   }
 }

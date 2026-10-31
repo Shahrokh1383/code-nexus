@@ -3,10 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DOCUMENTATION_CHANNELS } from '@shared/ipc/documentation';
 import type { DocumentDto, GetAllDocumentsResponse } from '@shared/ipc/documentation';
 import { useWorkspace } from '../../workspace';
-import { invokeIpc } from '../ipc';
-import { documentationKeys } from '../queryKeys';
+import { invokeIpc } from '../api/documentationIpc';
+import { documentationKeys } from '../keys';
 
-// Legacy user-facing fallback strings (documentation.store.ts), verbatim.
 const FETCH_FAILED = 'Failed to fetch';
 const ORPHANS_FAILED = 'Failed to fetch orphans';
 const DELETED_FAILED = 'Failed to fetch deleted';

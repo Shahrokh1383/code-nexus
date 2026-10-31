@@ -141,6 +141,20 @@ export class DocsFolderService {
     }
   }
 
+  async cleanupDeletedFile(rootPath: string, relativePath: string): Promise<void> {
+    const docsFolderPath = await this.config.readDocsFolderPath(rootPath);
+    if (!docsFolderPath) return;
+
+    const normalizedFile = this.join(relativePath);
+    const normalizedDocs = this.join(docsFolderPath);
+    if (!this.isWithin(normalizedDocs, normalizedFile)) return;
+
+    const document = await this.documents.findByPath(rootPath, normalizedFile);
+    if (!document) return;
+
+    await this.documents.delete(rootPath, document.id);
+  }
+
   //Private Helpers
 
   private async buildCandidates(rootPath: string) {
@@ -194,9 +208,9 @@ export class DocsFolderService {
     return base.charAt(0).toUpperCase() + base.slice(1);
   }
 
-    private folderError(code: string, message: string): DomainException {
-        return new DomainException(code, message);
-    }
+  private folderError(code: string, message: string): DomainException {
+    return new DomainException(code, message);
+  }
 
   private isAbsolute(path: string): boolean {
     return path.startsWith('/') || /^[A-Za-z]:/.test(path);
@@ -215,5 +229,9 @@ export class DocsFolderService {
 
   private join(...paths: string[]): string {
     return paths.map((p) => p.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '')).join('/').replace(/\/+/g, '/');
+  }
+
+  private isWithin(parentPath: string, childPath: string): boolean {
+    return childPath === parentPath || childPath.startsWith(parentPath + '/');
   }
 }
