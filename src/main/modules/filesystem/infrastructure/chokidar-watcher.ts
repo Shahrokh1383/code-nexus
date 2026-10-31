@@ -10,6 +10,28 @@ export interface WatcherEvent {
   relativePath: string;
 }
 
+export const DEFAULT_IGNORED_SEGMENTS: ReadonlySet<string> = new Set([
+  'node_modules',
+  '.git',
+  '.svn',
+  '.hg',
+  '.cache',
+  'dist',
+  'build',
+  'out',
+  '.next',
+  '.nuxt',
+  'target',
+  'coverage',
+]);
+
+const DEFAULT_IGNORED_GLOBS: readonly string[] = [
+  ...Array.from(DEFAULT_IGNORED_SEGMENTS, (segment) => `**/${segment}/**`),
+  '**/*.log',
+  '**/.DS_Store',
+  '**/Thumbs.db',
+];
+
 /**
  * Chokidar adapter — 300 ms debounced batching, then sequential delivery to
  * the injected batch handler. Ports the legacy adapter verbatim, including
@@ -32,7 +54,10 @@ export class ChokidarFileWatcher {
   ) {
     this.rootPath = PathUtils.normalize(rootPath);
     this.watcher = chokidar.watch(rootPath, {
-      ignored: ignorePatterns.map((p) => toChokidarPattern(p.value)),
+      ignored: [
+        ...DEFAULT_IGNORED_GLOBS,
+        ...ignorePatterns.map((p) => toChokidarPattern(p.value)),
+      ],
       ignoreInitial: false,
       persistent: true,
       depth: Infinity,

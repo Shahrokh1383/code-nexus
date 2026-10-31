@@ -1,3 +1,4 @@
+// src/main/modules/filesystem/services/FileSystemService.ts
 import type { FileTreeDto } from '@shared/ipc/filesystem';
 import { DomainException } from '../../../shared/errors/domain-exception';
 import type { EventBus } from '../../../shared/event-bus/event-bus';
@@ -7,7 +8,10 @@ import type { WorkspaceServiceContract } from '../../workspace/services/contract
 import type { FileSystemServiceContract } from './contracts/FileSystemServiceContract';
 import { IgnorePattern } from '../domain/ignore-pattern';
 import { FileIndexStore } from '../infrastructure/file-index-store';
-import { ChokidarFileWatcher } from '../infrastructure/chokidar-watcher';
+import {
+  ChokidarFileWatcher,
+  DEFAULT_IGNORED_SEGMENTS,
+} from '../infrastructure/chokidar-watcher';
 import { NodeFsProbe } from '../infrastructure/node-fs-probe';
 import { FileIndexMaintainer } from './file-index-maintainer';
 import { buildFileTree } from './tree-builder';
@@ -37,6 +41,25 @@ export class FileSystemService implements FileSystemServiceContract {
     private readonly workspace: () => WorkspaceServiceContract
   ) {}
 
+  private async purgeDefaultIgnoredEntries(store: FileIndexStore): Promise<void> {
+    const entries = await store.listEntries();
+    if (entries.length === 0) {
+      return;
+    }
+    const toDelete: string[] = [];
+    for (const { path } of entries) {
+      const segments = path.split('/');
+      if (segments.some((segment) => DEFAULT_IGNORED_SEGMENTS.has(segment))) {
+        toDelete.push(path);
+      }
+    }
+    if (toDelete.length === 0) {
+      return;
+    }
+    await store.deleteBatch(toDelete);
+    this.logger.info('purged default-ignored index entries', { removed: toDelete.length });
+  }
+
   getActiveRootPath(): string | null {
     return this.activeRootPath;
   }
@@ -45,6 +68,7 @@ export class FileSystemService implements FileSystemServiceContract {
     await this.deactivateSession();
 
     const store = new FileIndexStore(rootPath, this.file, this.logger);
+    await this.purgeDefaultIgnoredEntries(store);
     await this.reconcileIndex(rootPath, store);
 
     // Purge ignore-pattern matches; invalid patterns are skipped silently.

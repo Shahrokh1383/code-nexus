@@ -1,4 +1,4 @@
-import { type JSX, memo } from 'react';
+import { memo, useMemo, type JSX } from 'react';
 import type { FileNodeDto, FolderNodeDto } from '@shared/ipc/filesystem';
 import { useFileSystemStore, isFolderNode } from '../stores/filesystem.store';
 import { FileIcon } from './FileIcon';
@@ -6,6 +6,7 @@ import { FileIcon } from './FileIcon';
 interface FileNodeProps {
   node: FileNodeDto | FolderNodeDto;
   depth: number;
+  isExpanded: boolean;
 }
 
 const formatRelativeTime = (dateString: string): string => {
@@ -18,16 +19,23 @@ const formatRelativeTime = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString();
 };
 
-export const FileNode = memo(function FileNode({ node, depth }: FileNodeProps): JSX.Element {
+export const FileNode = memo(function FileNode({
+  node,
+  depth,
+  isExpanded,
+}: FileNodeProps): JSX.Element {
   const toggleFolder = useFileSystemStore((s) => s.toggleFolder);
-  const expandedPaths = useFileSystemStore((s) => s.expandedPaths);
 
   const isFolder = isFolderNode(node);
-  const isExpanded = isFolder && expandedPaths.has(node.path);
+  const lastModified = isFolder ? '' : (node as FileNodeDto).lastModified;
+  const displayTime = useMemo(
+    () => (lastModified ? formatRelativeTime(lastModified) : ''),
+    [lastModified]
+  );
 
   return (
     <div
-      className={`file-node`}
+      className="file-node"
       style={{ paddingLeft: `${depth * 16 + 8}px` }}
       onClick={() => isFolder && toggleFolder(node.path)}
       role="treeitem"
@@ -41,7 +49,7 @@ export const FileNode = memo(function FileNode({ node, depth }: FileNodeProps): 
 
       {!isFolder && (
         <div className="file-node__meta">
-          <span className="file-node__date">{formatRelativeTime((node as FileNodeDto).lastModified)}</span>
+          <span className="file-node__date">{displayTime}</span>
         </div>
       )}
     </div>

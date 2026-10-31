@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback, type JSX } from 'react';
-import { useFileTree, useIgnorePatterns, SelectableFileTree, IgnorePatternEditor } from '../features/filesystem';
+import { useFileTree, useIgnorePatterns, SelectableFileTree, IgnorePatternEditor, useFilesystemTreeUpdates } from '../features/filesystem';
 import '../shared/styles/file-browser.css';
 
 export function FileBrowserPage(): JSX.Element {
+  useFilesystemTreeUpdates();
   const { tree, totalFiles, totalFolders, error, isScanning } = useFileTree();
   const { addPattern, error: patternError } = useIgnorePatterns();
 
