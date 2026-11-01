@@ -6,27 +6,39 @@ export const isFolderNode = (node: FileNodeDto | FolderNodeDto): node is FolderN
 
 interface FileSystemUiState {
   expandedPaths: Set<string>;
+  selectedPaths: Set<string>;
   toggleFolder: (path: string) => void;
+  toggleSelection: (path: string) => void;
+  clearSelection: () => void;
   reset: () => void;
 }
 
 /**
- * File-system UI state (expand/collapse) — the only Zustand store in this
- * feature. Server state lives in React Query (Constitution §18).
+ * File-system UI state (expand/collapse + selection). Both are per-node
+ * boolean selectors — Zustand's `Object.is` bail means a toggle only
+ * re-renders the affected node, regardless of tree size (O(1) at 100k).
  */
 export const useFileSystemStore = create<FileSystemUiState>((set) => ({
   expandedPaths: new Set<string>(),
+  selectedPaths: new Set<string>(),
 
   toggleFolder: (path) =>
     set((state) => {
-      const nextExpanded = new Set(state.expandedPaths);
-      if (nextExpanded.has(path)) {
-        nextExpanded.delete(path);
-      } else {
-        nextExpanded.add(path);
-      }
-      return { expandedPaths: nextExpanded };
+      const next = new Set(state.expandedPaths);
+      if (next.has(path)) next.delete(path);
+      else next.add(path);
+      return { expandedPaths: next };
     }),
 
-  reset: () => set({ expandedPaths: new Set<string>() }),
+  toggleSelection: (path) =>
+    set((state) => {
+      const next = new Set(state.selectedPaths);
+      if (next.has(path)) next.delete(path);
+      else next.add(path);
+      return { selectedPaths: next };
+    }),
+
+  clearSelection: () => set({ selectedPaths: new Set<string>() }),
+
+  reset: () => set({ expandedPaths: new Set<string>(), selectedPaths: new Set<string>() }),
 }));

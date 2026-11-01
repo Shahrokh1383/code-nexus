@@ -28,11 +28,13 @@ function emptyIndex(): FileIndexFile {
 
 export class FileIndexStore {
   private readonly DEBOUNCE_MS = 300;
+
   private cache: FileIndexFile | null = null;
   private writeTimer: ReturnType<typeof setTimeout> | null = null;
   private childrenByParent: Map<string, IndexedPath[]> | null = null;
   private dirty = false;
   private fileExisted = false;
+  private scanInProgress = false;
 
   constructor(
     private readonly rootPath: string,
@@ -44,10 +46,21 @@ export class FileIndexStore {
     return PathUtils.join(this.rootPath, '.doclink', 'file-index.json');
   }
 
+  markScanStart(): void {
+    this.scanInProgress = true;
+  }
+
+  markScanEnd(): void {
+    this.scanInProgress = false;
+    if (this.writeTimer) {
+      clearTimeout(this.writeTimer);
+      this.writeTimer = null;
+    }
+  }
+
   /**
    * Guarantees `file-index.json` exists on disk before any watcher work
-   * begins — restores legacy behavior where the file was always present
-   * after workspace open. No-op when the file already exists.
+   * begins — legacy parity (file was always present after workspace open).
    */
   async ensureExists(): Promise<void> {
     await this.read();
@@ -91,6 +104,7 @@ export class FileIndexStore {
     if (existing && !existing.isDirectory) {
       return false;
     }
+    const isNew = !existing;
     const entry: FileIndexEntry = {
       id: randomUUID(),
       hash: null,
@@ -98,7 +112,7 @@ export class FileIndexStore {
       isDirectory: false,
     };
     index.files[path] = entry;
-    this.patchChildCache(path, entry);
+    this.patchChildCache(path, entry, isNew);
     this.dirty = true;
     this.scheduleWrite();
     return true;
@@ -110,6 +124,7 @@ export class FileIndexStore {
     if (existing && existing.isDirectory) {
       return false;
     }
+    const isNew = !existing;
     const entry: FileIndexEntry = {
       id: randomUUID(),
       hash: null,
@@ -117,7 +132,7 @@ export class FileIndexStore {
       isDirectory: true,
     };
     index.files[path] = entry;
-    this.patchChildCache(path, entry);
+    this.patchChildCache(path, entry, isNew);
     this.dirty = true;
     this.scheduleWrite();
     return true;
@@ -145,13 +160,7 @@ export class FileIndexStore {
     }
   }
 
-  /**
-   * Batch delete — direct paths + descendants. O(N · depth) instead of the
-   * previous O(N · M): each entry walks its own parent chain (bounded by
-   * path depth ~5) rather than scanning every input prefix. On a 50k-entry
-   * index with 30k deletions this is ~250k ops instead of ~1.5B — the
-   * difference between a multi-second freeze and ~2 ms.
-   */
+  /** O(N·depth) batch delete: each entry walks its own parent chain. */
   async deleteBatch(paths: readonly string[]): Promise<void> {
     if (paths.length === 0) {
       return;
@@ -219,6 +228,30 @@ export class FileIndexStore {
     }
   }
 
+async bulkUpsert(
+  entries: ReadonlyArray<{ path: string; isDirectory: boolean }>
+): Promise<void> {
+  if (entries.length === 0) return;
+  const index = await this.read();
+  const now = new Date().toISOString();
+  let changed = false;
+  for (const { path, isDirectory } of entries) {
+    const existing = index.files[path];
+    if (existing && existing.isDirectory === isDirectory) continue;
+    index.files[path] = {
+      id: existing?.id ?? randomUUID(),
+      hash: null,
+      lastModified: now,
+      isDirectory,
+    };
+    changed = true;
+  }
+  if (changed) {
+    this.invalidateChildrenCache();
+    this.dirty = true;
+  }
+}
+
   private async writeIndex(): Promise<void> {
     if (!this.cache) {
       return;
@@ -284,7 +317,13 @@ export class FileIndexStore {
     this.childrenByParent = map;
   }
 
-  private patchChildCache(path: string, entry: FileIndexEntry): void {
+  /**
+   * Inserts/updates a single cache bucket.
+   * `isNew` short-circuits the O(bucket) `findIndex` for the dominant case
+   * (fresh path during scan). `findIndex` only runs on the rare type-change
+   * path (file→folder or folder→file), where existing entry must be replaced.
+   */
+  private patchChildCache(path: string, entry: FileIndexEntry, isNew: boolean): void {
     if (!this.childrenByParent) {
       return;
     }
@@ -292,15 +331,19 @@ export class FileIndexStore {
     const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
     const bucket = this.childrenByParent.get(parent);
     const indexedPath: IndexedPath = { path, entry };
-    if (bucket) {
-      const existingIdx = bucket.findIndex((c) => c.path === path);
-      if (existingIdx >= 0) {
-        bucket[existingIdx] = indexedPath;
-      } else {
-        bucket.push(indexedPath);
-      }
-    } else {
+    if (!bucket) {
       this.childrenByParent.set(parent, [indexedPath]);
+      return;
+    }
+    if (isNew) {
+      bucket.push(indexedPath);
+      return;
+    }
+    const existingIdx = bucket.findIndex((c) => c.path === path);
+    if (existingIdx >= 0) {
+      bucket[existingIdx] = indexedPath;
+    } else {
+      bucket.push(indexedPath);
     }
   }
 
@@ -309,6 +352,9 @@ export class FileIndexStore {
   }
 
   private scheduleWrite(): void {
+    if (this.scanInProgress) {
+      return;
+    }
     if (this.writeTimer) {
       return;
     }

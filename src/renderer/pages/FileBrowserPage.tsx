@@ -1,5 +1,12 @@
-import { useEffect, useState, useCallback, type JSX } from 'react';
-import { useFileTree, useIgnorePatterns, SelectableFileTree, IgnorePatternEditor, useFilesystemTreeUpdates } from '../features/filesystem';
+import { useCallback, useEffect, type JSX } from 'react';
+import {
+  useFileTree,
+  useIgnorePatterns,
+  SelectableFileTree,
+  IgnorePatternEditor,
+  useFilesystemTreeUpdates,
+  useFileSystemStore,
+} from '../features/filesystem';
 import '../shared/styles/file-browser.css';
 
 export function FileBrowserPage(): JSX.Element {
@@ -7,33 +14,20 @@ export function FileBrowserPage(): JSX.Element {
   const { tree, totalFiles, totalFolders, error, isScanning } = useFileTree();
   const { addPattern, error: patternError } = useIgnorePatterns();
 
-  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
+  const selectedPaths = useFileSystemStore((s) => s.selectedPaths);
+  const clearSelection = useFileSystemStore((s) => s.clearSelection);
 
   useEffect(() => {
-    if (isScanning) {
-      setSelectedPaths(new Set());
-    }
-  }, [isScanning]);
+    if (isScanning) clearSelection();
+  }, [isScanning, clearSelection]);
 
-  const handleToggleSelect = useCallback((path: string) => {
-    setSelectedPaths((prev) => {
-      const next = new Set(prev);
-      if (next.has(path)) {
-        next.delete(path);
-      } else {
-        next.add(path);
-      }
-      return next;
-    });
-  }, []);
-
-  const handleIgnoreSelected = async (): Promise<void> => {
+  const handleIgnoreSelected = useCallback(async (): Promise<void> => {
     if (selectedPaths.size === 0) return;
     for (const path of selectedPaths) {
       await addPattern(path);
     }
-    setSelectedPaths(new Set());
-  };
+    clearSelection();
+  }, [selectedPaths, addPattern, clearSelection]);
 
   return (
     <div className="file-browser-page">
@@ -62,11 +56,7 @@ export function FileBrowserPage(): JSX.Element {
       <div className="file-browser__content">
         <div className="file-browser__tree-container">
           {tree ? (
-            <SelectableFileTree
-              nodes={[tree]}
-              selectedPaths={selectedPaths}
-              onToggleSelect={handleToggleSelect}
-            />
+            <SelectableFileTree nodes={[tree]} />
           ) : (
             <div className="file-browser__loading">
               <i className="fa-solid fa-folder-open text-primary" />

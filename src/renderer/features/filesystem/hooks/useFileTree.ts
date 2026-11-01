@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { FileTreeDto } from '@shared/ipc/filesystem';
 import { filesystemApi } from '../api/filesystemIpc';
@@ -15,20 +16,29 @@ function toErrorMessage(error: unknown): string {
 }
 
 /**
- * File tree query per directory. Renders one directory at a time; folder
- * children are loaded lazily on expand. Realtime freshness is owned once
- * at the page level (`useFilesystemTreeUpdates`) — the previous per-instance
- * `TREE_UPDATED` subscription created one listener per expanded folder,
- * multiplying invalidations per push and causing refetch storms.
- *
- * `refetchOnWindowFocus` is disabled: in Electron this fires on every
- * alt-tab and devtools toggle, and each firing refetched every expanded
- * folder. Realtime updates are handled by the shared subscription instead.
+ * File tree query per directory. Children load lazily via `FolderChildren`.
+ * `select` is memoized on `(parent, folderName)` so the resulting `tree`
+ * object is ref-stable across renders — prevents spurious full-tree
+ * re-renders when the workspace object ref happens to change.
  */
 export function useFileTree(parentPath?: string) {
   const { workspace } = useWorkspace();
   const workspaceId = workspace?.id ?? '';
   const parent = parentPath ?? '.';
+  const rootPath = workspace?.rootPath ?? '';
+
+  const folderName = useMemo(
+    () => (rootPath ? getWorkspaceFolderName(rootPath) : 'Workspace'),
+    [rootPath]
+  );
+
+  const select = useCallback(
+    (dto: FileTreeDto): FileTreeDto => {
+      if (parent !== '.') return dto;
+      return { ...dto, root: { ...dto.root, name: folderName } };
+    },
+    [parent, folderName]
+  );
 
   const treeQuery = useQuery({
     queryKey: filesystemKeys.tree(workspaceId, parent),
@@ -36,15 +46,7 @@ export function useFileTree(parentPath?: string) {
     queryFn: () => filesystemApi.getFileTree(workspaceId, parentPath),
     staleTime: 30_000,
     refetchOnWindowFocus: false,
-    select: (dto: FileTreeDto): FileTreeDto => {
-      if (parent !== '.') return dto;
-      return workspace
-        ? {
-            ...dto,
-            root: { ...dto.root, name: getWorkspaceFolderName(workspace.rootPath) },
-          }
-        : dto;
-    },
+    select,
   });
 
   const data = treeQuery.data ?? null;
