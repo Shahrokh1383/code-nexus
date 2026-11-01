@@ -10,6 +10,15 @@ export interface WatcherEvent {
   relativePath: string;
 }
 
+export interface ChokidarFileWatcherOptions {
+  /**
+   * Fires once after chokidar's initial scan completes, with the set of
+   * relative paths it observed during that scan. Enables the caller to
+   * reconcile the persisted index without issuing per-entry `fs.access`.
+   */
+  onReady?: (seenPaths: ReadonlySet<string>) => Promise<void>;
+}
+
 export const DEFAULT_IGNORED_SEGMENTS: ReadonlySet<string> = new Set([
   'node_modules',
   '.git',
@@ -33,24 +42,33 @@ const DEFAULT_IGNORED_GLOBS: readonly string[] = [
 ];
 
 /**
- * Chokidar adapter — 300 ms debounced batching, then sequential delivery to
- * the injected batch handler. Ports the legacy adapter verbatim, including
- * the ignore-pattern → chokidar-glob conversion rules; the only behavioral
- * fix is awaiting `watcher.close()` on stop to eliminate the restart race.
+ * Chokidar adapter with debounced batching + size-capped force-flush.
+ *
+ * Preserves legacy ignore-pattern → chokidar-glob conversion exactly. Adds:
+ *  - `seenPaths` tracking during the initial scan (drives post-ready
+ *    reconcile without per-entry fs.access — the cold-start freeze fix).
+ *  - Force-flush at MAX_BATCH_SIZE events so 50k-file scans don't starve
+ *    the debounce timer and leave `file-index.json` uncreated for seconds.
+ *  - Error listener (previously silent — chokidar failures were invisible).
+ *  - Ready diagnostics (`observed`, `seen`) for post-mortem verification.
  */
 export class ChokidarFileWatcher {
   private static readonly DEBOUNCE_MS = 300;
+  private static readonly MAX_BATCH_SIZE = 500;
 
   private watcher: FSWatcher | null = null;
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private pending: Array<{ type: WatcherEventType; absolutePath: string }> = [];
   private rootPath = '';
+  private seenPaths = new Set<string>();
+  private initialScanDone = false;
 
   constructor(
     rootPath: string,
     ignorePatterns: readonly IgnorePattern[],
     private readonly onBatch: (events: readonly WatcherEvent[]) => Promise<void>,
-    private readonly logger: Logger
+    private readonly logger: Logger,
+    options: ChokidarFileWatcherOptions = {}
   ) {
     this.rootPath = PathUtils.normalize(rootPath);
     this.watcher = chokidar.watch(rootPath, {
@@ -63,14 +81,47 @@ export class ChokidarFileWatcher {
       depth: Infinity,
     });
 
-    this.watcher.on('add', (filePath) => this.queueEvent('add', filePath));
-    this.watcher.on('change', (filePath) => this.queueEvent('change', filePath));
-    this.watcher.on('unlink', (filePath) => this.queueEvent('unlink', filePath));
-    this.watcher.on('addDir', (dirPath) => this.queueEvent('addDir', dirPath));
-    this.watcher.on('unlinkDir', (dirPath) => this.queueEvent('unlinkDir', dirPath));
+    let observed = 0;
+    const track = (fn: (p: string) => void) => (p: string) => {
+      observed += 1;
+      fn(p);
+    };
+
+    this.watcher.on('add', track((p) => this.queueEvent('add', p)));
+    this.watcher.on('change', track((p) => this.queueEvent('change', p)));
+    this.watcher.on('unlink', track((p) => this.queueEvent('unlink', p)));
+    this.watcher.on('addDir', track((p) => this.queueEvent('addDir', p)));
+    this.watcher.on('unlinkDir', track((p) => this.queueEvent('unlinkDir', p)));
+
+    this.watcher.on('error', (error) => {
+      this.logger.error('watcher error', {
+        message: error instanceof Error ? error.message : String(error),
+      });
+    });
+
+    this.watcher.once('ready', () => {
+      this.initialScanDone = true;
+      const seen = this.seenPaths;
+      this.seenPaths = new Set();
+      this.logger.info('watcher initial scan ready', {
+        rootPath: this.rootPath,
+        observed,
+        seen: seen.size,
+      });
+      const onReady = options.onReady;
+      if (onReady) {
+        void onReady(seen).catch((error: unknown) => {
+          this.logger.error('initial-scan reconcile failed', {
+            message: error instanceof Error ? error.message : String(error),
+          });
+        });
+      }
+    });
   }
 
   async stop(): Promise<void> {
+    this.initialScanDone = true;
+    this.seenPaths = new Set();
     if (this.watcher) {
       try {
         await this.watcher.close();
@@ -89,18 +140,34 @@ export class ChokidarFileWatcher {
   }
 
   private queueEvent(type: WatcherEventType, absolutePath: string): void {
+    if (!this.initialScanDone) {
+      this.seenPaths.add(this.toRelativePath(absolutePath));
+    }
     this.pending.push({ type, absolutePath });
+
+    if (this.pending.length >= ChokidarFileWatcher.MAX_BATCH_SIZE) {
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = null;
+      }
+      void this.flushEvents();
+      return;
+    }
 
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
     this.debounceTimer = setTimeout(() => {
+      this.debounceTimer = null;
       void this.flushEvents();
     }, ChokidarFileWatcher.DEBOUNCE_MS);
   }
 
   private async flushEvents(): Promise<void> {
-    const batch = [...this.pending];
+    if (this.pending.length === 0) {
+      return;
+    }
+    const batch = this.pending;
     this.pending = [];
 
     const events: WatcherEvent[] = batch.map(({ type, absolutePath }) => ({
@@ -112,6 +179,7 @@ export class ChokidarFileWatcher {
       await this.onBatch(events);
     } catch (error) {
       this.logger.error('watcher batch processing failed', {
+        count: events.length,
         message: error instanceof Error ? error.message : String(error),
       });
     }
@@ -130,18 +198,12 @@ export class ChokidarFileWatcher {
 }
 
 function toChokidarPattern(raw: string): string {
-  // 1. Explicit directory (trailing slash)
   if (raw.endsWith('/')) {
     const dirName = raw.slice(0, -1);
     return `**/${dirName}/**`;
   }
-
-  // 2. Contains a slash → already a relative path, use as-is
   if (raw.includes('/')) {
     return raw;
   }
-
-  // 3. Wildcard pattern without slash → match at any depth
-  // 4. Plain name (file or directory) → `**/name` matches both
   return `**/${raw}`;
 }

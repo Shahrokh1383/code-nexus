@@ -81,6 +81,7 @@ export class WorkspaceService implements WorkspaceServiceContract {
     if (!schema) {
       throw notFound();
     }
+    await this.doclink.ensureDoclink(normalized);
     const config = await this.configStore.load(normalized);
     await this.fileSystem().activateSession(
       normalized,

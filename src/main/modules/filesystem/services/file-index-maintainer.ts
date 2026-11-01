@@ -55,8 +55,11 @@ export class FileIndexMaintainer {
         if (this.isIgnored(relativePath)) {
           return;
         }
-        if (await this.store.upsertFolder(relativePath)) {
-          this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: true });
+        if (await this.store.findByPath(relativePath)) {
+          return;
+        }
+        if (await this.store.upsertFile(relativePath)) {
+          this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
         }
         return;
 

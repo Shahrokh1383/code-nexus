@@ -1,4 +1,3 @@
-// src/main/modules/filesystem/services/FileSystemService.ts
 import type { FileTreeDto } from '@shared/ipc/filesystem';
 import { DomainException } from '../../../shared/errors/domain-exception';
 import type { EventBus } from '../../../shared/event-bus/event-bus';
@@ -8,13 +7,10 @@ import type { WorkspaceServiceContract } from '../../workspace/services/contract
 import type { FileSystemServiceContract } from './contracts/FileSystemServiceContract';
 import { IgnorePattern } from '../domain/ignore-pattern';
 import { FileIndexStore } from '../infrastructure/file-index-store';
-import {
-  ChokidarFileWatcher,
-  DEFAULT_IGNORED_SEGMENTS,
-} from '../infrastructure/chokidar-watcher';
+import { ChokidarFileWatcher, DEFAULT_IGNORED_SEGMENTS } from '../infrastructure/chokidar-watcher';
 import { NodeFsProbe } from '../infrastructure/node-fs-probe';
 import { FileIndexMaintainer } from './file-index-maintainer';
-import { buildFileTree, buildFileTreeFromIndex  } from './tree-builder';
+import { buildFileTree, buildFileTreeFromIndex } from './tree-builder';
 
 function sessionMismatch(): DomainException {
   return new DomainException(
@@ -23,16 +19,43 @@ function sessionMismatch(): DomainException {
   );
 }
 
+function compilePatterns(raw: readonly string[]): IgnorePattern[] {
+  const compiled: IgnorePattern[] = [];
+  for (const p of raw) {
+    try {
+      compiled.push(new IgnorePattern(p));
+    } catch {
+      // Invalid pattern: skipped silently, matching legacy try/catch behavior.
+    }
+  }
+  return compiled;
+}
+
 /**
  * File-system module service. Owns the file index, the watcher session, and
  * the ignore-pattern reactions. Config persistence goes through the workspace
  * module contract — the only legal synchronous cross-module channel.
+ *
+ * Session lifecycle invariants:
+ *  1. `ensureExists()` runs before the purge so `file-index.json` is on disk
+ *     even for a never-opened workspace (legacy parity: file was always
+ *     present after `initialize`).
+ *  2. Purge runs in one pass with patterns compiled once — O(N·(M+P)), not
+ *     the previous O(N·M) + O(P·N).
+ *  3. Stale-entry reconcile is post-ready and in-memory only — no `fs.access`
+ *     on the activation path (cold-start freeze fix).
+ *  4. `lastScan` is set on scan ready and flushed — restores legacy field
+ *     that was silently null forever in the new codebase.
+ *  5. `addIgnorePattern` / `removeIgnorePattern` restart the watcher with the
+ *     new pattern set — previously changes only reached disk and never the
+ *     running watcher until the next full reactivation.
  */
 export class FileSystemService implements FileSystemServiceContract {
   private activeRootPath: string | null = null;
   private indexStore: FileIndexStore | null = null;
   private watcher: ChokidarFileWatcher | null = null;
   private readonly fsProbe = new NodeFsProbe();
+  private generation = 0;
 
   constructor(
     private readonly file: AtomicJsonFile,
@@ -41,76 +64,79 @@ export class FileSystemService implements FileSystemServiceContract {
     private readonly workspace: () => WorkspaceServiceContract
   ) {}
 
-  private async purgeDefaultIgnoredEntries(store: FileIndexStore): Promise<void> {
-    const entries = await store.listEntries();
-    if (entries.length === 0) {
-      return;
-    }
-    const toDelete: string[] = [];
-    for (const { path } of entries) {
-      const segments = path.split('/');
-      if (segments.some((segment) => DEFAULT_IGNORED_SEGMENTS.has(segment))) {
-        toDelete.push(path);
-      }
-    }
-    if (toDelete.length === 0) {
-      return;
-    }
-    await store.deleteBatch(toDelete);
-    this.logger.info('purged default-ignored index entries', { removed: toDelete.length });
-  }
-
   getActiveRootPath(): string | null {
     return this.activeRootPath;
   }
 
   async activateSession(rootPath: string, ignorePatterns: readonly string[]): Promise<void> {
+    // Idempotency guard (D1): repeated `getWorkspace` for the active root is
+    // a no-op. Pattern changes go through addIgnorePattern/removeIgnorePattern
+    // which restart the watcher explicitly (D10) — so this guard never
+    // freezes stale pattern state in place.
+    if (this.activeRootPath === rootPath && this.indexStore && this.watcher) {
+      return;
+    }
+
     await this.deactivateSession();
 
+    const gen = ++this.generation;
     const store = new FileIndexStore(rootPath, this.file, this.logger);
-    await this.purgeDefaultIgnoredEntries(store);
-    await this.reconcileIndex(rootPath, store);
 
-    // Purge ignore-pattern matches; invalid patterns are skipped silently.
-    for (const raw of ignorePatterns) {
-      try {
-        await store.deleteByPattern(new IgnorePattern(raw));
-      } catch {
-        // ignore invalid patterns
+    // Guarantee the metadata file exists on disk before watcher work begins
+    // — restores legacy behavior where `file-index.json` was always present
+    // after workspace open.
+    await store.ensureExists();
+
+    const compiled = compilePatterns(ignorePatterns);
+
+    // Single-pass purge: default-ignored segments ∪ user patterns. Replaces
+    // two earlier passes (purgeDefaultIgnoredEntries + per-pattern scan).
+    const entries = await store.listEntries();
+    const toPurge: string[] = [];
+    for (const { path } of entries) {
+      if (path.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s))) {
+        toPurge.push(path);
+        continue;
       }
+      for (const matcher of compiled) {
+        try {
+          if (matcher.matches(path)) {
+            toPurge.push(path);
+            break;
+          }
+        } catch {
+          // Per-pattern failure skipped.
+        }
+      }
+    }
+    if (toPurge.length > 0) {
+      await store.deleteBatch(toPurge);
+      this.logger.info('purged ignored index entries', { removed: toPurge.length });
     }
     await store.flush();
 
-    const compiled = ignorePatterns
-      .map((p) => {
-        try {
-          return new IgnorePattern(p);
-        } catch {
-          return null;
-        }
-      })
-      .filter((p): p is IgnorePattern => p !== null);
+    const snapshot = new Set<string>((await store.listEntries()).map((e) => e.path));
 
-    const maintainer = new FileIndexMaintainer(
-      store,
-      this.eventBus,
-      this.logger,
-      compiled
-    );
+    const maintainer = new FileIndexMaintainer(store, this.eventBus, this.logger, compiled);
     const watcher = new ChokidarFileWatcher(
       rootPath,
       compiled,
       (events) => maintainer.applyBatch(events),
-      this.logger
+      this.logger,
+      { onReady: (seen) => this.onInitialScanReady(store, snapshot, seen, gen) }
     );
 
     this.indexStore = store;
     this.watcher = watcher;
     this.activeRootPath = rootPath;
-    this.logger.info('file session activated', { rootPath });
+    this.logger.info('file session activated', {
+      rootPath,
+      initialEntries: snapshot.size,
+    });
   }
 
   async deactivateSession(): Promise<void> {
+    this.generation += 1;
     if (this.watcher) {
       await this.watcher.stop();
       this.watcher = null;
@@ -125,12 +151,13 @@ export class FileSystemService implements FileSystemServiceContract {
     this.activeRootPath = null;
   }
 
-  async getFileTree(workspaceId: string, parentPath?: string): Promise<FileTreeDto>  {
+  async getFileTree(workspaceId: string, parentPath?: string): Promise<FileTreeDto> {
     const store = this.assertActiveSession(workspaceId);
     const rootPath = this.activeRootPath!;
     const patterns = await this.workspace().getIgnorePatterns(workspaceId);
     const parent = parentPath ?? '.';
-    const parentEntry = parent === '.' ? { isDirectory: true as const } : await store.findByPath(parent);
+    const parentEntry =
+      parent === '.' ? { isDirectory: true as const } : await store.findByPath(parent);
     if (parentEntry?.isDirectory) {
       const indexed = await store.findChildrenOf(parent);
       return buildFileTreeFromIndex(parent, indexed, patterns);
@@ -149,21 +176,57 @@ export class FileSystemService implements FileSystemServiceContract {
     const validated = new IgnorePattern(pattern);
 
     await this.workspace().addIgnorePattern(workspaceId, pattern);
-
     const deletedPaths = await store.deleteByPattern(validated);
-    // Flush immediately so the watcher restart does not see stale data.
+    // Flush before restart so pending events don't reintroduce purged entries.
     await store.flush();
 
     for (const path of deletedPaths) {
       this.eventBus.emit('FileExcluded', { path });
     }
+    await this.restartWatcher();
     this.eventBus.emit('IgnorePatternsChanged', { workspaceId });
   }
 
   async removeIgnorePattern(workspaceId: string, pattern: string): Promise<void> {
     this.assertActiveSession(workspaceId);
     await this.workspace().removeIgnorePattern(workspaceId, pattern);
+    // Restart so chokidar re-scans with the reduced set and re-emits 'add'
+    // for previously-ignored paths — the maintainer re-indexes them.
+    await this.restartWatcher();
     this.eventBus.emit('IgnorePatternsChanged', { workspaceId });
+  }
+
+  private async restartWatcher(): Promise<void> {
+    const store = this.indexStore;
+    const rootPath = this.activeRootPath;
+    if (!store || !rootPath) {
+      return;
+    }
+
+    const patterns = await this.workspace().getIgnorePatterns(rootPath);
+    const compiled = compilePatterns(patterns);
+
+    if (this.watcher) {
+      await this.watcher.stop();
+      this.watcher = null;
+    }
+
+    const gen = ++this.generation;
+    const snapshot = new Set<string>((await store.listEntries()).map((e) => e.path));
+    const maintainer = new FileIndexMaintainer(store, this.eventBus, this.logger, compiled);
+
+    this.watcher = new ChokidarFileWatcher(
+      rootPath,
+      compiled,
+      (events) => maintainer.applyBatch(events),
+      this.logger,
+      { onReady: (seen) => this.onInitialScanReady(store, snapshot, seen, gen) }
+    );
+    this.logger.info('watcher restarted', {
+      rootPath,
+      patterns: compiled.length,
+      snapshotSize: snapshot.size,
+    });
   }
 
   private assertActiveSession(workspaceId: string): FileIndexStore {
@@ -173,39 +236,46 @@ export class FileSystemService implements FileSystemServiceContract {
     return this.indexStore;
   }
 
-  private async reconcileIndex(rootPath: string, store: FileIndexStore): Promise<void> {
-    const entries = await store.listEntries();
-    if (entries.length === 0) {
+  /**
+   * Fires once per watcher lifecycle, after chokidar's initial scan. Two-phase:
+   *   1. Delete index entries absent from the observed set — pure in-memory
+   *      diff, zero fs syscalls (replaces the old N × fs.access reconcile).
+   *   2. Stamp `lastScan` and flush — restores the legacy field that the new
+   *      codebase left null forever.
+   */
+  private async onInitialScanReady(
+    store: FileIndexStore,
+    snapshot: ReadonlySet<string>,
+    seen: ReadonlySet<string>,
+    gen: number
+  ): Promise<void> {
+    if (this.generation !== gen || this.indexStore !== store) {
       return;
     }
 
-    const CONCURRENCY = 64;
-    const toDelete: string[] = [];
-
-    for (let i = 0; i < entries.length; i += CONCURRENCY) {
-      const chunk = entries.slice(i, i + CONCURRENCY);
-      const checks = await Promise.all(
-        chunk.map(async ({ path }) => ({
-          path,
-          exists: await this.fsProbe.existsAsync(
-            this.fsProbe.absolutePath(rootPath, path)
-          ),
-        }))
-      );
-      for (const { path, exists } of checks) {
-        if (!exists) {
-          toDelete.push(path);
-        }
-      }
-      if (i + CONCURRENCY < entries.length) {
-        await new Promise<void>((resolve) => setImmediate(resolve));
+    const stale: string[] = [];
+    for (const path of snapshot) {
+      if (!seen.has(path)) {
+        stale.push(path);
       }
     }
-
-    if (toDelete.length > 0) {
-      await store.deleteBatch(toDelete);
-      this.logger.info('reconciled stale index entries', { removed: toDelete.length });
-      await store.flush();
+    if (stale.length > 0) {
+      await store.deleteBatch(stale);
+      for (const path of stale) {
+        this.eventBus.emit('FileDeleted', { path });
+      }
+      this.logger.info('reconciled stale index entries', { removed: stale.length });
     }
+
+    if (this.generation !== gen || this.indexStore !== store) {
+      return;
+    }
+
+    store.setLastScan(new Date().toISOString());
+    await store.flush();
+    this.logger.info('initial scan finalized', {
+      seen: seen.size,
+      staleRemoved: stale.length,
+    });
   }
 }
