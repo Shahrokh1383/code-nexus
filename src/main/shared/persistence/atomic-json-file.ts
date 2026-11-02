@@ -7,13 +7,6 @@ import type { Logger } from '../logger/logger';
 export const AtomicJsonFileToken: ServiceToken<AtomicJsonFile> =
   createServiceToken<AtomicJsonFile>('AtomicJsonFile');
 
-/**
- * Atomic JSON/text file writer with per-path write locking, EPERM retry for
- * Windows transient locks, and corrupted-file self-repair on read.
- * Ports the production-hardened semantics of the legacy JsonDatabase
- * (write-lock queue → temp file → rename, read retries + brace-matching
- * extraction of the first valid JSON object).
- */
 export class AtomicJsonFile {
   private static readonly writeLocks = new Map<string, Promise<void>>();
 
@@ -55,8 +48,12 @@ export class AtomicJsonFile {
     await this.queueWrite(filePath, () => this.atomicWrite(filePath, text));
   }
 
+  /**
+   * Serializes to raw JSON (no indentation). Pretty-printing a 100k-entry
+   * file index creates massive string overhead and blocks the main thread.
+   */
   async writeJson<T>(filePath: string, data: T): Promise<void> {
-    await this.writeText(filePath, `${JSON.stringify(data, null, 2)}\n`);
+    await this.writeText(filePath, JSON.stringify(data));
   }
 
   private queueWrite(filePath: string, writeFn: () => Promise<void>): Promise<void> {
@@ -93,7 +90,6 @@ export class AtomicJsonFile {
           // Temp file already gone — nothing to clean up.
         }
         if (attempt === 2) {
-          // Last resort: direct write. Losing atomicity beats losing data.
           this.logger.warn('atomic rename failed, falling back to direct write', {
             targetPath,
             code,

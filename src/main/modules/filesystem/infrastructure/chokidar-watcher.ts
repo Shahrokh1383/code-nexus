@@ -17,6 +17,13 @@ export interface ChokidarFileWatcherOptions {
    * reconcile the persisted index without issuing per-entry `fs.access`.
    */
   onReady?: (seenPaths: ReadonlySet<string>) => Promise<void>;
+  
+  /**
+   * If true, suppresses the 'add' events for files that already exist when
+   * the watcher starts. Used to prevent double-scanning when fastScanWorkspace
+   * is running.
+   */
+  ignoreInitial?: boolean;
 }
 
 export const DEFAULT_IGNORED_SEGMENTS: ReadonlySet<string> = new Set([
@@ -41,17 +48,6 @@ const DEFAULT_IGNORED_GLOBS: readonly string[] = [
   '**/Thumbs.db',
 ];
 
-/**
- * Chokidar adapter with debounced batching + size-capped force-flush.
- *
- * Preserves legacy ignore-pattern → chokidar-glob conversion exactly. Adds:
- *  - `seenPaths` tracking during the initial scan (drives post-ready
- *    reconcile without per-entry fs.access — the cold-start freeze fix).
- *  - Force-flush at MAX_BATCH_SIZE events so 50k-file scans don't starve
- *    the debounce timer and leave `file-index.json` uncreated for seconds.
- *  - Error listener (previously silent — chokidar failures were invisible).
- *  - Ready diagnostics (`observed`, `seen`) for post-mortem verification.
- */
 export class ChokidarFileWatcher {
   private static readonly DEBOUNCE_MS = 300;
   private static readonly MAX_BATCH_SIZE = 500;
@@ -76,7 +72,7 @@ export class ChokidarFileWatcher {
         ...DEFAULT_IGNORED_GLOBS,
         ...ignorePatterns.map((p) => toChokidarPattern(p.value)),
       ],
-      ignoreInitial: false,
+      ignoreInitial: options.ignoreInitial ?? false,
       persistent: true,
       depth: Infinity,
     });

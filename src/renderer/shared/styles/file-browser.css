@@ -73,7 +73,6 @@
   font-family: var(--cn-font-mono);
   font-size: var(--cn-font-size-sm);
   min-height: 0;
-  /* Restored contain: content to isolate scroll container layout from the rest of the page. */
   contain: content;
 }
 .file-browser__sidebar {
@@ -107,11 +106,7 @@
   cursor: pointer;
   transition: background-color 0.08s ease;
   user-select: none;
-  /* Isolate layout and paint so hover doesn't trigger a full tree reflow. */
   contain: layout paint;
-  /* Skip rendering off-screen rows to prevent massive DOM hangs. */
-  content-visibility: auto;
-  contain-intrinsic-size: 24px;
 }
 .file-node:hover {
   background-color: var(--cn-bg-hover);

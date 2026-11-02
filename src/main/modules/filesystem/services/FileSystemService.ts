@@ -30,7 +30,6 @@ function compilePatterns(raw: readonly string[]): IgnorePattern[] {
 }
 
 export class FileSystemService implements FileSystemServiceContract {
-  private static readonly PROGRESS_CHUNK_SIZE = 500;
   private static readonly EMIT_YIELD_INTERVAL = 500;
 
   private activeRootPath: string | null = null;
@@ -38,7 +37,6 @@ export class FileSystemService implements FileSystemServiceContract {
   private watcher: ChokidarFileWatcher | null = null;
   private readonly fsProbe = new NodeFsProbe();
   private generation = 0;
-  private initialScanDone: Promise<void> = Promise.resolve();
 
   constructor(
     private readonly file: AtomicJsonFile,
@@ -64,49 +62,44 @@ export class FileSystemService implements FileSystemServiceContract {
 
     const compiled = compilePatterns(ignorePatterns);
 
-    const lastScan = await store.getLastScan();
-    const needsScan = lastScan === null;
-
     const maintainer = new FileIndexMaintainer(store, this.eventBus, this.logger, compiled);
-    const onReady = (seenPaths: ReadonlySet<string>) =>
-      this.reconcileOnReady(store, seenPaths);
-
+    
+    // ALWAYS set ignoreInitial to true. 
+    // We rely on fastScanWorkspace for the initial build and reconciliation.
+    // Chokidar's native initial walk is too slow and floods the IPC.
     const watcher = new ChokidarFileWatcher(
       rootPath,
       compiled,
       (events) => maintainer.applyBatch(events),
       this.logger,
-      { onReady }
+      { ignoreInitial: true }
     );
 
     this.indexStore = store;
     this.watcher = watcher;
     this.activeRootPath = rootPath;
 
-    if (needsScan) {
-      const myGeneration = this.generation;
-      this.initialScanDone = this.performInitialScan(store, rootPath, compiled, myGeneration).catch(
-        (error) => {
-          this.logger.error('background initial scan failed', {
-            rootPath,
-            message: error instanceof Error ? error.message : String(error),
-          });
-        }
-      );
-    } else {
-      this.initialScanDone = Promise.resolve();
-    }
+    // Always run the scan in the background. If the index is up-to-date,
+    // it will quickly find 0 changes and exit, keeping workspace switching instant.
+    // We use `void` to explicitly mark this as fire-and-forget.
+    const myGeneration = this.generation;
+    void this.performInitialScan(store, rootPath, compiled, myGeneration).catch(
+      (error) => {
+        this.logger.error('background initial scan failed', {
+          rootPath,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    );
 
     this.logger.info('file session activated', {
       rootPath,
-      mode: needsScan ? 'background-scan' : 'cached-index',
       activationMs: Date.now() - activationStart,
     });
   }
 
   async deactivateSession(): Promise<void> {
     this.generation += 1;
-    this.initialScanDone = Promise.resolve();
     if (this.watcher) {
       await this.watcher.stop();
       this.watcher = null;
@@ -127,7 +120,6 @@ export class FileSystemService implements FileSystemServiceContract {
     const patterns = await this.workspace().getIgnorePatterns(workspaceId);
     const parent = parentPath ?? '.';
     
-    // Check if the requested folder is ignored. If so, do NOT read from disk.
     const compiled = compilePatterns(patterns);
     const isIgnored =
       parent !== '.' &&
@@ -152,7 +144,6 @@ export class FileSystemService implements FileSystemServiceContract {
       return buildFileTreeFromIndex(parent, indexed, patterns);
     }
     
-    // Fallback to disk only for unindexed, non-ignored folders.
     return buildFileTree(rootPath, this.fsProbe, parentPath, patterns);
   }
 
@@ -253,21 +244,15 @@ export class FileSystemService implements FileSystemServiceContract {
       if (!existingPaths.has(p)) toUpsert.push({ path: p, isDirectory: isDir });
     }
 
-    for (let i = 0; i < toUpsert.length; i += FileSystemService.PROGRESS_CHUNK_SIZE) {
-      if (myGeneration !== this.generation) return;
-      const chunk = toUpsert.slice(i, i + FileSystemService.PROGRESS_CHUNK_SIZE);
-      await store.bulkUpsert(chunk);
-      const last = chunk[chunk.length - 1];
-      if (last) {
-        this.eventBus.emit('FileDiscovered', {
-          path: last.path,
-          isDirectory: last.isDirectory,
-        });
-      }
-    }
+    await store.bulkUpsert(toUpsert);
 
-    store.setLastScan(new Date().toISOString());
-    await store.flush();
+    // Only flush and emit if the disk state actually differs from the index.
+    // This prevents unnecessary disk writes and UI updates on every workspace switch.
+    if (stale.length > 0 || toUpsert.length > 0) {
+      store.setLastScan(new Date().toISOString());
+      await store.flush();
+      this.eventBus.emit('FileDiscovered', { path: '.', isDirectory: true });
+    }
 
     this.logger.info('initial scan finalized', {
       scanned: scan.files.size,
@@ -275,39 +260,6 @@ export class FileSystemService implements FileSystemServiceContract {
       added: toUpsert.length,
       scanMs: scan.durationMs,
       totalMs: Date.now() - scanStart,
-    });
-  }
-
-  private async reconcileOnReady(
-    store: FileIndexStore,
-    seenPaths: ReadonlySet<string>
-  ): Promise<void> {
-    try {
-      await this.initialScanDone;
-    } catch {
-      // initialScanDone never rejects
-    }
-
-    const stale: string[] = [];
-    for await (const { path } of store.listEntriesIterable()) {
-      if (path === '.') continue;
-      if (!seenPaths.has(path)) stale.push(path);
-    }
-    if (stale.length === 0) return;
-
-    await store.deleteBatch(stale);
-    let sinceYield = 0;
-    for (let i = 0; i < stale.length; i++) {
-      this.eventBus.emit('FileDeleted', { path: stale[i] });
-      sinceYield++;
-      if (sinceYield >= FileSystemService.EMIT_YIELD_INTERVAL) {
-        sinceYield = 0;
-        await new Promise<void>((resolve) => setImmediate(resolve));
-      }
-    }
-    await store.flush();
-    this.logger.info('post-ready reconcile removed stale entries', {
-      count: stale.length,
     });
   }
 
@@ -345,7 +297,8 @@ export class FileSystemService implements FileSystemServiceContract {
       rootPath,
       compiled,
       (events) => maintainer.applyBatch(events),
-      this.logger
+      this.logger,
+      { ignoreInitial: true }
     );
     this.logger.info('watcher restarted', {
       rootPath,

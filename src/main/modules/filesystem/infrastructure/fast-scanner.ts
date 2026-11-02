@@ -5,30 +5,19 @@ import type { IgnorePattern } from '../domain/ignore-pattern';
 import { DEFAULT_IGNORED_SEGMENTS } from './chokidar-watcher';
 
 export interface ScanResult {
-  /** Map of relative path → isDirectory. Root is never in the map. */
   files: Map<string, boolean>;
   durationMs: number;
   dirsVisited: number;
 }
 
 /**
- * Concurrency budget. 32 saturates the underlying fs thread pool (default 4)
- * eightfold — the bottleneck becomes OS I/O, not JS coordination. Higher
- * values yield diminishing returns and increase peak memory.
+ * Concurrency budget. Dropped to 4 to match Node's default libuv threadpool.
+ * Using 32 saturated the CPU and starved Electron's main process, causing the
+ * renderer to freeze for 10+ seconds during the initial scan of a large codebase.
  */
-const CONCURRENCY = 32;
-/** Yield to the event loop at least this often so IPC stays responsive. */
+const CONCURRENCY = 4;
 const YIELD_INTERVAL_MS = 16;
 
-/**
- * Fast workspace scan using `readdir(withFileTypes: true)` — one syscall per
- * directory (Dirent carries type info) instead of one `stat` per file. For
- * 100k files / 10k directories this is 10k syscalls vs chokidar's 100k+.
- *
- * Symlinks are skipped (matches legacy purge behavior for symlinked dirs).
- * Default-ignored segments (node_modules, .git, etc.) are skipped without
- * recursing into them — matching the purge in `activateSession`.
- */
 export async function fastScanWorkspace(
   rootPath: string,
   patterns: readonly IgnorePattern[],
