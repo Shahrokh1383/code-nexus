@@ -8,9 +8,12 @@ function toErrorMessage(error: unknown): string {
 }
 
 /**
- * Ignore-pattern list + add/remove mutations. Mutations invalidate both the
- * pattern cache and the tree cache — the replacement for the legacy
- * `onPatternChange` refetch callback.
+ * Ignore-pattern list + add/remove mutations.
+ *
+ * Invalidates BOTH patterns and trees. The tree invalidation is required
+ * because adding/removing a pattern changes which directories are indexed.
+ * Without it, the UI would still show ignored directories like node_modules,
+ * and expanding them would trigger a heavy disk fallback in Main.
  */
 export function useIgnorePatterns() {
   const { workspace } = useWorkspace();
@@ -25,7 +28,7 @@ export function useIgnorePatterns() {
 
   const invalidateCaches = (): void => {
     void queryClient.invalidateQueries({ queryKey: filesystemKeys.patterns(workspaceId) });
-    void queryClient.invalidateQueries({ queryKey: filesystemKeys.all });
+    void queryClient.invalidateQueries({ queryKey: filesystemKeys.trees(workspaceId) });
   };
 
   const addPattern = useMutation({

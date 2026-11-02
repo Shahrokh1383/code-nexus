@@ -5,6 +5,9 @@ import { IgnorePattern } from '../domain/ignore-pattern';
 import type { FsDirEntry, NodeFsProbe } from '../infrastructure/node-fs-probe';
 import type { IndexedPath } from '../infrastructure/file-index-store';
 
+// Prevent IPC serialization and React rendering freezes on massive folders.
+const MAX_CHILDREN = 2000;
+
 function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
   return patterns
     .map((p) => {
@@ -17,13 +20,6 @@ function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
     .filter((p): p is IgnorePattern => p !== null);
 }
 
-/**
- * Builds a SHALLOW tree DTO for one directory, read from disk on demand.
- * Folder children are returned with `children: []` and loaded lazily by the
- * renderer when the user expands them. Keeps workspace-open cost O(children
- * of the requested directory), independent of total workspace size
- * (Constitution §2: Main orchestrates, infra reads OS).
- */
 export async function buildFileTree(
   rootPath: string,
   fsProbe: NodeFsProbe,
@@ -52,6 +48,7 @@ export async function buildFileTree(
   let folderCount = 0;
 
   for (const entry of entries) {
+    if (children.length >= MAX_CHILDREN) break;
     const childPath = targetPath === '.' ? entry.name : `${targetPath}/${entry.name}`;
     if (matchers.some((matcher) => matcher.matches(childPath))) {
       continue;
@@ -100,6 +97,7 @@ export function buildFileTreeFromIndex(
   let folderCount = 0;
 
   for (const { path, entry } of entries) {
+    if (children.length >= MAX_CHILDREN) break;
     if (matchers.some((matcher) => matcher.matches(path))) {
       continue;
     }

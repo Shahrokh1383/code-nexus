@@ -1,7 +1,11 @@
-import { useState, type JSX, type FormEvent } from 'react';
+import { memo, useState, type JSX, type FormEvent } from 'react';
 import { useIgnorePatterns } from '../hooks/useIgnorePatterns';
 
-export function IgnorePatternEditor(): JSX.Element {
+/**
+ * Memoized — parent re-renders (FileBrowserPage on selection toggle) no
+ * longer cascade into this component's React Query / mutation hooks.
+ */
+export const IgnorePatternEditor = memo(function IgnorePatternEditor(): JSX.Element {
   const { ignoredPatterns, addPattern, removePattern } = useIgnorePatterns();
   const [newPattern, setNewPattern] = useState('');
   const [isAdding, setIsAdding] = useState(false);
@@ -59,4 +63,4 @@ export function IgnorePatternEditor(): JSX.Element {
       </ul>
     </div>
   );
-}
+});

@@ -3,7 +3,7 @@ import type { Logger } from '../../../shared/logger/logger';
 import { validateRelativePath } from '../domain/file-path';
 import type { IgnorePattern } from '../domain/ignore-pattern';
 import type { FileIndexStore } from '../infrastructure/file-index-store';
-import type { WatcherEvent } from '../infrastructure/chokidar-watcher';
+import { DEFAULT_IGNORED_SEGMENTS, type WatcherEvent } from '../infrastructure/chokidar-watcher';
 
 export class FileIndexMaintainer {
   private static readonly YIELD_EVERY = 200;
@@ -43,21 +43,15 @@ export class FileIndexMaintainer {
 
     switch (event.type) {
       case 'add':
-        if (this.isIgnored(relativePath)) {
-          return;
-        }
+        if (this.isIgnored(relativePath)) return;
         if (await this.store.upsertFile(relativePath)) {
           this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
         }
         return;
 
       case 'change':
-        if (this.isIgnored(relativePath)) {
-          return;
-        }
-        if (await this.store.findByPath(relativePath)) {
-          return;
-        }
+        if (this.isIgnored(relativePath)) return;
+        if (await this.store.findByPath(relativePath)) return;
         if (await this.store.upsertFile(relativePath)) {
           this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
         }
@@ -69,11 +63,10 @@ export class FileIndexMaintainer {
         return;
 
       case 'addDir':
-        if (this.isIgnored(relativePath)) {
-          return;
+        if (this.isIgnored(relativePath)) return;
+        if (await this.store.upsertFolder(relativePath)) {
+          this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: true });
         }
-        await this.store.upsertFolder(relativePath);
-        this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: true });
         return;
 
       case 'unlinkDir':
@@ -84,6 +77,12 @@ export class FileIndexMaintainer {
   }
 
   private isIgnored(relativePath: string): boolean {
+    // Check default ignored segments (node_modules, .git, etc.)
+    if (relativePath.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s))) {
+      return true;
+    }
+    
+    // Check user-defined ignore patterns
     return this.ignorePatterns.some((pattern) => {
       try {
         return pattern.matches(relativePath);

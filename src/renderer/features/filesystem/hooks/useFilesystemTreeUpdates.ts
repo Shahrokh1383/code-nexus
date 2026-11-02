@@ -4,17 +4,11 @@ import { filesystemKeys, TREE_UPDATED_CHANNEL } from '../keys';
 import { onIpcEvent } from '../../../shared/lib/ipc';
 import { useWorkspace } from '../../workspace';
 
-const REFETCH_DEBOUNCE_MS = 500;
+const REFETCH_DEBOUNCE_MS = 300;
 
 /**
  * Single realtime subscription for the filesystem feature. One listener per
  * active workspace, batched into one refetch burst per burst of file events.
- * Mount once per page displaying filesystem data; do NOT call from
- * `useFileTree` (that is the pattern this replaces).
- *
- * `type: 'active'` refetches only currently-mounted queries — expanded
- * folders. Collapsed folders stay stale until remounted, which matches
- * VS Code's explorer behaviour.
  */
 export function useFilesystemTreeUpdates(): void {
   const { workspace } = useWorkspace();
@@ -24,15 +18,17 @@ export function useFilesystemTreeUpdates(): void {
   useEffect(() => {
     if (!workspaceId) return;
 
+    const treePrefix = filesystemKeys.trees(workspaceId);
+
     let timer: ReturnType<typeof setTimeout> | null = null;
     const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         timer = null;
-        void queryClient.refetchQueries({
-          queryKey: filesystemKeys.workspace(workspaceId),
-          type: 'active',
-        });
+        if (queryClient.isFetching({ queryKey: treePrefix }) > 0) {
+          return;
+        }
+        void queryClient.refetchQueries({ queryKey: treePrefix, type: 'active' });
       }, REFETCH_DEBOUNCE_MS);
     });
 

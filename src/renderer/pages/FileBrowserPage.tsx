@@ -1,4 +1,4 @@
-import { useCallback, useEffect, type JSX } from 'react';
+import { memo, useCallback, useEffect, useMemo, type JSX } from 'react';
 import {
   useFileTree,
   useIgnorePatterns,
@@ -9,6 +9,10 @@ import {
 } from '../features/filesystem';
 import '../shared/styles/file-browser.css';
 
+const Sidebar = memo(function Sidebar(): JSX.Element {
+  return <IgnorePatternEditor />;
+});
+
 export function FileBrowserPage(): JSX.Element {
   useFilesystemTreeUpdates();
   const { tree, totalFiles, totalFolders, error, isScanning } = useFileTree();
@@ -16,6 +20,10 @@ export function FileBrowserPage(): JSX.Element {
 
   const selectedPaths = useFileSystemStore((s) => s.selectedPaths);
   const clearSelection = useFileSystemStore((s) => s.clearSelection);
+
+  // Stable `nodes` array — otherwise `[tree]` creates a new ref every render,
+  // breaking `SelectableFileTree`'s memo and cascading the tree re-render.
+  const treeNodes = useMemo(() => (tree ? [tree] : []), [tree]);
 
   useEffect(() => {
     if (isScanning) clearSelection();
@@ -56,7 +64,7 @@ export function FileBrowserPage(): JSX.Element {
       <div className="file-browser__content">
         <div className="file-browser__tree-container">
           {tree ? (
-            <SelectableFileTree nodes={[tree]} />
+            <SelectableFileTree nodes={treeNodes} />
           ) : (
             <div className="file-browser__loading">
               <i className="fa-solid fa-folder-open text-primary" />
@@ -66,7 +74,7 @@ export function FileBrowserPage(): JSX.Element {
         </div>
 
         <aside className="file-browser__sidebar">
-          <IgnorePatternEditor />
+          <Sidebar />
         </aside>
       </div>
     </div>

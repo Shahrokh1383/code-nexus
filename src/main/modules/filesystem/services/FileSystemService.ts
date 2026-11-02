@@ -6,6 +6,7 @@ import type { AtomicJsonFile } from '../../../shared/persistence/atomic-json-fil
 import type { WorkspaceServiceContract } from '../../workspace/services/contracts/WorkspaceServiceContract';
 import type { FileSystemServiceContract } from './contracts/FileSystemServiceContract';
 import { IgnorePattern } from '../domain/ignore-pattern';
+import { pathNameOf } from '../domain/file-path';
 import { FileIndexStore } from '../infrastructure/file-index-store';
 import { ChokidarFileWatcher, DEFAULT_IGNORED_SEGMENTS } from '../infrastructure/chokidar-watcher';
 import { NodeFsProbe } from '../infrastructure/node-fs-probe';
@@ -29,11 +30,15 @@ function compilePatterns(raw: readonly string[]): IgnorePattern[] {
 }
 
 export class FileSystemService implements FileSystemServiceContract {
+  private static readonly PROGRESS_CHUNK_SIZE = 500;
+  private static readonly EMIT_YIELD_INTERVAL = 500;
+
   private activeRootPath: string | null = null;
   private indexStore: FileIndexStore | null = null;
   private watcher: ChokidarFileWatcher | null = null;
   private readonly fsProbe = new NodeFsProbe();
   private generation = 0;
+  private initialScanDone: Promise<void> = Promise.resolve();
 
   constructor(
     private readonly file: AtomicJsonFile,
@@ -59,85 +64,49 @@ export class FileSystemService implements FileSystemServiceContract {
 
     const compiled = compilePatterns(ignorePatterns);
 
-    // Purge ignored entries from existing index (single pass, patterns compiled once).
-    const existing = await store.listEntries();
-    const toPurge: string[] = [];
-    for (const { path } of existing) {
-      if (path.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s))) {
-        toPurge.push(path);
-        continue;
-      }
-      for (const matcher of compiled) {
-        try {
-          if (matcher.matches(path)) { toPurge.push(path); break; }
-        } catch { /* per-pattern skipped */ }
-      }
-    }
-    if (toPurge.length > 0) {
-      await store.deleteBatch(toPurge);
-      this.logger.info('purged ignored index entries', { removed: toPurge.length });
-    }
+    const lastScan = await store.getLastScan();
+    const needsScan = lastScan === null;
 
-    // Fast scan: one readdir per directory, 32-way concurrency, no per-file stat.
-    // Populates the store in ~1–2 s for 100k files — independent of chokidar.
-    store.markScanStart();
-    const scan = await fastScanWorkspace(rootPath, compiled, this.logger);
-    store.markScanEnd();
-
-    // Reconcile: remove stale (index has, disk doesn't) then bulk-add new.
-    const existingPaths = new Set<string>();
-    for (const { path } of await store.listEntries()) existingPaths.add(path);
-
-    const stale: string[] = [];
-    for (const p of existingPaths) {
-      if (!scan.files.has(p)) stale.push(p);
-    }
-    if (stale.length > 0) {
-      await store.deleteBatch(stale);
-      for (const path of stale) this.eventBus.emit('FileDeleted', { path });
-    }
-
-    const toUpsert: Array<{ path: string; isDirectory: boolean }> = [];
-    for (const [p, isDir] of scan.files) {
-      if (!existingPaths.has(p)) toUpsert.push({ path: p, isDirectory: isDir });
-    }
-    if (toUpsert.length > 0) {
-      await store.bulkUpsert(toUpsert);
-    }
-
-    store.setLastScan(new Date().toISOString());
-    await store.flush();
-
-    this.logger.info('initial scan finalized', {
-      scanned: scan.files.size,
-      staleRemoved: stale.length,
-      added: toUpsert.length,
-      scanMs: scan.durationMs,
-      totalMs: Date.now() - activationStart,
-    });
-
-    // Watcher starts AFTER scan+reconcile+flush so index is on disk before any
-    // event is processed. Chokidar's own setup scan runs in background; its
-    // 'add' events for paths already in the index are no-ops in the maintainer.
     const maintainer = new FileIndexMaintainer(store, this.eventBus, this.logger, compiled);
+    const onReady = (seenPaths: ReadonlySet<string>) =>
+      this.reconcileOnReady(store, seenPaths);
+
     const watcher = new ChokidarFileWatcher(
       rootPath,
       compiled,
       (events) => maintainer.applyBatch(events),
-      this.logger
+      this.logger,
+      { onReady }
     );
 
     this.indexStore = store;
     this.watcher = watcher;
     this.activeRootPath = rootPath;
+
+    if (needsScan) {
+      const myGeneration = this.generation;
+      this.initialScanDone = this.performInitialScan(store, rootPath, compiled, myGeneration).catch(
+        (error) => {
+          this.logger.error('background initial scan failed', {
+            rootPath,
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
+      );
+    } else {
+      this.initialScanDone = Promise.resolve();
+    }
+
     this.logger.info('file session activated', {
       rootPath,
-      initialEntries: scan.files.size,
+      mode: needsScan ? 'background-scan' : 'cached-index',
+      activationMs: Date.now() - activationStart,
     });
   }
 
   async deactivateSession(): Promise<void> {
     this.generation += 1;
+    this.initialScanDone = Promise.resolve();
     if (this.watcher) {
       await this.watcher.stop();
       this.watcher = null;
@@ -157,12 +126,33 @@ export class FileSystemService implements FileSystemServiceContract {
     const rootPath = this.activeRootPath!;
     const patterns = await this.workspace().getIgnorePatterns(workspaceId);
     const parent = parentPath ?? '.';
+    
+    // Check if the requested folder is ignored. If so, do NOT read from disk.
+    const compiled = compilePatterns(patterns);
+    const isIgnored =
+      parent !== '.' &&
+      (parent.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s)) ||
+        compiled.some((matcher) => {
+          try { return matcher.matches(parent); } catch { return false; }
+        }));
+
+    if (isIgnored) {
+      return {
+        root: { id: parent, path: parent, name: pathNameOf(parent), children: [] },
+        totalFiles: 0,
+        totalFolders: 0,
+      };
+    }
+
     const parentEntry =
       parent === '.' ? { isDirectory: true as const } : await store.findByPath(parent);
+
     if (parentEntry?.isDirectory) {
       const indexed = await store.findChildrenOf(parent);
       return buildFileTreeFromIndex(parent, indexed, patterns);
     }
+    
+    // Fallback to disk only for unindexed, non-ignored folders.
     return buildFileTree(rootPath, this.fsProbe, parentPath, patterns);
   }
 
@@ -193,6 +183,134 @@ export class FileSystemService implements FileSystemServiceContract {
     this.eventBus.emit('IgnorePatternsChanged', { workspaceId });
   }
 
+  private async performInitialScan(
+    store: FileIndexStore,
+    rootPath: string,
+    compiled: readonly IgnorePattern[],
+    myGeneration: number
+  ): Promise<void> {
+    const scanStart = Date.now();
+
+    const toPurge: string[] = [];
+    let purgeSinceYield = 0;
+    for await (const { path } of store.listEntriesIterable()) {
+      if (myGeneration !== this.generation) return;
+      let matches = false;
+      if (path.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s))) {
+        matches = true;
+      } else {
+        for (const matcher of compiled) {
+          try {
+            if (matcher.matches(path)) { matches = true; break; }
+          } catch { /* per-pattern skipped */ }
+        }
+      }
+      if (matches) toPurge.push(path);
+      purgeSinceYield++;
+      if (purgeSinceYield >= FileSystemService.EMIT_YIELD_INTERVAL) {
+        purgeSinceYield = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
+      }
+    }
+    if (myGeneration !== this.generation) return;
+
+    if (toPurge.length > 0) {
+      await store.deleteBatch(toPurge);
+      this.logger.info('purged ignored index entries', { removed: toPurge.length });
+    }
+
+    store.markScanStart();
+    const scan = await fastScanWorkspace(rootPath, compiled, this.logger);
+    store.markScanEnd();
+    if (myGeneration !== this.generation) return;
+
+    const existingPaths = new Set<string>();
+    for await (const { path } of store.listEntriesIterable()) {
+      if (myGeneration !== this.generation) return;
+      existingPaths.add(path);
+    }
+
+    const stale: string[] = [];
+    for (const p of existingPaths) {
+      if (!scan.files.has(p)) stale.push(p);
+    }
+    if (stale.length > 0) {
+      await store.deleteBatch(stale);
+      let sinceYield = 0;
+      for (let i = 0; i < stale.length; i++) {
+        if (myGeneration !== this.generation) return;
+        this.eventBus.emit('FileDeleted', { path: stale[i] });
+        sinceYield++;
+        if (sinceYield >= FileSystemService.EMIT_YIELD_INTERVAL) {
+          sinceYield = 0;
+          await new Promise<void>((resolve) => setImmediate(resolve));
+        }
+      }
+    }
+
+    const toUpsert: Array<{ path: string; isDirectory: boolean }> = [];
+    for (const [p, isDir] of scan.files) {
+      if (!existingPaths.has(p)) toUpsert.push({ path: p, isDirectory: isDir });
+    }
+
+    for (let i = 0; i < toUpsert.length; i += FileSystemService.PROGRESS_CHUNK_SIZE) {
+      if (myGeneration !== this.generation) return;
+      const chunk = toUpsert.slice(i, i + FileSystemService.PROGRESS_CHUNK_SIZE);
+      await store.bulkUpsert(chunk);
+      const last = chunk[chunk.length - 1];
+      if (last) {
+        this.eventBus.emit('FileDiscovered', {
+          path: last.path,
+          isDirectory: last.isDirectory,
+        });
+      }
+    }
+
+    store.setLastScan(new Date().toISOString());
+    await store.flush();
+
+    this.logger.info('initial scan finalized', {
+      scanned: scan.files.size,
+      staleRemoved: stale.length,
+      added: toUpsert.length,
+      scanMs: scan.durationMs,
+      totalMs: Date.now() - scanStart,
+    });
+  }
+
+  private async reconcileOnReady(
+    store: FileIndexStore,
+    seenPaths: ReadonlySet<string>
+  ): Promise<void> {
+    try {
+      await this.initialScanDone;
+    } catch {
+      // initialScanDone never rejects
+    }
+
+    const stale: string[] = [];
+    for await (const { path } of store.listEntriesIterable()) {
+      if (path === '.') continue;
+      if (!seenPaths.has(path)) stale.push(path);
+    }
+    if (stale.length === 0) return;
+
+    await store.deleteBatch(stale);
+    let sinceYield = 0;
+    for (let i = 0; i < stale.length; i++) {
+      this.eventBus.emit('FileDeleted', { path: stale[i] });
+      sinceYield++;
+      if (sinceYield >= FileSystemService.EMIT_YIELD_INTERVAL) {
+        sinceYield = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
+      }
+    }
+    await store.flush();
+    this.logger.info('post-ready reconcile removed stale entries', {
+      count: stale.length,
+    });
+  }
+
   private async restartWatcher(): Promise<void> {
     const store = this.indexStore;
     const rootPath = this.activeRootPath;
@@ -206,15 +324,12 @@ export class FileSystemService implements FileSystemServiceContract {
       this.watcher = null;
     }
 
-    // Re-scan because pattern set changed — this is the only case where a
-    // re-scan is justified (removing an ignore pattern can surface files
-    // that were never indexed). Bounded by the same ~1–2 s cost.
     store.markScanStart();
     const scan = await fastScanWorkspace(rootPath, compiled, this.logger);
     store.markScanEnd();
 
     const existingPaths = new Set<string>();
-    for (const { path } of await store.listEntries()) existingPaths.add(path);
+    for await (const { path } of store.listEntriesIterable()) existingPaths.add(path);
     const stale: string[] = [];
     for (const p of existingPaths) if (!scan.files.has(p)) stale.push(p);
     if (stale.length > 0) await store.deleteBatch(stale);

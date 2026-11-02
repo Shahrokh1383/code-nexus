@@ -28,6 +28,8 @@ function emptyIndex(): FileIndexFile {
 
 export class FileIndexStore {
   private readonly DEBOUNCE_MS = 300;
+  private static readonly YIELD_INTERVAL = 500;
+  private static readonly ITER_YIELD_INTERVAL = 1000;
 
   private cache: FileIndexFile | null = null;
   private writeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -58,10 +60,6 @@ export class FileIndexStore {
     }
   }
 
-  /**
-   * Guarantees `file-index.json` exists on disk before any watcher work
-   * begins — legacy parity (file was always present after workspace open).
-   */
   async ensureExists(): Promise<void> {
     await this.read();
     if (this.fileExisted) {
@@ -71,13 +69,17 @@ export class FileIndexStore {
     this.logger.info('file-index initialized', { path: this.filePath });
   }
 
-  /** Sets the ISO timestamp of the last completed scan (legacy parity). */
   setLastScan(iso: string): void {
     if (!this.cache) {
       return;
     }
     this.cache.lastScan = iso;
     this.dirty = true;
+  }
+
+  async getLastScan(): Promise<string | null> {
+    const index = await this.read();
+    return index.lastScan;
   }
 
   async findByPath(path: string): Promise<FileIndexEntry | null> {
@@ -88,6 +90,19 @@ export class FileIndexStore {
   async listEntries(): Promise<IndexedPath[]> {
     const index = await this.read();
     return Object.entries(index.files).map(([path, entry]) => ({ path, entry }));
+  }
+
+  async *listEntriesIterable(): AsyncGenerator<IndexedPath, void, void> {
+    const index = await this.read();
+    let sinceYield = 0;
+    for (const path of Object.keys(index.files)) {
+      yield { path, entry: index.files[path] };
+      sinceYield++;
+      if (sinceYield >= FileIndexStore.ITER_YIELD_INTERVAL) {
+        sinceYield = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
+      }
+    }
   }
 
   async findChildrenOf(parentPath: string): Promise<IndexedPath[]> {
@@ -160,7 +175,6 @@ export class FileIndexStore {
     }
   }
 
-  /** O(N·depth) batch delete: each entry walks its own parent chain. */
   async deleteBatch(paths: readonly string[]): Promise<void> {
     if (paths.length === 0) {
       return;
@@ -176,6 +190,7 @@ export class FileIndexStore {
       }
     }
 
+    let sinceYield = 0;
     for (const entryPath of Object.keys(index.files)) {
       let p = entryPath;
       let isDescendant = false;
@@ -189,6 +204,11 @@ export class FileIndexStore {
       if (isDescendant) {
         delete index.files[entryPath];
         changed = true;
+      }
+      sinceYield++;
+      if (sinceYield >= FileIndexStore.YIELD_INTERVAL) {
+        sinceYield = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
       }
     }
 
@@ -228,29 +248,35 @@ export class FileIndexStore {
     }
   }
 
-async bulkUpsert(
-  entries: ReadonlyArray<{ path: string; isDirectory: boolean }>
-): Promise<void> {
-  if (entries.length === 0) return;
-  const index = await this.read();
-  const now = new Date().toISOString();
-  let changed = false;
-  for (const { path, isDirectory } of entries) {
-    const existing = index.files[path];
-    if (existing && existing.isDirectory === isDirectory) continue;
-    index.files[path] = {
-      id: existing?.id ?? randomUUID(),
-      hash: null,
-      lastModified: now,
-      isDirectory,
-    };
-    changed = true;
+  async bulkUpsert(
+    entries: ReadonlyArray<{ path: string; isDirectory: boolean }>
+  ): Promise<void> {
+    if (entries.length === 0) return;
+    const index = await this.read();
+    const now = new Date().toISOString();
+    let changed = false;
+    let sinceYield = 0;
+    for (const { path, isDirectory } of entries) {
+      const existing = index.files[path];
+      if (existing && existing.isDirectory === isDirectory) continue;
+      index.files[path] = {
+        id: existing?.id ?? randomUUID(),
+        hash: null,
+        lastModified: now,
+        isDirectory,
+      };
+      changed = true;
+      sinceYield++;
+      if (sinceYield >= FileIndexStore.YIELD_INTERVAL) {
+        sinceYield = 0;
+        await new Promise<void>((resolve) => setImmediate(resolve));
+      }
+    }
+    if (changed) {
+      this.invalidateChildrenCache();
+      this.dirty = true;
+    }
   }
-  if (changed) {
-    this.invalidateChildrenCache();
-    this.dirty = true;
-  }
-}
 
   private async writeIndex(): Promise<void> {
     if (!this.cache) {
@@ -317,12 +343,6 @@ async bulkUpsert(
     this.childrenByParent = map;
   }
 
-  /**
-   * Inserts/updates a single cache bucket.
-   * `isNew` short-circuits the O(bucket) `findIndex` for the dominant case
-   * (fresh path during scan). `findIndex` only runs on the rare type-change
-   * path (file→folder or folder→file), where existing entry must be replaced.
-   */
   private patchChildCache(path: string, entry: FileIndexEntry, isNew: boolean): void {
     if (!this.childrenByParent) {
       return;

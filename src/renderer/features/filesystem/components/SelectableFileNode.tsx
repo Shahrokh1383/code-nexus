@@ -1,12 +1,19 @@
-import { memo, type JSX, useEffect, useRef, useState } from 'react';
+import {
+  memo,
+  type JSX,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import type { FileNodeDto, FolderNodeDto } from '@shared/ipc/filesystem';
 import { useFileSystemStore, isFolderNode } from '../stores/filesystem.store';
 import { FileNode } from './FileNode';
 import { useFileTree } from '../hooks/useFileTree';
 
 const INITIAL_VISIBLE_CHILDREN = 50;
-const CHILD_CHUNK_SIZE = 50;
-const SENTINEL_ROOT_MARGIN = '400px';
+const CHILD_CHUNK_SIZE = 100;
+const SENTINEL_ROOT_MARGIN = '200px';
 
 interface SelectableFileNodeProps {
   node: FileNodeDto | FolderNodeDto;
@@ -49,16 +56,19 @@ interface FolderChildrenProps {
   depth: number;
 }
 
-function FolderChildren({ folderPath, depth }: FolderChildrenProps): JSX.Element {
+const FolderChildren = memo(function FolderChildren({
+  folderPath,
+  depth,
+}: FolderChildrenProps): JSX.Element {
   const { tree } = useFileTree(folderPath);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_CHILDREN);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
+  const childCount = tree?.children.length ?? 0;
+
   useEffect(() => {
-    if (!tree) return;
-    if (visibleCount >= tree.children.length) return;
-    const el = sentinelRef.current;
-    if (!el) return;
+    if (childCount === 0) return;
+    if (visibleCount >= childCount) return;
 
     let scheduled = false;
     const observer = new IntersectionObserver(
@@ -66,16 +76,24 @@ function FolderChildren({ folderPath, depth }: FolderChildrenProps): JSX.Element
         if (!entries[0]?.isIntersecting) return;
         if (scheduled) return;
         scheduled = true;
-        requestAnimationFrame(() => {
+        // Use setTimeout to yield to the browser's paint cycle and prevent freezing.
+        setTimeout(() => {
           scheduled = false;
-          setVisibleCount((c) => Math.min(c + CHILD_CHUNK_SIZE, tree.children.length));
-        });
+          setVisibleCount((c) => Math.min(c + CHILD_CHUNK_SIZE, childCount));
+        }, 16);
       },
       { rootMargin: SENTINEL_ROOT_MARGIN }
     );
-    observer.observe(el);
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
     return () => observer.disconnect();
-  }, [tree, visibleCount]);
+  }, [childCount, visibleCount]);
+
+  const visible = useMemo(
+    () => (tree ? tree.children.slice(0, visibleCount) : []),
+    [tree, visibleCount]
+  );
 
   if (!tree) {
     return (
@@ -90,7 +108,6 @@ function FolderChildren({ folderPath, depth }: FolderChildrenProps): JSX.Element
   }
   if (tree.children.length === 0) return <></>;
 
-  const visible = tree.children.slice(0, visibleCount);
   const hasMore = visible.length < tree.children.length;
 
   return (
@@ -101,4 +118,4 @@ function FolderChildren({ folderPath, depth }: FolderChildrenProps): JSX.Element
       {hasMore && <div ref={sentinelRef} style={{ height: 1 }} aria-hidden="true" />}
     </div>
   );
-}
+});
