@@ -4,6 +4,7 @@ import { Header } from './shared/components/Header';
 import { WelcomePage } from './pages/WelcomePage';
 import { FileBrowserPage } from './pages/FileBrowserPage';
 import { DocumentManagerPage } from './pages/DocumentManagerPage';
+import { LinkingPage } from './pages/LinkingPage';
 import { useWorkspace } from './features/workspace';
 
 export default function App(): JSX.Element {
@@ -43,6 +44,7 @@ function AppBootstrap(): JSX.Element {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/files" element={<FileBrowserPage />} />
           <Route path="/docs" element={<DocumentManagerPage />} />
+          <Route path="/linking" element={<LinkingPage />} />
         </Routes>
       </main>
     </div>

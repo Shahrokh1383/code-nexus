@@ -3,6 +3,7 @@ import { WorkspaceProvider } from '../modules/workspace';
 import { FilesystemProvider } from '../modules/filesystem';
 import { SystemProvider } from '../modules/system';
 import { DocumentationProvider } from '../modules/documentation';
+import { LinkingProvider } from '../modules/linking';
 
 /**
  * The only module registry (Constitution §8). Adding a module means adding
@@ -13,4 +14,5 @@ export const enabledModuleProviders: ModuleProvider[] = [
   new FilesystemProvider(),
   new SystemProvider(),
   new DocumentationProvider(),
+  new LinkingProvider(),
 ];

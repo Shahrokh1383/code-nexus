@@ -86,6 +86,18 @@ export class DocumentService {
     this.events.emit('DocumentDeleted', { documentId: document.id, path: document.path });
   }
 
+  async setLinkCountIfChanged(
+    workspaceId: string,
+    documentId: string,
+    totalCount: number
+  ): Promise<void> {
+    const document = await this.documents.findById(workspaceId, documentId);
+    if (!document) return;
+    if (document.linkCount === totalCount) return;
+    document.updateLinkCount(totalCount);
+    await this.documents.save(workspaceId, document);
+  }
+
   private async requireDocument(workspaceId: string, documentId: string): Promise<Document> {
     const document = await this.documents.findById(workspaceId, documentId);
     if (!document) {

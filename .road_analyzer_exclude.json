@@ -29,8 +29,11 @@
     "src\\main\\bootstrap"
   ],
   "globalPatterns": [
-    "__tests__"
+    "__tests__",
+    "system",
+    "workspace",
+    "filesystem"
   ],
-  "lastModified": "2026-11-02T19:32:41.599Z",
+  "lastModified": "2026-11-04T17:09:26.879Z",
   "version": 1
 }

@@ -36,6 +36,33 @@ export interface DomainEventMap {
       directoryDepth: number;
     };
   };
+  'LinkCreated': {
+    linkId: string;
+    category: 'code' | 'doc';
+    sourceId: string;
+    targetId: string;
+  };
+  'LinkBroken': {
+    linkId: string;
+    category: 'code' | 'doc';
+    sourceId: string;
+    targetId: string;
+  };
+  'DocumentLinkCreated': {
+    linkId: string;
+    parentDocumentId: string;
+    childDocumentId: string;
+  };
+  'DocumentLinkBroken': {
+    linkId: string;
+    parentDocumentId: string;
+    childDocumentId: string;
+  };
+  'LinksMigrated': {
+    parentDocumentId: string;
+    childDocumentIds: string[];
+    migratedLinkIds: string[];
+  };
 }
 
 export type DomainEventName = keyof DomainEventMap & string;
