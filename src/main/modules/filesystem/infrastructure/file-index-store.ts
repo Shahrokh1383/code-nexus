@@ -14,6 +14,7 @@ export interface FileIndexEntry {
 interface FileIndexFile {
   version: string;
   lastScan: string | null;
+  cleanExit: boolean;
   files: Record<string, FileIndexEntry>;
 }
 
@@ -23,7 +24,7 @@ export interface IndexedPath {
 }
 
 function emptyIndex(): FileIndexFile {
-  return { version: '1.0', lastScan: null, files: {} };
+  return { version: '1.0', lastScan: null, cleanExit: false, files: {} };
 }
 
 export class FileIndexStore {
@@ -61,6 +62,12 @@ export class FileIndexStore {
   }
 
   async ensureExists(): Promise<void> {
+    // If we have unsaved changes, flush them first.
+    if (this.dirty) {
+      await this.flush();
+    }
+    // Force reading from disk to ensure we didn't miss a manual deletion.
+    this.cache = null;
     await this.read();
     if (this.fileExisted) {
       return;
@@ -70,9 +77,7 @@ export class FileIndexStore {
   }
 
   setLastScan(iso: string): void {
-    if (!this.cache) {
-      return;
-    }
+    if (!this.cache) return;
     this.cache.lastScan = iso;
     this.dirty = true;
   }
@@ -80,6 +85,19 @@ export class FileIndexStore {
   async getLastScan(): Promise<string | null> {
     const index = await this.read();
     return index.lastScan;
+  }
+
+  async getCleanExit(): Promise<boolean> {
+    const index = await this.read();
+    return index.cleanExit === true;
+  }
+
+  async markCleanExit(): Promise<void> {
+    if (!this.cache) return;
+    if (this.cache.cleanExit === true && !this.dirty) return;
+    this.cache.cleanExit = true;
+    this.dirty = true;
+    await this.flush();
   }
 
   async findByPath(path: string): Promise<FileIndexEntry | null> {
@@ -105,12 +123,19 @@ export class FileIndexStore {
     }
   }
 
-  async findChildrenOf(parentPath: string): Promise<IndexedPath[]> {
+  async findChildrenOf(
+    parentPath: string,
+    limit: number = Number.POSITIVE_INFINITY
+  ): Promise<IndexedPath[]> {
     await this.read();
     if (!this.childrenByParent) {
       this.rebuildChildrenCache();
     }
-    return this.childrenByParent?.get(parentPath) ?? [];
+    const bucket = this.childrenByParent?.get(parentPath) ?? [];
+    if (limit === Number.POSITIVE_INFINITY || bucket.length <= limit) {
+      return bucket;
+    }
+    return bucket.slice(0, limit);
   }
 
   async upsertFile(path: string): Promise<boolean> {
@@ -176,9 +201,7 @@ export class FileIndexStore {
   }
 
   async deleteBatch(paths: readonly string[]): Promise<void> {
-    if (paths.length === 0) {
-      return;
-    }
+    if (paths.length === 0) return;
     const index = await this.read();
     const direct = new Set(paths);
     let changed = false;
@@ -279,9 +302,7 @@ export class FileIndexStore {
   }
 
   private async writeIndex(): Promise<void> {
-    if (!this.cache) {
-      return;
-    }
+    if (!this.cache) return;
     try {
       await this.file.writeJson(this.filePath, this.cache);
       this.fileExisted = true;
@@ -289,6 +310,7 @@ export class FileIndexStore {
         path: this.filePath,
         entries: Object.keys(this.cache.files).length,
         lastScan: this.cache.lastScan,
+        cleanExit: this.cache.cleanExit,
       });
     } catch (error) {
       this.logger.error('file-index write failed', {
@@ -307,6 +329,9 @@ export class FileIndexStore {
       this.cache = await this.file.readJson<FileIndexFile>(this.filePath);
       this.fileExisted = true;
       this.dirty = false;
+      if (typeof this.cache.cleanExit !== 'boolean') {
+        this.cache.cleanExit = false;
+      }
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code !== 'ENOENT') {
@@ -328,9 +353,7 @@ export class FileIndexStore {
     }
     const map = new Map<string, IndexedPath[]>();
     for (const [path, entry] of Object.entries(this.cache.files)) {
-      if (path === '.') {
-        continue;
-      }
+      if (path === '.') continue;
       const lastSlash = path.lastIndexOf('/');
       const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
       const bucket = map.get(parent);
@@ -344,9 +367,7 @@ export class FileIndexStore {
   }
 
   private patchChildCache(path: string, entry: FileIndexEntry, isNew: boolean): void {
-    if (!this.childrenByParent) {
-      return;
-    }
+    if (!this.childrenByParent) return;
     const lastSlash = path.lastIndexOf('/');
     const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
     const bucket = this.childrenByParent.get(parent);
@@ -372,12 +393,8 @@ export class FileIndexStore {
   }
 
   private scheduleWrite(): void {
-    if (this.scanInProgress) {
-      return;
-    }
-    if (this.writeTimer) {
-      return;
-    }
+    if (this.scanInProgress) return;
+    if (this.writeTimer) return;
     this.writeTimer = setTimeout(() => {
       this.writeTimer = null;
       if (this.cache && this.dirty) {

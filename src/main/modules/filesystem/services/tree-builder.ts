@@ -6,7 +6,9 @@ import type { FsDirEntry, NodeFsProbe } from '../infrastructure/node-fs-probe';
 import type { IndexedPath } from '../infrastructure/file-index-store';
 
 // Prevent IPC serialization and React rendering freezes on massive folders.
-const MAX_CHILDREN = 2000;
+// Exported so the caller can push the cap down into the store query and
+// avoid allocating entries that will be discarded here.
+export const MAX_CHILDREN = 2000;
 
 function compileMatchers(patterns: readonly string[]): IgnorePattern[] {
   return patterns

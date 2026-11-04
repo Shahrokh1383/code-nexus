@@ -11,42 +11,14 @@ export interface WatcherEvent {
 }
 
 export interface ChokidarFileWatcherOptions {
-  /**
-   * Fires once after chokidar's initial scan completes, with the set of
-   * relative paths it observed during that scan. Enables the caller to
-   * reconcile the persisted index without issuing per-entry `fs.access`.
-   */
   onReady?: (seenPaths: ReadonlySet<string>) => Promise<void>;
-  
-  /**
-   * If true, suppresses the 'add' events for files that already exist when
-   * the watcher starts. Used to prevent double-scanning when fastScanWorkspace
-   * is running.
-   */
   ignoreInitial?: boolean;
 }
 
 export const DEFAULT_IGNORED_SEGMENTS: ReadonlySet<string> = new Set([
-  'node_modules',
-  '.git',
-  '.svn',
-  '.hg',
-  '.cache',
-  'dist',
-  'build',
-  'out',
-  '.next',
-  '.nuxt',
-  'target',
-  'coverage',
+  'node_modules', '.git', '.svn', '.hg', '.cache', 'dist', 'build',
+  'out', '.next', '.nuxt', 'target', 'coverage',
 ]);
-
-const DEFAULT_IGNORED_GLOBS: readonly string[] = [
-  ...Array.from(DEFAULT_IGNORED_SEGMENTS, (segment) => `**/${segment}/**`),
-  '**/*.log',
-  '**/.DS_Store',
-  '**/Thumbs.db',
-];
 
 export class ChokidarFileWatcher {
   private static readonly DEBOUNCE_MS = 300;
@@ -67,11 +39,21 @@ export class ChokidarFileWatcher {
     options: ChokidarFileWatcherOptions = {}
   ) {
     this.rootPath = PathUtils.normalize(rootPath);
+    
+    // Fast predicate function instead of glob array
+    const isIgnored = (path: string) => {
+      const normalized = PathUtils.normalize(path);
+      const relative = normalized === this.rootPath ? '' : normalized.slice(this.rootPath.length + 1);
+      if (!relative) return false;
+      const segments = relative.split('/');
+      if (segments.some(s => DEFAULT_IGNORED_SEGMENTS.has(s))) return true;
+      return ignorePatterns.some(p => {
+        try { return p.matches(relative); } catch { return false; }
+      });
+    };
+
     this.watcher = chokidar.watch(rootPath, {
-      ignored: [
-        ...DEFAULT_IGNORED_GLOBS,
-        ...ignorePatterns.map((p) => toChokidarPattern(p.value)),
-      ],
+      ignored: (path: string) => isIgnored(path),
       ignoreInitial: options.ignoreInitial ?? false,
       persistent: true,
       depth: Infinity,
@@ -150,9 +132,7 @@ export class ChokidarFileWatcher {
       return;
     }
 
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-    }
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       this.debounceTimer = null;
       void this.flushEvents();
@@ -160,9 +140,7 @@ export class ChokidarFileWatcher {
   }
 
   private async flushEvents(): Promise<void> {
-    if (this.pending.length === 0) {
-      return;
-    }
+    if (this.pending.length === 0) return;
     const batch = this.pending;
     this.pending = [];
 
@@ -183,23 +161,10 @@ export class ChokidarFileWatcher {
 
   private toRelativePath(absolutePath: string): string {
     const normalized = PathUtils.normalize(absolutePath);
-    if (normalized === this.rootPath) {
-      return '.';
-    }
+    if (normalized === this.rootPath) return '.';
     if (normalized.startsWith(`${this.rootPath}/`)) {
       return normalized.slice(this.rootPath.length + 1);
     }
     return normalized;
   }
-}
-
-function toChokidarPattern(raw: string): string {
-  if (raw.endsWith('/')) {
-    const dirName = raw.slice(0, -1);
-    return `**/${dirName}/**`;
-  }
-  if (raw.includes('/')) {
-    return raw;
-  }
-  return `**/${raw}`;
 }
