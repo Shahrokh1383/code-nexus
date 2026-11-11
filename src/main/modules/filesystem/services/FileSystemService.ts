@@ -99,40 +99,28 @@ export class FileSystemService implements FileSystemServiceContract {
     const cleanExit = await store.getCleanExit();
     if (myGeneration !== this.generation) return;
 
-    if (cleanExit) {
-      setTimeout(() => {
-        if (myGeneration === this.generation) {
-          try {
-            this.watcherController.install(store, rootPath, compiled, myGeneration);
-          } catch (error) {
-            this.logger.error('failed to install watcher during activation', {
-              rootPath,
-              message: error instanceof Error ? error.message : String(error),
-            });
-          }
-        }
-      }, 500);
-    } else {
-      void this.scanRunner
-        .performInitialScan(store, rootPath, compiled, myGeneration)
-        .then(() => {
-          if (myGeneration !== this.generation) return;
-          try {
-            this.watcherController.install(store, rootPath, compiled, myGeneration);
-          } catch (error) {
-            this.logger.error('failed to install watcher after scan', {
-              rootPath,
-              message: error instanceof Error ? error.message : String(error),
-            });
-          }
-        })
-        .catch((error) => {
-          this.logger.error('background initial scan failed', {
+    // Always reconcile disk vs index on cold start. `cleanExit` records only
+    // that the previous session exited gracefully — it makes no claim about
+    // the on-disk state, which may have changed while the app was closed.
+    void this.scanRunner
+      .performInitialScan(store, rootPath, compiled, myGeneration)
+      .then(() => {
+        if (myGeneration !== this.generation) return;
+        try {
+          this.watcherController.install(store, rootPath, compiled, myGeneration);
+        } catch (error) {
+          this.logger.error('failed to install watcher after scan', {
             rootPath,
             message: error instanceof Error ? error.message : String(error),
           });
+        }
+      })
+      .catch((error) => {
+        this.logger.error('background initial scan failed', {
+          rootPath,
+          message: error instanceof Error ? error.message : String(error),
         });
-    }
+      });
 
     this.logger.info('file session activated', {
       rootPath,
