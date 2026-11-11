@@ -1,10 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LINKING_CHANNELS } from '@shared/ipc/linking';
 import { useWorkspace } from '../../workspace';
 import { invokeIpc } from '../api/linkingIpc';
 import { linkingKeys } from '../keys';
 import { useCodeLinksQuery } from './useLinks';
+import { TREE_UPDATED_CHANNEL } from '../../filesystem/keys';
+import { onIpcEvent } from '../../../shared/lib/ipc';
 
 export function useLinkedFiles(documentId: string | null) {
   const { workspace } = useWorkspace();
@@ -12,6 +14,16 @@ export function useLinkedFiles(documentId: string | null) {
   const queryClient = useQueryClient();
 
   const codeLinksQuery = useCodeLinksQuery(wid, documentId);
+
+  useEffect(() => {
+    if (wid === '') return;
+    const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
+      void queryClient.invalidateQueries({
+        queryKey: linkingKeys.codeLinks(wid, documentId ?? ''),
+      });
+    });
+    return unsubscribe;
+  }, [queryClient, wid, documentId]);
 
   const removeCodeLinkMutation = useMutation({
     mutationFn: async (linkId: string) => {
@@ -39,7 +51,6 @@ export function useLinkedFiles(documentId: string | null) {
   const removeLink = useCallback(
     async (linkId: string, docId: string) => {
       await removeCodeLinkMutation.mutateAsync(linkId).catch(() => undefined);
-      // Legacy explicitly re-invalidated codeLinks for docId here; preserved.
       void queryClient.invalidateQueries({
         queryKey: linkingKeys.codeLinks(wid, docId),
       });

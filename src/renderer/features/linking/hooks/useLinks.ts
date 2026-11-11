@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LINKING_CHANNELS } from '@shared/ipc/linking';
 import type {
@@ -10,6 +10,8 @@ import { useWorkspace } from '../../workspace';
 import { invokeIpc } from '../api/linkingIpc';
 import { linkingKeys } from '../keys';
 import { useSelectedDocId } from '../stores/selectedDocument';
+import { TREE_UPDATED_CHANNEL } from '../../filesystem/keys';
+import { onIpcEvent } from '../../../shared/lib/ipc';
 
 const FETCH_FAILED = 'Failed to fetch linking data';
 const REMOVE_DOC_LINK_FAILED = 'Failed to remove document link';
@@ -99,6 +101,22 @@ export function useLinks() {
   const unlinkedQuery = useUnlinkedCodeFilesQuery(wid);
   const codeLinksQuery = useCodeLinksQuery(wid, selectedDocId);
   const documentLinksQuery = useDocumentLinksQuery(wid, selectedDocId);
+
+  useEffect(() => {
+    if (wid === '') return;
+    const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
+      void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
+      if (selectedDocId) {
+        void queryClient.invalidateQueries({
+          queryKey: linkingKeys.codeLinks(wid, selectedDocId),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: linkingKeys.documentLinks(wid, selectedDocId),
+        });
+      }
+    });
+    return unsubscribe;
+  }, [queryClient, wid, selectedDocId]);
 
   const removeDocumentLinkMutation = useMutation({
     mutationFn: async (linkId: string) => {
