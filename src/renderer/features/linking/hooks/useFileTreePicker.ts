@@ -18,6 +18,46 @@ export function getAllFileIds(node: FolderNodeDto | FileNodeDto): string[] {
   return node.children.flatMap(child => getAllFileIds(child));
 }
 
+// ─── Filter helpers (merged from useFilteredFileTree.ts) ───
+
+function filterTree(
+  node: FolderNodeDto | FileNodeDto,
+  searchTermLower: string
+): FolderNodeDto | FileNodeDto | null {
+  if ('children' in node) {
+    const filteredChildren = node.children
+      .map(child => filterTree(child, searchTermLower))
+      .filter((child): child is FolderNodeDto | FileNodeDto => child !== null);
+    if (filteredChildren.length > 0 || node.name.toLowerCase().includes(searchTermLower)) {
+      return { ...node, children: filteredChildren };
+    }
+    return null;
+  }
+  return node.name.toLowerCase().includes(searchTermLower) ? { ...node } : null;
+}
+
+export function useFilteredFileTree(
+  tree: FolderNodeDto | null | undefined,
+  searchTerm: string
+): FolderNodeDto | null {
+  return useMemo(() => {
+    if (!tree) return null;
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return tree;
+    const filtered = filterTree(tree, term);
+    return (filtered as FolderNodeDto) ?? null;
+  }, [tree, searchTerm]);
+}
+
+export function getAllFolderIds(node: FolderNodeDto | FileNodeDto): string[] {
+  if ('children' in node) {
+    return [node.id, ...node.children.flatMap(getAllFolderIds)];
+  }
+  return [];
+}
+
+// ─── Picker hook ───
+
 export function useFileTreePicker(
   isOpen: boolean,
   documents: DocumentOption[],
@@ -29,13 +69,16 @@ export function useFileTreePicker(
   const [selectedFileIds, setSelectedFileIds] = useState<Set<string>>(new Set());
   const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set());
 
+  // Reset only when the modal opens or the target document changes. Do not
+  // depend on `tree`: a filesystem event during an active picker should not
+  // wipe the user's in-progress selection.
   useEffect(() => {
     if (isOpen) {
       setSelectedFileIds(new Set());
       setSelectedDocumentIds(new Set());
       setActiveTab('code');
     }
-  }, [isOpen, initialDocumentId, tree]);
+  }, [isOpen, initialDocumentId]);
 
   const toggleFile = useCallback((id: string) => {
     setSelectedFileIds(prev => {
