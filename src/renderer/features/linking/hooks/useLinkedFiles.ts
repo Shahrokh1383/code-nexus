@@ -43,7 +43,7 @@ export function useLinkedFiles(documentId: string | null) {
         linkId,
       });
     },
-    onSuccess: (_data, _linkId) => {
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
       if (documentId) {
         void queryClient.invalidateQueries({
@@ -53,23 +53,19 @@ export function useLinkedFiles(documentId: string | null) {
     },
   });
 
-  const codeLinks = codeLinksQuery.data ?? [];
-  const filteredLinks = documentId
-    ? codeLinks.filter((link) => link.documentId === documentId)
-    : [];
+  // Cache is partitioned by (wid, codeLinks, documentId); the query returns
+  // links for exactly the requested document. No client-side filter needed.
+  const codeLinks = documentId ? codeLinksQuery.data ?? [] : [];
 
   const removeLink = useCallback(
-    async (linkId: string, docId: string) => {
+    async (linkId: string) => {
       await removeCodeLinkMutation.mutateAsync(linkId).catch(() => undefined);
-      void queryClient.invalidateQueries({
-        queryKey: linkingKeys.codeLinks(wid, docId),
-      });
     },
-    [removeCodeLinkMutation, queryClient, wid]
+    [removeCodeLinkMutation]
   );
 
   return {
-    codeLinks: filteredLinks,
+    codeLinks,
     removeLink,
   };
 }

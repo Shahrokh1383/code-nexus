@@ -1,4 +1,4 @@
-import { JSX, useState, useCallback, useEffect } from 'react';
+import { JSX, useState, useCallback } from 'react';
 import {
   useLinks,
   useLinkingPageOrchestrator,
@@ -13,7 +13,6 @@ import {
   PersistentDocumentSelector,
   LinkingTabs,
 } from '../features/linking';
-import { useDocuments } from '../features/documentation';
 import '../shared/styles/linking.css';
 import '../shared/styles/search-bar.css';
 import '../features/linking/components/UnlinkedFilesList.css';
@@ -25,33 +24,42 @@ function isLinkingTabId(id: string): id is LinkingTabId {
 }
 
 export function LinkingPage(): JSX.Element {
-  const { documents, selectedDocId, setSelectedDocId, selectedDoc, currentDocTitle } = useLinkingPageOrchestrator();
-  const { codeLinks, documentLinks, unlinkedFiles, isLoading, error, clearError, fetchLinksForDocument, fetchGraphData, removeDocumentLink } = useLinks();
+  const {
+    documents,
+    selectedDocId,
+    setSelectedDocId,
+    selectedDoc,
+    currentDocTitle,
+  } = useLinkingPageOrchestrator();
+  const {
+    codeLinks,
+    documentLinks,
+    unlinkedFiles,
+    isLoading,
+    error,
+    clearError,
+    removeDocumentLink,
+  } = useLinks();
   const [activeTab, setActiveTab] = useState<LinkingTabId>('linked');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleModalLink } = useLinkCreation(() => setIsModalOpen(false));
-  const { selectedIds, isAllSelected, isIndeterminate, toggleFile, toggleAll, handleQuickLink, handleBulkLink } = useUnlinkedFiles(selectedDocId);
+  const {
+    selectedIds,
+    isAllSelected,
+    isIndeterminate,
+    toggleFile,
+    toggleAll,
+    handleQuickLink,
+    handleBulkLink,
+  } = useUnlinkedFiles(selectedDocId);
   const { codeLinks: linkedFiles, removeLink } = useLinkedFiles(selectedDocId);
 
-  // After a document deletion (parent with children), links might have been migrated.
-  // The documents array length will change, so we refresh everything.
-  const { documents: allDocs } = useDocuments();
-  useEffect(() => {
-    if (allDocs.length > 0) {
-      fetchGraphData();
-      if (selectedDocId && allDocs.find(d => d.id === selectedDocId)) {
-        fetchLinksForDocument(selectedDocId);
-      }
-    }
-  }, [allDocs.length]);
-
-  const handleRemoveDocumentLink = useCallback(async (linkId: string) => {
-    await removeDocumentLink(linkId);
-    await fetchGraphData();
-    if (selectedDocId) {
-      await fetchLinksForDocument(selectedDocId);
-    }
-  }, [removeDocumentLink, fetchGraphData, fetchLinksForDocument, selectedDocId]);
+  const handleRemoveDocumentLink = useCallback(
+    async (linkId: string) => {
+      await removeDocumentLink(linkId);
+    },
+    [removeDocumentLink]
+  );
 
   const pageTabs = [
     { id: 'linked', label: 'Linked Files', icon: 'fa-list' },
@@ -82,7 +90,7 @@ export function LinkingPage(): JSX.Element {
           </div>
           <div className="linking-sidebar__body">
             <PersistentDocumentSelector
-              documents={documents.map(d => ({ id: d.id, title: d.title }))}
+              documents={documents.map((d) => ({ id: d.id, title: d.title }))}
               selectedDocumentId={selectedDocId}
               onSelectDocument={setSelectedDocId}
             />
@@ -90,24 +98,35 @@ export function LinkingPage(): JSX.Element {
         </aside>
 
         <div className="linking-main">
-          <LinkingTabs tabs={pageTabs} activeTab={activeTab} onTabChange={id => { if (isLinkingTabId(id)) setActiveTab(id); }} />
+          <LinkingTabs
+            tabs={pageTabs}
+            activeTab={activeTab}
+            onTabChange={(id) => {
+              if (isLinkingTabId(id)) setActiveTab(id);
+            }}
+          />
           <div className="linking-main__content">
-            {activeTab === 'linked' && (
-              selectedDoc ? (
+            {activeTab === 'linked' &&
+              (selectedDoc ? (
                 <LinkedFilesList
                   documentTitle={selectedDoc.title}
                   codeLinks={linkedFiles}
                   onRemoveLink={removeLink}
                 />
               ) : (
-                <div className="d-flex align-items-center justify-content-center h-100" style={{ color: 'var(--cn-text-secondary)' }}>
+                <div
+                  className="d-flex align-items-center justify-content-center h-100"
+                  style={{ color: 'var(--cn-text-secondary)' }}
+                >
                   <div className="text-center">
-                    <i className="fa-solid fa-list fa-3x mb-3" style={{ color: 'var(--cn-text-disabled)' }} />
+                    <i
+                      className="fa-solid fa-list fa-3x mb-3"
+                      style={{ color: 'var(--cn-text-disabled)' }}
+                    />
                     <p>Select a document from the sidebar to view its linked code files</p>
                   </div>
                 </div>
-              )
-            )}
+              ))}
             {activeTab === 'hierarchy' && (
               <DocumentHierarchy
                 documents={documents}
@@ -138,13 +157,16 @@ export function LinkingPage(): JSX.Element {
 
       <FileTreePickerModal
         isOpen={isModalOpen}
-        documents={documents.map(d => ({ id: d.id, title: d.title }))}
+        documents={documents.map((d) => ({ id: d.id, title: d.title }))}
         initialDocumentId={selectedDocId ?? ''}
         onClose={() => setIsModalOpen(false)}
         onLink={handleModalLink}
       />
       {isLoading && (
-        <div className="position-fixed bottom-0 end-0 m-4 p-3 rounded shadow-lg" style={{ backgroundColor: 'var(--cn-bg-elevated)', color: 'var(--cn-primary)' }}>
+        <div
+          className="position-fixed bottom-0 end-0 m-4 p-3 rounded shadow-lg"
+          style={{ backgroundColor: 'var(--cn-bg-elevated)', color: 'var(--cn-primary)' }}
+        >
           <i className="fa-solid fa-spinner fa-spin me-2" /> Syncing Links...
         </div>
       )}

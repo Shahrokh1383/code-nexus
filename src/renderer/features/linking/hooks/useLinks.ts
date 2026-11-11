@@ -98,9 +98,9 @@ export function useLinks() {
   const codeLinksQuery = useCodeLinksQuery(wid, selectedDocId);
   const documentLinksQuery = useDocumentLinksQuery(wid, selectedDocId);
 
-  // Filesystem-driven reconcile: backend LinkReconciler cleans dead
-  // code links on every disk event; filesystem:tree-updated (300 ms
-  // debounce) is the "reconcile finished" proxy.
+  // Filesystem-driven reconcile: invalidate on every tree update (300 ms
+  // debounced by RendererBridge). Selection-change refetch is handled by
+  // React Query's queryKey partitioning; no manual invalidation needed.
   useEffect(() => {
     if (wid === '') return;
     const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
@@ -117,10 +117,9 @@ export function useLinks() {
     return unsubscribe;
   }, [queryClient, wid, selectedDocId]);
 
-  // Link-mutation-driven reconcile: DocumentLinkCreated/Broken and
-  // LinkCreated/Broken fire on IPC mutations; the backend bridge coalesces
-  // them into a single 'linking:updated' push so the hierarchy tab and
-  // linked files update without manual refresh.
+  // Link-mutation-driven reconcile: LinkingBridge coalesces all link events
+  // into one 'linking:updated' push, so the hierarchy tab and linked files
+  // list reflect new mutations without page-level refetch orchestration.
   useEffect(() => {
     if (wid === '') return;
     const unsubscribe = onIpcEvent(LINKING_CHANNELS.UPDATED, () => {
@@ -157,24 +156,6 @@ export function useLinks() {
     onError: (error) => setMutationError(toError(error, REMOVE_DOC_LINK_FAILED)),
   });
 
-  const fetchGraphData = useCallback(async () => {
-    if (wid === '') return;
-    await queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
-  }, [wid, queryClient]);
-
-  const fetchLinksForDocument = useCallback(
-    async (documentId: string) => {
-      if (wid === '') return;
-      await queryClient.invalidateQueries({
-        queryKey: linkingKeys.codeLinks(wid, documentId),
-      });
-      await queryClient.invalidateQueries({
-        queryKey: linkingKeys.documentLinks(wid, documentId),
-      });
-    },
-    [wid, queryClient]
-  );
-
   const removeDocumentLink = useCallback(
     async (linkId: string) => {
       await removeDocumentLinkMutation.mutateAsync(linkId).catch(() => undefined);
@@ -199,8 +180,6 @@ export function useLinks() {
     isLoading: unlinkedQuery.isFetching,
     error,
     clearError,
-    fetchGraphData,
-    fetchLinksForDocument,
     removeDocumentLink,
   };
 }
