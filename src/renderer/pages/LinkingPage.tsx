@@ -5,7 +5,6 @@ import {
   useLinkCreation,
   useUnlinkedFiles,
   useLinkedFiles,
-  LinkingPageHeader,
   LinkedFilesList,
   DocumentHierarchy,
   UnlinkedFilesList,
@@ -69,12 +68,32 @@ export function LinkingPage(): JSX.Element {
 
   return (
     <div className="linking-page">
-      <LinkingPageHeader
-        totalCodeLinks={codeLinks.length}
-        totalDocLinks={documentLinks.length}
-        unlinkedCount={unlinkedFiles.length}
-        onCreateLink={() => setIsModalOpen(true)}
-      />
+      <div className="linking-header">
+        <div>
+          <h2 className="gradient-text" style={{ marginBottom: '4px' }}>
+            Knowledge Graph
+          </h2>
+          <div
+            className="text-secondary"
+            style={{ fontSize: 'var(--cn-font-size-sm)' }}
+          >
+            <span className="text-primary fw-bold">{codeLinks.length}</span> Code Links
+            &nbsp;|&nbsp;
+            <span className="text-primary fw-bold">{documentLinks.length}</span>{' '}
+            Hierarchies &nbsp;|&nbsp;
+            <span
+              className={unlinkedFiles.length > 0 ? 'status-doc-orphan fw-bold' : ''}
+            >
+              {unlinkedFiles.length}
+            </span>{' '}
+            Unlinked Files
+          </div>
+        </div>
+        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+          <i className="fa-solid fa-link me-2"></i> Create Link
+        </button>
+      </div>
+
       {error && (
         <div className="alert alert-danger alert-dismissible fade show m-0" role="alert">
           <i className="fa-solid fa-circle-exclamation" /> {error}
@@ -123,7 +142,10 @@ export function LinkingPage(): JSX.Element {
                       className="fa-solid fa-list fa-3x mb-3"
                       style={{ color: 'var(--cn-text-disabled)' }}
                     />
-                    <p>Select a document from the sidebar to view its linked code files</p>
+                    <p>
+                      Select a document from the sidebar to view its linked code
+                      files
+                    </p>
                   </div>
                 </div>
               ))}
