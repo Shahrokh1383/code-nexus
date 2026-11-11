@@ -26,12 +26,13 @@
     "src\\main\\shared",
     "src\\main\\kernel",
     "src\\main\\config",
-    "src\\main\\bootstrap"
+    "src\\main\\bootstrap",
+    "src\\shared"
   ],
   "globalPatterns": [
     "system",
     "workspace"
   ],
-  "lastModified": "2026-11-11T11:29:39.262Z",
+  "lastModified": "2026-11-11T13:23:26.469Z",
   "version": 1
 }

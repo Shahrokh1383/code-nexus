@@ -25,7 +25,27 @@ export class CodeLinkService {
     private readonly events: EventBus,
   ) {}
 
-  async createLink(rootPath: string, codeFileId: string, documentId: string): Promise<void> {
+  private async resolveCodeFileId(
+    rootPath: string,
+    rawId: string,
+  ): Promise<string | null> {
+    const allFiles = await this.codeFileQuery.getAllCodeFiles(rootPath);
+    const validIds = new Set(allFiles.map((f) => f.id));
+    if (validIds.has(rawId)) return rawId;
+    const byPath = new Map(allFiles.map((f) => [f.path, f.id]));
+    return byPath.get(rawId) ?? null;
+  }
+
+  async createLink(
+    rootPath: string,
+    rawCodeFileId: string,
+    documentId: string
+  ): Promise<void> {
+    const codeFileId = await this.resolveCodeFileId(rootPath, rawCodeFileId);
+    if (!codeFileId) {
+      throw new DomainException('CODE_FILE_NOT_FOUND', 'Code file not found in index');
+    }
+
     const existing = await this.linkRepo.findByCodeFileAndDocument(
       rootPath,
       codeFileId,
@@ -64,20 +84,31 @@ export class CodeLinkService {
 
   async createBulk(
     rootPath: string,
-    codeFileIds: string[],
+    rawCodeFileIds: string[],
     documentId: string
   ): Promise<BulkCreateResult> {
+    const allFiles = await this.codeFileQuery.getAllCodeFiles(rootPath);
+    const validIds = new Set(allFiles.map((f) => f.id));
+    const byPath = new Map(allFiles.map((f) => [f.path, f.id]));
+
     const createdIds: string[] = [];
     const skippedIds: string[] = [];
 
-    for (const codeFileId of codeFileIds) {
+    for (const rawId of rawCodeFileIds) {
+      const codeFileId = validIds.has(rawId) ? rawId : byPath.get(rawId);
+      if (!codeFileId) {
+        // File no longer in index — report and continue; do not abort batch.
+        skippedIds.push(rawId);
+        continue;
+      }
+
       const existing = await this.linkRepo.findByCodeFileAndDocument(
         rootPath,
         codeFileId,
         documentId
       );
       if (existing) {
-        skippedIds.push(codeFileId);
+        skippedIds.push(rawId);
         continue;
       }
 
@@ -97,7 +128,7 @@ export class CodeLinkService {
     return { createdIds, skippedIds };
   }
 
-    async getLinksForDocument(
+  async getLinksForDocument(
     rootPath: string,
     documentId: string
   ): Promise<CodeToDocLinkDto[]> {
@@ -119,6 +150,8 @@ export class CodeLinkService {
           codeFilePath: file?.path ?? '',
         };
       })
+      // Defense in depth (Phase 4 of the prior task): dead entries filtered
+      // server-side so the renderer never sees a placeholder.
       .filter((link) => link.codeFileName !== '');
   }
 
@@ -193,5 +226,21 @@ export class CodeLinkService {
 
     const childIds = childLinks.map((l) => l.childDocumentId);
     await this.migrate(rootPath, deletedDocumentId, childIds);
+  }
+
+  /**
+   * Purges all code links whose target document is deleted. Phase 5 pairs
+   * this with migrateFromDeletedDocument; see that method's contract.
+   */
+  async purgeLinksForDeletedDocument(
+    rootPath: string,
+    deletedDocumentId: string
+  ): Promise<void> {
+    const links = await this.linkRepo.findByDocument(rootPath, deletedDocumentId);
+    if (links.length === 0) return;
+    await this.linkRepo.deleteMany(
+      rootPath,
+      links.map((l) => l.id)
+    );
   }
 }
