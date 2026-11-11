@@ -4,7 +4,7 @@ import { FileTreeNode } from './FileTreeNode';
 import { DocumentSourceList } from './DocumentSourceList';
 import { LinkingTabs } from './LinkingTabs';
 import { SearchBar } from './SearchBar';
-import { useFilteredFileTree, getAllFolderIds } from '../hooks/useFilteredFileTree';
+import { useFilteredFileTree, getAllFolderIds } from '../hooks/useFileTreePicker';
 import './FileTreePickerModal.css';
 
 interface FileTreePickerModalProps {
@@ -27,21 +27,29 @@ export function FileTreePickerModal({
 
   const filteredTree = useFilteredFileTree(picker.tree, codeSearchTerm);
   const isSearchActive = codeSearchTerm.trim().length > 0;
-  const expandedFolderIds = isSearchActive && filteredTree ? new Set(getAllFolderIds(filteredTree)) : undefined;
+  const expandedFolderIds =
+    isSearchActive && filteredTree ? new Set(getAllFolderIds(filteredTree)) : undefined;
 
   const targetDocTitle = useMemo(
-    () => documents.find(d => d.id === initialDocumentId)?.title ?? 'Unknown document',
+    () => documents.find((d) => d.id === initialDocumentId)?.title ?? 'Unknown document',
     [documents, initialDocumentId]
   );
 
+  if (!isOpen) return null;
+
+  const isLinkDisabled =
+    !initialDocumentId ||
+    (picker.activeTab === 'code' && picker.selectedFileIds.size === 0) ||
+    (picker.activeTab === 'document' && picker.selectedDocumentIds.size === 0);
+
   const handleLink = () => {
-    if (!initialDocumentId) return;
+    if (isLinkDisabled) return;
     if (picker.activeTab === 'code') {
-      if (picker.selectedFileIds.size === 0) return;
       onLink(Array.from(picker.selectedFileIds), initialDocumentId, 'code');
     } else {
-      if (picker.selectedDocumentIds.size === 0) return;
-      const sourceIds = Array.from(picker.selectedDocumentIds).filter(id => id !== initialDocumentId);
+      const sourceIds = Array.from(picker.selectedDocumentIds).filter(
+        (id) => id !== initialDocumentId
+      );
       if (sourceIds.length === 0) return;
       onLink(sourceIds, initialDocumentId, 'document');
     }
@@ -53,16 +61,9 @@ export function FileTreePickerModal({
     { id: 'document', label: 'Documents', icon: 'fa-file-lines' },
   ];
 
-  if (!isOpen) return null;
-
-  const isLinkDisabled =
-    !initialDocumentId ||
-    (picker.activeTab === 'code' && picker.selectedFileIds.size === 0) ||
-    (picker.activeTab === 'document' && picker.selectedDocumentIds.size === 0);
-
   return (
     <div className="file-picker-backdrop" onClick={onClose}>
-      <div className="file-picker-modal" onClick={e => e.stopPropagation()}>
+      <div className="file-picker-modal" onClick={(e) => e.stopPropagation()}>
         <div className="file-picker-header">
           <h5 className="mb-0">Create Link</h5>
           <button className="btn btn-ghost" onClick={onClose}>
@@ -70,14 +71,13 @@ export function FileTreePickerModal({
           </button>
         </div>
 
-        {/* Target document indicator */}
         {initialDocumentId && (
           <div
             className="px-3 py-2 d-flex align-items-center gap-2"
             style={{
               backgroundColor: 'var(--cn-bg-secondary)',
               borderBottom: '1px solid var(--cn-border-light)',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
             }}
           >
             <i className="fa-solid fa-link text-primary" />
@@ -143,12 +143,10 @@ export function FileTreePickerModal({
               : `${picker.selectedDocumentIds.size} document${picker.selectedDocumentIds.size !== 1 ? 's' : ''} selected`}
           </span>
           <div>
-            <button className="btn btn-ghost me-2" onClick={onClose}>Cancel</button>
-            <button
-              className="btn btn-primary"
-              disabled={isLinkDisabled}
-              onClick={handleLink}
-            >
+            <button className="btn btn-ghost me-2" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="btn btn-primary" disabled={isLinkDisabled} onClick={handleLink}>
               Link Selected
             </button>
           </div>
