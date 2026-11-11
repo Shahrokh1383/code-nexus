@@ -1,410 +1,124 @@
-import { randomUUID } from 'crypto';
 import type { AtomicJsonFile } from '../../../shared/persistence/atomic-json-file';
 import { PathUtils } from '../../../shared/utils/path-utils';
 import type { Logger } from '../../../shared/logger/logger';
 import type { IgnorePattern } from '../domain/ignore-pattern';
+import { FileIndexCache } from './file-index-cache';
+import { FileIndexMutations } from './file-index-mutations';
+import { FileIndexPersistence } from './file-index-persistence';
+import type { FileIndexEntry, IndexedPath } from './file-index-types';
 
-export interface FileIndexEntry {
-  id: string;
-  hash: string | null;
-  lastModified: string;
-  isDirectory: boolean;
-}
-
-interface FileIndexFile {
-  version: string;
-  lastScan: string | null;
-  cleanExit: boolean;
-  files: Record<string, FileIndexEntry>;
-}
-
-export interface IndexedPath {
-  path: string;
-  entry: FileIndexEntry;
-}
-
-function emptyIndex(): FileIndexFile {
-  return { version: '1.0', lastScan: null, cleanExit: false, files: {} };
-}
+export type { FileIndexEntry, IndexedPath } from './file-index-types';
 
 export class FileIndexStore {
-  private readonly DEBOUNCE_MS = 300;
-  private static readonly YIELD_INTERVAL = 500;
-  private static readonly ITER_YIELD_INTERVAL = 1000;
-
-  private cache: FileIndexFile | null = null;
-  private writeTimer: ReturnType<typeof setTimeout> | null = null;
-  private childrenByParent: Map<string, IndexedPath[]> | null = null;
-  private dirty = false;
-  private fileExisted = false;
-  private scanInProgress = false;
+  private readonly cache: FileIndexCache;
+  private readonly persistence: FileIndexPersistence;
+  private readonly mutations: FileIndexMutations;
 
   constructor(
-    private readonly rootPath: string,
-    private readonly file: AtomicJsonFile,
+    rootPath: string,
+    file: AtomicJsonFile,
     private readonly logger: Logger
-  ) {}
-
-  private get filePath(): string {
-    return PathUtils.join(this.rootPath, '.doclink', 'file-index.json');
+  ) {
+    const filePath = PathUtils.join(rootPath, '.doclink', 'file-index.json');
+    this.cache = new FileIndexCache(filePath, file, logger);
+    this.persistence = new FileIndexPersistence(
+      filePath,
+      file,
+      logger,
+      () => this.cache.getSnapshot()
+    );
+    this.mutations = new FileIndexMutations(this.cache, this.persistence);
   }
 
   markScanStart(): void {
-    this.scanInProgress = true;
+    this.persistence.markScanStart();
   }
 
   markScanEnd(): void {
-    this.scanInProgress = false;
-    if (this.writeTimer) {
-      clearTimeout(this.writeTimer);
-      this.writeTimer = null;
-    }
+    this.persistence.markScanEnd();
   }
 
   async ensureExists(): Promise<void> {
-    // If we have unsaved changes, flush them first.
-    if (this.dirty) {
-      await this.flush();
-    }
-    // Force reading from disk to ensure we didn't miss a manual deletion.
-    this.cache = null;
-    await this.read();
-    if (this.fileExisted) {
-      return;
-    }
-    await this.writeIndex();
-    this.logger.info('file-index initialized', { path: this.filePath });
+    if (this.persistence.isDirty()) await this.persistence.flush();
+    this.cache.invalidate();
+    await this.cache.read();
+    if (this.cache.getFileExisted()) return;
+    await this.persistence.writeIndex();
+    this.logger.info('file-index initialized', { path: this.cache.getFilePath() });
   }
 
   setLastScan(iso: string): void {
-    if (!this.cache) return;
-    this.cache.lastScan = iso;
-    this.dirty = true;
+    const snapshot = this.cache.getSnapshot();
+    if (!snapshot) return;
+    snapshot.lastScan = iso;
+    this.persistence.markDirty();
   }
 
   async getLastScan(): Promise<string | null> {
-    const index = await this.read();
+    const index = await this.cache.read();
     return index.lastScan;
   }
 
   async getCleanExit(): Promise<boolean> {
-    const index = await this.read();
+    const index = await this.cache.read();
     return index.cleanExit === true;
   }
 
   async markCleanExit(): Promise<void> {
-    if (!this.cache) return;
-    if (this.cache.cleanExit === true && !this.dirty) return;
-    this.cache.cleanExit = true;
-    this.dirty = true;
-    await this.flush();
+    const snapshot = this.cache.getSnapshot();
+    if (!snapshot) return;
+    if (snapshot.cleanExit === true && !this.persistence.isDirty()) return;
+    snapshot.cleanExit = true;
+    this.persistence.markDirty();
+    await this.persistence.flush();
   }
 
   async findByPath(path: string): Promise<FileIndexEntry | null> {
-    const index = await this.read();
-    return index.files[path] ?? null;
+    return this.cache.findByPath(path);
   }
 
   async listEntries(): Promise<IndexedPath[]> {
-    const index = await this.read();
-    return Object.entries(index.files).map(([path, entry]) => ({ path, entry }));
+    return this.cache.listEntries();
   }
 
   async *listEntriesIterable(): AsyncGenerator<IndexedPath, void, void> {
-    const index = await this.read();
-    let sinceYield = 0;
-    for (const path of Object.keys(index.files)) {
-      yield { path, entry: index.files[path] };
-      sinceYield++;
-      if (sinceYield >= FileIndexStore.ITER_YIELD_INTERVAL) {
-        sinceYield = 0;
-        await new Promise<void>((resolve) => setImmediate(resolve));
-      }
-    }
+    yield* this.cache.listEntriesIterable();
   }
 
   async findChildrenOf(
     parentPath: string,
     limit: number = Number.POSITIVE_INFINITY
   ): Promise<IndexedPath[]> {
-    await this.read();
-    if (!this.childrenByParent) {
-      this.rebuildChildrenCache();
-    }
-    const bucket = this.childrenByParent?.get(parentPath) ?? [];
-    if (limit === Number.POSITIVE_INFINITY || bucket.length <= limit) {
-      return bucket;
-    }
-    return bucket.slice(0, limit);
+    return this.cache.findChildrenOf(parentPath, limit);
   }
 
   async upsertFile(path: string): Promise<boolean> {
-    const index = await this.read();
-    const existing = index.files[path];
-    if (existing && !existing.isDirectory) {
-      return false;
-    }
-    const isNew = !existing;
-    const entry: FileIndexEntry = {
-      id: randomUUID(),
-      hash: null,
-      lastModified: new Date().toISOString(),
-      isDirectory: false,
-    };
-    index.files[path] = entry;
-    this.patchChildCache(path, entry, isNew);
-    this.dirty = true;
-    this.scheduleWrite();
-    return true;
+    return this.mutations.upsertFile(path);
   }
 
   async upsertFolder(path: string): Promise<boolean> {
-    const index = await this.read();
-    const existing = index.files[path];
-    if (existing && existing.isDirectory) {
-      return false;
-    }
-    const isNew = !existing;
-    const entry: FileIndexEntry = {
-      id: randomUUID(),
-      hash: null,
-      lastModified: new Date().toISOString(),
-      isDirectory: true,
-    };
-    index.files[path] = entry;
-    this.patchChildCache(path, entry, isNew);
-    this.dirty = true;
-    this.scheduleWrite();
-    return true;
+    return this.mutations.upsertFolder(path);
   }
 
   async deleteByPath(path: string): Promise<void> {
-    const index = await this.read();
-    const prefix = `${path}/`;
-    let changed = false;
-
-    if (index.files[path]) {
-      delete index.files[path];
-      changed = true;
-    }
-    for (const entryPath of Object.keys(index.files)) {
-      if (entryPath.startsWith(prefix)) {
-        delete index.files[entryPath];
-        changed = true;
-      }
-    }
-    if (changed) {
-      this.invalidateChildrenCache();
-      this.dirty = true;
-      this.scheduleWrite();
-    }
+    return this.mutations.deleteByPath(path);
   }
 
   async deleteBatch(paths: readonly string[]): Promise<void> {
-    if (paths.length === 0) return;
-    const index = await this.read();
-    const direct = new Set(paths);
-    let changed = false;
-
-    for (const p of paths) {
-      if (index.files[p]) {
-        delete index.files[p];
-        changed = true;
-      }
-    }
-
-    let sinceYield = 0;
-    for (const entryPath of Object.keys(index.files)) {
-      let p = entryPath;
-      let isDescendant = false;
-      while (p.includes('/')) {
-        p = p.slice(0, p.lastIndexOf('/'));
-        if (direct.has(p)) {
-          isDescendant = true;
-          break;
-        }
-      }
-      if (isDescendant) {
-        delete index.files[entryPath];
-        changed = true;
-      }
-      sinceYield++;
-      if (sinceYield >= FileIndexStore.YIELD_INTERVAL) {
-        sinceYield = 0;
-        await new Promise<void>((resolve) => setImmediate(resolve));
-      }
-    }
-
-    if (changed) {
-      this.invalidateChildrenCache();
-      this.dirty = true;
-      this.scheduleWrite();
-    }
+    return this.mutations.deleteBatch(paths);
   }
 
   async deleteByPattern(pattern: IgnorePattern): Promise<string[]> {
-    const index = await this.read();
-    const deletedPaths: string[] = [];
-
-    for (const path of Object.keys(index.files)) {
-      if (pattern.matches(path)) {
-        deletedPaths.push(path);
-        delete index.files[path];
-      }
-    }
-    if (deletedPaths.length > 0) {
-      this.invalidateChildrenCache();
-      this.dirty = true;
-      this.scheduleWrite();
-    }
-    return deletedPaths;
-  }
-
-  async flush(): Promise<void> {
-    if (this.writeTimer) {
-      clearTimeout(this.writeTimer);
-      this.writeTimer = null;
-    }
-    if (this.cache && this.dirty) {
-      this.dirty = false;
-      await this.writeIndex();
-    }
+    return this.mutations.deleteByPattern(pattern);
   }
 
   async bulkUpsert(
     entries: ReadonlyArray<{ path: string; isDirectory: boolean }>
   ): Promise<void> {
-    if (entries.length === 0) return;
-    const index = await this.read();
-    const now = new Date().toISOString();
-    let changed = false;
-    let sinceYield = 0;
-    for (const { path, isDirectory } of entries) {
-      const existing = index.files[path];
-      if (existing && existing.isDirectory === isDirectory) continue;
-      index.files[path] = {
-        id: existing?.id ?? randomUUID(),
-        hash: null,
-        lastModified: now,
-        isDirectory,
-      };
-      changed = true;
-      sinceYield++;
-      if (sinceYield >= FileIndexStore.YIELD_INTERVAL) {
-        sinceYield = 0;
-        await new Promise<void>((resolve) => setImmediate(resolve));
-      }
-    }
-    if (changed) {
-      this.invalidateChildrenCache();
-      this.dirty = true;
-    }
+    return this.mutations.bulkUpsert(entries);
   }
 
-  private async writeIndex(): Promise<void> {
-    if (!this.cache) return;
-    try {
-      await this.file.writeJson(this.filePath, this.cache);
-      this.fileExisted = true;
-      this.logger.debug('file-index written', {
-        path: this.filePath,
-        entries: Object.keys(this.cache.files).length,
-        lastScan: this.cache.lastScan,
-        cleanExit: this.cache.cleanExit,
-      });
-    } catch (error) {
-      this.logger.error('file-index write failed', {
-        path: this.filePath,
-        message: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
-  }
-
-  private async read(): Promise<FileIndexFile> {
-    if (this.cache) {
-      return this.cache;
-    }
-    try {
-      this.cache = await this.file.readJson<FileIndexFile>(this.filePath);
-      this.fileExisted = true;
-      this.dirty = false;
-      if (typeof this.cache.cleanExit !== 'boolean') {
-        this.cache.cleanExit = false;
-      }
-    } catch (error) {
-      const code = (error as { code?: string }).code;
-      if (code !== 'ENOENT') {
-        this.logger.warn('file-index read failed, rebuilding', {
-          message: error instanceof Error ? error.message : String(error),
-        });
-      }
-      this.cache = emptyIndex();
-      this.fileExisted = false;
-      this.dirty = false;
-    }
-    return this.cache;
-  }
-
-  private rebuildChildrenCache(): void {
-    if (!this.cache) {
-      this.childrenByParent = new Map();
-      return;
-    }
-    const map = new Map<string, IndexedPath[]>();
-    for (const [path, entry] of Object.entries(this.cache.files)) {
-      if (path === '.') continue;
-      const lastSlash = path.lastIndexOf('/');
-      const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
-      const bucket = map.get(parent);
-      if (bucket) {
-        bucket.push({ path, entry });
-      } else {
-        map.set(parent, [{ path, entry }]);
-      }
-    }
-    this.childrenByParent = map;
-  }
-
-  private patchChildCache(path: string, entry: FileIndexEntry, isNew: boolean): void {
-    if (!this.childrenByParent) return;
-    const lastSlash = path.lastIndexOf('/');
-    const parent = lastSlash === -1 ? '.' : path.slice(0, lastSlash);
-    const bucket = this.childrenByParent.get(parent);
-    const indexedPath: IndexedPath = { path, entry };
-    if (!bucket) {
-      this.childrenByParent.set(parent, [indexedPath]);
-      return;
-    }
-    if (isNew) {
-      bucket.push(indexedPath);
-      return;
-    }
-    const existingIdx = bucket.findIndex((c) => c.path === path);
-    if (existingIdx >= 0) {
-      bucket[existingIdx] = indexedPath;
-    } else {
-      bucket.push(indexedPath);
-    }
-  }
-
-  private invalidateChildrenCache(): void {
-    this.childrenByParent = null;
-  }
-
-  private scheduleWrite(): void {
-    if (this.scanInProgress) return;
-    if (this.writeTimer) return;
-    this.writeTimer = setTimeout(() => {
-      this.writeTimer = null;
-      if (this.cache && this.dirty) {
-        this.dirty = false;
-        this.writeIndex().catch((error: unknown) => {
-          this.logger.error('file-index debounced write failed', {
-            message: error instanceof Error ? error.message : String(error),
-          });
-        });
-      }
-    }, this.DEBOUNCE_MS);
+  async flush(): Promise<void> {
+    await this.persistence.flush();
   }
 }
