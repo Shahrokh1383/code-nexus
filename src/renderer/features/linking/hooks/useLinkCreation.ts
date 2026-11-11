@@ -5,12 +5,12 @@ import { useWorkspace } from '../../workspace';
 import { invokeIpc } from '../api/linkingIpc';
 import { linkingKeys } from '../keys';
 
-export function useLinkCreation(onSuccess: () => void) {
+export function useBulkCodeLinksMutation() {
   const { workspace } = useWorkspace();
   const wid = workspace?.id ?? '';
   const queryClient = useQueryClient();
 
-  const bulkCodeLinksMutation = useMutation({
+  return useMutation({
     mutationFn: async (input: { codeFileIds: string[]; documentId: string }) => {
       if (wid === '') return;
       await invokeIpc<void>(LINKING_CHANNELS.CREATE_BULK_CODE_LINKS, {
@@ -26,6 +26,14 @@ export function useLinkCreation(onSuccess: () => void) {
       });
     },
   });
+}
+
+export function useLinkCreation(onSuccess: () => void) {
+  const { workspace } = useWorkspace();
+  const wid = workspace?.id ?? '';
+  const queryClient = useQueryClient();
+
+  const bulkCodeLinksMutation = useBulkCodeLinksMutation();
 
   const createDocumentLinkMutation = useMutation({
     mutationFn: async (input: { parentDocumentId: string; childDocumentId: string }) => {
@@ -36,8 +44,13 @@ export function useLinkCreation(onSuccess: () => void) {
         childDocumentId: input.childDocumentId,
       });
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
+    onSuccess: (_data, input) => {
+      void queryClient.invalidateQueries({
+        queryKey: linkingKeys.documentLinks(wid, input.parentDocumentId),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: linkingKeys.documentLinks(wid, input.childDocumentId),
+      });
     },
   });
 
@@ -52,7 +65,6 @@ export function useLinkCreation(onSuccess: () => void) {
           .mutateAsync({ codeFileIds: sourceIds, documentId: targetDocumentId })
           .catch(() => undefined);
       } else {
-        // Sequential by design (DI-13) — no bulk document-link API.
         for (const id of sourceIds) {
           await createDocumentLinkMutation
             .mutateAsync({ parentDocumentId: targetDocumentId, childDocumentId: id })
