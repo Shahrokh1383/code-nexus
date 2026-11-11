@@ -4,7 +4,11 @@ import { FileTreeNode } from './FileTreeNode';
 import { DocumentSourceList } from './DocumentSourceList';
 import { LinkingTabs } from './LinkingTabs';
 import { SearchBar } from './SearchBar';
-import { useFilteredFileTree, getAllFolderIds } from '../hooks/useFileTreePicker';
+import {
+  useFilteredFileTree,
+  getAllFolderIds,
+  useSearchFileTree,
+} from '../hooks/useFileTreePicker';
 import './FileTreePickerModal.css';
 
 interface FileTreePickerModalProps {
@@ -25,8 +29,9 @@ export function FileTreePickerModal({
   const picker = useFileTreePicker(isOpen, documents, initialDocumentId);
   const [codeSearchTerm, setCodeSearchTerm] = useState('');
 
-  const filteredTree = useFilteredFileTree(picker.tree, codeSearchTerm);
   const isSearchActive = codeSearchTerm.trim().length > 0;
+  const searchTree = useSearchFileTree(picker.tree, isSearchActive);
+  const filteredTree = useFilteredFileTree(searchTree ?? picker.tree, codeSearchTerm);
   const expandedFolderIds =
     isSearchActive && filteredTree ? new Set(getAllFolderIds(filteredTree)) : undefined;
 
@@ -105,6 +110,15 @@ export function FileTreePickerModal({
               {picker.isScanning || !picker.tree ? (
                 <div className="text-center p-4 text-secondary">
                   <i className="fa-solid fa-spinner fa-spin me-2"></i> Scanning project...
+                </div>
+              ) : isSearchActive && !searchTree ? (
+                <div className="text-center p-4 text-secondary">
+                  <i className="fa-solid fa-spinner fa-spin me-2"></i> Searching...
+                </div>
+              ) : isSearchActive && !filteredTree ? (
+                <div className="text-center p-4 text-secondary">
+                  <i className="fa-solid fa-search-minus me-2"></i> No files match &quot;
+                  {codeSearchTerm}&quot;.
                 </div>
               ) : (
                 <>

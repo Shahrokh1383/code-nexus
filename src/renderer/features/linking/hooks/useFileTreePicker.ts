@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useQueryClient, type QueryClient } from '@tanstack/react-query';
 import type { FolderNodeDto, FileNodeDto } from '@shared/ipc/filesystem';
-import { useFileTree } from '../../filesystem';
+import { useFileTree, filesystemApi, filesystemKeys } from '../../filesystem';
+import { useWorkspace } from '../../workspace';
 
 type PickerTab = 'code' | 'document';
 
@@ -56,7 +58,88 @@ export function getAllFolderIds(node: FolderNodeDto | FileNodeDto): string[] {
   return [];
 }
 
-// ─── Picker hook ───
+// Search: full-tree materialization
+async function materializeTree(
+  node: FolderNodeDto | FileNodeDto,
+  workspaceId: string,
+  queryClient: QueryClient,
+  isRoot: boolean
+): Promise<FolderNodeDto | FileNodeDto> {
+  if (!isFolderNode(node)) return node;
+
+  // Root is always populated by `useFileTree()`; re-fetching it via its
+  // `.path` is undefined behavior (path may be `.` or an absolute path).
+  if (node.children.length === 0 && !isRoot) {
+    try {
+      const dto = await queryClient.fetchQuery({
+        queryKey: filesystemKeys.tree(workspaceId, node.path),
+        queryFn: () => filesystemApi.getFileTree(workspaceId, node.path),
+        staleTime: 30_000,
+      });
+      const materializedChildren = await Promise.all(
+        dto.root.children.map((child) =>
+          materializeTree(child, workspaceId, queryClient, false)
+        )
+      );
+      return { ...dto.root, children: materializedChildren };
+    } catch {
+      // Partial failure: keep the folder as an empty leaf rather than
+      // dropping the entire search. The user still sees matches from
+      // reachable subtrees.
+      return node;
+    }
+  }
+
+  if (node.children.length === 0) return node;
+
+  const materializedChildren = await Promise.all(
+    node.children.map((child) =>
+      materializeTree(child, workspaceId, queryClient, false)
+    )
+  );
+  return { ...node, children: materializedChildren };
+}
+
+export function useSearchFileTree(
+  tree: FolderNodeDto | null,
+  isSearchActive: boolean
+): FolderNodeDto | null {
+  const { workspace } = useWorkspace();
+  const workspaceId = workspace?.id ?? '';
+  const queryClient = useQueryClient();
+  const [searchTree, setSearchTree] = useState<FolderNodeDto | null>(null);
+
+  // Clear stale tree when the workspace itself changes.
+  useEffect(() => {
+    setSearchTree(null);
+  }, [workspaceId]);
+
+  useEffect(() => {
+    if (!isSearchActive || !tree || !workspaceId) {
+      setSearchTree(null);
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      try {
+        const materialized = await materializeTree(tree, workspaceId, queryClient, true);
+        if (!cancelled && isFolderNode(materialized)) {
+          setSearchTree(materialized);
+        }
+      } catch {
+        if (!cancelled) setSearchTree(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [tree, isSearchActive, workspaceId, queryClient]);
+
+  return searchTree;
+}
+
+
+// Picker hook
 
 export function useFileTreePicker(
   isOpen: boolean,
