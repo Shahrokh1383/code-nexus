@@ -78,6 +78,16 @@ export class LinkJsonRepository {
     await this.writeIndex(rootPath, index);
   }
 
+  async deleteMany(rootPath: string, ids: readonly string[]): Promise<void> {
+    if (ids.length === 0) return;
+    const index = await this.readIndex(rootPath);
+    const idSet = new Set(ids);
+    const before = index.links.length;
+    index.links = index.links.filter((l) => !idSet.has(l.id));
+    if (index.links.length === before) return;
+    await this.writeIndex(rootPath, index);
+  }
+  
   async findAll(rootPath: string): Promise<CodeToDocLink[]> {
     const index = await this.readIndex(rootPath);
     return index.links.map((entry) => this.mapToEntity(entry));

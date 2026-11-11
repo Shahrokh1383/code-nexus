@@ -65,6 +65,23 @@ export class DocumentLinkService {
     return links.map((link) => this.toDto(link));
   }
 
+  async purgeOrphansForDeletedDocument(
+    rootPath: string,
+    deletedDocumentId: string
+  ): Promise<void> {
+    const asParent = await this.repo.findByParentDocument(rootPath, deletedDocumentId);
+    const asChild = await this.repo.findByChildDocument(rootPath, deletedDocumentId);
+    const orphaned = [...asParent, ...asChild];
+    for (const link of orphaned) {
+      await this.repo.delete(rootPath, link.id);
+      this.events.emit('DocumentLinkBroken', {
+        linkId: link.id,
+        parentDocumentId: link.parentDocumentId,
+        childDocumentId: link.childDocumentId,
+      });
+    }
+  }
+
   private toDto(link: DocumentToDocumentLink): DocumentLinkDto {
     return {
       id: link.id,
