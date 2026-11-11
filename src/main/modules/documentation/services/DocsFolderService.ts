@@ -153,6 +153,10 @@ export class DocsFolderService {
     if (!document) return;
 
     await this.documents.delete(rootPath, document.id);
+    // Emit parity with syncFiles: live disk deletions must trigger the same
+    // downstream flows (linking inheritance + link purge) that in-app
+    // deletions already trigger via DocumentService.softDelete.
+    this.events.emit('DocumentDeleted', { documentId: document.id, path: document.path });
   }
 
   //Private Helpers

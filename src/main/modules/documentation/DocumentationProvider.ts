@@ -21,8 +21,6 @@ export class DocumentationProvider implements ModuleProvider {
     const logger = c.resolve(LoggerToken).child('documentation');
     const generateId = () => randomUUID();
 
-    // Single shared instances — the document cache + debounced flush and the
-    // config RMW queue must never be duplicated across services.
     const configStore = new DocsFolderConfigStore(c.resolve(AtomicJsonFileToken));
     const documentStore = new DocumentJsonRepository(
       c.resolve(AtomicJsonFileToken),
@@ -64,6 +62,19 @@ export class DocumentationProvider implements ModuleProvider {
       } catch (error) {
         logger.warn('document cleanup on file delete failed', {
           path,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    });
+
+    eventBus.on('FileDiscovered', async ({ path }) => {
+      if (path !== '.') return;
+      const rootPath = activeRootPath();
+      if (!rootPath) return;
+      try {
+        await folders().syncFiles(rootPath);
+      } catch (error) {
+        logger.warn('cold-start documents sync failed', {
           message: error instanceof Error ? error.message : String(error),
         });
       }
