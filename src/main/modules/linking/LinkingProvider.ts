@@ -8,6 +8,7 @@ import { DocumentServiceToken } from '../documentation';
 import { LinkJsonRepository } from './infrastructure/LinkJsonRepository';
 import { DocumentLinkJsonRepository } from './infrastructure/DocumentLinkJsonRepository';
 import { FilesystemCodeFileQuery } from './infrastructure/FilesystemCodeFileQuery';
+import { LinkingBridge } from './infrastructure/LinkingBridge';
 import { DocumentLinkValidator } from './domain/DocumentLinkValidator';
 import { CodeLinkService } from './services/CodeLinkService';
 import { DocumentLinkService } from './services/DocumentLinkService';
@@ -26,7 +27,6 @@ export class LinkingProvider implements ModuleProvider {
     const file = c.resolve(AtomicJsonFileToken);
     const eventBus = c.resolve(EventBusToken);
 
-    // Shared singletons per module — same instances across services.
     const linkRepo = new LinkJsonRepository(file);
     const docLinkRepo = new DocumentLinkJsonRepository(file);
     const codeFileQuery = new FilesystemCodeFileQuery(file);
@@ -60,8 +60,6 @@ export class LinkingProvider implements ModuleProvider {
   }
 
   boot(c: ServiceContainer): void {
-    registerLinkingIpc(c, c.resolve(LoggerToken).child('linking:ipc'));
-
     const logger = c.resolve(LoggerToken).child('linking:events');
     const eventBus = c.resolve(EventBusToken);
     const activeRootPath = () => c.resolve(FileSystemServiceToken).getActiveRootPath();
@@ -70,14 +68,27 @@ export class LinkingProvider implements ModuleProvider {
     const updater = () => c.resolve(LinkCountUpdaterToken);
     const reconciler = () => c.resolve(LinkReconcilerToken);
 
+    registerLinkingIpc(c, c.resolve(LoggerToken).child('linking:ipc'));
+
+    // Renderer realtime bridge: any persisted link change → debounced
+    // 'linking:updated' push. Coalesced with filesystem:tree-updated at the
+    // renderer hook level.
+    const bridge = new LinkingBridge(
+      eventBus,
+      logger.child('bridge'),
+      () => activeRootPath() !== null
+    );
+    bridge.subscribe();
+
     eventBus.on('DocumentDeleted', async ({ documentId }) => {
       const rootPath = activeRootPath();
       if (!rootPath) return;
       try {
-        // Order matters: inherit code links to surviving children first, then
-        // purge the deceased document's doc-to-doc edges (which would
-        // otherwise survive as orphans). Both operations are idempotent.
+        // Order: migrate (inherits if children exist), then purge any
+        // residual links for the deceased doc, then purge doc-doc orphans.
+        // All three are idempotent.
         await codeLinks().migrateFromDeletedDocument(rootPath, documentId);
+        await codeLinks().purgeLinksForDeletedDocument(rootPath, documentId);
         await docLinks().purgeOrphansForDeletedDocument(rootPath, documentId);
       } catch (error) {
         logger.error('failed to migrate links after document deletion', {
@@ -87,9 +98,6 @@ export class LinkingProvider implements ModuleProvider {
       }
     });
 
-    // Filesystem-driven reconcile: fires on live per-path deletions, ignore-
-    // pattern exclusions, and the aggregate cold-start signal. All triggers
-    // coalesce inside LinkReconciler's debounce + in-flight gate.
     const triggerReconcile = (): void => {
       const rootPath = activeRootPath();
       if (!rootPath) return;
@@ -99,8 +107,6 @@ export class LinkingProvider implements ModuleProvider {
     eventBus.on('FileDeleted', () => triggerReconcile());
     eventBus.on('FileExcluded', () => triggerReconcile());
     eventBus.on('FileDiscovered', ({ path }) => {
-      // Only the aggregate cold-start signal (path === '.') reflects a scan
-      // that removed files; per-file additions cannot orphan links.
       if (path !== '.') return;
       triggerReconcile();
     });

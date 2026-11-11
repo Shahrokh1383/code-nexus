@@ -16,6 +16,7 @@ export const LINKING_CHANNELS = {
   GET_DOCUMENT_CHILDREN: 'linking:getDocumentChildren',
   GET_DOCUMENT_PARENTS: 'linking:getDocumentParents',
   CREATE_BULK_CODE_LINKS: 'linking:createBulkCodeLinks',
+  UPDATED: 'linking:updated',
 } as const;
 
 export type LinkingChannel =

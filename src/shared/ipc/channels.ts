@@ -19,6 +19,9 @@ export const ALL_IPC_CHANNELS = [
 export type IpcChannel = (typeof ALL_IPC_CHANNELS)[number];
 
 /** Main → renderer push channels. The only channels `on()` accepts. */
-export const EVENT_CHANNELS = [FILESYSTEM_CHANNELS.TREE_UPDATED] as const;
+export const EVENT_CHANNELS = [
+  FILESYSTEM_CHANNELS.TREE_UPDATED,
+  LINKING_CHANNELS.UPDATED,
+] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];

@@ -20,8 +20,6 @@ function toError(error: unknown, fallback: string): Error {
   return error instanceof Error ? error : new Error(fallback);
 }
 
-// ─── Shared query hooks (used by useLinks + useLinkedFiles + useUnlinkedFiles) ───
-
 export function useUnlinkedCodeFilesQuery(wid: string) {
   return useQuery({
     queryKey: linkingKeys.unlinked(wid),
@@ -87,8 +85,6 @@ export function useDocumentLinksQuery(wid: string, docId: string | null) {
   });
 }
 
-// ─── Main hook ───
-
 export function useLinks() {
   const { workspace } = useWorkspace();
   const wid = workspace?.id ?? '';
@@ -102,9 +98,32 @@ export function useLinks() {
   const codeLinksQuery = useCodeLinksQuery(wid, selectedDocId);
   const documentLinksQuery = useDocumentLinksQuery(wid, selectedDocId);
 
+  // Filesystem-driven reconcile: backend LinkReconciler cleans dead
+  // code links on every disk event; filesystem:tree-updated (300 ms
+  // debounce) is the "reconcile finished" proxy.
   useEffect(() => {
     if (wid === '') return;
     const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
+      void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
+      if (selectedDocId) {
+        void queryClient.invalidateQueries({
+          queryKey: linkingKeys.codeLinks(wid, selectedDocId),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: linkingKeys.documentLinks(wid, selectedDocId),
+        });
+      }
+    });
+    return unsubscribe;
+  }, [queryClient, wid, selectedDocId]);
+
+  // Link-mutation-driven reconcile: DocumentLinkCreated/Broken and
+  // LinkCreated/Broken fire on IPC mutations; the backend bridge coalesces
+  // them into a single 'linking:updated' push so the hierarchy tab and
+  // linked files update without manual refresh.
+  useEffect(() => {
+    if (wid === '') return;
+    const unsubscribe = onIpcEvent(LINKING_CHANNELS.UPDATED, () => {
       void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
       if (selectedDocId) {
         void queryClient.invalidateQueries({

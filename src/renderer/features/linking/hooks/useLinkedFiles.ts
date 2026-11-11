@@ -25,6 +25,16 @@ export function useLinkedFiles(documentId: string | null) {
     return unsubscribe;
   }, [queryClient, wid, documentId]);
 
+  useEffect(() => {
+    if (wid === '') return;
+    const unsubscribe = onIpcEvent(LINKING_CHANNELS.UPDATED, () => {
+      void queryClient.invalidateQueries({
+        queryKey: linkingKeys.codeLinks(wid, documentId ?? ''),
+      });
+    });
+    return unsubscribe;
+  }, [queryClient, wid, documentId]);
+
   const removeCodeLinkMutation = useMutation({
     mutationFn: async (linkId: string) => {
       if (wid === '') return;
