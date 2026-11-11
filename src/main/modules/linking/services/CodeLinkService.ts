@@ -97,7 +97,7 @@ export class CodeLinkService {
     return { createdIds, skippedIds };
   }
 
-  async getLinksForDocument(
+    async getLinksForDocument(
     rootPath: string,
     documentId: string
   ): Promise<CodeToDocLinkDto[]> {
@@ -105,19 +105,21 @@ export class CodeLinkService {
     const allFiles = await this.codeFileQuery.getAllCodeFiles(rootPath);
     const byId = new Map(allFiles.map((f) => [f.id, f]));
 
-    return links.map((link) => {
-      const file = byId.get(link.codeFileId);
-      return {
-        id: link.id,
-        codeFileId: link.codeFileId,
-        documentId: link.documentId,
-        type: link.type,
-        createdAt: link.createdAt,
-        migratedAt: link.migratedAt,
-        codeFileName: file?.name ?? '',
-        codeFilePath: file?.path ?? '',
-      };
-    });
+    return links
+      .map((link) => {
+        const file = byId.get(link.codeFileId);
+        return {
+          id: link.id,
+          codeFileId: link.codeFileId,
+          documentId: link.documentId,
+          type: link.type,
+          createdAt: link.createdAt,
+          migratedAt: link.migratedAt,
+          codeFileName: file?.name ?? '',
+          codeFilePath: file?.path ?? '',
+        };
+      })
+      .filter((link) => link.codeFileName !== '');
   }
 
   async getLinksForCodeFile(
