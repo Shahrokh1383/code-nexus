@@ -1,54 +1,18 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LINKING_CHANNELS } from '@shared/ipc/linking';
 import { useWorkspace } from '../../workspace';
-import { invokeIpc } from '../api/linkingIpc';
-import { linkingKeys } from '../keys';
 import { useUnlinkedCodeFilesQuery } from './useLinks';
+import { useBulkCodeLinksMutation } from './useLinkCreation';
 
 export function useUnlinkedFiles(currentDocumentId: string | null) {
   const { workspace } = useWorkspace();
   const wid = workspace?.id ?? '';
-  const queryClient = useQueryClient();
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const unlinkedQuery = useUnlinkedCodeFilesQuery(wid);
   const unlinkedFiles = unlinkedQuery.data ?? [];
 
-  const createCodeLinkMutation = useMutation({
-    mutationFn: async (input: { codeFileId: string; documentId: string }) => {
-      if (wid === '') return;
-      await invokeIpc<void>(LINKING_CHANNELS.CREATE_LINK, {
-        workspaceId: wid,
-        codeFileId: input.codeFileId,
-        documentId: input.documentId,
-      });
-    },
-    onSuccess: (_data, input) => {
-      void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
-      void queryClient.invalidateQueries({
-        queryKey: linkingKeys.codeLinks(wid, input.documentId),
-      });
-    },
-  });
-
-  const createBulkCodeLinksMutation = useMutation({
-    mutationFn: async (input: { codeFileIds: string[]; documentId: string }) => {
-      if (wid === '') return;
-      await invokeIpc<void>(LINKING_CHANNELS.CREATE_BULK_CODE_LINKS, {
-        workspaceId: wid,
-        codeFileIds: input.codeFileIds,
-        documentId: input.documentId,
-      });
-    },
-    onSuccess: (_data, input) => {
-      void queryClient.invalidateQueries({ queryKey: linkingKeys.unlinked(wid) });
-      void queryClient.invalidateQueries({
-        queryKey: linkingKeys.codeLinks(wid, input.documentId),
-      });
-    },
-  });
+  const bulkLinkMutation = useBulkCodeLinksMutation();
 
   const isAllSelected = useMemo(() => {
     if (unlinkedFiles.length === 0) return false;
@@ -69,7 +33,6 @@ export function useUnlinkedFiles(currentDocumentId: string | null) {
     });
   }, []);
 
-  // Legacy size-based check preserved verbatim (DI-18 — behavior not corrected).
   const toggleAll = useCallback(() => {
     setSelectedIds((prev) => {
       if (prev.size === unlinkedFiles.length) return new Set();
@@ -82,23 +45,23 @@ export function useUnlinkedFiles(currentDocumentId: string | null) {
   const handleQuickLink = useCallback(
     async (fileId: string) => {
       if (!currentDocumentId) return;
-      await createCodeLinkMutation
-        .mutateAsync({ codeFileId: fileId, documentId: currentDocumentId })
+      await bulkLinkMutation
+        .mutateAsync({ codeFileIds: [fileId], documentId: currentDocumentId })
         .catch(() => undefined);
     },
-    [currentDocumentId, createCodeLinkMutation]
+    [currentDocumentId, bulkLinkMutation]
   );
 
   const handleBulkLink = useCallback(async () => {
     if (!currentDocumentId || selectedIds.size === 0) return;
-    await createBulkCodeLinksMutation
+    await bulkLinkMutation
       .mutateAsync({
         codeFileIds: Array.from(selectedIds),
         documentId: currentDocumentId,
       })
       .catch(() => undefined);
     clearSelection();
-  }, [selectedIds, currentDocumentId, createBulkCodeLinksMutation, clearSelection]);
+  }, [selectedIds, currentDocumentId, bulkLinkMutation, clearSelection]);
 
   return {
     selectedIds,
