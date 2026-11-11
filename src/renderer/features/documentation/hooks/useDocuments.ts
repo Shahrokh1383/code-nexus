@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DOCUMENTATION_CHANNELS } from '@shared/ipc/documentation';
 import type { DocumentDto, GetAllDocumentsResponse } from '@shared/ipc/documentation';
 import { useWorkspace } from '../../workspace';
 import { invokeIpc } from '../api/documentationIpc';
 import { documentationKeys } from '../keys';
+import { TREE_UPDATED_CHANNEL } from '../../filesystem/keys';
+import { onIpcEvent } from '../../../shared/lib/ipc';
 
 const FETCH_FAILED = 'Failed to fetch';
 const ORPHANS_FAILED = 'Failed to fetch orphans';
@@ -36,6 +38,24 @@ export function useDocuments() {
 
   const [mutationError, setMutationError] = useState<Error | null>(null);
   const [dismissedError, setDismissedError] = useState<unknown>(null);
+
+  // Filesystem tree updates fire on both add and remove (via the filesystem
+  // module's RendererBridge). Invalidate the three documentation queries so
+  // DocumentManagerPage reflects disk-level changes without a manual refresh.
+  // Sequential to preserve the sync-then-fetch invariant of documentsQuery
+  // (SYNC_FILES runs inside its queryFn and must complete before orphans/
+  // deleted reads — matches the mount-time ordering).
+  useEffect(() => {
+    if (wid === '') return;
+    const unsubscribe = onIpcEvent(TREE_UPDATED_CHANNEL, () => {
+      void (async () => {
+        await queryClient.invalidateQueries({ queryKey: documentationKeys.documents(wid) });
+        await queryClient.invalidateQueries({ queryKey: documentationKeys.orphans(wid) });
+        await queryClient.invalidateQueries({ queryKey: documentationKeys.deleted(wid) });
+      })();
+    });
+    return unsubscribe;
+  }, [queryClient, wid]);
 
   // Legacy fetchDocumentation ran SYNC_FILES before GET_ALL — the list was
   // always post-sync. Preserved verbatim. Orphans ran after it in the store;
@@ -94,16 +114,14 @@ export function useDocuments() {
 
   const registerFolderMutation = useMutation({
     mutationFn: async (suggestedPath?: string) => {
-      if (wid === '') return; // legacy: no workspace → silent no-op
+      if (wid === '') return;
       await invokeIpc<void>(DOCUMENTATION_CHANNELS.REGISTER_FOLDER, {
         workspaceId: wid,
         suggestedPath,
       });
     },
-    onMutate: () => setMutationError(null), // legacy set error:null at start
+    onMutate: () => setMutationError(null),
     onSuccess: () => {
-      // Legacy registerFolder refetched documents + orphans ONLY — the
-      // trash list was NOT refetched. Preserved verbatim.
       void queryClient.invalidateQueries({ queryKey: documentsKey });
       void queryClient.invalidateQueries({ queryKey: orphansKey });
     },
@@ -119,14 +137,12 @@ export function useDocuments() {
       });
     },
     onSuccess: (_data, documentId) => {
-      // O(1) instant UI update — legacy moved the DTO between lists with no
-      // refetch. Preserved verbatim via direct cache writes.
       const doc =
         queryClient.getQueryData<GetAllDocumentsResponse>(documentsKey)?.documents.find(
           (d) => d.id === documentId
         ) ??
         queryClient.getQueryData<DocumentDto[]>(orphansKey)?.find((d) => d.id === documentId);
-      if (!doc) return; // legacy: unknown id → state unchanged
+      if (!doc) return;
 
       queryClient.setQueryData<GetAllDocumentsResponse>(documentsKey, (old) =>
         old ? { ...old, documents: old.documents.filter((d) => d.id !== documentId) } : old
@@ -148,7 +164,6 @@ export function useDocuments() {
       });
     },
     onSuccess: (_data, documentId) => {
-      // O(1) — no refetch, exactly like the legacy store.
       queryClient.setQueryData<DocumentDto[]>(deletedKey, (old) =>
         old ? old.filter((d) => d.id !== documentId) : old
       );
@@ -165,11 +180,10 @@ export function useDocuments() {
       });
     },
     onSuccess: (_data, documentId) => {
-      // O(1) — legacy routed the document back by its isOrphaned flag.
       const doc = queryClient.getQueryData<DocumentDto[]>(deletedKey)?.find(
         (d) => d.id === documentId
       );
-      if (!doc) return; // legacy: unknown id → state unchanged
+      if (!doc) return;
 
       queryClient.setQueryData<DocumentDto[]>(deletedKey, (old) =>
         old ? old.filter((d) => d.id !== documentId) : old
@@ -190,14 +204,8 @@ export function useDocuments() {
   const orphans = orphansQuery.data ?? [];
   const deletedDocuments = deletedQuery.data ?? [];
 
-  // Legacy isLoading: true while fetchDocumentation ran and while
-  // registerFolder was in flight — nothing else touched it.
   const isLoading = documentsQuery.isFetching || registerFolderMutation.isPending;
 
-  // Single dismissable error surface with legacy semantics: hidden while a
-  // documents fetch is in flight (legacy cleared error at fetch start) and
-  // re-shown for every NEW failure instance, even with an identical message
-  // (dismissal tracks the error object, not the text).
   const activeError: Error | null =
     documentsQuery.error ?? orphansQuery.error ?? deletedQuery.error ?? mutationError;
   const error =
@@ -211,8 +219,6 @@ export function useDocuments() {
 
   const registerFolder = useCallback(
     async (suggestedPath?: string) => {
-      // Never rejects — failures surface through the error banner, exactly
-      // like the legacy store action.
       await registerFolderMutation.mutateAsync(suggestedPath).catch(() => undefined);
     },
     [registerFolderMutation]
