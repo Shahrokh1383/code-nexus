@@ -1,3 +1,4 @@
+import { promises as fs } from 'fs';
 import type { EventBus } from '../../../../shared/event-bus/event-bus';
 import type { Logger } from '../../../../shared/logger/logger';
 import type { IgnorePattern } from '../../domain/ignore-pattern';
@@ -57,6 +58,24 @@ export class ScanRunner {
       store.markScanEnd();
     });
     if (myGeneration !== this.getGeneration()) return;
+
+    // Reachability guard: if the root is temporarily unreachable (unmounted
+    // drive, offline network share, permissions revoked), fastScanWorkspace
+    // returns an empty file set, and applyScanToStore would incorrectly mark
+    // every indexed path as stale — wiping the index. Verify root is a
+    // readable directory before applying the scan.
+    try {
+      const stat = await fs.stat(rootPath);
+      if (!stat.isDirectory()) {
+        throw new Error('root path is not a directory');
+      }
+    } catch (error) {
+      this.logger.warn('scan aborted: workspace root unreachable', {
+        rootPath,
+        message: error instanceof Error ? error.message : String(error),
+      });
+      return;
+    }
 
     const result = await this.applyScanToStore(store, scan, myGeneration, () => {
       this.eventBus.emit('FileDeleted', { path: '.' });
