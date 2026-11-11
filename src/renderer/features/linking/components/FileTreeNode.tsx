@@ -103,12 +103,22 @@ export function FileTreeNode({
     setLocalExpanded((prev) => !prev);
   };
 
-  const allChildIds = useMemo(() => (folder ? getAllFileIds(folder) : []), [folder]);
+  // Only trust the checkbox state when children are actually loaded. A folder
+  // with `children: []` has not been fetched (tree-builder.ts emits empty
+  // arrays; LazyFolderChildren fetches on expand), so counting its children
+  // would yield 0===0 → "fully checked" for a folder the user never selected.
+  const hasLoadedChildren = folder ? folder.children.length > 0 : false;
+  const allChildIds = useMemo(
+    () => (folder && hasLoadedChildren ? getAllFileIds(folder) : []),
+    [folder, hasLoadedChildren]
+  );
   const selectedChildCount = folder
     ? allChildIds.filter((id) => selectedIds.has(id)).length
     : 0;
-  const isFolderChecked = folder ? selectedChildCount === allChildIds.length : false;
-  const isFolderIndeterminate = folder
+  const isFolderChecked = hasLoadedChildren
+    ? selectedChildCount === allChildIds.length
+    : false;
+  const isFolderIndeterminate = hasLoadedChildren
     ? selectedChildCount > 0 && selectedChildCount < allChildIds.length
     : false;
 
@@ -168,7 +178,7 @@ export function FileTreeNode({
         </div>
         {isExpanded && (
           <div className="tree-children">
-            {folder.children.length > 0 ? (
+            {hasLoadedChildren ? (
               folder.children.map((child) => (
                 <FileTreeNode
                   key={child.id}
