@@ -38,13 +38,7 @@ export class DiffCalculator {
       const oldCount = i - oldStart;
       const newCount = j - newStart;
 
-      if (
-        oldCount === 1 &&
-        newCount === 1 &&
-        oldStart > 0 &&
-        i < oldLines.length &&
-        j < newLines.length
-      ) {
+      if (oldCount === 1 && newCount === 1) {
         modified.push(new DiffLine(newStart + 1, newLines[newStart], DiffLineType.MODIFIED));
       } else {
         for (let k = 0; k < oldCount; k++) {
