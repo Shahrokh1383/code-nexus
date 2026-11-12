@@ -6,10 +6,13 @@ import type {
   FileDiffResult,
 } from '@shared/ipc/tracking';
 import { TrackedFilePath } from '../domain/TrackedFilePath';
+import { HashValue } from '../domain/FileHash';
 import { TrackingJsonRepository } from '../infrastructure/TrackingJsonRepository';
 import { CommitsJsonRepository } from '../infrastructure/CommitsJsonRepository';
 import { DocumentCommitApprovalJsonRepository } from '../infrastructure/DocumentCommitApprovalJsonRepository';
 import { BaselineDiffCacheJsonRepository } from '../infrastructure/BaselineDiffCacheJsonRepository';
+import { FileSystemContentReader } from '../infrastructure/FileSystemContentReader';
+import { DiffCalculator } from '../infrastructure/DiffCalculator';
 import { LinkedDocumentQuery } from '../infrastructure/LinkedDocumentQuery';
 
 export class QueryService {
@@ -19,23 +22,39 @@ export class QueryService {
     private readonly approvalRepo: DocumentCommitApprovalJsonRepository,
     private readonly cacheRepo: BaselineDiffCacheJsonRepository,
     private readonly linkedQuery: LinkedDocumentQuery,
+    private readonly contentReader: FileSystemContentReader,
+    private readonly diffCalc: DiffCalculator,
   ) {}
 
   async getPendingChanges(rootPath: string, documentId?: string): Promise<FileHashDto[]> {
-    if (!documentId) return []; // Legacy: Result.ok([]) — NOT an error.
+    if (!documentId) return [];
 
     const linkedFiles = await this.linkedQuery.findLinkedFiles(rootPath, documentId);
     const approvals = await this.approvalRepo.findByDocument(rootPath, { value: documentId });
     const latest = approvals.length > 0 ? approvals[approvals.length - 1] : null;
 
+    // No commit yet: every linked file is pending. Resolve hash from tracker
+    // if present, otherwise re-hash from disk so a failed detection cannot
+    // hide a freshly linked file.
     if (!latest) {
       const result: FileHashDto[] = [];
       for (const filePathStr of linkedFiles) {
-        const hash = await this.hashRepo.findHashByPath(rootPath, new TrackedFilePath(filePathStr));
-        if (hash) {
+        const tracked = await this.hashRepo.findHashByPath(
+          rootPath, new TrackedFilePath(filePathStr),
+        );
+        let hashValue: string | null = tracked?.hashValue.value ?? null;
+        if (hashValue === null) {
+          try {
+            const content = await this.contentReader.readContent(rootPath, filePathStr);
+            hashValue = HashValue.fromContent(content).value;
+          } catch {
+            hashValue = null;
+          }
+        }
+        if (hashValue !== null) {
           result.push({
-            filePath: hash.filePath.value,
-            hashValue: hash.hashValue.value,
+            filePath: filePathStr,
+            hashValue,
             committedAt: null,
             status: 'PENDING',
           });
@@ -51,14 +70,32 @@ export class QueryService {
 
     const result: FileHashDto[] = [];
     for (const filePathStr of linkedFiles) {
-      const currentHash = await this.hashRepo.findHashByPath(rootPath, new TrackedFilePath(filePathStr));
-      if (!currentHash) continue;
+      const tracked = await this.hashRepo.findHashByPath(
+        rootPath, new TrackedFilePath(filePathStr),
+      );
+      if (!tracked) continue;
       const committedHash = commit.fileHashes.find((fh) => fh.filePath.value === filePathStr);
-      const isPending = !committedHash || !currentHash.hashValue.equals(committedHash.hashValue);
+
+      // Authoritative source: re-read the file from disk and hash it. This
+      // bypasses any stale state in tracking-index.json (e.g. when the fs
+      // watcher did not fire and recordHash never ran), so the pending list
+      // is always truthful as of this query.
+      let diskHashValue: string | null = null;
+      try {
+        const content = await this.contentReader.readContent(rootPath, filePathStr);
+        diskHashValue = HashValue.fromContent(content).value;
+      } catch {
+        diskHashValue = null; // file missing/unreadable — fall back to tracker
+      }
+      const effectiveHashValue = diskHashValue ?? tracked.hashValue.value;
+      const committedHashValue = committedHash?.hashValue.value ?? null;
+      const isPending =
+        committedHashValue === null || effectiveHashValue !== committedHashValue;
+
       if (isPending) {
         result.push({
-          filePath: currentHash.filePath.value,
-          hashValue: currentHash.hashValue.value,
+          filePath: tracked.filePath.value,
+          hashValue: effectiveHashValue,
           committedAt: committedHash ? commit.committedAt.toISOString() : null,
           status: 'PENDING',
         });
@@ -69,7 +106,10 @@ export class QueryService {
 
   async getAllPendingStatus(rootPath: string): Promise<PendingStatusDto[]> {
     const allHashes = await this.hashRepo.findAllHashes(rootPath);
-    const approvalsCache = new Map<string, ReturnType<DocumentCommitApprovalJsonRepository['findByDocument']> extends Promise<infer T> ? T : never>();
+    const approvalsCache = new Map<
+      string,
+      Awaited<ReturnType<DocumentCommitApprovalJsonRepository['findByDocument']>>
+    >();
     const commitCache = new Map<string, Awaited<ReturnType<CommitsJsonRepository['findById']>>>();
     const countMap: Record<string, number> = {};
 
@@ -131,11 +171,41 @@ export class QueryService {
   }
 
   async getFileDiff(rootPath: string, filePathStr: string): Promise<FileDiffResult> {
-    const filePath = new TrackedFilePath(filePathStr);
-    const hashEntry = await this.hashRepo.findHashByPath(rootPath, filePath);
-    if (!hashEntry || !hashEntry.isPending) return null;
-    const diff = await this.cacheRepo.loadDiff(rootPath, filePathStr);
-    if (diff === null) return 'CACHE_MISSING';
-    return diff;
+    // Self-healing diff: compute from the persisted commit baseline against
+    // the current file on disk. Does not rely on cache diff or on
+    // tracking-index.json's isPending flag, so it is correct even when the
+    // fs watcher failed to fire.
+    const baseline = await this.cacheRepo.loadBaseline(rootPath, filePathStr);
+    if (baseline === null) return 'CACHE_MISSING';
+
+    let currentContent: string;
+    try {
+      currentContent = await this.contentReader.readContent(rootPath, filePathStr);
+    } catch {
+      return null;
+    }
+
+    const oldHash = HashValue.fromContent(baseline);
+    const newHash = HashValue.fromContent(currentContent);
+    if (oldHash.equals(newHash)) return null;
+
+    const oldLines = baseline === '' ? [] : baseline.split('\n');
+    const newLines = currentContent === '' ? [] : currentContent.split('\n');
+    const { added, removed, modified } = this.diffCalc.computeDiff(oldLines, newLines);
+
+    return {
+      filePath: filePathStr,
+      oldHash: oldHash.value,
+      newHash: newHash.value,
+      addedLines: added.map((l) => ({
+        lineNumber: l.lineNumber, content: l.content, type: l.type as string,
+      })),
+      removedLines: removed.map((l) => ({
+        lineNumber: l.lineNumber, content: l.content, type: l.type as string,
+      })),
+      modifiedLines: modified.map((l) => ({
+        lineNumber: l.lineNumber, content: l.content, type: l.type as string,
+      })),
+    };
   }
 }

@@ -49,7 +49,12 @@ export class CommitsJsonRepository {
     const timer = this.debounceTimers.get(rootPath);
     if (timer) { clearTimeout(timer); this.debounceTimers.delete(rootPath); }
     const cache = this.caches.get(rootPath);
-    if (cache) await this.files.writeJson(join(rootPath, COMMITS_INDEX_FILENAME), cache);
+    if (cache) await this.files.writeJson(this.indexPath(rootPath), cache);
+  }
+
+  /** See TrackingJsonRepository.indexPath — .doclink is the metadata boundary. */
+  private indexPath(rootPath: string): string {
+    return join(rootPath, '.doclink', COMMITS_INDEX_FILENAME);
   }
 
   private async readIndex(rootPath: string): Promise<CommitsIndexSchema> {
@@ -58,7 +63,7 @@ export class CommitsJsonRepository {
 
     let index: CommitsIndexSchema;
     try {
-      index = await this.files.readJson<CommitsIndexSchema>(join(rootPath, COMMITS_INDEX_FILENAME));
+      index = await this.files.readJson<CommitsIndexSchema>(this.indexPath(rootPath));
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
       if (code === 'ENOENT') index = { version: SCHEMA_VERSION, commits: [] };
@@ -74,7 +79,7 @@ export class CommitsJsonRepository {
     const timer = setTimeout(async () => {
       this.debounceTimers.delete(rootPath);
       const cache = this.caches.get(rootPath);
-      if (cache) await this.files.writeJson(join(rootPath, COMMITS_INDEX_FILENAME), cache);
+      if (cache) await this.files.writeJson(this.indexPath(rootPath), cache);
     }, DEBOUNCE_DELAY_MS);
     this.debounceTimers.set(rootPath, timer);
   }

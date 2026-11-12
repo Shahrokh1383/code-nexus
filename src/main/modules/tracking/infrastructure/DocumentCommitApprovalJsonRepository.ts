@@ -41,7 +41,12 @@ export class DocumentCommitApprovalJsonRepository {
     const timer = this.debounceTimers.get(rootPath);
     if (timer) { clearTimeout(timer); this.debounceTimers.delete(rootPath); }
     const cache = this.caches.get(rootPath);
-    if (cache) await this.files.writeJson(join(rootPath, APPROVALS_FILENAME), cache);
+    if (cache) await this.files.writeJson(this.indexPath(rootPath), cache);
+  }
+
+  /** See TrackingJsonRepository.indexPath — .doclink is the metadata boundary. */
+  private indexPath(rootPath: string): string {
+    return join(rootPath, '.doclink', APPROVALS_FILENAME);
   }
 
   private async readIndex(rootPath: string): Promise<ApprovalsSchema> {
@@ -50,7 +55,7 @@ export class DocumentCommitApprovalJsonRepository {
 
     let index: ApprovalsSchema;
     try {
-      index = await this.files.readJson<ApprovalsSchema>(join(rootPath, APPROVALS_FILENAME));
+      index = await this.files.readJson<ApprovalsSchema>(this.indexPath(rootPath));
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
       if (code === 'ENOENT') index = { version: SCHEMA_VERSION, approvals: {} };
@@ -66,7 +71,7 @@ export class DocumentCommitApprovalJsonRepository {
     const timer = setTimeout(async () => {
       this.debounceTimers.delete(rootPath);
       const cache = this.caches.get(rootPath);
-      if (cache) await this.files.writeJson(join(rootPath, APPROVALS_FILENAME), cache);
+      if (cache) await this.files.writeJson(this.indexPath(rootPath), cache);
     }, DEBOUNCE_DELAY_MS);
     this.debounceTimers.set(rootPath, timer);
   }

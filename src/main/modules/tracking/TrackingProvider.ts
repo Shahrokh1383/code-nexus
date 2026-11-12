@@ -20,12 +20,22 @@ import { TrackingServiceToken, QueryServiceToken, LinkedDocumentQueryToken } fro
 import { registerTrackingIpc } from './ipc/TrackingIpc';
 import { TrackedFilePath } from './domain/TrackedFilePath';
 
+function toRelative(rootPath: string, raw: string): string {
+  const rootN = rootPath.replace(/\\/g, '/').replace(/\/+$/, '').toLowerCase();
+  let p = raw.replace(/\\/g, '/');
+  const pLower = p.toLowerCase();
+  if (pLower.startsWith(rootN + '/')) p = p.slice(rootN.length + 1);
+  if (p.startsWith('./')) p = p.slice(2);
+  return p;
+}
+
 export class TrackingProvider implements ModuleProvider {
   private hashRepo!: TrackingJsonRepository;
 
   register(c: ServiceContainer): void {
     const file = c.resolve(AtomicJsonFileToken);
     const events = c.resolve(EventBusToken);
+    const logger = c.resolve(LoggerToken);
     const userDataPath = app.getPath('userData');
 
     this.hashRepo = new TrackingJsonRepository(file);
@@ -37,12 +47,16 @@ export class TrackingProvider implements ModuleProvider {
     const linkedQuery = new LinkedDocumentQuery(c.resolve(CodeLinkServiceToken));
 
     c.bind(LinkedDocumentQueryToken, () => linkedQuery);
+
     c.bind(TrackingServiceToken, () => new TrackingService(
       this.hashRepo, commitRepo, approvalRepo, cacheRepo,
       contentReader, diffCalc, linkedQuery, events,
+      logger.child('tracking.service')
     ));
+
     c.bind(QueryServiceToken, () => new QueryService(
       this.hashRepo, commitRepo, approvalRepo, cacheRepo, linkedQuery,
+      contentReader, diffCalc,
     ));
   }
 
@@ -81,12 +95,17 @@ export class TrackingProvider implements ModuleProvider {
     events.on('FileModified', async ({ path }) => {
       const rootPath = activeRootPath();
       if (!rootPath) return;
-      const normalized = path.replace(/\\/g, '/');
-      if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
-      try { await tracking().detectChanges(rootPath, normalized); }
-      catch (err) {
+      try {
+        if (!path) {
+          logger.warn('FileModified received without path', {});
+          return;
+        }
+        const normalized = toRelative(rootPath, path);
+        if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+        await tracking().detectChanges(rootPath, normalized);
+      } catch (err) {
         logger.error('FileModified handler failed', {
-          path: normalized, message: err instanceof Error ? err.message : String(err),
+          path, message: err instanceof Error ? err.message : String(err),
         });
       }
     });
@@ -95,23 +114,25 @@ export class TrackingProvider implements ModuleProvider {
       if (isDirectory) return;
       const rootPath = activeRootPath();
       if (!rootPath) return;
-      const normalized = path.replace(/\\/g, '/');
-      if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
-      try { await tracking().detectChanges(rootPath, normalized); }
-      catch (err) {
+      try {
+        if (!path) return;
+        const normalized = toRelative(rootPath, path);
+        if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+        await tracking().detectChanges(rootPath, normalized);
+      } catch (err) {
         logger.error('FileDiscovered handler failed', {
-          path: normalized, message: err instanceof Error ? err.message : String(err),
+          path, message: err instanceof Error ? err.message : String(err),
         });
       }
     });
 
     events.on('FileDeleted', async ({ path }) => {
       const rootPath = activeRootPath();
-      if (!rootPath) return;
-      const normalized = path.replace(/\\/g, '/');
-      if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+      if (!rootPath || !path) return;
+      const normalized = toRelative(rootPath, path);
       try {
         await this.hashRepo.deleteHashByPath(rootPath, new TrackedFilePath(normalized));
+        await this.hashRepo.flush(rootPath);
       } catch (err) {
         logger.error('FileDeleted handler failed', {
           path: normalized, message: err instanceof Error ? err.message : String(err),
@@ -121,10 +142,11 @@ export class TrackingProvider implements ModuleProvider {
 
     events.on('FileExcluded', async ({ path }) => {
       const rootPath = activeRootPath();
-      if (!rootPath) return;
-      const normalized = path.replace(/\\/g, '/');
+      if (!rootPath || !path) return;
+      const normalized = toRelative(rootPath, path);
       try {
         await this.hashRepo.deleteHashByPath(rootPath, new TrackedFilePath(normalized));
+        await this.hashRepo.flush(rootPath);
       } catch (err) {
         logger.error('FileExcluded handler failed', {
           path: normalized, message: err instanceof Error ? err.message : String(err),
@@ -136,7 +158,17 @@ export class TrackingProvider implements ModuleProvider {
       const rootPath = activeRootPath();
       if (!rootPath) return;
       try {
-        await this.hashRepo.deleteAllExcept(rootPath, new Set(filePaths));
+        const normalized = new Set(filePaths.map((p) => toRelative(rootPath, p)));
+        await this.hashRepo.deleteAllExcept(rootPath, normalized);
+        await this.hashRepo.flush(rootPath);
+
+        const codeLinkService = c.resolve(CodeLinkServiceToken);
+        const allLinks = await codeLinkService.getAllLinks(rootPath);
+        const linkedFiles = new Set(allLinks.map((l) => l.codeFilePath));
+        for (const filePath of linkedFiles) {
+          if (filePath.startsWith('.doclink/') || filePath === '.doclink') continue;
+          await tracking().detectChanges(rootPath, filePath);
+        }
       } catch (err) {
         logger.error('FileIndexRebuilt handler failed', {
           message: err instanceof Error ? err.message : String(err),
@@ -151,7 +183,7 @@ export class TrackingProvider implements ModuleProvider {
       try {
         const filePath = await linkedQuery().findFilePathByFileId(rootPath, sourceId);
         if (!filePath) return;
-        const normalized = filePath.replace(/\\/g, '/');
+        const normalized = toRelative(rootPath, filePath);
         if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
         await tracking().detectChanges(rootPath, normalized);
       } catch (err) {

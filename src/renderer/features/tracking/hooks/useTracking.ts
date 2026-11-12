@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { TRACKING_CHANNELS } from '@shared/ipc/tracking';
 import type {
@@ -13,6 +13,9 @@ import { useTrackingStore } from '../stores/trackingStore';
 import { useWorkspace } from '@renderer/features/workspace';
 import { useDocuments } from '@renderer/features/documentation';
 import { trackingKeys } from '../keys';
+
+const PENDING_REFETCH_MS = 15000;
+const STATUS_REFETCH_MS = 30000;
 
 export function useTracking() {
   const queryClient = useQueryClient();
@@ -41,7 +44,12 @@ export function useTracking() {
         documentId: selectedDocument?.id,
       }),
     enabled: !!workspaceId,
+    refetchInterval: PENDING_REFETCH_MS,
+    refetchIntervalInBackground: false,
   });
+
+  const refetchPendingRef = useRef(pendingQuery.refetch);
+  refetchPendingRef.current = pendingQuery.refetch;
 
   const historyQuery = useQuery({
     queryKey: trackingKeys.history(workspaceId, selectedDocument?.id ?? null),
@@ -60,12 +68,17 @@ export function useTracking() {
         workspaceId,
       }),
     enabled: !!workspaceId,
+    refetchInterval: STATUS_REFETCH_MS,
+    refetchIntervalInBackground: false,
   });
 
-  const pendingCountByDocId: Record<string, number> = {};
-  for (const s of statusQuery.data ?? []) {
-    pendingCountByDocId[s.documentId] = s.pendingCount;
-  }
+  const pendingCountByDocId = useMemo<Record<string, number>>(() => {
+    const map: Record<string, number> = {};
+    for (const s of statusQuery.data ?? []) {
+      map[s.documentId] = s.pendingCount;
+    }
+    return map;
+  }, [statusQuery.data]);
 
   const approveMutation = useMutation({
     mutationFn: (documentId: string) =>
@@ -111,7 +124,7 @@ export function useTracking() {
   useEffect(() => {
     if (!workspaceId) return;
     const handler = (): void => {
-      void pendingQuery.refetch();
+      void refetchPendingRef.current();
       void queryClient.invalidateQueries({
         queryKey: trackingKeys.allPendingStatus(workspaceId),
       });
@@ -119,11 +132,14 @@ export function useTracking() {
         void queryClient.invalidateQueries({
           queryKey: trackingKeys.pending(workspaceId, selectedDocument.id),
         });
+        void queryClient.invalidateQueries({
+          queryKey: trackingKeys.history(workspaceId, selectedDocument.id),
+        });
       }
     };
     const unsubscribe = window.api.on(TRACKING_CHANNELS.PENDING_UPDATED, handler);
     return () => unsubscribe();
-  }, [workspaceId, selectedDocument, pendingQuery, queryClient]);
+  }, [workspaceId, selectedDocument, queryClient]);
 
   useEffect(() => {
     if (selectedDocument || documents.length === 0) return;

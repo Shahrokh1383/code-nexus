@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 import type { AtomicJsonFile } from '../../../shared/persistence/atomic-json-file';
@@ -8,14 +9,37 @@ interface CacheEntry {
   diff: ContentDiffDto | null;
 }
 
+const WORKSPACE_KEY_HEX_LENGTH = 32;
+const FILE_KEY_HEX_LENGTH = 40;
+
 export class BaselineDiffCacheJsonRepository {
   constructor(
     private readonly files: AtomicJsonFile,
     private readonly userDataPath: string,
   ) {}
 
+  private workspaceCacheDir(workspaceId: string): string {
+    const key = createHash('sha256')
+      .update(workspaceId)
+      .digest('hex')
+      .slice(0, WORKSPACE_KEY_HEX_LENGTH);
+    return join(this.userDataPath, 'code-nexus-cache', key);
+  }
+
   private filePath(workspaceId: string, relativePath: string): string {
-    return join(this.userDataPath, 'code-nexus-cache', workspaceId, `${relativePath}.json`);
+    const normalized = relativePath.replace(/\\/g, '/');
+    if (
+      normalized.length === 0 ||
+      normalized.startsWith('/') ||
+      /(^|\/)\.\.(\/|$)/.test(normalized)
+    ) {
+      throw new Error(`Invalid cache relative path: ${relativePath}`);
+    }
+    const fileKey = createHash('sha256')
+      .update(normalized)
+      .digest('hex')
+      .slice(0, FILE_KEY_HEX_LENGTH);
+    return join(this.workspaceCacheDir(workspaceId), `${fileKey}.json`);
   }
 
   async saveBaseline(workspaceId: string, relativePath: string, content: string): Promise<void> {
@@ -43,7 +67,13 @@ export class BaselineDiffCacheJsonRepository {
   }
 
   async clearCacheForFile(workspaceId: string, relativePath: string): Promise<void> {
-    await unlink(this.filePath(workspaceId, relativePath)).catch(() => {});
+    let path: string;
+    try {
+      path = this.filePath(workspaceId, relativePath);
+    } catch {
+      return;
+    }
+    await unlink(path).catch(() => {});
   }
 
   private async readCacheFile(path: string): Promise<CacheEntry | null> {

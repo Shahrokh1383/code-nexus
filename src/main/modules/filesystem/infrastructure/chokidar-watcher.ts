@@ -39,8 +39,7 @@ export class ChokidarFileWatcher {
     options: ChokidarFileWatcherOptions = {}
   ) {
     this.rootPath = PathUtils.normalize(rootPath);
-    
-    // Fast predicate function instead of glob array
+
     const isIgnored = (path: string) => {
       const normalized = PathUtils.normalize(path);
       const relative = normalized === this.rootPath ? '' : normalized.slice(this.rootPath.length + 1);
@@ -57,6 +56,7 @@ export class ChokidarFileWatcher {
       ignoreInitial: options.ignoreInitial ?? false,
       persistent: true,
       depth: Infinity,
+      awaitWriteFinish: { stabilityThreshold: 200, pollInterval: 50 },
     });
 
     let observed = 0;

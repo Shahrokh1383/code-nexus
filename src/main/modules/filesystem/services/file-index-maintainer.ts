@@ -49,13 +49,17 @@ export class FileIndexMaintainer {
         }
         return;
 
-      case 'change':
+      case 'change': {
         if (this.isIgnored(relativePath)) return;
-        if (await this.store.findByPath(relativePath)) return;
-        if (await this.store.upsertFile(relativePath)) {
+        const existedBefore = await this.store.findByPath(relativePath);
+        await this.store.upsertFile(relativePath);
+        if (existedBefore) {
+          this.eventBus.emit('FileModified', { path: relativePath });
+        } else {
           this.eventBus.emit('FileDiscovered', { path: relativePath, isDirectory: false });
         }
         return;
+      }
 
       case 'unlink':
         await this.store.deleteByPath(relativePath);
@@ -77,12 +81,9 @@ export class FileIndexMaintainer {
   }
 
   private isIgnored(relativePath: string): boolean {
-    // Check default ignored segments (node_modules, .git, etc.)
     if (relativePath.split('/').some((s) => DEFAULT_IGNORED_SEGMENTS.has(s))) {
       return true;
     }
-    
-    // Check user-defined ignore patterns
     return this.ignorePatterns.some((pattern) => {
       try {
         return pattern.matches(relativePath);

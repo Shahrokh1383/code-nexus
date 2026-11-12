@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import type { EventBus } from '../../../shared/event-bus/event-bus';
+import type { Logger } from '../../../shared/logger/logger';
 import { DomainException } from '../../../shared/errors/domain-exception';
 import { FileHash, FileHashId, HashValue } from '../domain/FileHash';
 import { TrackedFilePath } from '../domain/TrackedFilePath';
@@ -24,6 +25,7 @@ export class TrackingService {
     private readonly diffCalc: DiffCalculator,
     private readonly linkedQuery: LinkedDocumentQuery,
     private readonly events: EventBus,
+    private readonly logger: Logger,
   ) {}
 
   async recordHash(rootPath: string, filePathStr: string, newContent: string): Promise<void> {
@@ -36,40 +38,65 @@ export class TrackingService {
       await this.hashRepo.saveHash(rootPath, fileHash);
       try {
         await this.cacheRepo.saveBaseline(rootPath, filePathStr, newContent);
-      } catch {
-        // Cache is best-effort — metadata persisted regardless (legacy behavior).
+      } catch (err) {
+        this.logger.warn('recordHash: failed to save baseline for new file', {
+          filePath: filePath.value,
+          message: err instanceof Error ? err.message : String(err),
+        });
       }
+      await this.hashRepo.flush(rootPath);
+
+      this.events.emit('ChangesDetected', {
+        filePath: filePath.value,
+        oldHash: '',
+        newHash: newHash.value,
+        diffId: randomUUID(),
+      });
+      this.logger.debug('recordHash: new file tracked', { filePath: filePath.value });
       return;
     }
 
-    if (existing.hashValue.equals(newHash)) return;
+    if (existing.hashValue.equals(newHash)) {
+      this.logger.debug('recordHash: no change', { filePath: filePath.value });
+      return;
+    }
 
-    const eventDiffId = randomUUID();
+    const previousHashValue = existing.hashValue;
     existing.updateHash(newHash);
     existing.markPending();
 
     try {
       const baseline = await this.cacheRepo.loadBaseline(rootPath, filePathStr);
       const oldContent = baseline ?? '';
-      const oldHash = baseline ? HashValue.fromContent(baseline) : existing.hashValue;
-      const diff: ContentDiff = this.buildDiff(filePath, oldHash, newHash, oldContent, newContent);
+      const oldHashForDiff = baseline ? HashValue.fromContent(baseline) : previousHashValue;
+      const diff: ContentDiff = this.buildDiff(
+        filePath, oldHashForDiff, newHash, oldContent, newContent,
+      );
       await this.cacheRepo.saveDiff(rootPath, filePathStr, this.toDiffDto(diff));
-    } catch {
-      // Cache is best-effort (legacy behavior preserved — metadata continues).
+    } catch (err) {
+      this.logger.warn('recordHash: failed to build/save diff', {
+        filePath: filePath.value,
+        message: err instanceof Error ? err.message : String(err),
+      });
     }
-
     await this.hashRepo.saveHash(rootPath, existing);
+    await this.hashRepo.flush(rootPath);
+
     this.events.emit('ChangesDetected', {
       filePath: filePath.value,
-      oldHash: existing.hashValue.value,
+      oldHash: previousHashValue.value,
       newHash: newHash.value,
-      diffId: eventDiffId,
+      diffId: randomUUID(),
     });
+    this.logger.debug('recordHash: file modified', { filePath: filePath.value });
   }
 
   async detectChanges(rootPath: string, filePath: string): Promise<void> {
     const linked = await this.linkedQuery.findLinkedDocuments(rootPath, filePath);
-    if (linked.length === 0) return; // Link-only tracking (legacy behavior).
+    if (linked.length === 0) {
+      this.logger.debug('detectChanges: no linked documents found, skipping', { filePath });
+      return;
+    }
     const content = await this.contentReader.readContent(rootPath, filePath);
     await this.recordHash(rootPath, filePath, content);
   }
@@ -77,10 +104,7 @@ export class TrackingService {
   async approveCommit(rootPath: string, documentId: string): Promise<void> {
     const linkedFilePaths = await this.linkedQuery.findLinkedFiles(rootPath, documentId);
     if (linkedFilePaths.length === 0) {
-      throw new DomainException(
-        'NO_LINKED_FILES',
-        'No linked files found for the selected document',
-      );
+      throw new DomainException('NO_LINKED_FILES', 'No linked files found for the selected document');
     }
 
     const filePaths: TrackedFilePath[] = [];
@@ -88,18 +112,21 @@ export class TrackingService {
 
     for (const filePathStr of linkedFilePaths) {
       const filePath = new TrackedFilePath(filePathStr);
-      const existing = await this.hashRepo.findHashByPath(rootPath, filePath);
-      if (!existing) {
-        throw new DomainException(
-          'NO_HASH_RECORD',
-          `No hash record found for file: ${filePathStr}`,
-        );
-      }
+      let existing = await this.hashRepo.findHashByPath(rootPath, filePath);
 
       const currentContent = await this.contentReader.readContent(rootPath, filePathStr);
-      await this.hashRepo.updatePendingStatus(
-        rootPath, filePath, false, existing.hashValue.value,
-      );
+
+      if (!existing) {
+        await this.recordHash(rootPath, filePathStr, currentContent);
+        existing = await this.hashRepo.findHashByPath(rootPath, filePath);
+        if (!existing) {
+          throw new DomainException('NO_HASH_RECORD', `No hash record found for file: ${filePathStr}`);
+        }
+      }
+
+      const currentHash = HashValue.fromContent(currentContent);
+      existing.updateHash(currentHash);
+      await this.hashRepo.updatePendingStatus(rootPath, filePath, false, currentHash.value);
       await this.cacheRepo.clearCacheForFile(rootPath, filePathStr);
       await this.cacheRepo.saveBaseline(rootPath, filePathStr, currentContent);
       filePaths.push(filePath);
@@ -116,11 +143,16 @@ export class TrackingService {
     );
     await this.approvalRepo.save(rootPath, approval);
 
+    await this.hashRepo.flush(rootPath);
+    await this.commitRepo.flush(rootPath);
+    await this.approvalRepo.flush(rootPath);
+
     this.events.emit('CommitApproved', {
       commitId: commitId.value,
       documentId,
       filePaths: filePaths.map((p) => p.value),
     });
+    this.logger.debug('approveCommit: commit persisted', { documentId });
   }
 
   private buildDiff(

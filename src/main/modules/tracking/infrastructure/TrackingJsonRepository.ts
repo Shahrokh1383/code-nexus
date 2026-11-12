@@ -88,8 +88,15 @@ export class TrackingJsonRepository {
     if (cache) await this.files.writeJson(this.indexPath(rootPath), cache);
   }
 
+  /**
+   * Tracking metadata lives under `<workspace>/.doclink/` alongside
+   * links.json and file-index.json (Constitution §17 — .doclink is the
+   * workspace metadata boundary). Writing to the workspace root pollutes
+   * the user's tree and bypasses the .doclink ignore rules in the file
+   * watcher.
+   */
   private indexPath(rootPath: string): string {
-    return join(rootPath, TRACKING_INDEX_FILENAME);
+    return join(rootPath, '.doclink', TRACKING_INDEX_FILENAME);
   }
 
   private async readIndex(rootPath: string): Promise<TrackingIndexSchema> {
