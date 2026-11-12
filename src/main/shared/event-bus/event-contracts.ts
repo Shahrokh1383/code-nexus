@@ -63,6 +63,22 @@ export interface DomainEventMap {
     childDocumentIds: string[];
     migratedLinkIds: string[];
   };
+  'ChangesDetected': {
+    filePath: string;
+    oldHash: string;
+    newHash: string;
+    diffId: string;
+  };
+  'ReviewRequired': {
+    documentId: string;
+    filePath: string;
+    changeType: 'OUTDATED' | 'ORPHAN' | 'UNLINKED';
+  };
+  'CommitApproved': {
+    commitId: string;
+    documentId: string;
+    filePaths: string[];
+  };
 }
 
 export type DomainEventName = keyof DomainEventMap & string;

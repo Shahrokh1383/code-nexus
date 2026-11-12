@@ -4,6 +4,7 @@ import { FilesystemProvider } from '../modules/filesystem';
 import { SystemProvider } from '../modules/system';
 import { DocumentationProvider } from '../modules/documentation';
 import { LinkingProvider } from '../modules/linking';
+import { TrackingProvider } from '../modules/tracking/TrackingProvider';
 
 /**
  * The only module registry (Constitution §8). Adding a module means adding
@@ -15,4 +16,5 @@ export const enabledModuleProviders: ModuleProvider[] = [
   new SystemProvider(),
   new DocumentationProvider(),
   new LinkingProvider(),
+  new TrackingProvider(),
 ];

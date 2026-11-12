@@ -25,7 +25,7 @@ export class CodeLinkService {
     private readonly events: EventBus,
   ) {}
 
-  private async resolveCodeFileId(
+  async resolveCodeFileId(
     rootPath: string,
     rawId: string,
   ): Promise<string | null> {
