@@ -1,5 +1,4 @@
 /* ── Tracking Page ───────────────────────────────── */
-
 .tracking-page {
   padding: var(--cn-space-6);
   max-width: 1400px;
@@ -38,10 +37,7 @@
   margin: 0;
 }
 
-.tracking-header__stats {
-  display: flex;
-  gap: 1.5rem;
-}
+.tracking-header__stats { display: flex; gap: 1.5rem; }
 
 .tracking-stat {
   display: flex;
@@ -78,27 +74,29 @@
   gap: var(--cn-space-6);
 }
 
-.tracking-content__left {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cn-space-5);
-}
-
+.tracking-content__left,
 .tracking-content__right {
   display: flex;
   flex-direction: column;
   gap: var(--cn-space-5);
+  min-width: 0;
 }
 
-/* ── Pending Changes ─────────────────────────────── */
-.pending-changes {
+/* ── Shared: Panel Shell ─────────────────────────── */
+.pending-changes,
+.commit-history,
+.document-list {
   background-color: var(--cn-bg-elevated);
   border: 1px solid var(--cn-border-light);
   border-radius: var(--cn-radius-lg);
   padding: var(--cn-space-5);
 }
 
-.pending-changes--empty {
+/* ── Shared: Empty State ─────────────────────────── */
+.pending-changes--empty,
+.diff-viewer--empty,
+.commit-history--empty,
+.document-list--empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,20 +107,27 @@
   color: var(--cn-text-secondary);
 }
 
-.pending-changes__icon {
+.pending-changes__icon,
+.diff-viewer__icon,
+.commit-history__icon,
+.document-list__icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   opacity: 0.6;
   color: var(--cn-text-disabled);
 }
 
-.pending-changes__hint {
+.pending-changes__hint,
+.commit-history__hint,
+.document-list__hint {
   color: var(--cn-text-secondary);
   font-size: var(--cn-font-size-sm);
   margin-top: 0.5rem;
 }
 
-.pending-changes__title {
+/* ── Shared: Section Title ───────────────────────── */
+.pending-changes__title,
+.commit-history__title {
   font-size: 1.2rem;
   font-weight: var(--cn-font-weight-semibold);
   margin: 0 0 1rem 0;
@@ -132,6 +137,58 @@
   color: var(--cn-text-primary);
 }
 
+/* ── Shared: Scroll List ─────────────────────────── */
+.pending-changes__list,
+.commit-history__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cn-space-3);
+  overflow-y: auto;
+}
+
+.pending-changes__list { max-height: 400px; }
+.commit-history__list { max-height: 500px; }
+
+/* ── Shared: Card Base ───────────────────────────── */
+.pending-file,
+.commit-card {
+  background-color: var(--cn-bg-secondary);
+  border: 1px solid var(--cn-border-light);
+  border-radius: var(--cn-radius-md);
+  padding: 1rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pending-file:hover,
+.commit-card:hover {
+  background-color: var(--cn-bg-hover);
+  border-color: var(--cn-border-default);
+}
+
+/* ── Shared: Status Badge ────────────────────────── */
+.pending-file__status,
+.commit-card__status {
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--cn-radius-sm);
+  font-size: var(--cn-font-size-xs);
+  font-weight: var(--cn-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pending-file__status--pending,
+.commit-card__status--pending {
+  background-color: var(--cn-warning-muted);
+  color: var(--cn-warning);
+}
+
+.pending-file__status--approved,
+.commit-card__status--approved {
+  background-color: var(--cn-success-muted);
+  color: var(--cn-success);
+}
+
+/* ── Pending Changes ─────────────────────────────── */
 .pending-changes__count {
   background-color: var(--cn-warning-muted);
   color: var(--cn-warning);
@@ -142,28 +199,8 @@
   margin-left: auto;
 }
 
-.pending-changes__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cn-space-3);
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.pending-file {
-  background-color: var(--cn-bg-secondary);
-  border: 1px solid var(--cn-border-light);
-  border-radius: var(--cn-radius-md);
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.pending-file:hover {
-  background-color: var(--cn-bg-hover);
-  border-color: var(--cn-border-default);
-  transform: translateX(4px);
-}
+.pending-file { cursor: pointer; }
+.pending-file:hover { transform: translateX(4px); }
 
 .pending-file--selected {
   border-color: var(--cn-primary);
@@ -201,23 +238,46 @@
   font-family: var(--cn-font-mono);
 }
 
-.pending-file__status {
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--cn-radius-sm);
+/* ── Commit History ──────────────────────────────── */
+.commit-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.commit-card__id {
+  font-family: var(--cn-font-mono);
   font-size: var(--cn-font-size-xs);
-  font-weight: var(--cn-font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--cn-text-secondary);
 }
 
-.pending-file__status--pending {
-  background-color: var(--cn-warning-muted);
-  color: var(--cn-warning);
+.commit-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
+  margin-bottom: 0.5rem;
 }
 
-.pending-file__status--approved {
-  background-color: var(--cn-success-muted);
-  color: var(--cn-success);
+.commit-card__files-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cn-space-2);
+}
+
+.commit-card__file-path {
+  font-family: var(--cn-font-mono);
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-primary);
+  background-color: var(--cn-bg-active);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--cn-radius-sm);
+}
+
+.commit-card__more {
+  font-size: var(--cn-font-size-xs);
+  color: var(--cn-text-secondary);
 }
 
 /* ── Diff Viewer ─────────────────────────────────── */
@@ -227,58 +287,6 @@
   border-radius: var(--cn-radius-lg);
   overflow: hidden;
 }
-
-.diff-viewer--empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 3rem;
-  min-height: 200px;
-  color: var(--cn-text-secondary);
-}
-
-.diff-viewer__icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  opacity: 0.6;
-  color: var(--cn-text-disabled);
-}
-
-.diff-viewer__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.25rem;
-  background-color: var(--cn-bg-secondary);
-  border-bottom: 1px solid var(--cn-border-light);
-}
-
-.diff-viewer__file-path {
-  font-family: var(--cn-font-mono);
-  font-size: var(--cn-font-size-sm);
-  color: var(--cn-text-primary);
-}
-
-.diff-viewer__stats {
-  display: flex;
-  gap: var(--cn-space-3);
-}
-
-.diff-stat {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--cn-radius-md);
-  font-size: var(--cn-font-size-xs);
-  font-weight: var(--cn-font-weight-semibold);
-}
-
-.diff-stat--added { background-color: var(--cn-success-muted); color: var(--cn-success); }
-.diff-stat--removed { background-color: var(--cn-error-muted); color: var(--cn-error); }
-.diff-stat--modified { background-color: var(--cn-warning-muted); color: var(--cn-warning); }
 
 .diff-viewer__content {
   font-family: var(--cn-font-mono);
@@ -312,10 +320,7 @@
   user-select: none;
 }
 
-.diff-line__content {
-  flex: 1;
-  word-break: break-all;
-}
+.diff-line__content { flex: 1; word-break: break-all; }
 
 .diff-line--added {
   background-color: var(--cn-success-soft);
@@ -352,14 +357,9 @@
   border: none;
 }
 
-.commit-button:hover:not(:disabled) {
-  background-color: var(--cn-primary-hover);
-}
+.commit-button:hover:not(:disabled) { background-color: var(--cn-primary-hover); }
 
-.commit-button--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.commit-button--disabled { opacity: 0.5; cursor: not-allowed; }
 
 .commit-button__badge {
   background-color: rgba(255, 255, 255, 0.2);
@@ -371,136 +371,10 @@
   margin-left: auto;
 }
 
-/* ── Commit History ──────────────────────────────── */
-.commit-history {
-  background-color: var(--cn-bg-elevated);
-  border: 1px solid var(--cn-border-light);
-  border-radius: var(--cn-radius-lg);
-  padding: var(--cn-space-5);
-}
-
-.commit-history--empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 3rem;
-  min-height: 200px;
-  color: var(--cn-text-secondary);
-}
-
-.commit-history__icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  opacity: 0.6;
-  color: var(--cn-text-disabled);
-}
-
-.commit-history__hint {
-  color: var(--cn-text-secondary);
-  font-size: var(--cn-font-size-sm);
-  margin-top: 0.5rem;
-}
-
-.commit-history__title {
-  font-size: 1.2rem;
-  font-weight: var(--cn-font-weight-semibold);
-  margin: 0 0 1rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--cn-text-primary);
-}
-
-.commit-history__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cn-space-3);
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.commit-card {
-  background-color: var(--cn-bg-secondary);
-  border: 1px solid var(--cn-border-light);
-  border-radius: var(--cn-radius-md);
-  padding: 1rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.commit-card:hover {
-  background-color: var(--cn-bg-hover);
-  border-color: var(--cn-border-default);
-}
-
-.commit-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.commit-card__id {
-  font-family: var(--cn-font-mono);
-  font-size: var(--cn-font-size-xs);
-  color: var(--cn-text-secondary);
-}
-
-.commit-card__status {
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--cn-radius-sm);
-  font-size: var(--cn-font-size-xs);
-  font-weight: var(--cn-font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.commit-card__status--approved {
-  background-color: var(--cn-success-muted);
-  color: var(--cn-success);
-}
-
-.commit-card__status--pending {
-  background-color: var(--cn-warning-muted);
-  color: var(--cn-warning);
-}
-
-.commit-card__meta {
-  display: flex;
-  gap: 1rem;
-  font-size: var(--cn-font-size-xs);
-  color: var(--cn-text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.commit-card__files-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--cn-space-2);
-}
-
-.commit-card__file-path {
-  font-family: var(--cn-font-mono);
-  font-size: var(--cn-font-size-xs);
-  color: var(--cn-text-primary);
-  background-color: var(--cn-bg-active);
-  padding: 0.2rem 0.5rem;
-  border-radius: var(--cn-radius-sm);
-}
-
-.commit-card__more {
-  font-size: var(--cn-font-size-xs);
-  color: var(--cn-text-secondary);
-}
-
 /* ── Loading ─────────────────────────────────────── */
 .tracking-loading {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -511,88 +385,153 @@
   color: var(--cn-text-inverse);
 }
 
-.tracking-loading i {
-  font-size: 2rem;
-  color: var(--cn-primary);
-}
+.tracking-loading i { font-size: 2rem; color: var(--cn-primary); }
 
-/* ── Document List ────────────────────────────────── */
+/* ── Pending Document List ────────────────────────── */
 .document-list {
-  background-color: var(--cn-bg-elevated);
-  border: 1px solid var(--cn-border-light);
-  border-radius: var(--cn-radius-lg);
-  padding: var(--cn-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cn-space-4);
+  max-height: min(560px, 65vh);
+  overflow: hidden;
 }
 
 .document-list--empty {
+  max-height: none;
+  overflow: visible;
+}
+
+.document-list__header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 3rem;
-  min-height: 200px;
-  color: var(--cn-text-secondary);
-}
-
-.document-list__icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  opacity: 0.6;
-  color: var(--cn-text-disabled);
-}
-
-.document-list__hint {
-  color: var(--cn-text-secondary);
-  font-size: var(--cn-font-size-sm);
-  margin-top: 0.5rem;
+  gap: var(--cn-space-2);
+  flex-shrink: 0;
 }
 
 .document-list__title {
+  margin: 0;
   font-size: 1.2rem;
   font-weight: var(--cn-font-weight-semibold);
-  margin: 0 0 1rem 0;
+  color: var(--cn-text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--cn-text-primary);
 }
 
+.document-list__count,
+.document-card__badge {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  font-size: var(--cn-font-size-xs);
+  border-radius: var(--cn-radius-full);
+  font-variant-numeric: tabular-nums;
+}
+
+.document-list__count {
+  font-weight: var(--cn-font-weight-semibold);
+  color: var(--cn-text-secondary);
+  background-color: var(--cn-bg-active);
+}
+
+.document-card__badge {
+  flex-shrink: 0;
+  font-weight: var(--cn-font-weight-bold);
+  color: var(--cn-warning);
+  background-color: var(--cn-warning-muted);
+}
+
+.document-list > .search-bar { flex-shrink: 0; }
+
 .document-list__items {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--cn-space-3);
+  padding-right: 0.25rem;
+  scrollbar-gutter: stable;
 }
 
+.document-list__empty-message {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: var(--cn-font-size-sm);
+  color: var(--cn-text-secondary);
+}
+
+.document-list__empty-message p { margin: 0; }
+
 .document-card {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--cn-space-3);
+  padding: 0.75rem 1rem;
   background-color: var(--cn-bg-secondary);
   border: 1px solid var(--cn-border-light);
+  border-left: 3px solid transparent;
   border-radius: var(--cn-radius-md);
-  padding: 1rem;
   cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .document-card:hover {
   background-color: var(--cn-bg-hover);
   border-color: var(--cn-border-default);
+  transform: translateY(-1px);
+}
+
+.document-card:focus-visible {
+  outline: 2px solid var(--cn-primary);
+  outline-offset: 2px;
 }
 
 .document-card--selected {
+  background-color: var(--cn-primary-muted);
   border-color: var(--cn-primary);
+  border-left-color: var(--cn-primary);
+}
+
+.document-card__avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.85rem;
+  color: var(--cn-text-secondary);
+  background-color: var(--cn-bg-active);
+  border-radius: var(--cn-radius-md);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.document-card:hover .document-card__avatar,
+.document-card--selected .document-card__avatar {
+  color: var(--cn-primary);
   background-color: var(--cn-primary-muted);
 }
 
 .document-card__info {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.15rem;
+}
+
+.document-card__name,
+.document-card__path {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .document-card__name {
+  font-size: var(--cn-font-size-sm);
   font-weight: var(--cn-font-weight-semibold);
   color: var(--cn-text-primary);
 }
@@ -603,13 +542,26 @@
   color: var(--cn-text-secondary);
 }
 
-.document-card__badge {
-  background-color: var(--cn-warning-muted);
-  color: var(--cn-warning);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--cn-radius-full);
-  font-size: var(--cn-font-size-xs);
-  font-weight: var(--cn-font-weight-semibold);
+.document-card__chevron {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--cn-text-disabled);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.document-card:hover .document-card__chevron {
+  color: var(--cn-text-secondary);
+  transform: translateX(2px);
+}
+
+.document-card--selected .document-card__chevron { color: var(--cn-primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  .document-card,
+  .document-card__avatar,
+  .document-card__chevron { transition: none; }
+  .document-card:hover,
+  .document-card:hover .document-card__chevron { transform: none; }
 }
 
 /* ── Document Commit Panel ───────────────────────── */
@@ -622,8 +574,7 @@
 /* ── Full‑screen Diff Modal ──────────────────────── */
 .diff-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
@@ -700,9 +651,7 @@
 
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 1024px) {
-  .tracking-content {
-    grid-template-columns: 1fr;
-  }
+  .tracking-content { grid-template-columns: 1fr; }
   
   .tracking-header {
     flex-direction: column;
@@ -717,20 +666,11 @@
 }
 
 @media (max-width: 768px) {
-  .tracking-page {
-    padding: var(--cn-space-4);
-  }
-  
-  .tracking-header__info h1 {
-    font-size: 1.4rem;
-  }
+  .tracking-page { padding: var(--cn-space-4); }
+  .tracking-header__info h1 { font-size: 1.4rem; }
   
   .pending-changes__list,
-  .commit-history__list {
-    max-height: 300px;
-  }
+  .commit-history__list { max-height: 300px; }
   
-  .diff-viewer__content {
-    max-height: 300px;
-  }
+  .diff-viewer__content { max-height: 300px; }
 }

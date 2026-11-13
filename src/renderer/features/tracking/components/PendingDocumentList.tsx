@@ -18,10 +18,8 @@ export function PendingDocumentList({
   selectedDocumentId,
   onSelectDocument,
 }: PendingDocumentListProps): JSX.Element {
-  // 1. Only documents with pending changes
   let pendingDocs = documents.filter((doc) => (pendingCountByDocId[doc.id] || 0) > 0);
 
-  // 2. Apply search filter
   if (searchQuery.trim()) {
     const q = searchQuery.toLowerCase();
     pendingDocs = pendingDocs.filter(
@@ -30,7 +28,6 @@ export function PendingDocumentList({
     );
   }
 
-  // 3. Sort by pending count descending
   pendingDocs.sort(
     (a, b) => (pendingCountByDocId[b.id] || 0) - (pendingCountByDocId[a.id] || 0),
   );
@@ -53,6 +50,14 @@ export function PendingDocumentList({
         <h3 className="document-list__title">
           <i className="fa-solid fa-book-open" /> Pending Documents
         </h3>
+        {pendingDocs.length > 0 && (
+          <span
+            className="document-list__count"
+            aria-label={`${pendingDocs.length} pending documents`}
+          >
+            {pendingDocs.length}
+          </span>
+        )}
       </div>
 
       <div className="search-bar">
@@ -79,29 +84,46 @@ export function PendingDocumentList({
       </div>
 
       {pendingDocs.length === 0 && searchQuery ? (
-        <div className="document-list--empty" style={{ padding: '1.5rem' }}>
+        <div className="document-list__empty-message">
           <p>No documents match your search.</p>
         </div>
       ) : (
         <div className="document-list__items">
           {pendingDocs.map((doc) => {
             const count = pendingCountByDocId[doc.id] || 0;
+            const isSelected = selectedDocumentId === doc.id;
             return (
               <div
                 key={doc.id}
-                className={`document-card ${selectedDocumentId === doc.id ? 'document-card--selected' : ''}`}
+                className={`document-card ${isSelected ? 'document-card--selected' : ''}`}
                 onClick={() => onSelectDocument(doc)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && onSelectDocument(doc)}
+                aria-current={isSelected ? 'true' : undefined}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelectDocument(doc);
+                  }
+                }}
               >
+                <span className="document-card__avatar" aria-hidden="true">
+                  <i className="fa-solid fa-file-lines" />
+                </span>
                 <div className="document-card__info">
                   <span className="document-card__name">{doc.title}</span>
                   <span className="document-card__path">{doc.path}</span>
                 </div>
-                {count > 0 && (
-                  <span className="document-card__badge">{count}</span>
-                )}
+                <span
+                  className="document-card__badge"
+                  title={`${count} pending changes`}
+                >
+                  {count}
+                </span>
+                <i
+                  className="fa-solid fa-chevron-right document-card__chevron"
+                  aria-hidden="true"
+                />
               </div>
             );
           })}
