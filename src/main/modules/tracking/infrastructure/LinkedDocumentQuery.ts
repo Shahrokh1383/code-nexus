@@ -5,8 +5,13 @@ import type { CodeLinkService } from '../../linking/services/CodeLinkService';
  * imports of linking internals, no direct imports from filesystem/documentation
  * domains. Satisfies Constitution §2 (cross-module via contract only).
  *
- * Requires `CodeLinkService.resolveCodeFileId` to be public (single-word edit
- * to linking — documented in the completion report).
+ * Requires `CodeLinkService.resolveCodeFileId` and
+ * `CodeLinkService.getCodeFilePathById` to be public (single-word edits to
+ * linking — documented in the completion report).
+ *
+ * `findFilePathByFileId` resolves against the file-index, not against live
+ * links, so it remains valid after the last link to a file is removed. This
+ * is required by `LinkBroken` consumers.
  */
 export class LinkedDocumentQuery {
   constructor(private readonly codeLinks: CodeLinkService) {}
@@ -24,7 +29,6 @@ export class LinkedDocumentQuery {
   }
 
   async findFilePathByFileId(rootPath: string, fileId: string): Promise<string | null> {
-    const links = await this.codeLinks.getLinksForCodeFile(rootPath, fileId);
-    return links.length > 0 ? links[0].codeFilePath : null;
+    return this.codeLinks.getCodeFilePathById(rootPath, fileId);
   }
 }

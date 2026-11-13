@@ -186,8 +186,45 @@ export class TrackingProvider implements ModuleProvider {
         const normalized = toRelative(rootPath, filePath);
         if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
         await tracking().detectChanges(rootPath, normalized);
+        await this.hashRepo.updatePendingStatus(
+          rootPath, new TrackedFilePath(normalized), true,
+        );
+        await this.hashRepo.flush(rootPath);
+        logger.debug('LinkCreated: pending reset on link', {
+          filePath: normalized, sourceId,
+        });
       } catch (err) {
         logger.error('LinkCreated handler failed', {
+          sourceId, message: err instanceof Error ? err.message : String(err),
+        });
+      }
+    });
+
+    events.on('LinkBroken', async ({ category, sourceId }) => {
+      if (category !== 'code') return;
+      const rootPath = activeRootPath();
+      if (!rootPath) return;
+      try {
+        const filePath = await linkedQuery().findFilePathByFileId(rootPath, sourceId);
+        if (!filePath) return;
+        const normalized = toRelative(rootPath, filePath);
+        if (normalized.startsWith('.doclink/') || normalized === '.doclink') return;
+
+        const remaining = await linkedQuery().findLinkedDocuments(rootPath, normalized);
+        if (remaining.length > 0) {
+          logger.debug('LinkBroken: file still linked elsewhere, keeping tracking', {
+            filePath: normalized, remaining: remaining.length, sourceId,
+          });
+          return;
+        }
+
+        await this.hashRepo.deleteHashByPath(rootPath, new TrackedFilePath(normalized));
+        await this.hashRepo.flush(rootPath);
+        logger.debug('LinkBroken: orphaned tracking entry removed', {
+          filePath: normalized, sourceId,
+        });
+      } catch (err) {
+        logger.error('LinkBroken handler failed', {
           sourceId, message: err instanceof Error ? err.message : String(err),
         });
       }

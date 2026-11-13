@@ -35,6 +35,7 @@ export class TrackingService {
 
     if (!existing) {
       const fileHash = new FileHash(new FileHashId(randomUUID()), filePath, newHash);
+      fileHash.markPending();
       await this.hashRepo.saveHash(rootPath, fileHash);
       try {
         await this.cacheRepo.saveBaseline(rootPath, filePathStr, newContent);

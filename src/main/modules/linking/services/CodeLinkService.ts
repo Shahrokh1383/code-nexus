@@ -40,6 +40,11 @@ export class CodeLinkService {
     return byPath.get(normalizedRawId) ?? null;
   }
 
+  async getCodeFilePathById(rootPath: string, codeFileId: string): Promise<string | null> {
+    const file = await this.codeFileQuery.getCodeFileById(rootPath, codeFileId);
+    return file ? this.normalizePath(rootPath, file.path) : null;
+  }
+
   async createLink(rootPath: string, rawCodeFileId: string, documentId: string): Promise<void> {
     const codeFileId = await this.resolveCodeFileId(rootPath, rawCodeFileId);
     if (!codeFileId) {
@@ -89,7 +94,7 @@ export class CodeLinkService {
     for (const rawId of rawCodeFileIds) {
       const normalizedRawId = this.normalizePath(rootPath, rawId);
       const codeFileId = validIds.has(rawId) ? rawId : byPath.get(normalizedRawId);
-      
+
       if (!codeFileId) {
         skippedIds.push(rawId);
         continue;
@@ -217,5 +222,13 @@ export class CodeLinkService {
     const links = await this.linkRepo.findByDocument(rootPath, deletedDocumentId);
     if (links.length === 0) return;
     await this.linkRepo.deleteMany(rootPath, links.map((l) => l.id));
+    for (const link of links) {
+      this.events.emit('LinkBroken', {
+        linkId: link.id,
+        category: 'code',
+        sourceId: link.codeFileId,
+        targetId: link.documentId,
+      });
+    }
   }
 }
