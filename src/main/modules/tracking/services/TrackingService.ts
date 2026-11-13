@@ -102,6 +102,58 @@ export class TrackingService {
     await this.recordHash(rootPath, filePath, content);
   }
 
+  async reconcileOnBoot(rootPath: string): Promise<void> {
+    const start = Date.now();
+    try {
+      const allHashes = await this.hashRepo.findAllHashes(rootPath);
+      if (allHashes.length === 0) {
+        this.logger.debug('reconcileOnBoot: nothing to reconcile', { rootPath });
+        return;
+      }
+
+      let removed = 0;
+      let reDetected = 0;
+
+      for (const hash of allHashes) {
+        const filePath = hash.filePath.value;
+        if (filePath.startsWith('.doclink/') || filePath === '.doclink') continue;
+
+        try {
+          const linkedDocumentIds = await this.linkedQuery.findLinkedDocuments(rootPath, filePath,);
+          if (linkedDocumentIds.length === 0) {
+            await this.hashRepo.deleteHashByPath(rootPath, hash.filePath);
+            removed++;
+            continue;
+          }
+          await this.detectChanges(rootPath, filePath);
+          reDetected++;
+        } catch (err) {
+          this.logger.warn('reconcileOnBoot: per-file failure', {
+            filePath,
+            message: err instanceof Error ? err.message : String(err),
+          });
+        }
+      }
+
+      if (removed > 0) {
+        await this.hashRepo.flush(rootPath);
+      }
+
+      this.logger.info('reconcileOnBoot: finalized', {
+        rootPath,
+        totalTracked: allHashes.length,
+        removed,
+        reDetected,
+        totalMs: Date.now() - start,
+      });
+    } catch (error) {
+      this.logger.error('reconcileOnBoot: failed', {
+        rootPath,
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
   async approveCommit(rootPath: string, documentId: string): Promise<void> {
     const linkedFilePaths = await this.linkedQuery.findLinkedFiles(rootPath, documentId);
     if (linkedFilePaths.length === 0) {

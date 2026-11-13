@@ -115,6 +115,21 @@ export class QueryService {
 
     for (const hash of allHashes) {
       const linkedDocs = await this.linkedQuery.findLinkedDocuments(rootPath, hash.filePath.value);
+      if (linkedDocs.length === 0) continue;
+
+      // Authoritative source: re-read the file from disk and hash it. This
+      // mirrors `getPendingChanges` above and removes the boot-time dependency
+      // on `tracking-index.json` being refreshed by `reconcileOnBoot` before
+      // this query runs. Without this, an offline-modified file is invisible
+      // until another `ChangesDetected` event triggers a refetch.
+      let effectiveHashValue: string;
+      try {
+        const content = await this.contentReader.readContent(rootPath, hash.filePath.value);
+        effectiveHashValue = HashValue.fromContent(content).value;
+      } catch {
+        effectiveHashValue = hash.hashValue.value; // unreadable — trust tracker
+      }
+
       for (const docId of linkedDocs) {
         if (!approvalsCache.has(docId)) {
           approvalsCache.set(docId, await this.approvalRepo.findByDocument(rootPath, { value: docId }));
@@ -136,7 +151,7 @@ export class QueryService {
           continue;
         }
         const committedHash = commit.fileHashes.find((fh) => fh.filePath.value === hash.filePath.value);
-        if (!committedHash || !hash.hashValue.equals(committedHash.hashValue)) {
+        if (!committedHash || effectiveHashValue !== committedHash.hashValue.value) {
           countMap[docId] = (countMap[docId] || 0) + 1;
         }
       }

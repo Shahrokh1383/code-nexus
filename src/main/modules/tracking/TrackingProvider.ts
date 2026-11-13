@@ -111,9 +111,21 @@ export class TrackingProvider implements ModuleProvider {
     });
 
     events.on('FileDiscovered', async ({ path, isDirectory }) => {
-      if (isDirectory) return;
       const rootPath = activeRootPath();
       if (!rootPath) return;
+      if (isDirectory) {
+        if (path === '.') {
+          try {
+            await tracking().reconcileOnBoot(rootPath);
+          } catch (err) {
+            logger.error('FileDiscovered boot reconcile failed', {
+              path,
+              message: err instanceof Error ? err.message : String(err),
+            });
+          }
+        }
+        return;
+      }
       try {
         if (!path) return;
         const normalized = toRelative(rootPath, path);
