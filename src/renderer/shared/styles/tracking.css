@@ -85,7 +85,7 @@
 /* ── Shared: Panel Shell ─────────────────────────── */
 .pending-changes,
 .commit-history,
-.document-list {
+.tracking-page .document-list {
   background-color: var(--cn-bg-elevated);
   border: 1px solid var(--cn-border-light);
   border-radius: var(--cn-radius-lg);
@@ -388,7 +388,7 @@
 .tracking-loading i { font-size: 2rem; color: var(--cn-primary); }
 
 /* ── Pending Document List ────────────────────────── */
-.document-list {
+.tracking-page .document-list {
   display: flex;
   flex-direction: column;
   gap: var(--cn-space-4);
@@ -396,7 +396,7 @@
   overflow: hidden;
 }
 
-.document-list--empty {
+.tracking-page .document-list--empty {
   max-height: none;
   overflow: visible;
 }
@@ -464,7 +464,7 @@
 
 .document-list__empty-message p { margin: 0; }
 
-.document-card {
+.tracking-page .document-card {
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -478,18 +478,18 @@
   transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
-.document-card:hover {
+.tracking-page .document-card:hover {
   background-color: var(--cn-bg-hover);
   border-color: var(--cn-border-default);
   transform: translateY(-1px);
 }
 
-.document-card:focus-visible {
+.tracking-page .document-card:focus-visible {
   outline: 2px solid var(--cn-primary);
   outline-offset: 2px;
 }
 
-.document-card--selected {
+.tracking-page .document-card--selected {
   background-color: var(--cn-primary-muted);
   border-color: var(--cn-primary);
   border-left-color: var(--cn-primary);
@@ -524,7 +524,7 @@
 }
 
 .document-card__name,
-.document-card__path {
+.tracking-page .document-card__path {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -536,7 +536,7 @@
   color: var(--cn-text-primary);
 }
 
-.document-card__path {
+.tracking-page .document-card__path {
   font-family: var(--cn-font-mono);
   font-size: var(--cn-font-size-xs);
   color: var(--cn-text-secondary);
@@ -557,10 +557,10 @@
 .document-card--selected .document-card__chevron { color: var(--cn-primary); }
 
 @media (prefers-reduced-motion: reduce) {
-  .document-card,
+  .tracking-page .document-card,
   .document-card__avatar,
   .document-card__chevron { transition: none; }
-  .document-card:hover,
+  .tracking-page .document-card:hover,
   .document-card:hover .document-card__chevron { transform: none; }
 }
 
