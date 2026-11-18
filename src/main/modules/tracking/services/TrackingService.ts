@@ -105,6 +105,8 @@ export class TrackingService {
   async reconcileOnBoot(rootPath: string): Promise<void> {
     const start = Date.now();
     try {
+      await this.adoptLegacyBaselines(rootPath);
+
       const allHashes = await this.hashRepo.findAllHashes(rootPath);
       if (allHashes.length === 0) {
         this.logger.debug('reconcileOnBoot: nothing to reconcile', { rootPath });
@@ -206,6 +208,123 @@ export class TrackingService {
       filePaths: filePaths.map((p) => p.value),
     });
     this.logger.debug('approveCommit: commit persisted', { documentId });
+  }
+
+  private async adoptLegacyBaselines(rootPath: string): Promise<void> {
+    const start = Date.now();
+    try {
+      const [hashes, commits] = await Promise.all([
+        this.hashRepo.findAllHashes(rootPath),
+        this.commitRepo.findAll(rootPath),
+      ]);
+
+      const committedHashByPath = new Map<string, string>();
+      const ordered = [...commits].sort((a, b) => {
+        const dt = b.committedAt.getTime() - a.committedAt.getTime();
+        return dt !== 0 ? dt : b.id.value.localeCompare(a.id.value);
+      });
+      for (const commit of ordered) {
+        for (const fh of commit.fileHashes) {
+          const key = fh.filePath.value;
+          if (!committedHashByPath.has(key)) {
+            committedHashByPath.set(key, fh.hashValue.value);
+          }
+        }
+      }
+
+      const candidates = new Set<string>();
+      for (const h of hashes) candidates.add(h.filePath.value);
+      if (hashes.length === 0 && committedHashByPath.size > 0) {
+        for (const path of committedHashByPath.keys()) candidates.add(path);
+      }
+
+      // Also add candidates from the legacy JSON index.
+      const legacyIndex = await this.cacheRepo.loadLegacyBaselineIndex(rootPath);
+      if (legacyIndex) {
+        for (const path of legacyIndex.keys()) {
+          candidates.add(path);
+        }
+      }
+
+      if (candidates.size === 0) {
+        this.logger.debug('adoptLegacyBaselines: no candidates', { rootPath });
+        return;
+      }
+
+      let needsAdoption = false;
+      for (const filePath of candidates) {
+        if (!(await this.cacheRepo.hasBaseline(rootPath, filePath))) {
+          needsAdoption = true;
+          break;
+        }
+      }
+      if (!needsAdoption) {
+        this.logger.debug('adoptLegacyBaselines: all candidates already have baselines', {
+          rootPath,
+          candidates: candidates.size,
+        });
+        return;
+      }
+
+      let seededLegacy = 0;
+      let seededDisk = 0;
+      let skippedModified = 0;
+      let unrecoverable = 0;
+
+      for (const filePath of candidates) {
+        if (await this.cacheRepo.hasBaseline(rootPath, filePath)) continue;
+
+        // Try recovering from ANY legacy source
+        const legacyContent = await this.cacheRepo.loadLegacyBaseline(rootPath, filePath);
+        if (legacyContent !== null) {
+          try {
+            await this.cacheRepo.saveBaseline(rootPath, filePath, legacyContent);
+            seededLegacy++;
+            continue;
+          } catch (err) {
+            this.logger.warn('adoptLegacyBaselines: failed to write legacy baseline', {
+              filePath,
+              message: err instanceof Error ? err.message : String(err),
+            });
+          }
+        }
+
+        const committed = committedHashByPath.get(filePath);
+        if (committed === undefined) continue;
+        try {
+          const content = await this.contentReader.readContent(rootPath, filePath);
+          if (HashValue.fromContent(content).value !== committed) {
+            skippedModified++;
+            continue;
+          }
+          await this.cacheRepo.saveBaseline(rootPath, filePath, content);
+          seededDisk++;
+        } catch (err) {
+          unrecoverable++;
+          this.logger.warn('adoptLegacyBaselines: per-file failure', {
+            filePath,
+            message: err instanceof Error ? err.message : String(err),
+          });
+        }
+      }
+
+      this.logger.info('adoptLegacyBaselines: finalized', {
+        rootPath,
+        totalTracked: hashes.length,
+        totalCommitted: committedHashByPath.size,
+        candidates: candidates.size,
+        seededLegacy,
+        seededDisk,
+        skippedModified,
+        unrecoverable,
+        totalMs: Date.now() - start,
+      });
+    } catch (err) {
+      this.logger.error('adoptLegacyBaselines: failed', {
+        rootPath,
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
   }
 
   private buildDiff(

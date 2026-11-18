@@ -1,0 +1,23 @@
+# DYNAMIC ALIASES
+[A]=src/main/modules/tracking/infrastructure
+[B]=src/renderer/features/tracking/components
+[C]=src/main/modules/tracking/domain
+[D]=src/main/modules/tracking/services
+[E]=src/main/modules/tracking/ipc
+[F]=src/renderer/features/tracking/stores
+[G]=src/renderer/features/tracking/hooks
+[H]=src/renderer/features/tracking/api
+[I]=src/renderer/pages
+
+# MANIFEST
+src/main/modules/tracking(TrackingProvider.ts,index.ts)
+[C](ContentDiff.ts,DocumentCommitApproval.ts,FileHash.ts,GranularCommit.ts,TrackedFilePath.ts)
+[A](BaselineDiffCacheJsonRepository.ts,CommitsJsonRepository.ts,DiffCalculator.ts,DocumentCommitApprovalJsonRepository.ts,FileSystemContentReader.ts,LinkedDocumentQuery.ts,TrackingBridge.ts,TrackingJsonRepository.ts)
+[E](TrackingIpc.ts,schemas.ts)
+[D](QueryService.ts,TrackingService.ts,tokens.ts)
+src/renderer/features/tracking(index.ts,keys.ts)
+[H](trackingIpc.ts)
+[B](CommitButton.tsx,CommitHistory.tsx,DiffViewer.tsx,DocumentCommitPanel.tsx,PendingChangesList.tsx,PendingDocumentList.tsx,TrackingPageHeader.tsx)
+[G](useTracking.ts)
+[F](trackingStore.ts)
+[I](TrackingPage.tsx)

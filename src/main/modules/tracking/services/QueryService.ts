@@ -33,9 +33,6 @@ export class QueryService {
     const approvals = await this.approvalRepo.findByDocument(rootPath, { value: documentId });
     const latest = approvals.length > 0 ? approvals[approvals.length - 1] : null;
 
-    // No commit yet: every linked file is pending. Resolve hash from tracker
-    // if present, otherwise re-hash from disk so a failed detection cannot
-    // hide a freshly linked file.
     if (!latest) {
       const result: FileHashDto[] = [];
       for (const filePathStr of linkedFiles) {
@@ -76,16 +73,12 @@ export class QueryService {
       if (!tracked) continue;
       const committedHash = commit.fileHashes.find((fh) => fh.filePath.value === filePathStr);
 
-      // Authoritative source: re-read the file from disk and hash it. This
-      // bypasses any stale state in tracking-index.json (e.g. when the fs
-      // watcher did not fire and recordHash never ran), so the pending list
-      // is always truthful as of this query.
       let diskHashValue: string | null = null;
       try {
         const content = await this.contentReader.readContent(rootPath, filePathStr);
         diskHashValue = HashValue.fromContent(content).value;
       } catch {
-        diskHashValue = null; // file missing/unreadable — fall back to tracker
+        diskHashValue = null;
       }
       const effectiveHashValue = diskHashValue ?? tracked.hashValue.value;
       const committedHashValue = committedHash?.hashValue.value ?? null;
@@ -117,17 +110,12 @@ export class QueryService {
       const linkedDocs = await this.linkedQuery.findLinkedDocuments(rootPath, hash.filePath.value);
       if (linkedDocs.length === 0) continue;
 
-      // Authoritative source: re-read the file from disk and hash it. This
-      // mirrors `getPendingChanges` above and removes the boot-time dependency
-      // on `tracking-index.json` being refreshed by `reconcileOnBoot` before
-      // this query runs. Without this, an offline-modified file is invisible
-      // until another `ChangesDetected` event triggers a refetch.
       let effectiveHashValue: string;
       try {
         const content = await this.contentReader.readContent(rootPath, hash.filePath.value);
         effectiveHashValue = HashValue.fromContent(content).value;
       } catch {
-        effectiveHashValue = hash.hashValue.value; // unreadable — trust tracker
+        effectiveHashValue = hash.hashValue.value;
       }
 
       for (const docId of linkedDocs) {
@@ -186,12 +174,24 @@ export class QueryService {
   }
 
   async getFileDiff(rootPath: string, filePathStr: string): Promise<FileDiffResult> {
-    // Self-healing diff: compute from the persisted commit baseline against
-    // the current file on disk. Does not rely on cache diff or on
-    // tracking-index.json's isPending flag, so it is correct even when the
-    // fs watcher failed to fire.
-    const baseline = await this.cacheRepo.loadBaseline(rootPath, filePathStr);
-    if (baseline === null) return 'CACHE_MISSING';
+    let baseline = await this.cacheRepo.loadBaseline(rootPath, filePathStr);
+
+    if (baseline === null) {
+      // Lazy migration: recover legacy baseline if present, save it to new cache.
+      const legacy = await this.cacheRepo.loadLegacyBaseline(rootPath, filePathStr);
+      if (legacy !== null) {
+        baseline = legacy;
+        try {
+          await this.cacheRepo.saveBaseline(rootPath, filePathStr, legacy);
+        } catch {
+          // If saving fails, we still use the legacy baseline for this diff.
+        }
+      }
+    }
+
+    if (baseline === null) {
+      return this.computeBaselineMissingDiff(rootPath, filePathStr);
+    }
 
     let currentContent: string;
     try {
@@ -221,6 +221,49 @@ export class QueryService {
       modifiedLines: modified.map((l) => ({
         lineNumber: l.lineNumber, content: l.content, type: l.type as string,
       })),
+    };
+  }
+
+  private async computeBaselineMissingDiff(
+    rootPath: string,
+    filePathStr: string,
+  ): Promise<FileDiffResult> {
+    let currentContent: string;
+    try {
+      currentContent = await this.contentReader.readContent(rootPath, filePathStr);
+    } catch {
+      return null;
+    }
+    const currentHash = HashValue.fromContent(currentContent);
+
+    let committedHashValue: string | null = null;
+    const linkedDocs = await this.linkedQuery.findLinkedDocuments(rootPath, filePathStr);
+    for (const docId of linkedDocs) {
+      const approvals = await this.approvalRepo.findByDocument(rootPath, { value: docId });
+      const latest = approvals.length > 0 ? approvals[approvals.length - 1] : null;
+      if (!latest) continue;
+      const commit = await this.commitRepo.findById(rootPath, latest.commitId);
+      const fh = commit?.fileHashes.find((f) => f.filePath.value === filePathStr);
+      if (fh) { committedHashValue = fh.hashValue.value; break; }
+    }
+
+    if (committedHashValue !== null && committedHashValue === currentHash.value) {
+      return null;
+    }
+    if (currentContent === '' && committedHashValue === null) {
+      return null;
+    }
+
+    const lines = currentContent === '' ? [] : currentContent.split('\n');
+    return {
+      filePath: filePathStr,
+      oldHash: committedHashValue ?? '',
+      newHash: currentHash.value,
+      addedLines: lines.map((content, i) => ({
+        lineNumber: i + 1, content, type: 'ADDED',
+      })),
+      removedLines: [],
+      modifiedLines: [],
     };
   }
 }
