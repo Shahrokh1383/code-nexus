@@ -8,15 +8,19 @@ Upon launching the application, the first requirement is to define the scope of 
 
 ## 2. Configuring Exclusions (Ignore Rules)
 
-Before establishing a baseline, it is critical to filter out noise. Not all files in a project require documentation (e.g., compiled assets, dependency directories, generated minified files). 
+Before establishing a baseline, it is critical to filter out noise. Not all files in a project require documentation (e.g., compiled assets, dependency directories, generated minified files).
 
-Navigate to the **Ignore** section. Add the specific file or folder names that you wish to exclude from all tracking mechanisms. Once your ignore list is populated, execute a **Rescan**. The application will re-evaluate the file tree strictly adhering to these new parameters.
+Navigate to the **Ignore** section and add the specific file or folder names that you wish to exclude from all tracking mechanisms.
+
+Exclusions take effect immediately and automatically. The moment an entry is added, CodeNexus removes the matching paths from its tracking state on its own — no manual **Rescan** is required. The application dynamically reorganizes everything affected by the new rule and refreshes the project tree, which always renders correctly according to the current ignore configuration. Ignored files and folders simply disappear from the tree and from tracking, with no further action needed from you.
 
 ## 3. Defining the Documentation Directory
 
-With the workspace initialized, you must point the application to your documentation folder using the **Doc** button. 
+With the workspace initialized, you must point the application to your documentation folder using the **Doc** button.
 
-This is a one-time configuration. CodeNexus does not rely on fragile absolute paths or static folder names. If you subsequently rename this folder, move it to a different depth within the project tree, or relocate it entirely, the application will retain its tracking state and automatically relocate the reference.
+This selection is fully flexible. If you pick the wrong folder, you can correct it at any time: click **Doc** again and select the proper directory. CodeNexus immediately detects the new documentation path and adopts it cleanly, without any problems or additional configuration.
+
+CodeNexus does not rely on fragile absolute paths or static folder names. If you subsequently rename this folder, move it to a different depth within the project tree, or relocate it entirely, the application will retain its tracking state and automatically relocate the reference.
 
 After selection, navigate to the **Docs** page. Here, the application categorizes your documentation into two distinct states:
 *   **Orphaned Documentation:** Documents that currently exist in the folder but have zero code files linked to them. These require immediate review to determine if they are obsolete or simply unlinked.
@@ -24,7 +28,7 @@ After selection, navigate to the **Docs** page. Here, the application categorize
 
 ## 4. Establishing Relationships (The Link Module)
 
-This is the core mechanism of CodeNexus. Navigate to the **Link** page to map your codebase to your documentation. 
+This is the core mechanism of CodeNexus. Navigate to the **Link** page to map your codebase to your documentation.
 
 **Executing a Link:**
 Using the sidebar—relying primarily on the search functionality for efficiency—select your target document. From this interface, you can perform two types of mappings:
@@ -32,7 +36,7 @@ Using the sidebar—relying primarily on the search functionality for efficiency
 *   **Doc-to-Doc:** Link the selected document to other documents to establish a structural hierarchy.
 
 **Understanding the Interface:**
-*   **The Graph Tab:** Provides a visual, topological map of your ecosystem. It clearly illustrates which code files belong to which documents and the directional flow of dependencies.
+*   **The Linked Files Tab:** Displays a complete list of every code file linked to the selected document, each shown with its exact path. There is no graph visualization; relationships are presented as a clear, directly inspectable list.
 *   **The Hierarchy Tab:** Displays a strict tree structure of your document-to-document relationships, defining clear parent and child boundaries.
 
 **Handling Structural Changes (Inheritance):**
@@ -42,6 +46,9 @@ If a parent document is deleted, CodeNexus does not orphan the associated code f
 
 Once your links are established, the passive phase of the workflow ends and the automated phase begins. You do not need to trigger scans manually. The CodeNexus daemon monitors your file system continuously in the background.
 
+**Offline and Startup Reconciliation:**
+Tracking is no longer limited to the time the application is running. CodeNexus fully supports offline change tracking: if you modify your codebase while the application is closed, nothing is lost. On the next launch, the application automatically reconciles the current state of the workspace against its stored baselines and surfaces every change that accumulated while it was off, flagging the affected documents exactly as if the changes had been observed live.
+
 Navigate to the **Tracking** page to manage the lifecycle of your documentation updates:
 
 *   **Alert Surface:** The moment a tracked code file is modified, added, or deleted, the Tracking UI will immediately flag every single document linked to that file as requiring an update.
@@ -49,4 +56,4 @@ Navigate to the **Tracking** page to manage the lifecycle of your documentation 
 *   **The Update Cycle:** Open your actual documentation files externally or within your editor and update them to reflect the code changes.
 *   **Granular Commit:** Once the documentation is updated, return to CodeNexus and execute a **Commit** for that specific document. This action records the new baseline *only* for the code files linked to that document, and removes the alert *only* for that document. Other documents affected by the same code change will remain flagged until they are individually reviewed and committed.
 
-By adhering to this cycle, you guarantee that the documentation folder is never out of sync with the underlying codebase. The background tracking engine handles the observation; you handle the verification.
+By adhering to this cycle, you guarantee that the documentation folder is never out of sync with the underlying codebase. The background tracking engine handles observation while the app is running, and startup reconciliation catches up on everything that happened while it was closed; you handle the verification.
