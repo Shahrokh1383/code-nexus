@@ -19,7 +19,7 @@ export class WindowManager {
 
     const iconPath = app.isPackaged
       ? join(process.resourcesPath, 'icon.ico')
-      : join(__dirname, '../../build/icon.ico');
+      : join(__dirname, '../build/icon.ico');
 
     const window = new BrowserWindow({
       width: 1200,
@@ -54,10 +54,18 @@ export class WindowManager {
       return { action: 'deny' };
     });
 
+    const logLoadFailure = (error: unknown): void => {
+      this.logger.error('main window content load failed', {
+        message: error instanceof Error ? error.message : String(error),
+      });
+    };
+
+    // Bundled main is flat at dist-electron/main.js, so the app root
+    // (dist/, build/) is exactly one level up — not two.
     if (!app.isPackaged) {
-      void window.loadURL('http://localhost:5173');
+      void window.loadURL('http://localhost:5173').catch(logLoadFailure);
     } else {
-      void window.loadFile(join(__dirname, '../../dist/index.html'));
+      void window.loadFile(join(__dirname, '../dist/index.html')).catch(logLoadFailure);
     }
 
     this.mainWindow = window;
